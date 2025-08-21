@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Théorie du Producteur</title>
+    <meta name="description" content="Slides de présentation du cours Microéconomie avancée - Théorie du Producteur">
+    <meta name="author" content="Ramanambonona Ambinintsoa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/moon.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <style>
+        /* Définition des variables CSS pour les couleurs */
+        :root {
+            --axis-color: white;
+            --text-color: white;
+            --curve-color: #FFD700; /* Une couleur or pour la courbe */
+        }
+        body { /* Fallback et application générale */
+            --axis-color: white;
+            --text-color: white;
+            --curve-color: #FFD700;
+        }
+
+        /* Styles personnalisés pour les blocs (conservés pour la cohérence du design) */
+        .block, .alertblock {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-left: 5px solid #28a745; /* Vert pour les blocs normaux */
+        }
+        .alertblock {
+            border-left-color: #dc3545; /* Rouge pour les alertes */
+        }
+        .block h3, .alertblock h3 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        .block p, .alertblock p {
+            font-size: 1em;
+            margin-bottom: 0;
+        }
+        /* Style pour centrer le SVG et son contenu associé */
+        .slide-content-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%; /* S'assurer qu'il prend toute la hauteur disponible du slide */
+        }
+
+        /* Styles pour le bouton IA */
+        .ai-button {
+            background-color: #32CD32; /* LimeGreen */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em; /* Légèrement plus petit pour ne pas prendre trop de place */
+            margin-top: 20px; /* Moins d'espace pour économiser de la place */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .ai-button:hover {
+            background-color: #228B22; /* ForestGreen */
+            transform: translateY(-2px);
+        }
+
+        .ai-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Styles pour la zone de réponse de l'IA */
+        .llm-response {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px; /* Réduit le padding pour plus d'espace */
+            margin-top: 15px; /* Moins d'espace */
+            color: white;
+            text-align: left;
+            font-size: 0.85em; /* Légèrement plus petit */
+            max-height: 150px; /* Augmenté pour éviter le tronquage avec des réponses plus longues */
+            overflow-y: auto; /* Ajoute un défilement si le contenu est trop long */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none; /* Masqué par défaut */
+            line-height: 1.4; /* Améliore la lisibilité du texte */
+        }
+
+        .llm-response.visible {
+            display: block; /* Visible quand le contenu est là */
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 25px; /* Plus petit */
+            height: 25px; /* Plus petit */
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Style de l’aire SVG pour l'exemple Ricardo */
+        .ricardo-wrap {
+            display: grid;
+            grid-template-columns: 1fr 360px; /* SVG | bloc équations */
+            gap: 2rem;
+            align-items: start;
+            margin-top: 20px; /* Espace au-dessus du wrap */
+        }
+        @media (max-width: 1000px) {
+            .ricardo-wrap {
+                grid-template-columns: 1fr; /* Passage en colonne simple sur petits écrans */
+            }
+        }
+
+        /* Axes et textes du SVG */
+        .axis { stroke: var(--axis-color); stroke-width: 1.5; }
+        .axis-arrow { fill: var(--axis-color); }
+        .svg-label { fill: var(--text-color); font-size: 14px; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+        /* Courbe + animation “tracé à la main” */
+        .prod-curve {
+            stroke: var(--curve-color);
+            stroke-width: 2;
+            fill: none;
+            /* valeurs initiales : on cache le tracé (seront ajustées en JS avec la vraie longueur) */
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+        }
+        /* Classe appliquée quand la slide devient visible */
+        .draw {
+            animation: draw-path 2.2s ease-out forwards;
+        }
+        @keyframes draw-path {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Apparition progressive des étiquettes/équations */
+        /* Ces styles sont utilisés avec la classe 'fragment' de Reveal.js */
+        .fragment.svg-label.visible, .fragment.eq.visible, .fragment.hint.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fragment.svg-label, .fragment.eq, .fragment.hint {
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all .6s ease;
+        }
+
+        /* Bloc équations à droite */
+        .equations-card {
+            border: 1px solid color-mix(in oklab, var(--text-color) 25%, transparent);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            background-color: rgba(255, 255, 255, 0.05); /* Légèrement transparent */
+        }
+        .equations-card h3 {
+            margin: 0 0 .5rem 0;
+            font-size: 1.05rem;
+            color: var(--text-color);
+        }
+        .equations-card .eq {
+            margin: .35rem 0;
+            font-size: 1.02rem;
+            color: var(--text-color);
+        }
+        .equations-card .hint {
+            font-size: .9rem; opacity: .8;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Page de garde - Titre -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <h2>Microéconomie Avancée</h2>
+                <p><a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona?originalSubdomain=mg">Dr. Ramanambonona Ambinintsoa</a></p>
+                <div class="r-hstack justify-center">
+                    <div data-id="box1" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                    <div data-id="box2" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                    <div data-id="box3" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                </div>
+                <aside class="notes">
+                    Page de garde présentant le titre du cours et les informations de l'auteur.
+                </aside>
+            </section>
+
+            <!-- Slide 2: Page de garde - Institution -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <div class="r-hstack justify-center">
+                    <div data-id="box1" data-auto-animate-delay="0" style="background: cyan; width: 150px; height: 100px; margin: 10px;"></div>
+                    <div data-id="box2" data-auto-animate-delay="0.1" style="background: magenta; width: 150px; height: 100px; margin: 10px;"></div>
+                    <div data-id="box3" data-auto-animate-delay="0.2" style="background: yellow; width: 150px; height: 100px; margin: 10px;"></div>
+                </div>
+                <h2 style="margin-top: 20px;">Ecole Normale Supérieure</h2>
+                <aside class="notes">
+                    Cette diapositive affiche l'institution avec une animation des boîtes colorées.
+                </aside>
+            </section>
+
+            <!-- Slide 3: Page de garde - Thème -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <div class="r-stack">
+                    <div data-id="box1" style="background: cyan; width: 300px; height: 300px;"></div>
+                    <div data-id="box2" style="background: magenta; width: 200px; height: 200px;"></div>
+                    <div data-id="box3" style="background: yellow; width: 100px; height: 100px;"></div>
+                </div>
+                <h2 style="margin-top: 20px;">Théorie du Producteur</h2>
+                <aside class="notes">
+                    Cette diapositive introduit le thème du cours avec une animation en pile.
+                </aside>
+            </section>
+
+            <!-- Section: Introduction -->
+            <section>
+                <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+                    <h2 style="color: white;">Introduction</h2>
+                    <ul style="font-size: 1.1em; color: white;">
+                        <li class="fragment fade-up">Le producteur transforme des <strong style="color: pink;">inputs</strong> en <strong style="color: pink;">outputs</strong>.</li>
+                        <li class="fragment fade-up"><strong style="color: pink;">Inputs</strong> : facteurs utilisés pour produire.</li>
+                        <li class="fragment fade-up"><strong style="color: pink;">Outputs</strong> : biens ou services produits.</li>
+                        <li class="fragment fade-up">Le producteur intervient sur le marché :
+                            <ul style="font-size: 1.0em;">
+                                <li class="fragment fade-up">Demande d'<strong style="color: pink;">inputs</strong></li>
+                                <li class="fragment fade-up">Offre d'<strong style="color: pink;">outputs</strong></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <aside class="notes">
+                        Cette diapositive introduit les concepts fondamentaux de la théorie du producteur.
+                    </aside>
+                </section>
+            </section>
+
+            <!-- Section: Technique de production d'une entreprise -->
+            <section>
+                <section>
+                    <h2>Technique de production</h2>
+                    <div class="block">
+                        <h3>Fonction de Production</h3>
+                        $$
+                        \begin{aligned}
+                            & f : \mathbb{R}_+^n \to \mathbb{R}_+ \\
+                            & (x_1, \dots, x_n) \mapsto f(x_1, \dots, x_n)
+                        \end{aligned}
+                        $$
+                    </div>
+                    <ul class="fragment" style="margin-top: 20px;">
+                        <li class="fragment fade-up">$x_i$ : quantités d'inputs.</li>
+                        <li class="fragment fade-up">$f(x_1,\dots,x_n)$ : quantité d'output produite.</li>
+                        <li class="fragment fade-up">la fonction $f$ : quantité d'output en utilisant les quantités d'inputs utilisées.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Propriétés de la fonction de production</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Condition initiale :</strong> $f(0, \dots, 0) = 0$</li>
+                        <li class="fragment fade-up"><strong>Continuité :</strong> la fonction $f$ est continue</li>
+                        <li class="fragment fade-up"><strong>Monotonie :</strong> la fonction $f$ est faiblement croissante</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Définitions importantes (1/2)</h2>
+                    <div class="block">
+                        <h3>Isoquante de production (niveau $\alpha$)</h3>
+                        <p>Courbe de niveau définie par :</p>
+                        $$
+                        f(x_1,\dots,x_n)=\alpha
+                        $$
+                    </div>
+                </section>
+                <section>
+					<h2>Définitions importantes (2/2)</h2>
+                    <div class="block">
+                        <h3>Ensemble de production</h3>
+                        <p>Ensemble des combinaisons d'inputs et outputs réalisables :</p>
+                        $$
+                        \{(y, x_1,\dots,x_n) \in \mathbb{R}^{n+1}_+ \mid 0 \leq y \leq f(x_1,\dots,x_n)\}
+                        $$
+                    </div>
+                </section>
+            </section>
+
+            <!-- Subsection: A - Exemples de fonction de production -->
+            <section>
+                <section>
+                    <h2>Exemples de fonctions de production</h2>
+                    <strong>Exemple 1 : Ricardo (production de blé)</strong>
+                    <ul>
+                        <li class="fragment fade-up">Ricardo étudie les profits fonciers via la production agricole.</li>
+                        <li class="fragment fade-up">Relation entre la quantité produite ($y$) et le travail ($L$).</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Exemple 1 : Ricardo (production de blé)</h2>
+                    <div class="ricardo-wrap">
+                        <!-- ====== SVG ====== -->
+                        <svg class="ricardo-svg" width="800" height="600" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Production de blé Ricardo, y=f(L)">
+                            <!-- Fond -->
+                            <rect width="100%" height="100%" fill="none"/>
+
+                            <!-- Axe Y -->
+                            <path class="axis" d="M144.37,293.43 L143.75,106.14"/>
+                            <path class="axis-arrow" d="M 143.75,106.14 L 139.75,114.14 L 147.75,114.14 Z"/>
+                            <!-- Axe X -->
+                            <path class="axis" d="M144.37,293.43 L378.72,292.7"/>
+                            <path class="axis-arrow" d="M 378.72,292.7 L 370.72,288.7 L 370.72,296.7 Z"/>
+
+                            <!-- Courbe de production (Bézier cubique) : y = f(L) -->
+                            <path id="ricardo-curve" class="prod-curve" d="M144.37,293.43 C157,218 222,121 338,139"/>
+
+                            <!-- Libellés (texte brut car SVG ne gère pas MathJax directement) -->
+                            <text x="127.02" y="100.62" class="svg-label fragment" data-delay="200">y</text>
+                            <text x="390" y="305" class="svg-label fragment" data-delay="400">L</text>
+                            <text x="95" y="87" class="svg-label fragment" data-delay="600">Production de blé</text>
+                            <text x="389" y="286" class="svg-label fragment" data-delay="800">Travail</text>
+                            <text x="330" y="128" class="svg-label fragment" data-delay="1000">y = f(L)</text>
+                        </svg>
+
+                        <!-- ====== Équations (TeX rendu par le plugin Math de Reveal) ====== -->
+                        <div class="equations-card" style="font-size: 1.1em; max-width: 40%;">
+                            <h3>Propriétés</h3>
+                            <div class="eq fragment" data-delay="200">Produit&nbsp;: \(\;y = f(L)\)</div>
+                            <div class="eq fragment" data-delay="600">Rendements marginaux décroissants&nbsp;: \(\;\dfrac{\partial^2 y}{\partial L^2} < 0\)</div>
+                            <div class="eq fragment hint" data-delay="800"><em>Lecture</em>&nbsp;: Plus on utilise \(L\), plus l’accroissement de \(y\) est faible.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Exemples de fonctions de production (suite)</h2>
+                    <strong>Exemple 2 : Ligne électrique (Cobb-Douglas)</strong>
+                    $$
+                    P_f = k \sqrt{P_i S}
+                    $$
+                    <p class="fragment" style="margin-top: 20px;">avec :</p>
+                    <ul>
+                        <li class="fragment fade-up">$P_i$ : puissance d'entrée</li>
+                        <li class="fragment fade-up">$P_f$ : puissance de sortie</li>
+                        <li class="fragment fade-up">$S$ : section de la ligne</li>
+                    </ul>
+                    <p class="fragment" style="margin-top: 20px;"><i>Substitution infinie entre les facteurs (inputs).</i></p>
+                </section>
+
+                <section>
+                    <h2>Exemples de fonctions de production (suite)</h2>
+                    <strong>Exemple 3 : Facteurs complémentaires (Leontief)</strong>
+                    $$
+                    y = 2 \min \left(x_1, \frac{x_2}{3}\right)
+                    $$
+                    <ul>
+                        <li class="fragment fade-up">Complémentarité stricte entre les facteurs.</li>
+                        <li class="fragment fade-up">Exemple : Machines ($x_1$) et énergie ($x_2$) sont des inputs complémentaires indispensables l'un à l'autre.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Subsection: B - Rendements d'échelle -->
+            <section>
+                <section>
+                    <h2>Rendements d'échelle</h2>
+                    <div class="block">
+                        <h3>Question centrale :</h3>
+                        <p>Que se passe-t-il si l’on augmente simultanément tous les inputs de $1\%$ ?</p>
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Croissants :</strong> la production augmente plus que proportionnellement.</li>
+                        <li class="fragment fade-up"><strong>Constants :</strong> la production augmente proportionnellement.</li>
+                        <li class="fragment fade-up"><strong>Décroissants :</strong> la production augmente moins que proportionnellement.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Fonction homogène de degré $\mu$</h2>
+                    <p>$f$ est homogène de degré $\mu$ si, pour tout $\lambda >0$</p>
+                    $$ f(\lambda x_1, \dots, \lambda x_n) = \lambda ^{\mu} f(x_1, \dots, x_n) $$
+                    <ul>
+                        <li class="fragment fade-up">Si $\mu > 1$ : rendements d’échelle croissants.</li>
+                        <li class="fragment fade-up">Si $\mu = 1$ : rendements d’échelle constants.</li>
+                        <li class="fragment fade-up">Si $\mu < 1$ : rendements d’échelle décroissants.</li>
+                    </ul>
+                    <div class="alertblock fragment">
+                        <h3>Remarque importante</h3>
+                        <p>La notion de rendement d’échelle est <u>locale</u> : elle peut varier selon les quantités d’inputs utilisées.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Subsection: C - Autres caractéristiques locales -->
+            <section>
+                <section>
+                    <h2>Autres caractéristiques locales</h2>
+                    <p>Soit une fonction de production à deux inputs :</p>
+                    $$
+                    \begin{aligned}
+                    & f : \mathbb{R}_+^2 \rightarrow \mathbb{R}_+ \\
+                    & (x_1, x_2) \mapsto f(x_1, x_2)
+                    \end{aligned}
+                    $$
+                    <p class="fragment" style="margin-top: 20px;">On suppose :</p>
+                    <ul>
+                        <li class="fragment fade-up">$f$ différentiable</li>
+                        <li class="fragment fade-up">$f$ faiblement croissante</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>1. Productivité marginale</h2>
+                    <div class="block">
+                        <h3>Définition : Productivité marginale</h3>
+                        <p>Supplément d'output résultant d’une unité supplémentaire d'un input :</p>
+                        $$
+                        Pm_i = \frac{\partial f(x_1, x_2)}{\partial x_i}
+                        $$
+                    </div>
+                </section>
+                <section>
+                    <h2>1. Productivité marginale (suite)</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Rendements marginaux décroissants :</strong> la productivité marginale décroît avec la quantité d'input utilisée.</li>
+                        <li class="fragment fade-up">Cette hypothèse est vraie pour les fonctions de production <strong>concaves</strong>.</li>
+                        <li class="fragment fade-up">Elle implique : <i>plus un input est rare, plus son rendement marginal est élevé</i>.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>1. Productivité marginale (suite)</h2>
+                    <div class="alertblock fragment">
+                        <h3>Remarque importante</h3>
+                        <p>Il n’existe pas de lien direct entre rendements marginaux décroissants et rendements d’échelle décroissants.</p>
+                    </div>
+                </section>
+                
+				<section data-auto-animate>
+				  <h2>2. Productivité moyenne</h2>
+
+				  <!-- Layout deux colonnes -->
+				  <div class="pm-grid">
+					<!-- Bloc définition -->
+					<div class="block">
+					  <h3>Définition : Productivité moyenne</h3>
+					  <p>Quantité produite par unité d’input :</p>
+					  $$ PM_i \;=\; \frac{f(x_1, x_2)}{x_i} $$
+					</div>
+
+					<!-- Bloc rappel / points clés -->
+					<div class="alertblock" role="note" aria-label="Points clés">
+					  <ul>
+						<li>Mesure l’efficacité <em>moyenne</em> de chaque facteur.</li>
+						<li>Utile pour comparer la performance des inputs.</li>
+					  </ul>
+					</div>
+				  </div>
+				</section>
+				
+
+                <section>
+                    <h2>3. Élasticité</h2>
+                    <div class="block">
+                        <h3>Définition : Élasticité</h3>
+                        <p>Variation relative de la production suite à une hausse de 1% de l'input $i$ :</p>
+                        $$
+                        \mu_i(x) = \frac{\partial f(x_1, x_2)}{\partial x_i}\cdot\frac{x_i}{f(x_1, x_2)}
+                        $$
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Numérateur : productivité marginale</li>
+                        <li class="fragment fade-up">Dénominateur : productivité moyenne</li>
+                    </ul>
+                </section>
+                
+				<section>
+                    <h2>3. Élasticité</h2>
+                    <div class="block fragment">
+                        <h3>Propriété</h3>
+                        <p>Si $f$ est homogène de degré $\mu$, alors :</p>
+                        $$
+                        \mu_1(x) + \mu_2(x) = \mu
+                        $$
+                        <i>(Somme des élasticités marginales = degré d'homogénéité)</i>
+                    </div>
+                </section>				
+
+                <section>
+                    <h2>Exemple : Fonction Cobb-Douglas</h2>
+                    <div class="block">
+                        <h3>Forme générale</h3>
+                        $$
+                        f(x_1, x_2) = k \cdot x_1^{\alpha_1} x_2^{\alpha_2}
+                        $$
+                    </div>
+                    <div class="block fragment">
+                        <h3>Élasticité marginale</h3>
+                        <p>Pour une fonction Cobb-Douglas :</p>
+                        $$
+                        \mu_i(x) = \alpha_i
+                        $$
+                    </div>
+                </section>
+
+            <!-- Subsection: 4. Taux marginal de substitution technique (TMST) -->
+ 
+                <section>
+                    <h2>4.TMST </h2>
+                    <div class="block">
+                        <h3>Définition du TMST</h3>
+                        <p>Quantité d'input 2 nécessaire pour compenser la réduction d'une unité d'input 1, à production constante :</p>
+                        $$
+                        TMST_{1/2}(x) = \frac{f'_1(x)}{f'_2(x)} = -\frac{dx_2}{dx_1}
+                        $$
+                    </div>
+                </section>
+
+                <section>
+                    <h2>4.TMST </h2>
+                    <ul>
+                        <li class="fragment fade-up">Un TMST élevé indique une faible substituabilité de l'input 1 par l'input 2.</li>
+                        <li class="fragment fade-up">Si la fonction est quasi-concave, le TMST décroît le long de l'isoquante.</li>
+                    </ul>
+                </section>
+			</section>
+
+            <!-- Section: Comportement rationnel d'une entreprise en concurrence parfaite -->
+            <section>
+                <section>
+                    <h2>Comportement rationnel d'une entreprise en concurrence parfaite</h2>
+                    <ul>
+                        <li class="fragment fade-up">Objectif central : maximiser le profit.</li>
+                        <li class="fragment fade-up">Conditions de concurrence parfaite bien définies ou explicitées.</li>
+                    </ul>
+                </section>
+
+                <!-- Subsection: a. Maximisation du profit -->
+                <section>
+                    <h2>Maximisation du profit</h2>
+                    <div class="block">
+                        <h3>Définition du profit</h3>
+                        <p>Bénéfice = Valeur des outputs - Coût total des inputs</p>
+                        $$
+                        \text{Profit} = \text{Valeur de la production} - \text{Coût total}
+                        $$
+                    </div>
+                    <div class="block fragment">
+                        <h3>Hypothèse de comportement</h3>
+                        <p><i>L'entreprise cherche à maximiser son bénéfice.</i></p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Profit du producteur</h2>
+                    <p>En considérant la fonction de production :</p>
+                    $$
+                    f : \mathbb{R}_+^n \to \mathbb{R}_+
+                    $$
+                    <ul>
+                        <li class="fragment fade-up">Prix de l'output : $q$</li>
+                        <li class="fragment fade-up">Prix de l'input $i$ : $p_i$</li>
+						<li class="fragment fade-up">Quantité de l'input $i$ : $x_i$</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Profit du producteur</h2>
+                    <p class="fragment" style="margin-top: 20px;">Le profit s'écrit :
+                    $$
+                    B(x, p, q) = q \cdot f(x_1, \dots, x_n) - \sum_{i=1}^{n} p_i x_i
+                    $$
+					</p>
+                    <p class="fragment" style="margin-top: 20px;">En notation vectorielle simplifiée :
+                    $$
+                    B(x) = q f(x) - p \cdot x
+                    $$
+					</p>
+                </section>				
+                <!-- Subsection: 2. Hypothèse de concurrence parfaite -->
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Définition</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;">Environnement où les entreprises n’ont aucune influence sur les prix et ne peuvent pas coopérer.</p>
+					</div>
+				</section>
+
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Conditions de concurrence parfaite</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;"><u>1. Atomicité du marché :</u> très grand nombre d’acteurs (vendeurs et acheteurs), aucun n'influence le prix individuellement.</p>
+					</div>
+				</section>
+
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Conditions de concurrence parfaite</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;"><u>2. Homogénéité des biens :</u> produits parfaitement identiques aux yeux des consommateurs, aucune différenciation.</p>
+					</div>
+				</section>
+
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Conditions de concurrence parfaite</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;"><u>3. Information parfaite et transparente :</u> accès égal et immédiat à l’information pour tous les acteurs.</p>
+					</div>
+				</section>
+
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Conditions de concurrence parfaite</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;"><u>4. Libre entrée et sortie :</u> aucune barrière à l’entrée ou à la sortie du marché.</p>
+					</div>
+				</section>
+				
+				<section>
+					<h2>Hypothèses de concurrence parfaite</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Conditions de concurrence parfaite</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;"><u>5. Libre circulation des facteurs :</u> mobilité parfaite des facteurs de production.</p>
+					</div>
+				</section>				
+				
+				
+                <!-- Subsection: B. Offre optimale d'output et demande optimale d'input -->
+				<section>
+					<h2>Offre optimale d'ouput et demande optimale d'input</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Sous hypothèse de concurrence parfaite :</h3>
+						<p style="margin: 12px 0; font-size: 0.95em;">
+						$$
+						\max_{x \in \mathbb{R}_+^n} B(x; q, p) = q \cdot f(x) - p \cdot x
+						$$
+						</p>
+						<p class="fragment" style="margin-top: 20px;">Avec :
+						$$
+						x = (x_1, \dots, x_n), \quad p = (p_1, \dots, p_n)
+						$$
+						</p>
+					</div>
+				</section>
+				
+				<section>
+					<h2>Offre optimale d'ouput et demande optimale d'input</h2>
+					<div class="block" style="padding: 15px; margin-top: 10px;">
+						<h3>Solutions</h3>
+						<p class="fragment" style="margin-top: 20px;">
+						Fonction de demande optimale d'inputs : $x^*(q,p)$
+						</p>
+						<p class="fragment" style="margin-top: 20px;">
+						Fonction d’offre optimale d'output : $y^*(q,p) = f(x^*(q,p))$
+						</p>
+						<p class="fragment" style="margin-top: 20px;">
+						<u>Remarque</u> : L’entreprise ne produit que si son profit est positif
+						</p>
+					</div>
+				</section>				
+                <!-- Subsubsection: 1. Caractéristiques des solutions -->
+                <section>
+                    <h2>Conditions du premier ordre</h2>
+                    <p class="fragment" style="margin-top: 20px;">Pour $f$ différentiable. Conditions nécessaires :
+                    $$
+                    \frac{\partial B(x,q,p)}{\partial x_i} = 0,\quad \forall i=1,\dots,n
+                    $$
+					</p>
+                    <p class="fragment" style="margin-top: 20px;" >On obtient :
+                    $$
+                    q\cdot f_i'(x) - p_i = 0 \quad \Rightarrow \quad q\cdot f_i'(x) = p_i
+                    $$
+					</p>
+                </section>
+				
+				<section>
+                    <h2>Conditions du premier ordre</h2>
+                    <div class="block fragment">
+                        <h3>Interprétations</h3>
+                        <ul>
+                            <li class="fragment fade-up">$p_i$ : coût marginal (prix de l'input supplémentaire)</li>
+                            <li class="fragment fade-up">$q \cdot f_i'(x)$ : recette marginale générée par cet input</li>
+                        </ul>
+                    </div>
+                </section>
+			
+                <section>
+                    <h2> A l'optimum</h2>
+                    <p class="fragment" style="margin-top: 20px;">Pour deux inputs $i$ et $j$ :
+                    $$
+                    f_i'(x) = \frac{p_i}{q},\quad f_j'(x) = \frac{p_j}{q}
+                    $$
+					</p>
+                    <p class="fragment" style="margin-top: 20px;">Ainsi :
+                    $$
+                    \frac{f_i'(x)}{f_j'(x)} = \frac{p_i}{p_j} \quad \Rightarrow \quad TMST_{i/j}(x) = \frac{p_i}{p_j}
+                    $$
+					</p>
+                </section>
+
+				<section>
+                    <h2>A l'optimum</h2>
+                    <div class="alertblock fragment">
+                        <h3>Résultat clé</h3>
+                        <p>A l'optimum, le TMST est égal au rapport des prix des inputs.</p>
+                    </div>
+                    <div class="block fragment">
+                        <h3>Remarque importante</h3>
+                        <p>Si $f$ est concave, les conditions du second ordre sont automatiquement satisfaites.</p>
+                    </div>
+                </section>
+			
+
+                <!-- Subsubsection: 2. Cas d'une fonction homogène de degré $\mu$ -->
+                <section>
+                    <h2>Cas d'une fonction homogène de degré $\mu$</h2>
+                    <p class="fragment" style="margin-top: 20px;">Pour une fonction homogène de degré $\mu$ :
+                    $$
+                    \forall t>1, \quad f(tx)=t^\mu f(x)
+                    $$
+					</p>
+                    <p class="fragment" style="margin-top: 20px;">Le profit devient alors :
+                    $$
+                    \begin{aligned}
+					& B(tx,q,p)=q f(tx)- p (tx)\\
+					& B(tx,q,p)=q t^{\mu}f(x)-t p x \\
+					& B(tx,q,p)= t^{\mu -1}qf(x)-p x
+					\end{aligned}
+                    $$
+					</p>
+                </section>
+                
+				<section>
+					<h2>Cas d'une fonction homogène de degré $\mu$</h2>
+					
+					<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+						<!-- Cas 1: Rendements croissants -->
+						<div class="fragment fade-up" style="border: 1px solid #eee; padding: 15px; border-radius: 8px;">
+							<h4 style="color: #c0392b; margin-top: 0;">$\mu > 1$</h3>
+							<p style="margin: 8px 0; font-size: 0.6em;">Rendements croissants</p>
+							<p style="font-size: 0.6em;">$B(tx,q,p)>t B(x,q,p)$</p>
+							<ul style="margin-top: 10px; font-size: 0.6em;">
+								<li class="fragment fade-up">Fusion d'entreprises $\Rightarrow$ Monopole</li>
+							</ul>
+						</div>
+						
+						<!-- Cas 2: Rendements constants -->
+						<div class="fragment fade-up" style="border: 1px solid #eee; padding: 15px; border-radius: 8px;">
+							<h4 style="color: #2980b9; margin-top: 0;">$\mu = 1$</h3>
+							<p style="margin: 8px 0; font-size: 0.6em;">Rendements constants</p>
+							<p style="font-size: 0.6em;">$B(tx,q,p)=t B(x,q,p)$</p>
+							<ul style="margin-top: 10px; font-size: 0.6em;">
+								<li class="fragment fade-up">Indifférence entre produire ou non si $B(x,q,p)=0$</li>
+							</ul>
+						</div>
+						
+						<!-- Cas 3: Rendements décroissants -->
+						<div class="fragment fade-up" style="border: 1px solid #eee; padding: 15px; border-radius: 8px;">
+							<h4 style="color: #27ae60; margin-top: 0;">$\mu < 1$</h3>
+							<p style="margin: 8px 0; font-size: 0.6em;">Rendements décroissants</p>
+							<p style="font-size: 0.6em;">$B(tx,q,p)< tB(x,q,p)$</p>
+							<ul style="margin-top: 10px; font-size: 0.6em;">
+								<li class="fragment fade-up">Solution optimale $x^*$ finie</li>
+							</ul>
+						</div>
+					</div>
+				</section>    
+			
+				
+				<!-- Slide 1 : Conditions d'optimalité -->
+				<section>
+					<h2>Solution pour $\mu<1$ (Rendements décroissants)</h2>
+					<div style="margin-top: 25px;">
+						<h3 class="fragment" data-fragment-index="0">Conditions d'optimalité</h3>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin: 15px 0;">
+							$$x^* : qf_i'(x^*) = p_i,\quad i=1,\dots,n$$
+						</div>
+						<p class="fragment" data-fragment-index="2">Notation vectorielle :</p>
+						<div class="fragment" data-fragment-index="3" style="font-size: 1.1em; margin: 15px 0;">
+							$$qf'(x^*)=p$$
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 2 : Dérivation du profit -->
+				<section>
+					<h2>Solution pour $\mu<1$ (Rendements décroissants)</h2>
+					<div style="margin-top: 25px;">
+						<h3 class="fragment" data-fragment-index="0">Calcul du profit optimal</h3>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1em; margin: 15px 0;">
+							$$\Pi(q,p) = qf(x^*)-px^*$$
+						</div>
+						<div class="fragment" data-fragment-index="2" style="font-size: 1em; margin: 15px 0;">
+							$$= qf(x^*)-qf'(x^*)x^*$$
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 3 : Résultat final -->
+				<section>
+					<h2>Solution pour $\mu<1$ (Rendements décroissants)</h2>
+					<div style="margin-top: 25px;">
+						<h3 class="fragment" data-fragment-index="0">Expression simplifiée</h3>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1em; margin: 15px 0;">
+							$$= qf(x^*)\left[1-\frac{f'(x^*)x^*}{f(x^*)}\right]$$
+						</div>
+						<div class="fragment" data-fragment-index="2" style="font-size: 1em; margin: 15px 0; color: #1976d2;">
+							$$= qf(x^*)(1-\mu)$$
+						</div>
+						<div class="alertblock fragment" data-fragment-index="3">
+							<p>Le profit est strictement positif car $\mu < 1$</p>
+						</div>
+					</div>
+				</section>
+                <!-- Subsection: C. Propriétés des fonctions de profit, d'offre et de demande optimale -->
+                <section>
+                    <h2>Propriétés des fonctions de profit</h2>
+                    <p>La fonction de profit $\Pi(q,p)$ vérifie les propriétés suivantes :</p>
+                    <ul>
+                        <li class="fragment fade-up">$\Pi(q,p)\geq0$</li>
+                        <li class="fragment fade-up">Croissante en $q$, décroissante en chaque $p_i$</li>
+                        <li class="fragment fade-up">Homogène de degré 1 en $(q,p)$</li>
+                        <li class="fragment fade-up">Convexe en $(q,p)$</li>
+                    </ul>
+                </section>
+
+				<!-- Slide 1 : Propriétés de base -->
+				<section>
+					<h2>Propriétés des fonctions d'offre et de demande optimales</h2>
+					<div style="margin-top: 25px;">
+						<p class="fragment" data-fragment-index="0">Les fonctions optimales vérifient :</p>
+						<ul style="margin-top: 20px;">
+							<li class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin-bottom: 15px;">
+								$x^*(q,p)$ est croissante en $q$, décroissante en $p$
+							</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- Slide 2 : Propriétés de différentiation -->
+				<section>
+					<h2>Propriétés des fonctions d'offre et de demande optimales</h2>
+					<div style="margin-top: 25px;">
+						<div class="fragment" data-fragment-index="0">
+							<p>Si $\Pi(q,p)$ différentiable :</p>
+						</div>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial \Pi(q,p)}{\partial q}=y^*(q,p)
+							$$
+						</div>
+						<div class="fragment" data-fragment-index="2" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial \Pi(q,p)}{\partial p_i}=-x_i^*(q,p)
+							$$
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 3 : Corollaire -->
+				<section>
+					<h2>Propriétés des fonctions d'offre et de demande optimales</h2>
+					<div style="margin-top: 25px;">
+						<div class="fragment" data-fragment-index="0">
+							<div class="alertblock">
+								<h3>Corollaire (si $\Pi$ deux fois différentiable)</h3>
+							</div>
+						</div>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial^2 \Pi(q,p)}{\partial q^2}=\frac{\partial y^*(q,p)}{\partial q}>0
+							$$
+						</div>
+						<div class="fragment" data-fragment-index="2" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial^2 \Pi(q,p)}{\partial p_i^2}=-\frac{\partial x_i^*(q,p)}{\partial p_i}>0
+							$$
+						</div>
+					</div>
+				</section>
+            </section>
+
+            <!-- Section: Fonction de coût -->
+            <section>
+                <section>
+                    <h2>Fonction de coût : approche duale</h2>
+                    <p style="font-size: 0.9em">On peut analyser la maximisation du profit en deux étapes :</p>
+                    <ol>
+                        <li class="fragment fade-up" style="font-size: 0.9em">Minimiser le coût des inputs pour un niveau de production donné $\bar{y}$.</li>
+                        <li class="fragment fade-up" style="font-size: 0.9em" >Choisir ensuite le niveau de production maximisant le profit.</li>
+                    </ol>
+                    <div class="block fragment" style="font-size: 0.9em" >
+                        <h3>Programme de minimisation des coûts</h3>
+                        $$
+                        \begin{aligned}
+                        & \min_{x \in \mathbb{R}_+^n} p\cdot x \\
+                        & \text{s.c. } f(x)\geq \bar{y}
+                        \end{aligned}
+                        $$
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Définition de la fonction de coût</h2>
+                    <p>La valeur de ce programme définit la <strong>fonction de coût</strong> :</p>
+                    $$
+                    C(\bar{y}, p)=p\cdot\tilde{x}(\bar{y}, p)
+                    $$
+                    <p class="fragment" style="margin-top: 20px;">où $\tilde{x}(\bar{y}, p)$ est la <strong>demande conditionnelle d'inputs</strong>.</p>
+                </section>
+
+                <!-- Subsection: A. Propriétés -->
+                <section>
+                    <h2>Propriétés de la fonction de coût</h2>
+                    <p>La fonction de coût $C(\bar{y}, p)$ satisfait :</p>
+                    <ul>
+                        <li class="fragment fade-up">Croissante en $\bar{y}$, décroissante en $p$.</li>
+                        <li class="fragment fade-up">Homogène de degré 1 en $p$ :
+                            $$
+                            C(\bar{y}, tp)=tC(\bar{y}, p), \quad t>0
+                            $$
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Slide 1 : Symétrie des dérivées croisées -->
+				<section>
+					<h2>Propriétés différentielles</h2>
+					<div style="margin-top: 25px;">
+						<p class="fragment" data-fragment-index="0">Si $C(\bar{y}, p)$ est deux fois différentiable :</p>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial^2 C(\bar{y}, p)}{\partial p_i \partial p_j}
+							=\frac{\partial \tilde{x}_j(\bar{y}, p)}{\partial p_i}
+							=\frac{\partial \tilde{x}_i(\bar{y}, p)}{\partial p_j}
+							$$
+						</div>
+						<div class="fragment" data-fragment-index="2" style="margin-top: 20px;">
+							<p>Relation de symétrie croisée des dérivées partielles.</p>
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 2 : Demande conditionnelle -->
+				<section>
+					<h2>Propriétés différentielles</h2>
+					<div style="margin-top: 25px;">
+						<div class="fragment" data-fragment-index="0">
+							<p>La dérivée première indique la demande conditionnelle :</p>
+						</div>
+						<div class="fragment" data-fragment-index="1" style="font-size: 1.1em; margin: 20px 0;">
+							$$
+							\frac{\partial C(\bar{y}, p)}{\partial p_i}=\tilde{x}_i(\bar{y}, p)
+							$$
+						</div>
+						<div class=" block fragment" data-fragment-index="2">
+							<p>Cette relation n'est autre que lemme de Shephard (qu'on a vu dans la Théorie du Consommateur).</p>
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 3 : Effet de substitution -->
+				<section>
+					<h2>Propriétés différentielles</h2>
+					<div style="margin-top: 25px;">
+						<div class="fragment" data-fragment-index="0">
+							<p>Impact de la variation du prix d'un input $i$ :</p>
+						</div>
+						<div class="block fragment" data-fragment-index="1" style="font-size: 1em; margin: 20px 0;">
+							\[
+							\frac{\partial \tilde{x}_i(\bar{y}, p)}{\partial p_j} =
+							\begin{cases}
+								>0 & \text{si } i,j \text{ substituables}\\
+								<0 & \text{si } i,j \text{ complémentaires}
+							\end{cases}
+							\]
+						</div>
+					</div>
+				</section>
+
+                <!-- Subsection: B. Les différents types de coûts -->
+                <section>
+                    <h2>1. Le coût fixe</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        <p>Coût engagé indépendamment du niveau de production :</p>
+                        $$
+                        CF(p) = \lim_{\bar{y} \to 0} C(\bar{y}, p)
+                        $$
+                    </div>
+                    <p class="fragment" style="margin-top: 20px;"><i>Le coût fixe est constant quel que soit $\bar{y} > 0$.</i></p>
+                </section>
+
+                <section>
+                    <h2>2. Le coût variable</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        <p>Coût lié uniquement à la production :</p>
+                        $$
+                        CV(\bar{y}, p) = C(\bar{y}, p) - CF(p)
+                        $$
+                    </div>
+                    <p class="fragment" style="margin-top: 20px;"><i>Il dépend du niveau de production.</i></p>
+                </section>
+
+                <section>
+                    <h2>3. Le coût marginal</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        <p>Supplément de coût induit par une unité d’output supplémentaire :</p>
+                        $$
+                        Cm(\bar{y}, p) = \frac{\partial C(\bar{y}, p)}{\partial \bar{y}}
+                        $$
+                    </div>
+                    <p class="fragment" style="margin-top: 20px;"><i>Indique la variation instantanée du coût total.</i></p>
+                </section>
+
+                <!-- Slide 1 : Définition du coût moyen -->
+				<section>
+					<h2>4. Le coût moyen</h2>
+					<div class="alert block">
+						<h3>Définition</h3>
+						<p>Coût unitaire de production :</p>
+						<div style="font-size: 1.1em; margin: 10px 0;">
+							$$CM(\bar{y}, p) = \frac{C(\bar{y}, p)}{\bar{y}}$$
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 2 : Dérivée corrigée -->
+				<section>
+					<h2>4. Le coût moyen</h2>
+					<div class="alert block" style="font-size: 0.9em">
+						<h3>Dérivée du coût moyen</h3>
+						<div style="font-size: 0.7em; margin: 10px 0;">
+							$$
+							\begin{aligned}
+							\frac{\partial CM(\bar{y}, p)}{\partial \bar{y}} =0 
+							& \Rightarrow \frac{ \frac{\partial C}{\partial \bar{y}} \cdot \bar{y} - C(\bar{y}, p) }{ \bar{y}^2 } =0 \\[0.3cm]
+							&= \frac{ Cm(\bar{y}, p) \cdot \bar{y} - C(\bar{y}, p) }{ \bar{y}^2 } =0 \\[0.3cm]
+							&= \frac{1}{\bar{y}} \left[ Cm(\bar{y}, p) - CM(\bar{y}, p) \right] =0 \\[0.3cm]
+							& \Rightarrow Cm(\bar{y}, p) = CM(\bar{y}, p)
+							\end{aligned}
+							$$
+						</div>
+					</div>
+				</section>
+
+				<!-- Slide 3 : Interprétation économique -->
+				<section>
+					<h2>4. Le coût moyen</h2>
+					<div style="margin-top: 20px;">
+						<div class="fragment" data-fragment-index="0">
+							<p>Le coût moyen est à son extrémum lorsque :</p>
+							<div style="font-size: 1.1em; margin: 15px 0; color: pink;">
+								$$CM(\bar{y}, p) = Cm(\bar{y}, p)$$
+							</div>
+						</div>
+						<div class=" alert block">
+							<p>Ce point correspond à l'intersection des courbes de coût moyen (CM) et coût marginal (Cm)</p>
+						</div>
+					</div>
+				</section>
+
+                <!-- Subsubsection: 5. Coût à court terme et coût à long terme -->
+                <section>
+                    <h2>Coût à court terme vs long terme</h2>
+                    <div class="block">
+                        <h3>Distinction clé</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Court terme (CT)</strong> : certains inputs sont rigides (fixes).</li>
+                            <li class="fragment fade-up"><strong>Long terme (LT)</strong> : tous les inputs sont variables (flexibles).</li>
+                        </ul>
+                    </div>
+                    <strong class="fragment" style="margin-top: 20px;">Exemple : $m = 2$ (deux inputs)</strong>
+                    <ul>
+                        <li class="fragment fade-up">Le bien 2 est rigide à court terme : $x_2 = \bar{x}_2$ fixé.</li>
+                        <li class="fragment fade-up">Le programme devient :
+                            $$
+                            \min_{x_1 \in \mathbb{R}_+} \; p_1 x_1 + p_2 \bar{x}_2
+                            \quad \text{s.c.} \quad f(x_1, \bar{x}_2) \geq \bar{y}
+                            $$
+                        </li>
+                        <li class="fragment fade-up">Valeur : $C^{CT}(\bar{y}, p, \bar{x}_2)$</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Coût à long terme</h2>
+                    <div class="block">
+                        <h3>Tous les inputs sont variables</h3>
+                        $$
+                        \min_{(x_1,x_2) \in \mathbb{R}_+^2} \; p_1 x_1 + p_2 x_2
+                        \quad \text{s.c.} \quad f(x_1,x_2) \geq \bar{y}
+                        $$
+                        <p class="fragment" style="margin-top: 20px;"><strong>Valeur :</strong> $C^{LT}(\bar{y}, p)$</p>
+                    </div>
+                    <div class="block fragment">
+                        <h3>Lien entre les deux fonctions de coût</h3>
+                        $$
+                        \min_{\bar{x}_2} C^{CT}(\bar{y}, p, \bar{x}_2) \Rightarrow C^{LT}(\bar{y}, p)
+                        $$
+                    </div>
+                    <p class="fragment" style="margin-top: 20px;"><i>Le coût de long terme correspond au minimum du coût de court terme optimisé par rapport à l’input rigide.</i></p>
+                </section>
+
+                <!-- Subsection: C. Offre optimale de l'entreprise -->
+                <section>
+                    <h2>Objectif de l'entreprise</h2>
+                    <div class="block">
+                        <h3>Bénéfice</h3>
+                        $$
+                        B(y, q, p) = qy - C(y, p)
+                        $$
+                    </div>
+                    <div class="block fragment">
+                        <h3>Programme de maximisation</h3>
+                        $$
+                        \max_{y \in \mathbb{R}_+} B(y, q, p)
+                        $$
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Solution : $y^*(q, p)$ = offre optimale d’output</li>
+                        <li class="fragment fade-up">Inputs associés : $x^*(q, p) = \tilde{x}(y^*(q, p), p)$</li>
+                    </ul>
+                </section>
+
+                <!-- Subsubsection: 1. Résolution du programme -->
+                <section>
+                    <h2>Condition du premier ordre</h2>
+                    <p>Si $C(y, p)$ est différentiable :</p>
+                    $$
+                    \frac{\partial B(y, q, p)}{\partial y} = 0 \Rightarrow q = Cm(y, p)
+                    $$
+                    <div class="block fragment">
+                        <h3>Interprétation</h3>
+                        <p>À l’optimum :</p>
+                        $$
+                        q = Rm = Cm
+                        $$
+                        <i>Le prix est égal au coût marginal.</i>
+                    </div>
+                </section>
+
+                <!-- Subsubsection: 2. Seuil de rentabilité -->
+                <section>
+                    <h2>Seuil de rentabilité</h2>
+                    <div class="block">
+                        <h3>Expression du bénéfice</h3>
+                        $$
+                        B(y, q, p) = y \left[q - CM(y, p)\right]
+                        $$
+                    </div>
+                    <strong class="fragment" style="margin-top: 20px;">Seuil critique :</strong>
+                    $$
+                    q_0 = \min_y CM(y, p)
+                    $$
+                    <ul>
+                        <li class="fragment fade-up">Si $q < q_0$ :
+                            $$
+                            B < 0 \quad \Rightarrow \quad \text{L’entreprise ne produit pas.}
+                            $$
+                        </li>
+                        <li class="fragment fade-up">Si $q \geq q_0$ :
+                            $$
+                            \text{L’entreprise produit et maximise son bénéfice.}
+                            $$
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Lien entre $Cm$, $CM$ et le profit</h2>
+                    <div class="block">
+                        <h3>Forme alternative du profit</h3>
+                        $$
+                        \begin{aligned}
+                        \Pi(q, p) &= Cm(y, p) \cdot y - C(y, p) \\\\
+                        &= y \left[Cm(y, p) - CM(y, p)\right]
+                        \end{aligned}
+                        $$
+                    </div>
+                    <strong class="fragment" style="margin-top: 20px;">Conclusion :</strong> Pour que le profit soit positif,
+                    \[
+                    \text{il faut que } Cm(y, p) > CM(y, p)
+                    \]
+                    <i>(le coût moyen doit croître au point d'optimum).</i>
+                </section>
+
+                <!-- Subsubsection: 3. Illustration graphique (renuméroté de 2. pour la clarté) -->
+                <section>
+                    <h2>Illustration graphique : seuil de rentabilité et profit</h2>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <!-- Le diagramme TikZ ne peut pas être rendu directement en HTML. -->
+                        <!-- Vous pouvez le remplacer par une image si disponible, par exemple: -->
+                        <!-- <img src="chemin/vers/votre/diagramme_cout_profit.png" alt="Illustration graphique coût et profit" style="max-width: 80%; height: auto;"> -->
+                        <p style="text-align: center; font-size: 0.9em; color: rgba(255,255,255,0.7);">
+                            [Diagramme du seuil de rentabilité, des coûts marginaux et moyens, et de la zone de profit ici. Le code TikZ ne peut pas être intégré directement.]
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Illustration graphique : seuil de rentabilité et profit</h2>
+                    <ul>
+                        <li class="fragment fade-up">$q_0$ : seuil de rentabilité (point où $q = CM$ minimal)</li>
+                        <li class="fragment fade-up">$q_2$ : prix de vente > CM → production rentable</li>
+                        <li class="fragment fade-up">Zone orange : <strong>profit</strong></li>
+                        <li class="fragment fade-up">Zone violette : <strong>coût total</strong></li>
+                        <li class="fragment fade-up">Zone hachurée : <strong>recettes totales</strong> pour différents niveaux de production</li>
+                    </ul>
+                </section>
+
+                <!-- Subsection: D. Lien entre fonction de coût et rendements d’échelle -->
+                <section>
+                    <h2>Lien entre coût et rendements d’échelle</h2>
+                    <div class="block">
+                        <h3>Propriété</h3>
+                        <p>Si $f$ est homogène de degré $\mu$, alors :</p>
+                        $$
+                        C(t\bar{y}, p) = t^{1/\mu} C(\bar{y}, p)
+                        $$
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Fonction de coût homogène de degré $1/\mu$ en $\bar{y}$</li>
+                        <li class="fragment fade-up">Dépend de la nature des rendements d’échelle</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Démonstration du résultat</h2>
+                    <p>Soit $z = t^{-1/\mu} x$ :</p>
+                    <ul>
+                        <li class="fragment fade-up">Alors $f(z) = f(t^{-1/\mu}x) = t^{-1} f(x)$</li>
+                        <li class="fragment fade-up">Si $f(x) \geq t \bar{y} \Rightarrow f(z) \geq \bar{y}$</li>
+                        <li class="fragment fade-up">Donc $C(t\bar{y}, p) = t^{1/\mu} C(\bar{y}, p)$</li>
+                    </ul>
+                    <div class="block fragment">
+                        <h3>Cas particulier $\mu = 1$</h3>
+                        <ul>
+                            <li class="fragment fade-up">$C(\bar{y}, p) = \bar{y} \cdot C(1, p)$</li>
+                            <li class="fragment fade-up">$B(y, q, p) = y \cdot [q - C(1, p)]$</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/zoom/zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/math/math.min.js"></script>
+    <script>
+        // Initialisation de Reveal.js
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            math: {
+                mathjax3: {
+                    path: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js'
+                }
+            },
+            plugins: [
+                RevealZoom,
+                RevealNotes,
+                RevealSearch,
+                RevealMarkdown,
+                RevealHighlight,
+                RevealMath
+            ]
+        });
+
+        // Logique pour l'intégration de l'API Gemini
+        /**
+         * Appelle l'API Gemini avec une logique de relance exponentielle.
+         * @param {string} prompt Le texte de la requête pour l'API Gemini.
+         * @param {number} retries Le nombre de tentatives restantes.
+         * @param {number} delay Le délai actuel avant la prochaine tentative (en ms).
+         * @returns {Promise<string>} La réponse textuelle de l'API.
+         */
+        async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // La clé API est fournie par l'environnement Canvas
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429 && retries > 0) { // Too Many Requests
+                        console.warn(`Taux limite atteint. Réessai dans ${delay / 1000} secondes...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiAPI(prompt, retries - 1, delay * 2); // Double le délai
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Structure de réponse inattendue de l'API Gemini.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'appel à l'API Gemini:", error);
+                throw error;
+            }
+        }
+
+        /**
+         * Gère le clic sur les boutons d'explication IA.
+         * @param {string} prompt Le prompt à envoyer à l'API Gemini.
+         * @param {HTMLElement} outputElement L'élément DOM où afficher la réponse.
+         */
+        async function handleAIExplanation(prompt, outputElement) {
+            outputElement.classList.add('visible');
+            outputElement.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center;">Génération de l\'explication...</p>';
+
+            try {
+                const explanation = await callGeminiAPI(prompt);
+                outputElement.innerHTML = `<p>${explanation}</p>`;
+            } catch (error) {
+                outputElement.innerHTML = `<p style="color: red;">Désolé, une erreur est survenue lors de la récupération de l'explication. Veuillez réessayer.</p>`;
+                console.error("Erreur d'affichage de l'explication IA:", error);
+            }
+        }
+
+        // Configuration des boutons pour chaque slide
+        document.addEventListener('DOMContentLoaded', () => {
+            const explainPmBtn = document.getElementById('explainPmBtn');
+            const pmOutput = document.getElementById('pmOutput');
+            if (explainPmBtn) {
+                explainPmBtn.addEventListener('click', () => {
+                    handleAIExplanation("Expliquez la productivité marginale avec un exemple simple et concret en une ou deux phrases.", pmOutput);
+                });
+            }
+
+            const explainPMBtn = document.getElementById('explainPMBtn');
+            const pmAverageOutput = document.getElementById('pmAverageOutput');
+            if (explainPMBtn) {
+                explainPMBtn.addEventListener('click', () => {
+                    handleAIExplanation("Expliquez la productivité moyenne et son utilité avec une analogie simple en une ou deux phrases.", pmAverageOutput);
+                });
+            }
+
+            const explainElasticityBtn = document.getElementById('explainElasticityBtn');
+            const elasticityOutput = document.getElementById('elasticityOutput');
+            if (explainElasticityBtn) {
+                explainElasticityBtn.addEventListener('click', () => {
+                    handleAIExplanation("Expliquez l'élasticité marginale d'un input avec un exemple très simple, en une ou deux phrases, et son utilité pour une entreprise.", elasticityOutput);
+                });
+            }
+
+            const explainTmSTBtn = document.getElementById('explainTmSTBtn');
+            const tmstOutput = document.getElementById('tmstOutput');
+            if (explainTmSTBtn) {
+                explainTmSTBtn.addEventListener('click', () => {
+                    handleAIExplanation("Expliquez le Taux Marginal de Substitution Technique (TMST) et son implication pour un producteur en une ou deux phrases avec un exemple simple.", tmstOutput);
+                });
+            }
+
+            // Gestion de l'animation de la courbe SVG de Ricardo
+            Reveal.on( 'slidechanged', event => {
+                const ricardoSlide = event.currentSlide.querySelector('.ricardo-svg');
+                if (ricardoSlide) {
+                    const curve = ricardoSlide.querySelector('#ricardo-curve');
+                    if (curve) {
+                        // Un seul dessin par visite pour éviter les re-calculs inutiles
+                        if (!curve.classList.contains('drawn')) {
+                            const length = curve.getTotalLength();
+                            curve.style.strokeDasharray = length;
+                            curve.style.strokeDashoffset = length;
+                            curve.classList.add('draw'); // Déclenche l'animation CSS
+                            curve.classList.add('drawn'); // Marque comme dessiné
+                        }
+                    }
+                } else {
+                    // Réinitialiser l'animation de la courbe si l'on quitte la slide Ricardo
+                    const prevRicardoSlide = event.previousSlide ? event.previousSlide.querySelector('.ricardo-svg') : null;
+                    if (prevRicardoSlide) {
+                        const prevCurve = prevRicardoSlide.querySelector('#ricardo-curve');
+                        if (prevCurve && prevCurve.classList.contains('drawn')) {
+                            prevCurve.classList.remove('draw');
+                            prevCurve.classList.remove('drawn');
+                            prevCurve.style.strokeDashoffset = prevCurve.getTotalLength(); // Réinitialiser le décalage
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

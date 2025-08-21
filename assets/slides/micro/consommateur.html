@@ -1,0 +1,2285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Théorie du Consommateur</title>
+    <meta name="description" content="Slides de présentation du cours Microéconomie avancée - Théorie du Consommateur">
+    <meta name="author" content="Ramanambonona Ambinintsoa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/solarized.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <style>
+        /* COULEURS MODIFIÉES SELON VOTRE DEMANDE */
+        :root {
+            --bg-color: #ffffff;      /* Blanc */
+            --text-color: #333333;    /* Gris sombre */
+            --title-color: #555555;   /* Gris foncé */
+            --important-color: #ff0000; /* Rouge */
+            --block-bg: rgba(245, 245, 245, 0.8); /* Fond légèrement grisé pour les blocs */
+        }
+
+        body {
+            background-color: var(--bg-color) !important;
+            color: var(--text-color) !important;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5 {
+            color: var(--title-color) !important;
+        }
+
+        .reveal strong, .important {
+            color: var(--important-color) !important;
+            font-weight: bold;
+        }
+
+        /* Styles personnalisés pour les blocs */
+        .block, .alertblock {
+            background-color: var(--block-bg);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-left: 5px solid #28a745; /* Vert pour les blocs normaux */
+            color: var(--text-color) !important;
+        }
+        .alertblock {
+            border-left-color: var(--important-color); /* Rouge pour les alertes */
+        }
+        .block h3, .alertblock h3 {
+            margin-top: 0;
+            color: var(--title-color) !important;
+            font-size: 1.2em;
+        }
+        .block p, .alertblock p {
+            font-size: 1em;
+            margin-bottom: 0;
+            color: var(--text-color) !important;
+        }
+
+        /* Style pour centrer le SVG et son contenu associé */
+        .slide-content-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%; /* S'assurer qu'il prend toute la hauteur disponible du slide */
+        }
+
+        /* Styles pour le bouton IA */
+        .ai-button {
+            background-color: #32CD32; /* LimeGreen */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: fit-content; /* S'adapte au contenu */
+            margin-left: auto;
+            margin-right: auto;
+            display: block; /* Centrer le bouton */
+        }
+
+        .ai-button:hover {
+            background-color: #228B22; /* ForestGreen */
+            transform: translateY(-2px);
+        }
+
+        .ai-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Styles pour la zone de réponse de l'IA */
+        .llm-response {
+            background-color: rgba(245, 245, 245, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            color: var(--text-color) !important;
+            text-align: left;
+            font-size: 0.85em;
+            max-height: 150px; /* Augmenté pour éviter le tronquage */
+            overflow-y: auto; /* Ajoute un défilement si le contenu est trop long */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Masqué par défaut */
+            line-height: 1.4;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .llm-response.visible {
+            display: block; /* Visible quand le contenu est là */
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--important-color);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styles spécifiques pour les diagrammes SVG */
+        .diagram-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .diagram-svg {
+            max-width: 100%;
+            height: auto;
+            background: rgba(245, 245, 245, 0.5); /* Léger fond pour le SVG */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .diagram-svg .axis { stroke: var(--title-color); stroke-width: 1.5; }
+        .diagram-svg .axis-arrow { fill: var(--title-color); }
+        .diagram-svg .svg-label { fill: var(--text-color); font-size: 16px; font-family: 'Inter', sans-serif; }
+        .diagram-svg .indifference-curve {
+            stroke: var(--important-color);
+            stroke-width: 2;
+            fill: none;
+            transition: stroke-dashoffset 2s ease-out; /* Animation pour le dessin */
+        }
+        .diagram-svg .budget-line { stroke: #5555ff; stroke-width: 2; } /* Bleu pour la ligne budgétaire */
+        .diagram-svg .tangent-line { stroke: #888888; stroke-width: 1; stroke-dasharray: 4 2; }
+        .diagram-svg .optimal-point { fill: #00aa00; } /* Vert pour le point optimal */
+        .diagram-svg .optimal-label { fill: var(--text-color); font-size: 14px; }
+        .diagram-svg .dashed-line { stroke: var(--text-color); stroke-width: 0.8; stroke-dasharray: 5 5; }
+
+        /* Animation de dessin pour les courbes */
+        .draw-curve {
+            stroke-dasharray: 1000; /* Grande valeur initiale */
+            stroke-dashoffset: 1000;
+            animation: draw-path 2s ease-out forwards;
+        }
+        @keyframes draw-path {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Styles pour le diagramme Slutsky/Hicks */
+        .slutsky-hicks-diagram {
+            max-width: 600px;
+            height: 400px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .slutsky-hicks-diagram .curve-u0, .slutsky-hicks-diagram .curve-u1 {
+            stroke: var(--important-color);
+            fill: none;
+            stroke-width: 2;
+        }
+        .slutsky-hicks-diagram .budget-line-initial, .slutsky-hicks-diagram .budget-line-final, .slutsky-hicks-diagram .budget-line-compensated {
+            stroke: #5555ff;
+            stroke-width: 2;
+        }
+        .slutsky-hicks-diagram .budget-line-compensated {
+            stroke-dasharray: 5 5;
+            stroke: #ff8800; /* Orange */
+        }
+        .slutsky-hicks-diagram .point {
+            fill: #00aa00;
+            r: 3;
+        }
+        .slutsky-hicks-diagram .label {
+            fill: var(--text-color);
+            font-size: 14px;
+        }
+        .slutsky-hicks-diagram .arrow {
+            stroke: var(--important-color);
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        .slutsky-hicks-diagram defs marker {
+            fill: var(--important-color);
+            stroke: none;
+        }
+
+        /* Améliorations pour la lisibilité */
+        .reveal section img {
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .reveal ul, .reveal ol {
+            text-align: left;
+            margin-left: 1em;
+        }
+        
+        .reveal li {
+            margin-bottom: 0.5em;
+        }
+        
+        .reveal table {
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        
+        .reveal th, .reveal td {
+            padding: 8px 12px;
+            border: 1px solid #cccccc;
+        }
+        
+        .reveal th {
+            background-color: #f5f5f5;
+        }
+        
+        /* Ajout d'espacement pour les sections divisées */
+        .divided-section {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Page de garde - Titre -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <h2>Microéconomie Avancée</h2>
+                <p><a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona-7a4283244?originalSubdomain=mg">Dr. Ramanambonona Ambinintsoa</a></p>
+                <div class="r-hstack justify-center">
+                    <div data-id="box1" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                    <div data-id="box2" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                    <div data-id="box3" style="background: #999; width: 50px; height: 50px; margin: 10px; border-radius: 5px;"></div>
+                </div>
+                <aside class="notes">
+                    Page de garde présentant le titre du cours et les informations de l'auteur.
+                </aside>
+            </section>
+
+            <!-- Slide 2: Page de garde - Institution -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <div class="r-hstack justify-center">
+                    <div data-id="box1" data-auto-animate-delay="0" style="background: cyan; width: 150px; height: 100px; margin: 10px;"></div>
+                    <div data-id="box2" data-auto-animate-delay="0.1" style="background: magenta; width: 150px; height: 100px; margin: 10px;"></div>
+                    <div data-id="box3" data-auto-animate-delay="0.2" style="background: yellow; width: 150px; height: 100px; margin: 10px;"></div>
+                </div>
+                <h2 style="margin-top: 20px;">Ecole Normale Supérieure</h2>
+                <aside class="notes">
+                    Cette diapositive affiche l'institution avec une animation des boîtes colorées.
+                </aside>
+            </section>
+
+            <!-- Slide 3: Page de garde - Thème -->
+            <section data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                <div class="r-stack">
+                    <div data-id="box1" style="background: cyan; width: 300px; height: 300px;"></div>
+                    <div data-id="box2" style="background: magenta; width: 200px; height: 200px;"></div>
+                    <div data-id="box3" style="background: yellow; width: 100px; height: 100px;"></div>
+                </div>
+                <h2 style="margin-top: 20px;">Théorie du Consommateur</h2>
+                <aside class="notes">
+                    Cette diapositive introduit le thème du cours avec une animation en pile.
+                </aside>
+            </section>
+			<section>
+				<section class="slide">
+					<h1>Introduction</h1>
+				</section>
+			<!-- Section: Introduction -->
+                <section data-transition="slide" data-background="#f5f5f5">
+                    <h2>Introduction</h2>
+                    <ul>
+                        <li class="fragment fade-up">La microéconomie analyse le comportement des agents sur le marché.</li>
+                        <li class="fragment fade-up">Les biens échangés peuvent être des matières premières, des biens ou des services.</li>
+                        <li class="fragment fade-up">Deux acteurs fondamentaux : <strong>l'offre</strong> et <strong>la demande</strong>.</li>
+                        <li class="fragment fade-up">Deux variables centrales : <strong>le prix</strong> et <strong>la quantité</strong>.</li>
+                        <li class="fragment fade-up">Cadre basé sur des <strong>hypothèses simplificatrices</strong>.</li>
+                        <li class="fragment fade-up">Discipline analytique rigoureuse dans la science économique.</li>
+                    </ul>
+                    <aside class="notes">
+                        Introduction aux principes fondamentaux de la microéconomie et du rôle des agents.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Objectifs de la microéconomie</h2>
+                    <div class="block">
+                        <h3>Objectifs</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Explicatifs :</strong> Comprendre et formaliser les comportements économiques.</li>
+                            <li class="fragment fade-up"><strong>Méthodologiques :</strong> Utilisation du langage mathématique pour modéliser.</li>
+                            <li class="fragment fade-up"><strong>Normatifs :</strong> Identifier les comportements souhaitables selon l'efficacité ou l'équité.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Les agents économiques</h2>
+                    <div class="block">
+                        <h3>Trois types principaux d'agents participent aux échanges :</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Les ménages</strong> : unités de consommation, parfois productrices ou salariées, offreur de travail.</li>
+                            <li class="fragment fade-up"><strong>Les entreprises</strong> : produisent des biens et services destinés à être vendus sur le marché.</li>
+                            <li class="fragment fade-up"><strong>L'État</strong> : acteur économique majeur :
+                                <ul>
+                                    <li class="fragment fade-up">prélèvement des impôts</li>
+                                    <li class="fragment fade-up">régulation des activités économiques.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Le marché</h2>
+                    <ul>
+                        <li class="fragment fade-up">Chaque bien possède son <strong>marché propre</strong>, où se rencontrent offre et demande.</li>
+                        <li class="fragment fade-up">Les marchés se distinguent selon :
+                            <ul>
+                                <li class="fragment fade-up">La nature du bien ;</li>
+                                <li class="fragment fade-up">La localisation géographique ;</li>
+                                <li class="fragment fade-up">La période de disponibilité.</li>
+                            </ul>
+                        </li>
+                        <li class="fragment fade-up">L'échange s'opère lorsque <strong>l'offre est égale à la demande</strong>.</li>
+                        <li class="fragment fade-up">En cas de déséquilibre, des <strong>mécanismes d'ajustement</strong> interviennent (marchandage, enchères, etc.).</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Choix et rationalité</h2>
+                    <div class="block">
+                        <h3>Postulat central de la microéconomie :</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Individualisme méthodologique</strong> : chaque agent agit individuellement.</li>
+                            <li class="fragment fade-up">Les choix sont <strong>rationnels</strong> : ils visent à maximiser un intérêt propre.</li>
+                            <li class="fragment fade-up">L'agent choisit l'option qu'il juge <strong>meilleure</strong> parmi les opportunités disponibles.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Rationalité des agents économiques</h2>
+                    <div class="block">
+                        <h3>Deux comportements fondamentaux</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Le consommateur</strong> :
+                                <ul>
+                                    <li class="fragment fade-up">Connaît ses contraintes : revenu et prix des biens.</li>
+                                    <li class="fragment fade-up">Il cherche à <strong>maximiser son utilité</strong>.</li>
+                                </ul>
+                            </li>
+                            <li class="fragment fade-up"><strong>Le producteur</strong> :
+                                <ul>
+                                    <li class="fragment fade-up">Tient compte des coûts de production et du prix de vente.</li>
+                                    <li class="fragment fade-up">Il vise à <strong>maximiser son profit</strong>.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Échange et satisfaction mutuelle</h2>
+                    <ul>
+                        <li class="fragment fade-up">Sur un marché, chaque agent est <strong>libre de ses choix</strong>.</li>
+                        <li class="fragment fade-up">L'échange a lieu si <strong>toutes les parties trouvent un intérêt à y participer</strong>.</li>
+                        <li class="fragment fade-up">Cela reflète la logique de <strong>satisfaction mutuelle minimale</strong> dans l'échange.</li>
+                    </ul>
+                </section>
+            </section>
+			<section>
+				<section class="slide">
+					<h1>Rappels mathématiques</h1>
+				</section>
+                <section>
+                    <h2>1. Fonction à plusieurs variables</h2>
+                    <ul>
+                        <li class="fragment fade-up">Une fonction à $n$ variables est une application :
+                            \[
+                            f : \mathbb{R}_+^n \rightarrow \mathbb{R}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Notation classique :
+                            \[
+                            y = f(x_1, \dots, x_n)
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Elle associe une valeur $y$ à un vecteur $(x_1, \dots, x_n)$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>2. Dérivée (fonction d'une variable)</h2>
+                    <div class="block">
+                        <h3>Définition formelle</h3>
+                        \[
+                        f^{\prime}(x)=\lim_{\Delta x \rightarrow 0} \frac{f(x+\Delta x)-f(x)}{\Delta x}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">La dérivée $f'(x)$ mesure la variation de $f(x)$ lorsque $x$ varie.</li>
+                        <li class="fragment fade-up">Exemple : si $f(x) = x^2$, alors $f'(x) = 2x$.</li>
+                        <li class="fragment fade-up"><strong>Interprétation graphique</strong> : pente de la tangente à la courbe.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>3. Dérivées partielles</h2>
+                    <ul>
+                        <li class="fragment fade-up">Si $f$ dépend de plusieurs variables, on peut dériver partiellement.</li>
+                        <li class="fragment fade-up">Par rapport à $x_i$ :
+                            \[
+                            \frac{\partial f}{\partial x_i} = \lim_{\Delta x_i \to 0} \frac{f(\dots, x_i + \Delta x_i, \dots) - f(\dots, x_i, \dots)}{\Delta x_i}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Notation usuelle :
+                            \[
+                            \frac{\partial f(x_1, \dots, x_n)}{\partial x_i}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>4. Différentielle</h2>
+                    <div class="block">
+                        <h3>Variation totale d'une fonction différentiable :</h3>
+                        \[
+                        df = \frac{\partial f}{\partial x_1} dx_1 + \cdots + \frac{\partial f}{\partial x_n} dx_n
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Elle approxime la variation de $f$ quand plusieurs variables changent.</li>
+                        <li class="fragment fade-up">Elle est très utile dans l'analyse des fonctions économiques.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>5. Concavité et convexité (1/2)</h2>
+                    <div class="block">
+                        <h3>Définitions (cas général)</h3>
+                        <ul>
+                            <li class="fragment fade-up">$f$ est <strong>concave</strong> si :
+                                \[
+                                f(\lambda x + (1 - \lambda)x') \geq \lambda f(x) + (1 - \lambda)f(x')
+                                \]
+                            </li>
+                            <li class="fragment fade-up">$f$ est <strong>convexe</strong> si :
+                                \[
+                                f(\lambda x + (1 - \lambda)x') \leq \lambda f(x) + (1 - \lambda)f(x')
+                                \]
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>5. Concavité et convexité (2/2) : Critères</h2>
+                    <div class="block">
+                        <h3>Critères d'identification</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>Cas unidimensionnel</strong> :
+                                \[
+                                f''(x) \leq 0 \Rightarrow \text{concave}, \quad f''(x) \geq 0 \Rightarrow \text{convexe}
+                                \]
+                            </li>
+                            <li class="fragment fade-up"><strong>Cas multivarié</strong> : via la matrice hessienne
+                                \[
+                                H_f(x) = \left[ \frac{\partial^2 f}{\partial x_i \partial x_j} \right]
+                                \]
+                            </li>
+                            <li class="fragment fade-up">$f$ est concave si $H_f(x)$ est semi-définie négative.</li>
+                            <li class="fragment fade-up">$f$ est convexe si $H_f(x)$ est semi-définie positive.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>6. Conditions d'optimalité</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Condition du premier ordre (gradient nul)</strong> :
+                            \[
+                            \nabla f(x^*) = \left( \frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n} \right) = 0
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Condition du second ordre</strong> :
+                            <ul>
+                                <li class="fragment fade-up">Si $H_f(x^*)$ est définie négative : $x^*$ est un maximum local.</li>
+                                <li class="fragment fade-up">Si $H_f(x^*)$ est définie positive : $x^*$ est un minimum local.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>7. Optimisation sous contrainte</h2>
+                    <div class="block">
+                        <h3>Problème de maximisation sous contrainte</h3>
+                        \[
+                        \begin{aligned}
+                        & \max f(x_1,\ldots,x_n) \\
+                        & \text{s.c. } g(x_1,\ldots,x_n) = c
+                        \end{aligned}
+                        \]
+                    </div>
+                    <vspace{0.4cm}
+                    <ul>
+                        <li class="fragment fade-up"><strong>Méthode des multiplicateurs de Lagrange</strong> :
+                            \[
+                            \mathcal{L}(x, \lambda) = f(x) - \lambda (g(x) - c)
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Conditions de premier ordre :
+                            \[
+                            \left\{
+                            \begin{aligned}
+                            & \frac{\partial \mathcal{L}}{\partial x_i} = 0 \quad (i = 1, \dots, n) \\
+                            & \frac{\partial \mathcal{L}}{\partial \lambda} = 0
+                            \end{aligned}
+                            \right.
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Interprétation du multiplicateur de Lagrange</h2>
+                    <ul>
+                        <li class="fragment fade-up">Le système donne $n + 1$ équations à résoudre.</li>
+                        <li class="fragment fade-up">La solution optimale est notée $(x_1^*, \dots, x_n^*)$.</li>
+                        <li class="fragment fade-up">Le multiplicateur $\lambda$ représente la <strong>valeur marginale de la contrainte</strong> :
+                            \[
+                            \lambda = \frac{df^*}{dc}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>8. Fonction homogène</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        \[
+                        f(\lambda x_1, \dots, \lambda x_n) = \lambda^\mu f(x_1, \dots, x_n)
+                        \]
+                    </div>
+                    <vspace{0.4cm}
+                    <ul>
+                        <li class="fragment fade-up"><strong>Homogénéité de degré $\mu$</strong> : la fonction évolue proportionnellement à l'échelle.</li>
+                        <li class="fragment fade-up">Cas particuliers :
+                            <ul>
+                                <li class="fragment fade-up">Degré $0$ : $f$ reste inchangée → rendements constants à l'échelle.</li>
+                                <li class="fragment fade-up">Degré $1$ : $f$ est proportionnelle → rendements linéaires.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Le comportement du consommateur -->
+            <section>
+				<section class="slide">
+					<h1>Le comportement du consommateur</h1>
+				</section>
+                <section>
+                    <h2>Le comportement du consommateur</h2>
+                    <ul>
+                        <li class="fragment fade-up">Expliquer l'origine de la <strong>demande individuelle</strong>.</li>
+                        <li class="fragment fade-up">Un <strong>bien</strong> peut être un objet matériel ou un service.</li>
+                        <li class="fragment fade-up">Les biens sont supposés <strong>divisibles à l'infini</strong>.</li>
+                        <li class="fragment fade-up">La quantité consommée de chaque bien est un <strong>réel positif</strong>.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Préférences individuelles et Axiomes - PARTIE 1 -->
+            <section>
+                <section class="slide">
+					<h1>Préférences individuelles et Axiomes</h1>
+				</section>
+				
+				<section>
+                    <h2>Préférences individuelles</h2>
+                    <div class="block">
+                        <h3>Cadre général</h3>
+                        <ul>
+                            <li class="fragment fade-up">On considère $n$ biens notés $i = 1, \dots, n$.</li>
+                            <li class="fragment fade-up">Le consommateur choisit un <strong>panier de biens</strong> :
+                                \[
+                                (x_1, x_2, \dots, x_n)
+                                \]
+                            </li>
+                            <li class="fragment fade-up">Ce vecteur représente les quantités choisies de chaque bien.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Exemple de panier de biens</h2>
+                    <div class="block">
+                        <h3>Comparaison de deux paniers</h3>
+                        <ul>
+                            <li class="fragment fade-up">Exemple illustratif avec 4 biens : banane, riz, mangue, maïs.</li>
+                        </ul>
+                        \[
+                        \begin{array}{|c|c|c|}
+                        \hline
+                        \textbf{Bien} & \textbf{Panier A} & \textbf{Panier B} \\
+                        \hline
+                        \text{Banane} & 10 & 7 \\
+                        \text{Riz} & 7 & 10 \\
+                        \text{Mangue} & 3 & 2 \\
+                        \text{Maïs} & 2 & 3 \\
+                        \hline
+                        \end{array}
+                        \]
+                    </div>
+                    <vspace{0.2cm}
+                    <ul>
+                        <li class="fragment fade-up"><strong>Représentation vectorielle</strong> :
+                            \[
+                            \mathbf{A} = \begin{pmatrix} 10 \\ 7 \\ 3 \\ 2 \end{pmatrix}, \quad
+                            \mathbf{B} = \begin{pmatrix} 7 \\ 10 \\ 2 \\ 3 \end{pmatrix}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Préférences individuelles</h2>
+                    <ul>
+                        <li class="fragment fade-up">Chaque individu cherche à maximiser sa <strong>satisfaction</strong>.</li>
+                        <li class="fragment fade-up">Il peut comparer deux paniers et choisir celui qu'il préfère.</li>
+                        <li class="fragment fade-up">Les préférences sont subjectives : un individu peut préférer $A$, un autre $B$.</li>
+                        <li class="fragment fade-up">Elles sont indépendantes des prix : seule compte l'<strong>utilité perçue</strong>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Axiomes des préférences (1/2)</h2>
+                    On note par $X$ et $Y$ : les paniers des biens
+                    \[
+                    X = \begin{pmatrix} x_1 \\ \vdots \\ x_n \end{pmatrix} \in \mathbb{R}^n_+, \quad Y = \begin{pmatrix} y_1 \\ \vdots \\ y_n \end{pmatrix} \in \mathbb{R}^n_+,
+                    \]
+				</section>
+				<section>
+				<h2>Axiomes des préférences (2/2)</h2>
+                    <div class="block">
+                        <h3>Une relation de préférence $\succeq$ respecte 4 propriétés fondamentales :</h3>
+                        <ul>
+                            <li class="fragment fade-up"><strong>1. Complétude</strong> : $\forall (X, Y) \in \mathbb{R}^n_+ \times \mathbb{R}^n_+, \quad X \succeq Y \; \text{ou} \; Y \succeq X$</li>
+                            <li class="fragment fade-up"><strong>2. Réflexivité</strong> : $\forall X \in \mathbb{R}^n_+, \quad X \succeq X$</li>
+                            <li class="fragment fade-up"><strong>3. Transitivité</strong> : $\forall (X, Y, Z) \in \mathbb{R}^n_+ \times \mathbb{R}^n_+ \times \mathbb{R}^n_+, \quad (X \succeq Y \; \text{et} \; Y \succeq Z) \Rightarrow X \succeq Z$</li>
+							<li class="fragment fade-up"><strong>4. Non saturation</strong> : $\forall (X, Y) \in \mathbb{R}^n_+ \times \mathbb{R}^n_+ \; \text{si} \; y_i > x_i \; \forall i \Rightarrow Y \succ X$</li>
+							<ul>
+							<li class="fragment fade-up">Un panier contenant strictement plus de chaque bien est préféré.</li>
+							</ul>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section: Fonction d'utilité - PARTIE 1 -->
+            <section>
+                <section class="slide">
+					<h1>Fonction d'utilité</h1>
+				</section>
+				<section>
+                    <h2>Fonction d'utilité</h2>
+                    <div class="block">
+                        <h3>Lien entre préférence et utilité</h3>
+                        \[
+                        U : \mathbb{R}_+^n \rightarrow \mathbb{R} \quad \text{tel que} \quad X \succeq Y \iff U(X) \geq U(Y)
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Indifférence</strong> : $X \sim Y \iff U(X) = U(Y)$</li>
+                        <li class="fragment fade-up"><strong>Préférence stricte</strong> : $X \succ Y \iff U(X) > U(Y)$</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Exemple illustratif de fonction d'utilité</h2>
+                    <ul>
+                        <li class="fragment fade-up">Soit deux paniers :
+                            \[
+                            X = \begin{pmatrix} 4 \\ 2 \end{pmatrix}, \quad Y = \begin{pmatrix} 5 \\ 4 \end{pmatrix}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Comme $Y$ contient plus de chaque bien, alors $Y \succ X$.</li>
+                        <li class="fragment fade-up">Si $U(X) = 8$ et $U(Y) = 12$, alors $Y$ est préféré à $X$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Notion d'utilité</h2>
+                    <ul>
+                        <li class="fragment fade-up">La fonction d'utilité $U$ représente les préférences du consommateur.</li>
+                        <li class="fragment fade-up">Ce n'est pas la valeur de $U(X)$ qui compte, mais son <strong>classement relatif</strong>.</li>
+                        <li class="fragment fade-up">L'utilité est une notion <strong>ordinale</strong>, pas cardinale.</li>
+                        <li class="fragment fade-up">Deux fonctions représentant les mêmes préférences :
+                            \[
+                            U(X) \succeq U(Y) \iff V(X) \succeq V(Y), \quad \text{avec } V = f(U), \; f'>0
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Propriétés de la fonction d'utilité</h2>
+                    <ul>
+                        <li class="fragment fade-up">L'utilité est <strong>faiblement croissante</strong> :
+                            \[
+                            \frac{\partial U}{\partial x_i} \geq 0, \quad \forall i
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Ajouter plus d'un bien ne diminue jamais l'utilité.</li>
+                        <li class="fragment fade-up">Cela reflète l'axiome de non-saturation.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Fonction d'utilité : Cobb-Douglas</h2>
+                    <div class="block">
+                        <h3>Forme générale :</h3>
+                        <ul>
+                            <li class="fragment fade-up">$U(x_1, \dots, x_n) = k x_1^{\alpha_1} x_2^{\alpha_2} \cdots x_n^{\alpha_n}$</li>
+                            <li class="fragment fade-up">$k > 0$ : constante de proportion.</li>
+                            <li class="fragment fade-up">$\alpha_i > 0$ : élasticité de chaque bien.</li>
+                            <li class="fragment fade-up">Cette fonction implique que tous les biens sont nécessaires.</li>
+                            <li class="fragment fade-up">Très utilisée pour modéliser les préférences avec substituabilité partielle.</li>
+                        </ul>
+                    </div>
+                </section>
+				
+                <section>
+                    <h2>Fonction d'utilité : biens complémentaires</h2>
+                    <div class="block">
+                        <h3>Forme générale :</h3>
+                        <ul>
+                            <li class="fragment fade-up">$U(x_1, \dots, x_n) = \min\left(\frac{x_1}{a_1}, \frac{x_2}{a_2}, \dots, \frac{x_n}{a_n}\right)$</li>
+                            <li class="fragment fade-up">$a_i > 0$ : coefficients de proportionnalité.</li>
+                            <li class="fragment fade-up">Modélise des biens utilisés <strong>ensemble en proportions fixes</strong>.</li>
+                            <li class="fragment fade-up">Exemple : café + sucre, ordinateur + écran.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Lignes et courbes de niveau</h2>
+                    <ul>
+                        <li class="fragment fade-up">Une <strong>ligne de niveau</strong> $\alpha$ : ensemble des paniers avec même utilité.
+                            \[
+                            I^U_\alpha = \{X \in \mathbb{R}^n_+ \mid U(X) = \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Pour $n=2$, on parle de <strong>courbe de niveau</strong> ou <strong>courbe d'indifférence</strong>.</li>
+                        <li class="fragment fade-up">Tous les paniers sur cette courbe procurent la même satisfaction.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Courbes d'indifférence ($n=2$)</h2>
+                    <ul>
+                        <li class="fragment fade-up">Pour $U(x_1, x_2)$, chaque courbe d'indifférence est :
+                            \[
+                            I^U_\alpha = \{(x_1, x_2) \in \mathbb{R}^2_+ \mid U(x_1, x_2) = \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Aussi appelées <strong>courbes d'iso-utilité</strong>.</li>
+                        <li class="fragment fade-up">Elles permettent de visualiser les préférences sans référence aux prix.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Illustration des courbes d'indifférence</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+
+                            <!-- Labels des axes -->
+							<text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Courbes d'indifférence -->
+                            <path id="indiff-curve-1" class="indifference-curve draw-curve" d="M100,100 C100,200 200,300 300,300"/>
+							 <!-- Labels des courbes -->
+                            <text x="305" y="300" class="svg-label">Courbe d'indifférence</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Exemple : fonction Cobb-Douglas</h2>
+                    <div class="block">
+                        <h3>Fonction :</h3>
+                        \[
+                        U(x_1, x_2) = 2x_1^{\frac{2}{3}}x_2^{\frac{1}{3}}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Niveau constant $\alpha$ :
+                            \[
+                            x_2 = \left( \frac{\alpha}{2x_1^{\frac{2}{3}}} \right)^3
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Courbes d'indifférence convexes : substituabilité partielle.</li>
+                    </ul>
+                </section>
+                <section>
+					<div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Courbes d'indifférence Cobb-Douglas -->
+                            <!-- Points pour U=1: (1, 0.125), (2, 0.039), (4, 0.009) -->
+                            <!-- Points pour U=2: (1, 1), (2, 0.315), (4, 0.079) -->
+                            <path class="indifference-curve draw-curve" d="M 70,300 C 120,250 200,180 300,150" stroke="#FF0000" id="cobb-douglas-curve-u1"/>
+                            <path class="indifference-curve draw-curve" d="M 70,250 C 140,180 250,120 400,100" stroke="#FF0000" id="cobb-douglas-curve-u2"/>
+
+                            <!-- Annotations pour les courbes -->
+                            <text x="310" y="140" class="svg-label">$\alpha=1 \rightarrow x_2 = (\frac{1}{2x_1^{2/3}})^3$</text>
+                            <text x="410" y="90" class="svg-label">$\alpha=2 \rightarrow x_2 = (\frac{2}{2x_1^{2/3}})^3$</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Exemple : Fonction d'utilité Leontief(biens complémentaires)</h2>
+                    <div class="block">
+                        <h3>Fonction :</h3>
+                        \[
+                        U(x_1, x_2) = 2 \min(x_1, 3x_2)
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Niveau d'utilité $\alpha$, la courbe a une forme de "L" :
+                            <ul>
+                                <li class="fragment fade-up">$x_1 = 3x_2$ lorsque $x_1 \leq \frac{\alpha}{2}$,</li>
+                                <li class="fragment fade-up">$x_2 = \frac{\alpha}{6}$ lorsque $x_1 > \frac{\alpha}{2}$.</li>
+                            </ul>
+                        </li>
+                        <li class="fragment fade-up">Représente des biens consommés ensemble.</li>
+                    </ul>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Courbes d'indifférence Leontief (L-shape) -->
+                            <!-- Exemple pour alpha=10 (U=10), alors 2*min(x1, 3x2) = 10 -->
+                            <!-- min(x1, 3x2) = 5 -->
+                            <!-- Point de coude : x1=5, 3x2=5 => x2=5/3 -->
+                            <!-- Segment horizontal: x2=5/3 (env 1.67) pour x1 > 5 -->
+                            <!-- Segment vertical: x1=5 pour x2 < 5/3 -->
+                            <path class="indifference-curve draw-curve" d="M 120, 350 L 120, 280 L 300, 280" id="leontief-curve-1" stroke="#FF0000"/>
+                            <path class="indifference-curve draw-curve" d="M 170, 350 L 170, 230 L 350, 230" id="leontief-curve-2" stroke="#FF0000"/>
+
+                            <!-- Labels pour les points de coude -->
+                            <text x="125" y="270" class="svg-label">$x_1=6, x_2=2$</text>
+                            <text x="175" y="220" class="svg-label">$x_1=9, x_2=3$</text>
+
+                            <text x="320" y="100" class="svg-label">$\alpha=2 \min(x_1, 3x_2)$</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Ensemble de niveau associés à l'utilité</h2>
+                    <ul>
+                        <li class="fragment fade-up">Niveau égal :
+                            \[
+                            I^U_\alpha = \{X \in \mathbb{R}^n_+ \mid U(X) = \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Niveau supérieur ou égal :
+                            \[
+                            I^U_\alpha{}^+ = \{X \in \mathbb{R}^n_+ \mid U(X) \geq \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Niveau strictement supérieur :
+                            \[
+                            I^U_\alpha{}^{*+} = \{X \in \mathbb{R}^n_+ \mid U(X) > \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Niveau inférieur ou égal :
+                            \[
+                            I^U_\alpha{}^- = \{X \in \mathbb{R}^n_+ \mid U(X) \leq \alpha\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Niveau strictement inférieur :
+                            \[
+                            I^U_\alpha{}^{*-} = \{X \in \mathbb{R}^n_+ \mid U(X) < \alpha\}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Convexité des préférences et quasi-concavité -->
+            <section>
+                <section>
+                    <h2>Convexité des préférences</h2>
+                    <ul>
+                        <li class="fragment fade-up">Une préférence est <strong>convexe</strong> si :
+                            \[
+                            X \succeq Y \Rightarrow \lambda X + (1 - \lambda) Y \succeq Y \quad \forall \lambda \in [0,1]
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Autrement dit, un mélange $Z = \lambda X + (1-\lambda) Y$ est au moins aussi bon que $Y$.</li>
+                        <li class="fragment fade-up">Cela traduit une <strong>préférence pour la diversification</strong>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Quasi-concavité de la fonction d'utilité</h2>
+                    <ul>
+                        <li class="fragment fade-up">Si les préférences sont convexes, alors la fonction d'utilité $U$ est <strong>quasi-concave</strong>.</li>
+                        <li class="fragment fade-up">L'ensemble de niveau supérieur est convexe :
+                            \[
+                            I^U_\alpha{}^+ = \{ X \in \mathbb{R}^n_+ \mid U(X) \geq \alpha \}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Cela garantit que toute combinaison de paniers ayant une utilité $\ge \alpha$ appartient aussi à $I^U_\alpha{}^+$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Démonstration – Objectif</h2>
+                    <div class="block">
+                        <h3>À démontrer :</h3>
+                        \[
+                        X \succeq Y \Rightarrow \lambda X + (1 - \lambda) Y \succeq Y \quad \forall \lambda \in [0,1]
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Hypothèse : $X \succeq Y \iff U(X) \geq U(Y)$</li>
+                        <li class="fragment fade-up">Fonction d'utilité $U$ est <strong>quasi-concave</strong></li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Démonstration – Étapes</h2>
+                    <ul>
+                        <li class="fragment fade-up">Soit $\alpha = U(Y)$. Comme $U(X) \geq U(Y)$, on a $X, Y \in I^U_\alpha{}^+$</li>
+                        <li class="fragment fade-up">Par convexité de $I^U_\alpha{}^+$ :
+                            \[
+                            \lambda X + (1 - \lambda) Y \in I^U_\alpha{}^+
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Donc :
+                            \[
+                            U(\lambda X + (1 - \lambda) Y) \geq \alpha = U(Y)
+                            \Rightarrow \lambda X + (1 - \lambda) Y \succeq Y
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Interprétation intuitive</h2>
+                    <ul>
+                        <li class="fragment fade-up">Si $X$ est préféré à $Y$, alors un <strong>mélange</strong> des deux est aussi acceptable que $Y$.</li>
+                        <li class="fragment fade-up">Préférences convexes = <strong>préférence pour la diversité</strong>.</li>
+                        <li class="fragment fade-up">Cas particuliers :
+                            <ul>
+                                <li class="fragment fade-up">Si $\lambda = 1$ : on obtient $X$ lui-même.</li>
+                                <li class="fragment fade-up">Si $\lambda = 0$ : on obtient $Y$, et $Y \succeq Y$ est trivialement vrai.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Taux marginal de substitution -->
+            <section>
+                <section>
+                    <h2>Taux Marginal de Substitution (TMS)</h2>
+                    <ul>
+                        <li class="fragment fade-up">Le <strong>TMS</strong> mesure la quantité de bien $x_2$ à céder pour compenser la perte d'une unité de $x_1$, <strong>à utilité constante</strong>.</li>
+                        <li class="fragment fade-up">Définition :
+                            \[
+                            TMS_{1/2} = - \frac{dx_2}{dx_1}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Il correspond à la <strong>pente</strong> de la courbe d'indifférence.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Déduction mathématique du TMS</h2>
+                    <ul>
+                        <li class="fragment fade-up">À utilité constante ($U(x_1,x_2)=\alpha$), la différentielle est nulle :
+                            \[
+                            dU = \frac{\partial U}{\partial x_1} dx_1 + \frac{\partial U}{\partial x_2} dx_2 = 0
+                            \]
+                        </li>
+                        <li class="fragment fade-up">On isole :
+                            \[
+                            \frac{\partial U}{\partial x_1} dx_1 = - \frac{\partial U}{\partial x_2} dx_2
+                            \]
+                        </li>
+                        <li class="fragment fade-up">En divisant :
+                            \[
+                            -\frac{dx_2}{dx_1} = \frac{\partial U / \partial x_1}{\partial U / \partial x_2}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Formule du TMS</h2>
+                    <div class="block">
+                        <h3>Expression du TMS :</h3>
+                        \[
+                        TMS_{1/2} = \frac{\partial U / \partial x_1}{\partial U / \partial x_2}
+                        \]
+                    </div>
+                    <div class="block">
+                        <h3>Autre expression du TMS :</h3>
+                        <p>$ TMS_{1/2}$ valeur relative attribuée par le consommateur au bien $1$ par rapport au bien $2$</p>
+                        \[
+                        TMS_{1/2} = \frac{1}{TMS_{2/1}}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Le TMS est <strong>positif</strong>, car on exprime une compensation.</li>
+                        <li class="fragment fade-up">Il mesure le <strong>taux d'échange subjectif</strong> entre deux biens.</li>
+                        <li class="fragment fade-up">Interprétation géométrique : pente de la tangente à la courbe d'indifférence.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Représentation graphique du TMS</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Courbe d'indifférence -->
+                            <path class="indifference-curve draw-curve" d="M 80,300 C 120,200 250,100 400,150" id="tms-curve"/>
+
+                            <!-- Triangles de variation -->
+                            <polygon points="150,250 220,250 220,180" fill="rgba(255,0,0,0.3)" stroke="red" stroke-width="1"/>
+                            <polygon points="250,280 320,280 320,210" fill="rgba(0,0,255,0.3)" stroke="blue" stroke-width="1"/>
+
+                            <!-- Lignes de variation -->
+                            <line x1="220" y1="180" x2="220" y2="250" stroke="white" stroke-dasharray="2 2"/>
+                            <line x1="150" y1="250" x2="220" y2="250" stroke="white" stroke-dasharray="2 2"/>
+                            <line x1="320" y1="210" x2="320" y2="280" stroke="white" stroke-dasharray="2 2"/>
+                            <line x1="250" y1="280" x2="320" y2="280" stroke="white" stroke-dasharray="2 2"/>
+
+                            <!-- Étiquettes des variations -->
+                            <text x="140" y="215" class="svg-label">$-\Delta x_2$</text>
+                            <text x="190" y="265" class="svg-label">$\Delta x_1$</text>
+                            <text x="340" y="100" class="svg-label">Pente: $-\frac{\Delta x_2}{\Delta x_1}$</text>
+                        </svg>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section: Contrainte budgétaire -->
+            <section>
+                <section>
+                    <h2>Contrainte budgétaire</h2>
+                    <ul>
+                        <li class="fragment fade-up">Le consommateur dispose d'un <strong>revenu fixe</strong> $R$.</li>
+                        <li class="fragment fade-up">Il ne peut pas influencer ce revenu : il est exogène.</li>
+                        <li class="fragment fade-up">Il choisit un panier de biens dans une limite budgétaire.</li>
+                        <li class="fragment fade-up">Ensemble budgétaire :
+                            \[
+                            B = \left\{ (x_1,\ldots,x_n) \in \mathbb{R}^n_+ \;\middle|\; \sum_{i=1}^{n} p_i x_i \le R \right\}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Interprétations de la contrainte budgétaire</h2>
+                    <ul>
+                        <li class="fragment fade-up">La dépense totale ne peut dépasser le revenu :
+                            \[
+                            \sum_{i=1}^n p_i x_i \le R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">L'égalité :
+                            \[
+                            \sum_{i=1}^n p_i x_i = R
+                            \]
+                            représente la <strong>frontière du budget</strong>, c'est-à-dire les paniers qui utilisent tout le revenu.
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Cas particulier : 2 biens</h2>
+                    <ul>
+                        <li class="fragment fade-up">Pour deux biens, la contrainte est :
+                            \[
+                            p_1 x_1 + p_2 x_2 \le R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">À l'égalité :
+                            \[
+                            x_2 = \frac{R}{p_2} - \frac{p_1}{p_2}x_1
+                            \]
+                        </li>
+                        <li class="fragment fade-up">C'est une droite décroissante : pente = $-\frac{p_1}{p_2}$.</li>
+                        <li class="fragment fade-up">Elle relie les paniers réalisables qui <strong>épuisent le revenu</strong>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Représentation graphique : droite budgétaire</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Droite budgétaire -->
+                            <line class="budget-line" x1="70" y1="100" x2="350" y2="350"/>
+                            <text x="360" y="100" class="svg-label">Budget : $p_1 x_1 + p_2 x_2 = R$</text>
+
+                            <!-- Intercepts -->
+                            <text x="30" y="105" class="svg-label">$\frac{R}{p_2}$</text>
+                            <text x="345" y="365" class="svg-label">$\frac{R}{p_1}$</text>
+
+                            <!-- Point réalisable -->
+                            <circle cx="150" cy="250" r="4" class="optimal-point"/>
+                            <text x="160" y="255" class="svg-label">Panier réalisable</text>
+
+                            <!-- Panier trop cher -->
+                            <text x="250" y="70" class="svg-label">Panier trop cher $\rightarrow$</text>
+                        </svg>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section: Programme primal du consommateur -->
+            <section>
+                <section>
+                    <h2>Programme primal du consommateur</h2>
+                    <ul>
+                        <li class="fragment fade-up">Objectif : maximiser l'utilité sous contrainte budgétaire.</li>
+                        <li class="fragment fade-up">Formulation :
+                            \[
+                            \max_{(x_1, \dots, x_n) \in \mathbb{R}^n_+} U(x_1, \dots, x_n)
+                            \]
+                            \[
+                            \text{s.c. } \sum_{i=1}^n p_i x_i \leq R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Le consommateur est rationnel et prend en compte ses ressources limitées.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Demande Marshallienne</h2>
+                    <ul>
+                        <li class="fragment fade-up">La solution optimale est appelée <strong>fonction de demande Marshallienne</strong> :
+                            \[
+                            x_i^*(\mathbf{P}, R), \quad i = 1, \dots, n
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Elle dépend des prix $\mathbf{P} = (p_1, \dots, p_n)$ et du revenu $R$.</li>
+                        <li class="fragment fade-up">Elle indique les quantités optimales de chaque bien.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Fonction d'utilité indirecte</h2>
+                    <div class="block">
+                        <h3>Définition :</h3>
+                        \[
+                        V(\mathbf{P}, R) = U(x^*_1(\mathbf{P}, R), \dots, x^*_n(\mathbf{P}, R))
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Elle donne le niveau maximal de satisfaction atteint au prix $\mathbf{P}$ et revenu $R$.</li>
+                        <li class="fragment fade-up">C'est l'utilité obtenue en consommant le panier optimal.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Exemple : deux biens</h2>
+                    <ul>
+                        <li class="fragment fade-up">Programme :
+                            \[
+                            \max_{x_1, x_2 \geq 0} U(x_1, x_2)
+                            \quad \text{s.c. } p_1 x_1 + p_2 x_2 \leq R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Solution au point de tangence entre une courbe d'indifférence et la contrainte budgétaire.</li>
+                        <li class="fragment fade-up">Condition d'optimalité :
+                            \[
+                            \frac{\partial U / \partial x_1}{\partial U / \partial x_2} = \frac{p_1}{p_2}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Détermination graphique de la demande optimale</h2>
+                    <ul>
+                        <li class="fragment fade-up">La solution optimale $E$ vérifie :
+                            \[
+                            E = I^+(M) \cap B \quad \text{où } I^+(M) = \{X \mid U(X) \geq U(M)\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Le panier $E$ maximise $U$ sous la contrainte :
+                            \[
+                            B = \{X \mid \sum p_i x_i \leq R\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Si $I^+(M) \cap B \neq \varnothing$ mais $M$ n'est pas optimal, alors $M$ n'est pas solution.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Équilibre du consommateur : représentation graphique</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Droite budgétaire -->
+                            <line class="budget-line" x1="100" y1="100" x2="400" y2="350"/>
+                            <text x="70" y="90" class="svg-label">R/p2</text>
+                            <text x="390" y="365" class="svg-label">R/p1</text>
+
+                            <!-- Courbe d'indifférence tangente -->
+                            <path class="indifference-curve draw-curve" d="M 120,320 C 180,220 280,150 350,180" id="equilibrium-curve"/>
+
+                            <!-- Point d'équilibre E -->
+                            <circle cx="250" cy="250" r="5" class="optimal-point"/>
+                            <text x="260" y="245" class="optimal-label">E($x_1^*(P,R)$, $x_2^*(P,R)$)</text>
+
+                            <!-- Lignes pointillées vers les axes -->
+                            <line class="dashed-line" x1="250" y1="250" x2="250" y2="350"/>
+                            <line class="dashed-line" x1="250" y1="250" x2="70" y2="250"/>
+                            <text x="240" y="365" class="svg-label">$x_1^*$</text>
+                            <text x="55" y="255" class="svg-label">$x_2^*$</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Théorème</h2>
+                    <div class="block">
+                        <h3>Énoncé du théorème</h3>
+                        <p>Soit un consommateur rationnel avec une fonction d'utilité $U(x_1, x_2)$ strictement quasi-concave, et une contrainte budgétaire :</p>
+                        \[
+                        p_1 x_1 + p_2 x_2 = R, \quad p_1, p_2 > 0, \; R > 0
+                        \]
+                        <p>Alors la solution optimale $(x_1^*, x_2^*)$ vérifie :</p>
+                        \[
+                        TMS_{1/2} = \frac{p_1}{p_2}, \quad \text{où } TMS_{1/2} = \frac{\partial U/\partial x_1}{\partial U/\partial x_2}
+                        \]
+                    </div>
+                </section>
+                <section>
+                    <h2>Preuve (1/2) : maximisation sous contrainte</h2>
+                    <ul>
+                        <li class="fragment fade-up">Problème :
+                            \[
+                            \max_{x_1, x_2} U(x_1, x_2) \quad \text{s.c. } p_1 x_1 + p_2 x_2 = R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Lagrangien :
+                            \[
+                            \mathcal{L} = U(x_1, x_2) - \lambda(p_1 x_1 + p_2 x_2 - R)
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Conditions de premier ordre :
+                            \[
+                            \frac{\partial \mathcal{L}}{\partial x_1} = \frac{\partial U}{\partial x_1} - \lambda p_1 = 0
+                            \]
+                            \[
+                            \frac{\partial \mathcal{L}}{\partial x_2} = \frac{\partial U}{\partial x_2} - \lambda p_2 = 0
+                            \]
+                            \[
+                            \frac{\partial \mathcal{L}}{\partial \lambda} = -(p_1 x_1 + p_2 x_2 - R) = 0
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Preuve (2/2) : condition de tangence</h2>
+                    <ul>
+                        <li class="fragment fade-up">En divisant les deux premières conditions :
+                            \[
+                            \frac{\partial U/\partial x_1}{\partial U/\partial x_2} = \frac{p_1}{p_2}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Le TMS est donc égal au rapport des prix à l'optimum :
+                            \[
+                            TMS_{1/2} = \frac{p_1}{p_2} \quad \blacksquare
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Interprétation</h2>
+                    <ul>
+                        <li class="fragment fade-up">À l'équilibre, la <strong>valeur marginale</strong> des biens est alignée avec leur <strong>valeur marchande</strong>.</li>
+                        <li class="fragment fade-up">Le consommateur ne peut améliorer son utilité sans violer la contrainte.</li>
+                        <li class="fragment fade-up">La <strong>quasi-concavité stricte</strong> garantit que ce point est un <strong>maximum global</strong>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Généralisation du TMS</h2>
+                    <div class="block">
+                        <h3>Pour tout couple de biens $i$ et $j$ :</h3>
+                        \[
+                        TMS_{i/j} = \frac{\partial U / \partial x_i}{\partial U / \partial x_j} = \frac{p_i}{p_j}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Le principe reste le même : tangence entre courbe d'indifférence et contrainte budgétaire.</li>
+                        <li class="fragment fade-up">Cette condition caractérise l'optimum pour $n$ biens.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Programme dual du consommateur -->
+            <section>
+                <section>
+                    <h2>Programme dual du consommateur</h2>
+                    <ul>
+                        <li class="fragment fade-up">Deux problèmes d'optimisation liés :</li>
+                        <li class="fragment fade-up"><strong>Problème primal</strong> :
+                            \[
+                            \max_{\mathbf{x}} U(\mathbf{x}) \quad \text{s.c. } \mathbf{p} \cdot \mathbf{x} \leq R
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Problème dual</strong> :
+                            \[
+                            \min_{\mathbf{x}} \mathbf{p} \cdot \mathbf{x} \quad \text{s.c. } U(\mathbf{x}) \geq \bar{U}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Les deux approches sont équivalentes.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Fonctions clés</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Fonction d'utilité indirecte</strong> :
+                            \[
+                            V(\mathbf{p}, R) = \max_{\mathbf{x}} \left\{ U(\mathbf{x}) \mid \mathbf{p} \cdot \mathbf{x} \le R \right\}
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Fonction de dépense</strong> :
+                            \[
+                            D(\mathbf{p}, \bar{U}) = \min_{\mathbf{x}} \left\{ \mathbf{p} \cdot \mathbf{x} \mid U(\mathbf{x}) \ge \bar{U} \right\}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Relations de dualité</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Équivalence</strong> :
+                            \[
+                            V(\mathbf{p}, D(\mathbf{p}, \bar{U})) = \bar{U}
+                            \quad \text{et} \quad
+                            D(\mathbf{p}, V(\mathbf{p}, R)) = R
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Théorème de dualité</strong> :
+                            \[
+                            h_i(\mathbf{p}, \bar{U}) = x_i^M(\mathbf{p}, D(\mathbf{p}, \bar{U}))
+                            \]
+                        </li>
+                        <li class="fragment fade-up">La demande Hicksienne correspond à la demande Marshallienne évaluée au revenu minimal.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Différentes méthodes d'analyse - PARTIE 1 -->
+            <section>
+                <section>
+                    <h2>Outils de passage entre primal et dual</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Lemme de Shephard</strong> :
+                            \[
+                            h_i(\mathbf{p}, \bar{U}) = \frac{\partial D(\mathbf{p}, \bar{U})}{\partial p_i}
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Identité de Roy</strong> :
+                            \[
+                            x_i^M(\mathbf{p}, R) = - \frac{\partial V / \partial p_i}{\partial V / \partial R}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Ces relations permettent de passer d'un problème à l'autre.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Identité de Roy</h2>
+                    <div class="block">
+                        <h3>Formule</h3>
+                        \[
+                        x_i^* = -\frac{\partial V / \partial p_i}{\partial V / \partial R}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Elle relie la <strong>demande marshallienne</strong> à la <strong>fonction d'utilité indirecte</strong>.</li>
+                        <li class="fragment fade-up">Issue de la différentiation du programme de maximisation.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Démonstration de l'identité de Roy</h2>
+                    <ol>
+                        <li class="fragment fade-up">Programme :
+                            \[
+                            \max U(x_1,x_2) \quad \text{s.c. } p_1 x_1 + p_2 x_2 = R
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Lagrangien :
+                            \[
+                            \mathcal{L} = U(x_1,x_2) + \lambda(R - p_1 x_1 - p_2 x_2)
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Théorème de l'enveloppe :
+                            \[
+                            \frac{\partial V}{\partial p_i} = -\lambda x_i^*, \quad \frac{\partial V}{\partial R} = \lambda
+                            \]
+                        </li>
+                        <li class="fragment fade-up">D'où :
+                            \[
+                            x_i^* = -\frac{\frac{\partial V}{\partial p_i}}{\frac{\partial V}{\partial R}} \quad \blacksquare
+                            \]
+                        </li>
+                    </ol>
+                </section>
+                <section>
+                    <h2>Exemple : application de Roy</h2>
+                    <ul>
+                        <li class="fragment fade-up">Soit $V(p,R) = \dfrac{R}{2\sqrt{p_1p_2}}$</li>
+                        <li class="fragment fade-up">Alors :
+                            \[
+                            \frac{\partial V}{\partial p_1} = -\frac{R}{4p_1^{3/2}\sqrt{p_2}}, \quad \frac{\partial V}{\partial R} = \frac{1}{2\sqrt{p_1p_2}}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">On obtient :
+                            \[
+                            x_1^* = \frac{R}{2p_1}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Lemme de Shephard</h2>
+                    <div class="block">
+                        <h3>Formule fondamentale</h3>
+                        \[
+                        \frac{\partial D(p, \bar{U})}{\partial p_i} = h_i(p, \bar{U})
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Dérivée de la fonction de dépense = demande hicksienne.</li>
+                        <li class="fragment fade-up">Variation du coût minimal quand le prix $p_i$ varie.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Différentes méthodes d'analyse - PARTIE 2 -->
+            <section>
+                <section>
+                    <h2>Intuition et démonstration (esquisse)</h2>
+                    <ul>
+                        <li class="fragment fade-up">Minimisation :
+                            \[
+                            \min \sum p_i x_i \quad \text{s.c. } U(x) \geq \bar{U}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Lagrangien :
+                            \[
+                            \mathcal{L} = \sum p_i x_i + \mu(\bar{U} - U(x))
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Par le théorème de l'enveloppe :
+                            \[
+                            \frac{\partial D}{\partial p_i} = x_i^* = h_i
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Décomposition de Slutsky</h2>
+                    <div class="block">
+                        <h3>Variation de la demande Marshallienne</h3>
+                        \[
+                        \frac{\partial x_i^M}{\partial p_j} =
+                        \underbrace{\frac{\partial h_i}{\partial p_j}}_{\text{Effet substitution}} -
+                        \underbrace{x_j^M \cdot \frac{\partial x_i^M}{\partial R}}_{\text{Effet revenu}}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Slutsky sépare les effets prix :
+                            <ul>
+                                <li class="fragment fade-up">Substitution : changement relatif.</li>
+                                <li class="fragment fade-up">Revenu : changement de pouvoir d'achat.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Décomposition de Slutsky : Illustration</h2>
+                    <div class="fragment">
+                        <svg class="slutsky-hicks-diagram" viewBox="0 0 600 400">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" />
+                                </marker>
+                            </defs>
+
+                            <!-- Axes -->
+                            <line x1="50" y1="350" x2="550" y2="350" stroke="#555555" stroke-width="1.5"/>
+                            <line x1="50" y1="350" x2="50" y2="50" stroke="#555555" stroke-width="1.5"/>
+                            <text x="540" y="365" class="label">x1</text>
+                            <text x="35" y="60" class="label">x2</text>
+
+                            <!-- Courbes d'indifférence -->
+                            <path d="M 50 250 C 150 150, 250 100, 350 120" class="curve-u0"/>
+                            <text x="360" y="110" class="label">U0</text>
+
+                            <!-- Droites budgétaires -->
+                            <!-- Initial -->
+                            <line x1="50" y1="280" x2="350" y2="350" class="budget-line-initial"/>
+                            <text x="360" y="340" class="label">BL0</text>
+
+                            <!-- Compensée (fictive) -->
+                            <line x1="120" y1="180" x2="420" y2="350" class="budget-line-compensated"/>
+                            <text x="430" y="340" class="label">BL_comp</text>
+
+                            <!-- Finale -->
+                            <line x1="150" y1="150" x2="450" y2="350" class="budget-line-final"/>
+                            <text x="460" y="340" class="label">BL1</text>
+
+                            <!-- Points -->
+                            <circle cx="200" cy="200" r="4" class="point"/>
+                            <text x="210" y="195" class="label">A</text>
+
+                            <circle cx="300" cy="180" r="4" class="point"/>
+                            <text x="310" y="175" class="label">B</text>
+
+                            <circle cx="380" cy="200" r="4" class="point"/>
+                            <text x="390" y="195" class="label">C</text>
+
+                            <!-- Flèches -->
+                            <path d="M 200 200 L 300 180" class="arrow"/>
+                            <text x="230" y="170" class="label">Effet substitution</text>
+
+                            <path d="M 300 180 L 380 200" class="arrow"/>
+                            <text x="330" y="170" class="label">Effet revenu</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Exemple : Slutsky (application)</h2>
+                    <ul>
+                        <li class="fragment fade-up">Soit $x_1 = \dfrac{R}{2p_1}$ :
+                            \[
+                            \frac{\partial x_1}{\partial p_1} = -\frac{R}{2p_1^2}, \quad \frac{\partial x_1}{\partial R} = \frac{1}{2p_1}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Et $h_1 = x_1 \Rightarrow$
+                            \[
+                            \frac{\partial h_1}{\partial p_1} = -\frac{R}{4p_1^2}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Ainsi :
+                            \[
+                            \text{Substitution} = -\frac{R}{4p_1^2}, \quad
+                            \text{Revenu} = -\frac{R}{4p_1^2}
+                            \Rightarrow
+                            \text{Total} = -\frac{R}{2p_1^2}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Demande Hicksienne</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        \[
+                        \mathbf{h}(\mathbf{p}, \bar{U}) = \arg\min_{\mathbf{x} \geq 0} \left\{ \sum_{i=1}^n p_i x_i \;\middle|\; U(\mathbf{x}) \geq \bar{U} \right\}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Minimisation des dépenses pour atteindre un niveau d'utilité fixé.</li>
+                        <li class="fragment fade-up">Représente la <strong>demande compensée</strong>.</li>
+                        <li class="fragment fade-up">Elle dépend de $p$ et de $\bar{U}$, pas du revenu $R$.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Différentes méthodes d'analyse - PARTIE 3 -->
+            <section>
+                <section>
+                    <h2>Propriétés de la demande Hicksienne</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Compensation</strong> : Maintient l'utilité constante malgré les variations de prix.</li>
+                        <li class="fragment fade-up"><strong>Homogénéité de degré 0</strong> en prix :
+                            \[
+                            \mathbf{h}(\lambda \mathbf{p}, \bar{U}) = \mathbf{h}(\mathbf{p}, \bar{U})
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Lien avec la fonction de dépense</strong> :
+                            \[
+                            D(\mathbf{p}, \bar{U}) = \sum p_i h_i(\mathbf{p}, \bar{U})
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Décomposition de Hicks : Illustration</h2>
+                    <div class="fragment">
+                        <svg class="slutsky-hicks-diagram" viewBox="0 0 600 400">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" />
+                                </marker>
+                            </defs>
+
+                            <!-- Axes -->
+                            <line x1="50" y1="350" x2="550" y2="350" stroke="#555555" stroke-width="1.5"/>
+                            <line x1="50" y1="350" x2="50" y2="50" stroke="#555555" stroke-width="1.5"/>
+                            <text x="540" y="365" class="label">x1</text>
+                            <text x="35" y="60" class="label">x2</text>
+
+                            <!-- Courbes d'indifférence -->
+                            <path d="M 50 250 C 150 150, 250 100, 350 120" class="curve-u0"/>
+                            <text x="360" y="110" class="label">U0</text>
+
+                            <path d="M 50 200 C 150 100, 250 50, 350 70" class="curve-u1"/>
+                            <text x="360" y="60" class="label">U1</text>
+
+                            <!-- Droites budgétaires -->
+                            <!-- Initial -->
+                            <line x1="50" y1="280" x2="350" y2="350" class="budget-line-initial"/>
+                            <text x="360" y="340" class="label">BL0</text>
+
+                            <!-- Compensée (tangente à U0) -->
+                            <line x1="120" y1="180" x2="420" y2="350" class="budget-line-compensated"/>
+                            <text x="430" y="340" class="label">BL_comp</text>
+
+                            <!-- Finale -->
+                            <line x1="150" y1="150" x2="450" y2="350" class="budget-line-final"/>
+                            <text x="460" y="340" class="label">BL1</text>
+
+                            <!-- Points -->
+                            <circle cx="200" cy="200" r="4" class="point"/>
+                            <text x="210" y="195" class="label">A</text>
+
+                            <circle cx="300" cy="180" r="4" class="point"/>
+                            <text x="310" y="175" class="label">B</text>
+
+                            <circle cx="380" cy="200" r="4" class="point"/>
+                            <text x="390" y="195" class="label">C</text>
+
+                            <!-- Flèches -->
+                            <path d="M 200 200 L 300 180" class="arrow"/>
+                            <text x="230" y="170" class="label">Effet substitution</text>
+
+                            <path d="M 300 180 L 380 200" class="arrow"/>
+                            <text x="330" y="170" class="label">Effet revenu</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Exemple : Hicksienne Cobb-Douglas</h2>
+                    <div class="block">
+                        <h3>Utilité : $U(x_1, x_2) = x_1^\alpha x_2^{1-\alpha}$</h3>
+                    </div>
+                    <vspace{-1ex}
+                    <ul>
+                        <li class="fragment fade-up">Fonction de dépense :
+                            \[
+                            D(p_1, p_2, \bar{U}) = \bar{U} \left(\frac{p_1}{\alpha}\right)^\alpha \left(\frac{p_2}{1-\alpha}\right)^{1-\alpha}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Application du lemme de Shephard :
+                            \[
+                            h_1 = \frac{\partial D}{\partial p_1}
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Résultat obtenu :
+                            \[
+                            h_1 = \frac{\alpha \bar{U}}{p_1}
+                            \quad \text{et} \quad
+                            h_2 = \frac{(1-\alpha)\bar{U}}{p_2}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Conditions de validité du lemme de Shephard</h2>
+                    <ul>
+                        <li class="fragment fade-up">Les préférences doivent être :
+                            <ul>
+                                <li class="fragment fade-up">Complètes, convexes et continues,</li>
+                                <li class="fragment fade-up">Différentiables pour appliquer l'enveloppe.</li>
+                            </ul>
+                        </li>
+                        <li class="fragment fade-up">L'unicité de la solution est assurée par la convexité stricte.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Applications de la demande Hicksienne</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Décomposition de Slutsky</strong> (rappel) :
+                            \[
+                            \frac{\partial x_i}{\partial p_j} = \frac{\partial h_i}{\partial p_j} - x_j \cdot \frac{\partial x_i}{\partial R}
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Interprétation</strong> :
+                            <ul>
+                                <li class="fragment fade-up">$\frac{\partial h_i}{\partial p_j}$ : <i>Effet substitution pur</i>,</li>
+                                <li class="fragment fade-up">$x_j \cdot \frac{\partial x_i}{\partial R}$ : <i>Effet revenu</i>.</li>
+                            </ul>
+                        </li>
+                        <li class="fragment fade-up"><strong>Lien avec le producteur</strong> : parallèle avec la demande de facteurs minimisant un coût.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Élasticités - PARTIE 1 -->
+            <section>
+                <section>
+                    <h2>Élasticité-prix directe</h2>
+                    <div class="block">
+                        <h3>Définition :</h3>
+                        \[
+                        \varepsilon_{ii} = \frac{\partial x_i^M}{\partial p_i} \cdot \frac{p_i}{x_i^M}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">Mesure la réactivité de la demande face à son propre prix.</li>
+                        <li class="fragment fade-up">$\varepsilon_{ii} < 0$ : loi de la demande (sauf Giffen).</li>
+                        <li class="fragment fade-up">$|\varepsilon_{ii}| > 1$ : demande élastique (ex : voyages).</li>
+                        <li class="fragment fade-up">$|\varepsilon_{ii}| < 1$ : inélastique (ex : médicaments).</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Élasticité-revenu</h2>
+                    \[
+                    \varepsilon_{iR} = \frac{\partial x_i^M}{\partial R} \cdot \frac{R}{x_i^M}
+                    \]
+                    <ul>
+                        <li class="fragment fade-up">$\varepsilon_{iR} > 0$ : bien normal (ex : produits bio).</li>
+                        <li class="fragment fade-up">$\varepsilon_{iR} < 0$ : bien inférieur (ex : transport public).</li>
+                        <li class="fragment fade-up">$\varepsilon_{iR} > 1$ : bien de luxe (ex : voiture haut de gamme).</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Élasticités - PARTIE 2 -->
+            <section>
+                <section>
+                    <h2>Élasticité-prix croisée</h2>
+                    \[
+                    \varepsilon_{ij} = \frac{\partial x_i^M}{\partial p_j} \cdot \frac{p_j}{x_i^M}
+                    \]
+                    <ul>
+                        <li class="fragment fade-up">$\varepsilon_{ij} > 0$ : biens substituts (ex : café/thé).</li>
+                        <li class="fragment fade-up">$\varepsilon_{ij} < 0$ : biens complémentaires (ex : essence/voiture).</li>
+                        <li class="fragment fade-up">$\varepsilon_{ij} = 0$ : indépendance parfaite.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Exemple : Cobb-Douglas $U(x_1, x_2) = x_1^{0.6} x_2^{0.4}$</h2>
+                    \[
+                    x_1^M = \frac{0.6R}{p_1}, \quad x_2^M = \frac{0.4R}{p_2}
+                    \]
+                    <ul>
+                        <li class="fragment fade-up">$\varepsilon_{11} = -1$ : demande unitaire</li>
+                        <li class="fragment fade-up">$\varepsilon_{1R} = 1$ : bien normal proportionnel</li>
+                        <li class="fragment fade-up">$\varepsilon_{12} = 0$ : biens indépendants</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Interprétation des élasticités</h2>
+                    <div class="block">
+                        <center>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><strong>Type</strong></th>
+                                        <th><strong>Valeur</strong></th>
+                                        <th><strong>Signification</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$\varepsilon_{ii} = -1$</td>
+                                        <td>Unitaire</td>
+                                        <td>Dépense constante</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\varepsilon_{iR} = 1$</td>
+                                        <td>Proportionnelle</td>
+                                        <td>Part budgétaire fixe</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\varepsilon_{ij} = 0$</td>
+                                        <td>Indépendants</td>
+                                        <td>Aucune interaction</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                    </div>
+                </section>
+                <section>
+                    <h2>Applications pratiques des élasticités</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Fixation de prix</strong> : hausse possible si demande inélastique.</li>
+                        <li class="fragment fade-up"><strong>Politiques fiscales</strong> : taxation stable sur biens inélastiques.</li>
+                        <li class="fragment fade-up"><strong>Politiques sociales</strong> : cibler les biens à forte élasticité-revenu.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Élasticité et équation de Slutsky</h2>
+                    <div class="block">
+                        <h3>Décomposition en élasticités :</h3>
+                        \[
+                        \varepsilon_{ii} = \underbrace{\varepsilon_{ii}^H}_{\text{Substitution}} + \underbrace{s_i \varepsilon_{iR}}_{\text{Revenu}}
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">$\varepsilon_{ii}^H$ : élasticité hicksienne (utilité constante)</li>
+                        <li class="fragment fade-up">$s_i = \dfrac{p_i x_i}{R}$ : part budgétaire du bien $i$</li>
+                        <li class="fragment fade-up">Permet de distinguer les deux effets d'une variation de prix</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Fonction de demande nette -->
+            <section>
+                <section>
+                    <h2>Demande nette</h2>
+                    <strong>Revenu issu des dotations initiales</strong>
+                    <ul>
+                        <li class="fragment fade-up">Le revenu du consommateur provient désormais de la vente de ses dotations initiales.</li>
+                        <li class="fragment fade-up">Chaque bien $i$ est doté d'une quantité $\bar{x}_i$.</li>
+                        <li class="fragment fade-up">Le revenu devient :
+                            \[
+                            R(p) = \sum_{i=1}^n p_i \bar{x}_i
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Nouveau programme du consommateur</h2>
+                    <div class="block">
+                        <h3>Maximisation avec dotations initiales</h3>
+                        \[
+                        \max_{x_1, \dots, x_n} U(x_1, \dots, x_n) \quad \text{s.c. } \sum_{i=1}^n p_i x_i = \sum_{i=1}^n p_i \bar{x}_i
+                        \]
+                    </div>
+                    <vspace{0.4cm}
+                    <ul>
+                        <li class="fragment fade-up">Le revenu est endogène : il dépend des prix et des dotations.</li>
+                        <li class="fragment fade-up">La fonction de demande s'écrit :
+                            \[
+                            x_i(p) = x_i^*(p, R(p))
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Homogénéité de la demande</h2>
+                    <ul>
+                        <li class="fragment fade-up">La fonction de demande reste homogène de degré zéro :
+                            \[
+                            x_i^*(\lambda p, \lambda R(p)) = x_i^*(p, R(p))
+                            \]
+                        </li>
+                        <li class="fragment fade-up">La demande ne change pas si tous les prix et le revenu varient dans la même proportion.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Demande nette</h2>
+                    <div class="block">
+                        <h3>Définition</h3>
+                        \[
+                        Z_i(p) = x_i(p) - \bar{x}_i
+                        \]
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">$Z_i(p) > 0$ : l'individu achète du bien $i$.</li>
+                        <li class="fragment fade-up">$Z_i(p) < 0$ : l'individu vend du bien $i$.</li>
+                        <li class="fragment fade-up">$Z_i(p) = 0$ : ni achat ni vente de $i$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Nouvelle contrainte budgétaire</h2>
+                    <ul>
+                        <li class="fragment fade-up">La contrainte s'écrit :
+                            \[
+                            \sum_{i=1}^n p_i(x_i - \bar{x}_i) = 0
+                            \quad \Leftrightarrow \quad
+                            \sum_{i=1}^n p_i Z_i(p) = 0
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Interprétation : la valeur nette des échanges est nulle.</li>
+                        <li class="fragment fade-up">Pour $n = 2$ :
+                            \[
+                            p_1 Z_1(p) = - p_2 Z_2(p)
+                            \]
+                        </li>
+                        <li class="fragment fade-up">Ce que l'on achète doit être financé par ce que l'on vend.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Représentation graphique de la demande nette</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">x2</text>
+                            <text x="440" y="365" class="svg-label">x1</text>
+
+                            <!-- Droite budgétaire (passant par le point de dotation) -->
+                            <line class="budget-line" x1="100" y1="100" x2="400" y2="350"/>
+
+                            <!-- Courbe d'indifférence -->
+                            <path class="indifference-curve draw-curve" d="M 120,320 C 180,220 280,150 350,180" id="net-demand-curve"/>
+
+                            <!-- Point de dotation initiale -->
+                            <circle cx="280" cy="220" r="5" fill="#888888"/>
+                            <text x="285" y="215" class="optimal-label">$\bar{x}$</text>
+                            <line class="dashed-line" x1="280" y1="220" x2="280" y2="350"/>
+                            <line class="dashed-line" x1="280" y1="220" x2="70" y2="220"/>
+                            <text x="270" y="365" class="svg-label">$\bar{x}_1$</text>
+                            <text x="55" y="225" class="svg-label">$\bar{x}_2$</text>
+
+                            <!-- Point d'équilibre E -->
+                            <circle cx="250" cy="250" r="5" class="optimal-point"/>
+                            <text x="255" y="245" class="optimal-label">E</text>
+                            <line class="dashed-line" x1="250" y1="250" x2="250" y2="350"/>
+                            <line class="dashed-line" x1="250" y1="250" x2="70" y2="250"/>
+                            <text x="240" y="365" class="svg-label">$x_1(p)$</text>
+                            <text x="55" y="255" class="svg-label">$x_2(p)$</text>
+
+                            <!-- Zones Z1 et Z2 -->
+                            <text x="260" y="280" class="svg-label">$Z_1(p) < 0$</text>
+                            <text x="180" y="240" class="svg-label">$Z_2(p) > 0$</text>
+                        </svg>
+                    </div>
+                    <ul>
+                        <li class="fragment fade-up">$x_1(p) < \bar{x}_1$ : l'individu vend du bien 1.</li>
+                        <li class="fragment fade-up">$x_2(p) > \bar{x}_2$ : l'individu achète du bien 2.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Section: Arbitrage travail / loisir -->
+            <section>
+                <section>
+                    <h2>Arbitrage entre travail et loisir</h2>
+                    <ul>
+                        <li class="fragment fade-up">Le travail est mesuré en temps consacré à une activité salariale.</li>
+                        <li class="fragment fade-up">La rémunération est proportionnelle au temps de travail : $w$ par unité de temps.</li>
+                        <li class="fragment fade-up">L'individu préfère le loisir au travail, mais a besoin de revenus pour consommer, d'où la nécessité de faire l'arbitrage entre travail et loisir.</li>
+                        <li class="fragment fade-up">Il doit arbitrer entre :
+                            \[
+                            \text{Loisir } = L_0 - L \quad \text{et} \quad \text{Travail } = L
+                            \]
+                            où $L_0$ : temps global
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Fonction d'utilité avec désutilité du travail</h2>
+                    \[
+                    U(\overset{+}{q},\overset{-}{L}) = V(q,(L_0 - L))
+                    \]
+                    <vspace{-0.5em}
+                    <ul>
+                        <li class="fragment fade-up">$q$ : quantité consommée — augmente l'utilité.</li>
+                        <li class="fragment fade-up">$L$ : temps de travail — réduit le loisir donc l'utilité.</li>
+                        <li class="fragment fade-up">Le taux marginal de substitution est :
+                            \[
+                            TMS_{q/(L_0 - L)} = -\frac{d(L_0 - L)}{dq} = \frac{\frac{\partial V}{\partial q}}{\frac{\partial V}{\partial (L_0 - L)}} = -\frac{\frac{\partial V}{\partial q}}{\frac{\partial V}{\partial L}}
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Fonction d'utilité avec désutilité du travail : Représentation</h2>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <path class="axis" d="M70,350 L70,50"/>
+                            <path class="axis-arrow" d="M 70,50 L 66,58 L 74,58 Z"/>
+                            <path class="axis" d="M70,350 L450,350"/>
+                            <path class="axis-arrow" d="M 450,350 L 442,346 L 442,354 Z"/>
+                            <!-- Labels des axes -->
+                            <text x="60" y="40" class="svg-label">q</text>
+                            <text x="440" y="365" class="svg-label">Loisir ($L_0-L$)</text>
+
+                            <!-- Courbes d'indifférence -->
+                            <path class="indifference-curve draw-curve" d="M 80,300 C 120,200 250,100 400,150" id="leisure-tradeoff-curve-1"/>
+                            <path class="indifference-curve draw-curve" d="M 100,320 C 150,230 270,140 420,180" id="leisure-tradeoff-curve-2"/>
+
+                            <!-- Ligne de budget (exemple) -->
+                            <line class="budget-line" x1="100" y1="350" x2="380" y2="100"/>
+                            <text x="390" y="100" class="svg-label">Contrainte budgétaire</text>
+
+                            <!-- Point d'équilibre -->
+                            <circle cx="280" cy="200" r="5" class="optimal-point"/>
+                            <text x="285" y="195" class="optimal-label">E</text>
+
+                            <!-- Axes pour le graphique Loisir vs Travail -->
+                            <text x="300" y="365" class="svg-label">Loisir ($L_0 - L$)</text>
+                            <text x="60" y="40" class="svg-label">Quantité (q)</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h2>Offre individuelle de travail</h2>
+                    <div class="block">
+                        <h3>Contrainte budgétaire</h3>
+                        \[
+                        pq = R + wL
+                        \]
+                    </div>
+                    <vspace{-0.5em}
+                    <ul>
+                        <li class="fragment fade-up">$R$ : revenu exogène (non salarial).</li>
+                        <li class="fragment fade-up">$wL$ : revenu issu du travail.</li>
+                        <li class="fragment fade-up">Le consommateur choisit $q$ et $L$ pour maximiser $V(q, L_0 - L)$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Formulation du programme</h2>
+                    <div class="block">
+                        <h3>Programme d'optimisation</h3>
+                        \[
+                        \left\{
+                        \begin{aligned}
+                        & \max_{q,L} \quad V(q, L_0 - L) \\
+                        & \text{s.c. } \quad pq = R + wL
+                        \end{aligned}
+                        \right.
+                        \]
+                    </div>
+                    <vspace{0.5em}
+                    <ul>
+                        <li class="fragment fade-up">Solution : $q^*(p,w,R)$ et $L^*(p,w,R)$</li>
+                        <li class="fragment fade-up">L'offre de travail dépend de $w$ et $R$.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Trois cas d'offre de travail</h2>
+                    <ul>
+                        <li class="fragment fade-up"><strong>Cas 1 :</strong> $L^S = L_0$ (zéro loisir)
+                            \[
+                            q^d = \frac{R + wL_0}{p}
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Cas 2 :</strong> $L^S = 0$ (zéro travail)
+                            \[
+                            q^d = \frac{R}{p}
+                            \]
+                        </li>
+                        <li class="fragment fade-up"><strong>Cas 3 :</strong> $0 < L^S < L_0$ (arbitrage interne)
+                            \[
+                            L^S = L^*(p, w, R), \quad q^d = q^*
+                            \]
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Remarques finales</h2>
+                    <ul>
+                        <li class="fragment fade-up">Ces cas s'expriment en fonction de contraintes sur le taux de salaire $w$.</li>
+                        <li class="fragment fade-up">Il existe un <strong>salaire de réservation</strong> : en dessous de ce niveau, l'individu préfère ne pas travailler.</li>
+                        <li class="fragment fade-up">L'analyse permet de comprendre comment l'offre de travail réagit aux variations de $w$.</li>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/zoom/zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/math/math.min.js"></script>
+    <script>
+        // Initialisation de Reveal.js
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            width : "100%",
+            margin : 0.02,
+            math: {
+                mathjax3: {
+                    path: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js'
+                }
+            },
+            plugins: [
+                RevealZoom,
+                RevealNotes,
+                RevealSearch,
+                RevealMarkdown,
+                RevealHighlight,
+                RevealMath
+            ]
+        });
+
+        // Logique pour l'intégration de l'API Gemini
+        /**
+         * Appelle l'API Gemini avec une logique de relance exponentielle.
+         * @param {string} prompt Le texte de la requête pour l'API Gemini.
+         * @param {number} retries Le nombre de tentatives restantes.
+         * @param {number} delay Le délai actuel avant la prochaine tentative (en ms).
+         * @returns {Promise<string>} La réponse textuelle de l'API.
+         */
+        async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // La clé API est fournie par l'environnement Canvas
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429 && retries > 0) { // Too Many Requests
+                        console.warn(`Taux limite atteint. Réessai dans ${delay / 1000} secondes...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiAPI(prompt, retries - 1, delay * 2); // Double le délai
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Structure de réponse inattendue de l'API Gemini.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'appel à l'API Gemini:", error);
+                throw error;
+            }
+        }
+
+        /**
+         * Gère le clic sur les boutons d'explication IA.
+         * @param {string} prompt Le prompt à envoyer à l'API Gemini.
+         * @param {HTMLElement} outputElement L'élément DOM où afficher la réponse.
+         */
+        async function handleAIExplanation(prompt, outputElement) {
+            outputElement.classList.add('visible');
+            outputElement.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center;">Génération de l\'explication...</p>';
+
+            try {
+                const explanation = await callGeminiAPI(prompt);
+                outputElement.innerHTML = `<p>${explanation}</p>`;
+            } catch (error) {
+                outputElement.innerHTML = `<p style="color: red;">Désolé, une erreur est survenue lors de la récupération de l'explication. Veuillez réessayer.</p>`;
+                console.error("Erreur d'affichage de l'explication IA:", error);
+            }
+        }
+
+        // Configuration des boutons pour chaque slide
+        document.addEventListener('DOMContentLoaded', () => {
+            // Boutons d'explication IA pour les concepts
+            document.getElementById('explainUtilityBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez la fonction d'utilité en microéconomie et son rôle dans les préférences du consommateur en une phrase simple.", document.getElementById('utilityOutput'));
+            });
+
+            document.getElementById('explainTmsBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez le Taux Marginal de Substitution (TMS) en microéconomie avec un exemple concret en une phrase simple.", document.getElementById('tmsOutput'));
+            });
+
+            document.getElementById('explainMarshallianBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez la demande Marshallienne en microéconomie et ce qu'elle représente pour le consommateur en une phrase simple.", document.getElementById('marshallianOutput'));
+            });
+
+            document.getElementById('explainRoyBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez l'identité de Roy en microéconomie et son utilité en une phrase simple.", document.getElementById('royOutput'));
+            });
+
+            document.getElementById('explainShephardBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez le lemme de Shephard en microéconomie et ce qu'il révèle sur la fonction de dépense en une phrase simple.", document.getElementById('shephardOutput'));
+            });
+
+            document.getElementById('explainSlutskyBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez la décomposition de Slutsky en microéconomie et comment elle sépare les effets d'un changement de prix en une phrase simple.", document.getElementById('slutskyOutput'));
+            });
+
+            document.getElementById('explainHicksianBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez la demande Hicksienne en microéconomie et sa différence avec la demande Marshallienne en une phrase simple.", document.getElementById('hicksianOutput'));
+            });
+
+            document.getElementById('explainElasticityDirectBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez l'élasticité-prix directe en microéconomie et ce qu'elle indique sur la réaction de la demande face au prix du bien lui-même en une phrase simple.", document.getElementById('elasticityDirectOutput'));
+            });
+
+            document.getElementById('explainElasticityIncomeBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez l'élasticité-revenu en microéconomie et ce qu'elle indique sur la nature d'un bien (normal, inférieur, luxe) en une phrase simple.", document.getElementById('elasticityIncomeOutput'));
+            });
+
+            document.getElementById('explainElasticityCrossBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez l'élasticité-prix croisée en microéconomie et comment elle caractérise la relation entre deux biens (substituts, complémentaires) en une phrase simple.", document.getElementById('elasticityCrossOutput'));
+            });
+
+
+            // Fonction pour gérer l'animation des courbes SVG
+            const animateSvgCurves = (svgElement) => {
+                const curves = svgElement.querySelectorAll('.indifference-curve, .prod-curve');
+                curves.forEach(curve => {
+                    const length = curve.getTotalLength();
+                    curve.style.strokeDasharray = length;
+                    curve.style.strokeDashoffset = length;
+                    curve.classList.add('draw-curve'); // Trigger animation
+                });
+            };
+
+            // Écouteur pour le changement de slide afin d'animer les SVGs
+            Reveal.on('slidechanged', event => {
+                const currentSlide = event.currentSlide;
+                const svgs = currentSlide.querySelectorAll('.diagram-svg');
+                svgs.forEach(svg => {
+                    // Reset and re-animate if already drawn to ensure animation plays on revisit
+                    const curves = svg.querySelectorAll('.indifference-curve, .prod-curve');
+                    curves.forEach(curve => {
+                        curve.classList.remove('draw-curve');
+                        void curve.offsetWidth; // Trigger reflow to restart CSS animation
+                    });
+                    animateSvgCurves(svg); // Re-animate
+                });
+            });
+
+            // Initial animation on first load
+            const initialSvgs = document.querySelectorAll('.diagram-svg');
+            initialSvgs.forEach(svg => animateSvgCurves(svg));
+        });
+    </script>
+</body>
+</html>

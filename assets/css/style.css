@@ -1,0 +1,532 @@
+/* Styles généraux */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1px;
+}
+
+/* En-tête et navigation */
+header {
+    /* Rendre la barre fixe */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100; /* Assurez-vous qu'elle est au-dessus du reste du contenu */
+
+    /* Styles de base */
+    background-color: rgba(255, 255, 255, 0.9); /* Un fond blanc semi-transparent */
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 0;
+    transition: background-color 0.3s ease; /* Pour une transition douce */
+}
+
+/* Ajoutez ceci pour empêcher le contenu de se cacher sous la barre fixe */
+body {
+    padding-top: 5rem; /* Ajustez cette valeur si la barre est plus haute */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: #212529;
+}
+
+nav {
+    display: inline-block;
+    float: right;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #212529;
+    font-weight: bold;
+}
+
+/* Sections principales */
+main {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+h2 {
+    border-bottom: 2px solid grey;
+    padding-bottom: 5px;
+    margin-top: 0;
+    font-size: 1.8rem;
+}
+
+
+/* Style pour le conteneur du texte */
+.bio-text {
+    flex-grow: 1; /* Le texte prend l'espace restant */
+    min-width: 300px; /* S'assure que le texte ne devient pas trop étroit */
+}
+
+/* Pied de page */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid #e9ecef;
+    margin-top: 2rem;
+    color: #6c757d;
+}
+
+/* --- Footnote et boutons sociaux (version petite) --- */
+.footnote {
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.social {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 0.3rem;
+}
+
+.social a img {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.social a img:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* Style pour le lien de navigation actif */
+nav a.active {
+    color: white;
+    background-color: grey;
+    border-radius: 3px;
+}
+
+.surligner {
+    color : white;
+    background-color: grey;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.authorlink {
+    color : #6c757d;
+    background-color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Bouton retour en haut */
+#btn-haut {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+
+    background-color: #9e9e9e;
+    color: #fff;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    cursor: pointer;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+    /* état par défaut : invisible */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    /* animation de fondu */
+    transition: opacity .25s ease, visibility .25s ease, transform .2s ease;
+}
+
+/* État visible (activé par JS) */
+#btn-haut.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Effet survol */
+#btn-haut:hover {
+    background-color: #757575;
+    transform: translateY(-2px);
+}
+
+/* Accessibilité : réduit les animations si demandé */
+@media (prefers-reduced-motion: reduce) {
+    #btn-haut {
+        transition: none;
+    }
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Style pour les sections de recherche */
+h3 {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 5px;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.publication {
+    margin-bottom: 25px; /* Espace entre les publications */
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    background-color: #ffffff; /* Fond blanc pour les blocs */
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease;
+}
+
+.publication:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Ombre légère au survol */
+}
+
+.publication p {
+    margin: 0;
+    line-height: 1.6;
+    color: #555;
+}
+
+.publication p:first-child {
+    font-weight: bold;
+    color: #212529;
+}
+
+.publication p em {
+    font-style: italic;
+    color: #6c757d;
+}
+
+.publication a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #495057; /* Couleur de fond foncée pour le bouton */
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.publication a:hover {
+    background-color: #212529; /* Couleur de fond plus foncée au survol */
+}
+
+.btn-transparent {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #343a40; /* Bordure noire */
+    background-color: transparent; /* Fond transparent */
+    color: #343a40; /* Texte noir */
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-transparent:hover {
+    background-color: #343a40; /* Fond noir au survol */
+    color: #ffffff; /* Texte blanc au survol */
+}
+
+.research-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    background-color: #ffffff;
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease;
+}
+
+.research-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.research-item p {
+    margin: 0;
+    line-height: 1.5; /* Simple line height */
+    color: #555;
+}
+
+.research-item p.title {
+    font-weight: bold;
+    color: #212529;
+    font-size: 1.1em;
+}
+
+.research-item p.authors-year {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.research-item .buttons {
+    margin-top: 15px;
+}
+
+.research-item .abstract-text {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #6c757d;
+    border-radius: 3px;
+    line-height: 1.6;
+}
+
+.html-viewer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.html-viewer iframe {
+    width: 100%;
+    min-height: 800px;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.page-content h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+}
+
+/* Styles pour le tableau */
+.table-container {
+    overflow-x: auto;
+}
+
+.teaching-table {
+    width: 100%;
+    border-collapse: collapse; /* Permet aux bordures de se coller */
+    font-family: 'IBM Plex Mono', monospace;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.teaching-table th, .teaching-table td {
+    padding: 15px;
+    text-align: left;
+    border-right: 1px solid #e5e7eb; /* Bordure verticale */
+    border-bottom: 1px solid #e5e7eb; /* Bordure horizontale */
+}
+
+/* Bordure de la dernière cellule pour éviter un double contour */
+.teaching-table th:last-child, .teaching-table td:last-child {
+    border-right: none;
+}
+
+.teaching-table th {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-right: 1px solid #333; /* Bordure plus foncée pour les en-têtes */
+}
+
+.teaching-table th:last-child {
+    border-right: none;
+}
+
+.teaching-table tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.teaching-table tr:hover {
+    background-color: #eef1f5;
+}
+
+/* Ligne de séparation entre les cours */
+.teaching-table .course-separator td {
+    border-bottom: 2px solid #1a1a1a; /* Bordure plus épaisse pour marquer la fin d'un cours */
+}
+
+/* Styles pour les liens et le nom du cours */
+.teaching-table a {
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.teaching-table a:hover {
+    color: #1a1a1a;
+    text-decoration: underline;
+}
+
+.teaching-table .course-name {
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Styles pour la page Tools */
+.tools-intro {
+    text-align: center;
+    padding: 60px 0 40px;
+}
+
+.tools-intro h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-bottom: none;
+}
+
+.tools-intro p {
+    font-size: 1.1rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.course-section {
+    padding: 40px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-header h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    border-bottom: none;
+}
+
+.section-header p {
+    font-size: 1rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.course-card h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.course-card p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.course-card .syllabus-link {
+    display: inline-flex;
+    padding: 10px 20px;
+    background-color: #495057;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+
+.course-card .syllabus-link:hover {
+    background-color: #212529;
+}
+
+/* Bio section styles */
+.bio {
+    margin-bottom: 40px;
+    overflow: auto; /* Clearfix for floated image */
+}
+
+.profile-pic-sticky {
+    float: right;
+    width: 300px;
+    height: auto;
+    margin: 0 0 20px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .bio {
+        text-align: left; /* Optional: center text for mobile */
+    }

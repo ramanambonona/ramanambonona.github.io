@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rappel mathématiques - Microéconomie Avancée</title>
+    
+    <!-- CDN pour les styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/moon.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #ff7e5f;
+            --secondary-color: #e8e9ed;
+            --bg-color: #2a2a2e;
+            --text-color: #f0f0f0;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+        
+        .reveal {
+            background: radial-gradient(circle, #1a1a1e 0%, #0a0a0c 100%);
+        }
+        
+        .reveal .slide-number {
+            font-size: 20px;
+            color: var(--secondary-color);
+            background: rgba(0,0,0,0.3);
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        
+        .reveal .controls {
+            color: var(--primary-color);
+        }
+        
+        .reveal .progress {
+            color: var(--primary-color);
+        }
+        
+        .reveal section h1, .reveal section h2, .reveal section h3 {
+            color: var(--secondary-color);
+            text-transform: none;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        
+        .reveal section h1 {
+            font-size: 3.5rem;
+            text-shadow: 0 0 10px rgba(255, 204, 95, 0.5);
+        }
+        
+        .reveal section h2 {
+            font-size: 2.8rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .reveal section h3 {
+            font-size: 2.3rem;
+        }
+        
+        .reveal section p, .reveal section li {
+            color: var(--text-color);
+            font-size: 1.7rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .reveal section ul {
+            margin-top: 20px;
+        }
+        
+        .reveal section li {
+            margin-bottom: 10px;
+        }
+        
+        .math-formula {
+            font-size: 1.6rem;
+            margin: 25px auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 126, 95, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            width: 90%;
+            overflow-x: auto;
+        }
+        
+        .svg-container {
+            margin: 30px auto;
+            width: 85%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 204, 95, 0.2);
+        }
+        
+        .note {
+            font-size: 1.4rem;
+            color: #a0a0a0;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .half {
+            width: 48%;
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 1%;
+        }
+        
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            text-align: center;
+        }
+        
+        .professor-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 204, 95, 0.3);
+            max-width: 500px;
+        }
+        
+        .professor-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid var(--secondary-color);
+        }
+        
+        .icon-highlight {
+            color: var(--secondary-color);
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .function-viz {
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #aaa;
+        }
+        
+        .gradient-box {
+            background: linear-gradient(135deg, #ff7e5f, #ffcc5f);
+            height: 10px;
+            width: 100%;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .convexity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .convexity-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .convexity-item h4 {
+            color: var(--secondary-color);
+            margin-top: 0;
+        }
+        
+        @media (max-width: 900px) {
+            .half, .convexity-grid {
+                display: block;
+                width: 100%;
+            }
+            
+            .convexity-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1 : Titre -->
+            <section>
+                <div class="center-content">
+                    <h1>Microéconomie Avancée</h1>
+                    <h2>Rappel Mathématiques</h2>
+                    <div class="gradient-box"></div>
+                    <div class="professor-card">
+                        <i class="fas fa-user-graduate icon-highlight"></i>
+                        <h3>Dr. Ramanambonona Ambinintsoa</h3>
+                        <p><i class="fas fa-university icon-highlight"></i> Université d'Antsirabe - Université de l'Itasy - ENS Antananarivo</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section : Fonctions à plusieurs variables -->
+            <section>
+                <section>
+                    <h2>Fonction à plusieurs variables</h2>
+                    <p>Une fonction à $n$ variables est une application de l'espace réel positif $\mathbb{R}_+^n$ vers l'ensemble des réels :</p>
+
+                    <div class="math-formula">
+                        \[
+                        f : \mathbb{R}_+^n \rightarrow \mathbb{R}
+                        \]
+                    </div>
+
+                    <p>Notation classique :</p>
+
+                    <div class="math-formula">
+                        \[
+                        y = f(x_1, \dots, x_n)
+                        \]
+                    </div>
+
+                    <p>Elle associe une valeur $y$ à un vecteur d'entrée $(x_1, \dots, x_n)$.</p>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> En microéconomie, les fonctions à plusieurs variables sont omniprésentes : 
+                        fonctions de production, fonctions d'utilité, fonctions de coût,...
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 2 : Dérivée d'une fonction -->
+            <section>
+                <section>
+                    <h2>Dérivée (fonction d'une variable)</h2>
+                    <p><strong>Définition formelle</strong></p>
+                    <div class="math-formula">
+                        \[
+                        f^{\prime}(x)=\lim_{\Delta x \rightarrow 0} \frac{f(x+\Delta x)-f(x)}{\Delta x}
+                        \]
+                    </div>
+                    <p>La dérivée $f'(x)$ mesure la variation de $f(x)$ lorsque $x$ varie.</p>
+                </section>
+				
+                <section>
+                    <h2>Interprétation de la Dérivée</h2>
+                    <div class="convexity-grid">
+                        <div class="convexity-item">
+                            <h4>Interprétation graphique</h4>
+                            <p>Pente de la tangente à la courbe</p>
+                            <div class="function-viz">
+                                <i class="fas fa-chart-line" style="font-size: 4rem; color: #ffcc5f;"></i>
+                                <span>Représentation graphique de la dérivée</span>
+                            </div>
+                        </div>	                      
+                        <div class="convexity-item">
+                            <h4>Utilisation</h4>
+                            <p>Utilité marginale, coût marginal, productivité marginale</p>
+                            <div class="function-viz">
+                                <i class="fas fa-calculator" style="font-size: 3rem; color: #ff7e5f;"></i>
+                                <span>Concepts économiques</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>				
+
+                <section>
+                    <h3>Exmple</h3>
+					<p>Si $f(x) = x^2$, alors :</p>
+                    <div class="math-formula">
+                        \[
+                        f'(x) = 2x
+                        \]
+                    </div>
+                    <div class="convexity-grid">
+                        <div class="convexity-item">
+                            <h4>Démonstration</h4>
+								<div class="math-formula" style="font-size: 1.5rem">
+									\[
+									\begin{aligned}
+									f'(x) &= \lim_{\Delta x \to 0} \frac{(x + \Delta x)^2 - x^2}{\Delta x} \\
+									&= \lim_{\Delta x \to 0} \frac{x^2 + 2x\Delta x + (\Delta x)^2 - x^2}{\Delta x} \\
+									&= \lim_{\Delta x \to 0} (2x + \Delta x) \\
+									&= 2x
+									\end{aligned}
+									\]
+								</div>
+                        </div>	                      
+                        <div class="convexity-item">
+                            <h4>Application</h4>
+							<p>Pour $x = 3$:</p>
+								<div class="math-formula" style="font-size: 1.5rem">
+									\[
+									f'(3) = 2 \times 3 = 6
+									\]
+								</div>
+							<p>La pente de la tangente au point (3,9) est 6</p>
+						</div>
+                     </div>
+                </section>				
+				
+            <!-- Section 3 : Dérivées partielles -->
+            <section>
+                <section>
+                    <h2>Dérivées partielles</h2>
+                    <p>Si $f$ dépend de plusieurs variables, on peut dériver partiellement :</p>
+                    <div class="math-formula">
+                        \[
+                        \frac{\partial f}{\partial x_i} = \lim_{\Delta x_i \to 0} \frac{f(\dots, x_i + \Delta x_i, \dots) - f(\dots, x_i, \dots)}{\Delta x_i}
+                        \]
+                    </div>
+                    <p>Notation usuelle :</p>
+                    <div class="math-formula">
+                        \[
+                        \frac{\partial f(x_1, \dots, x_n)}{\partial x_i}
+                        \]
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle icon-highlight"></i> La dérivée partielle mesure la variation de la fonction quand on modifie une seule variable, 
+                        en maintenant les autres constantes.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Exemple : dérivées partielles</h3>
+                    <p>Soit la fonction :</p>
+                    <div class="math-formula">
+                        \[
+                        f(x, y) = x^2 y + 3xy^2
+                        \]
+                    </div>
+                    <p><strong>Dérivée partielle par rapport à $x$</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        \frac{\partial f}{\partial x} = 2xy + 3y^2
+                        \]
+                    </div>
+                    <p><strong>Dérivée partielle par rapport à $y$</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        \frac{\partial f}{\partial y} = x^2 + 6xy
+                        \]
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> En économie, les dérivées partielles représentent des concepts comme 
+                        le produit marginal du travail ou le taux marginal de substitution.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 4 : Différentielle -->
+            <section>
+                <section>
+                    <h2>Différentielle</h2>
+                    <p><strong>Variation totale d'une fonction différentiable</strong></p>
+                    <div class="math-formula">
+                        \[
+                        df = \frac{\partial f}{\partial x_1} dx_1 + \cdots + \frac{\partial f}{\partial x_n} dx_n
+                        \]
+                    </div>
+                    <p>Elle approxime la variation de $f$ quand plusieurs variables changent.</p>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle icon-highlight"></i> La différentielle totale est essentielle pour l'analyse des variations 
+                        simultanées de plusieurs facteurs de production ou de consommation.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Exemple : Différentielle totale</h3>
+                    <p>Pour la même fonction :</p>
+                    <div class="math-formula">
+                        \[
+                        f(x, y) = x^2 y + 3xy^2
+                        \]
+                    </div>
+                    <p>La différentielle est :</p>
+                    <div class="math-formula">
+                        \[
+                        df = \frac{\partial f}{\partial x} dx + \frac{\partial f}{\partial y} dy
+                        \]
+                    </div>
+                    <p>En remplaçant :</p>
+                    <div class="math-formula">
+                        \[
+                        df = (2xy + 3y^2) dx + (x^2 + 6xy) dy
+                        \]
+                    </div>
+                    
+                    <div class="function-viz">
+                        <i class="fas fa-cube" style="font-size: 4rem; color: #ff7e5f;"></i>
+                        <span>Représentation de la différentielle dans l'espace 3D</span>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Slide : Concavité / Convexité -->
+            <section>
+                <section>
+                    <h3>Concavité et Convexité</h3>
+                    <p><strong>Définitions générales</strong></p>
+                    <div class="convexity-grid">
+                        <div class="convexity-item">
+                            <h4>Concave</h4>
+                            <div class="math-formula">
+                                \[
+                                f(\lambda x + (1 - \lambda)x') \geq \lambda f(x) + (1 - \lambda)f(x')
+                                \]
+                            </div>
+                            <div class="function-viz">
+                                <i class="fas fa-chart-line" style="font-size: 3rem; color: #ff7e5f;"></i>
+                                <span>Courbe concave</span>
+                            </div>
+                        </div>
+                        
+                        <div class="convexity-item">
+                            <h4>Convexe</h4>
+                            <div class="math-formula">
+                                \[
+                                f(\lambda x + (1 - \lambda)x') \leq \lambda f(x) + (1 - \lambda)f(x')
+                                \]
+                            </div>
+                            <div class="function-viz">
+                                <i class="fas fa-chart-line" style="font-size: 3rem; color: #ffcc5f;"></i>
+                                <span>Courbe convexe</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Critères de convexité</h3>
+                    <div class="half">
+                        <h4>Unidimensionnel</h4>
+                        <div class="math-formula">
+                            \[
+                            f''(x) \leq 0 \Rightarrow f \text{ concave}
+                            \]
+                            \[
+                            f''(x) \geq 0 \Rightarrow f \text{ convexe}
+                            \]
+                        </div>
+                        <div class="note">
+                            <i class="fas fa-info-circle icon-highlight"></i> La concavité/convexité d'une fonction d'utilité 
+                            détermine les préférences du consommateur.
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Multivarié</h4>
+                        <p>Matrice hessienne :</p>
+                        <div class="math-formula" class="half" style="font-size: 0.7em">
+                            \[
+                            H_f(x) =
+                            \begin{bmatrix}
+                            \frac{\partial^2 f}{\partial x_1^2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+                            \vdots & \ddots & \vdots \\
+                            \frac{\partial^2 f}{\partial x_n \partial x_1} & \cdots & \frac{\partial^2 f}{\partial x_n^2}
+                            \end{bmatrix}
+                            \]
+                        </div>
+                        <p>Concavité si $H_f$ semi-définie négative, convexité si semi-définie positive.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Slide : Conditions d'optimalité -->
+            <section>
+                <section>
+                    <h3>Conditions d'optimalité</h3>
+                    <div class="half">
+                        <h4>Premier ordre (CPO)</h4>
+                        <div class="math-formula">
+                            \[
+                            \nabla f(x^*) = \left( \frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n} \right) = 0
+                            \]
+                        </div>
+                        <div class="note">
+                            <i class="fas fa-info-circle icon-highlight"></i> Condition nécessaire mais non suffisante pour un extremum.
+                        </div>
+                    </div>
+                    
+                    <div class="half">
+                        <h4>Second ordre (CSO)</h4>
+                        <div class="math-formula">
+                            <ul>
+                                <li>$H_f(x^*)$ définie négative → maximum local</li>
+                                <li>$H_f(x^*)$ définie positive → minimum local</li>
+                            </ul>
+                        </div>
+                        <div class="note">
+                            <i class="fas fa-info-circle icon-highlight"></i> En microéconomie, ces conditions permettent de 
+                            déterminer les quantités optimales de production ou de consommation.
+                        </div>
+                    </div>
+                    
+                    <div class="function-viz">
+                        <i class="fas fa-mountain" style="font-size: 4rem; color: #ffcc5f;"></i>
+                        <span>Représentation des points critiques (max, min, point selle)</span>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Slide : Exemples de concavité -->
+            <section>
+                <section>
+                    <h3>Exemple 1 : Concavité</h3>
+                    <p>Soit :</p>
+                    <div class="math-formula">
+                        \[
+                        f(x) = \ln(x)
+                        \]
+                    </div>
+                    <p>On a :</p>
+                    <div class="math-formula">
+                        \[
+                        f'(x) = \frac{1}{x}, \quad f''(x) = -\frac{1}{x^2} < 0 \quad \text{pour tout } x > 0
+                        \]
+                    </div>
+                    <p><strong>Donc : $f$ est concave sur $\mathbb{R}_+^*$.</strong></p>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> Les fonctions logarithmiques sont souvent utilisées pour représenter 
+                        des fonctions d'utilité car elles sont concaves, ce qui implique une utilité marginale décroissante.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Exemple 2 : Convexité</h3>
+                    <p>Soit :</p>
+                    <div class="math-formula">
+                        \[
+                        f(x) = x^2
+                        \]
+                    </div>
+                    <p>On a :</p>
+                    <div class="math-formula">
+                        \[
+                        f'(x) = 2x, \quad f''(x) = 2 > 0
+                        \]
+                    </div>
+                    <p><strong>Donc : $f$ est convexe sur $\mathbb{R}$.</strong></p>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> Les fonctions quadratiques sont convexes et sont souvent utilisées 
+                        pour modéliser des fonctions de coût en économie.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Exemple 3 : Matrice hessienne</h3>
+                    <p>Soit :</p>
+                    <div class="math-formula">
+                        \[
+                        f(x, y) = x^2 + xy + y^2
+                        \]
+                    </div>
+                    <p>Les dérivées secondes sont :</p>
+                    <div class="math-formula">
+                        \[
+                        \frac{\partial^2 f}{\partial x^2} = 2, \quad 
+                        \frac{\partial^2 f}{\partial x \partial y} = 1, \quad
+                        \frac{\partial^2 f}{\partial y^2} = 2
+                        \]
+                    </div>
+                    <p>Matrice hessienne :</p>
+                    <div class="math-formula">
+                        \[
+                        H_f(x, y) =
+                        \begin{bmatrix}
+                        2 & 1 \\
+                        1 & 2
+                        \end{bmatrix}
+                        \]
+                    </div>
+                    <p>Déterminant = $2×2 - 1×1 = 3 > 0$ et trace = 4 > 0 → définie positive → <strong>convexe</strong>.</p>
+                </section>
+            </section>
+
+            <!-- Slide : Optimisation sous contrainte -->
+            <section>
+                <section>
+                    <h3>Optimisation sous contrainte</h3>
+                    <p><strong>Problème de maximisation</strong></p>
+                    <div class="math-formula">
+                        \[
+                        \begin{aligned}
+                        & \max f(x_1,\ldots,x_n) \\
+                        & \text{s.c. } g(x_1,\ldots,x_n) = c
+                        \end{aligned}
+                        \]
+                    </div>
+                    <p><strong>Méthode de Lagrange</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        \mathcal{L}(x, \lambda) = f(x) - \lambda (g(x) - c)
+                        \]
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> Cette méthode est fondamentale en microéconomie pour résoudre 
+                        les problèmes de maximisation d'utilité sous contrainte budgétaire ou de minimisation des coûts.
+                    </div>
+                </section>
+                
+                <section>
+                    <h3>Conditions de premier ordre</h3>
+                    <div class="math-formula">
+                        \[
+                        \left\{
+                        \begin{aligned}
+                        \frac{\partial \mathcal{L}}{\partial x_i} &= 0 \\
+                        \frac{\partial \mathcal{L}}{\partial \lambda} &= 0
+                        \end{aligned}
+                        \right.
+                        \quad i = 1,\dots,n
+                        \]
+                    </div>
+                    
+                    <div class="function-viz">
+                        <i class="fas fa-project-diagram" style="font-size: 4rem; color: #ff7e5f;"></i>
+                        <span>Représentation graphique des courbes de niveau et de la contrainte</span>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3>Interprétation de $\lambda$</h3>
+                    <ul>
+                        <li>La solution optimale est notée :  
+                            <div class="math-formula">
+                                \[
+                                (x_1^*, \dots, x_n^*)
+                                \]
+                            </div>
+                        </li>
+                        <li>Le multiplicateur $\lambda$ représente :
+                            <strong>la valeur marginale de la contrainte</strong> :
+                            <div class="math-formula">
+                                \[
+                                \lambda = \frac{df^*}{dc}
+                                \]
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle icon-highlight"></i> En économie, $\lambda$ représente souvent l'utilité marginale 
+                        du revenu ou le coût marginal de la production.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Slide : Exemple optimisation -->
+            <section>
+                <section>
+                    <h3>Exemple : optimisation avec contrainte</h3>
+                    <p><strong>Problème</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        \begin{aligned}
+                        & \max_{(x,y)} f(x, y) = x y \\
+                        & \text{s.c. } x + y = 10
+                        \end{aligned}
+                        \]
+                    </div>
+                    <p><strong>Lagrangien</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        \mathcal{L}(x, y, \lambda) = x y - \lambda (x + y - 10)
+                        \]
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Étapes de résolution</h3>
+                    <p><strong>CPO :</strong></p>
+                    <div class="math-formula">
+                        \[
+                        \left\{
+                        \begin{aligned}
+                        \frac{\partial \mathcal{L}}{\partial x} &= y - \lambda = 0 \\
+                        \frac{\partial \mathcal{L}}{\partial y} &= x - \lambda = 0 \\
+                        \frac{\partial \mathcal{L}}{\partial \lambda} &= x + y - 10 = 0
+                        \end{aligned}
+                        \right.
+                        \]
+                    </div>
+                    <ul>
+                        <li>$\lambda = y$ et $\lambda = x \Rightarrow x = y$</li>
+                        <li>Donc $x + x = 10 \Rightarrow x = 5$, $y = 5$</li>
+                    </ul>
+                    
+                    <div class="function-viz">
+                        <i class="fas fa-calculator" style="font-size: 4rem; color: #ffcc5f;"></i>
+                        <span>Solution: (5,5) avec valeur f(5,5) = 25</span>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Solution optimale</h3>
+                    <p><strong>Résultat final</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        (x^*, y^*) = (5, 5), \quad f^* = 25, \quad \lambda = 5
+                        \]
+                    </div>
+                    <p><strong>Interprétation de $\lambda$ :</strong></p>
+                    <div class="math-formula">
+                        \[
+                        \lambda = \frac{df^*}{dc} = 5
+                        \]
+                    </div>
+                    <p>Chaque unité supplémentaire de ressource (c passant de 10 à 11) augmente $f^*$ d'environ 5 unités.</p>
+                </section>
+            </section>
+
+            <!-- Slide : Fonction homogène -->
+            <section>
+                <section>
+                    <h3>Fonction homogène</h3>
+                    <p><strong>Définition</strong> :</p>
+                    <div class="math-formula">
+                        \[
+                        f(\lambda x_1, \dots, \lambda x_n) = \lambda^\mu f(x_1, \dots, x_n)
+                        \]
+                    </div>
+                    <ul>
+                        <li>Degré $0$ → rendements constants</li>
+                        <li>Degré $1$ → rendements linéaires</li>
+                        <li>Degré $>1$ → rendements croissants</li>
+                        <li>Degré $<1$ → rendements décroissants</li>
+                    </ul>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle icon-highlight"></i> En économie, l'homogénéité est liée aux rendements d'échelle 
+                        dans les fonctions de production.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Exemple 1</h3>
+                    <div class="math-formula">
+                        \[
+                        f(x, y) = x^2 + y^2
+                        \]
+                    </div>
+                    <p><strong>Test :</strong></p>
+                    <div class="math-formula">
+                        \[
+                        f(\lambda x, \lambda y) = \lambda^2 x^2 + \lambda^2 y^2 = \lambda^2 (x^2 + y^2) = \lambda^2 f(x, y)
+                        \]
+                    </div>
+                    <p><strong>→ homogène de degré 2</strong></p>
+                </section>
+
+                <section>
+                    <h3>Exemple 2</h3>
+                    <div class="math-formula">
+                        \[
+                        f(x, y) = \frac{x}{y}
+                        \]
+                    </div>
+                    <p><strong>Test :</strong></p>
+                    <div class="math-formula">
+                        \[
+                        f(\lambda x, \lambda y) = \frac{\lambda x}{\lambda y} = \frac{x}{y} = \lambda^0 f(x, y)
+                        \]
+                    </div>
+                    <p><strong>→ homogène de degré 0</strong></p>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb icon-highlight"></i> Les fonctions homogènes de degré 0 sont importantes en économie 
+                        car elles représentent des relations qui ne dépendent pas de l'échelle (ex: taux de change).
+                    </div>
+                </section>
+            </section>
+
+            <!-- Slide de conclusion -->
+            <section>
+                <div class="center-content">
+                    <h2>Récapitulatif des Concepts Clés</h2>
+                    <div class="gradient-box"></div>
+                    <div class="convexity-grid">
+                        <div class="convexity-item">
+                            <i class="fas fa-calculator icon-highlight" style="font-size: 3rem;"></i>
+                            <h4>Dérivées partielles</h4>
+                            <p>Variation par rapport à une variable</p>
+                        </div>
+                        
+                        <div class="convexity-item">
+                            <i class="fas fa-project-diagram icon-highlight" style="font-size: 3rem;"></i>
+                            <h4>Matrice Hessienne</h4>
+                            <p>Dérivées secondes et convexité</p>
+                        </div>
+                        
+                        <div class="convexity-item">
+                            <i class="fas fa-link icon-highlight" style="font-size: 3rem;"></i>
+                            <h4>Lagrangien</h4>
+                            <p>Optimisation sous contraintes</p>
+                        </div>
+                        
+                        <div class="convexity-item">
+                            <i class="fas fa-expand-arrows-alt icon-highlight" style="font-size: 3rem;"></i>
+                            <h4>Homogénéité</h4>
+                            <p>Rendements d'échelle</p>
+                        </div>
+                    </div>
+                    
+                    <div class="professor-card">
+                        <h3>Merci pour votre attention !</h3>
+                        <p>Questions ?</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- CDN pour les scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax3 ],
+            math: {
+                mathjax3: {
+                    path: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js'
+                }
+            },
+            transition: 'convex',
+            backgroundTransition: 'slide',
+            controlsLayout: 'edges',
+            controlsTutorial: true,
+            height: 800,
+            margin: 0.08,
+            keyboard: {
+                38: 'prev',
+                40: 'next',
+            }
+        });
+    </script>
+</body>
+</html>

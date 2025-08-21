@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Microéconomie - Concurrence Imparfaite</title>
+    <meta name="description" content="Slides de présentation du cours Microéconomie - Concurrence Imparfaite">
+    <meta name="author" content="Master SES Semestre 8 - ENS Antananarivo">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/moon.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --main-bg-color: #1a1a1a;
+            --text-color: #fff;
+            --highlight-color: #ffcc00; /* Yellow */
+            --secondary-highlight-color: #00ffff; /* Cyan */
+            --block-bg-color: rgba(255, 255, 255, 0.08);
+            --block-border-color: #28a745; /* Green */
+            --alert-border-color: #dc3545; /* Red */
+            --axis-color: white;
+            --demand-curve-color: #87CEEB; /* SkyBlue */
+            --supply-curve-color: #FF6347; /* Tomato */
+            --marginal-cost-color: #32CD32; /* LimeGreen */
+            --marginal-revenue-color: #9932CC; /* DarkOrchid */
+            --equilibrium-point-color: #FFD700; /* Gold */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--main-bg-color);
+        }
+
+        .reveal .slides section {
+            text-align: left;
+            padding: 0 5%;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-color);
+            text-shadow: none;
+        }
+
+        .block, .alertblock {
+            background-color: var(--block-bg-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-left: 5px solid var(--block-border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .alertblock {
+            border-left-color: var(--alert-border-color);
+        }
+        .block h3, .alertblock h3 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 1.2em;
+        }
+        .block p, .alertblock p {
+            font-size: 1em;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Lists */
+        .reveal ul, .reveal ol {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            list-style-position: inside;
+        }
+        .reveal ul li, .reveal ol li {
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        /* Fragments (for animations) */
+        .fragment.fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fragment.fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom highlight color */
+        strong {
+            color: var(--highlight-color);
+        }
+
+        /* Tables */
+        .reveal table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .reveal th, .reveal td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            text-align: left;
+        }
+        .reveal th {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* MathJax */
+        .reveal .MathJax {
+            font-size: 1.1em !important;
+        }
+
+        /* AI Button Styling */
+        .ai-button {
+            background-color: var(--marginal-cost-color); /* LimeGreen */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        .ai-button:hover {
+            background-color: #228B22; /* ForestGreen */
+            transform: translateY(-2px);
+        }
+        .ai-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .llm-response {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            color: var(--text-color);
+            text-align: left;
+            font-size: 0.85em;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            line-height: 1.4;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .llm-response.visible {
+            display: block;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* SVG Diagram Styling */
+        .diagram-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .diagram-svg {
+            max-width: 100%;
+            height: auto;
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 10px; /* Space between SVG and text */
+        }
+        .diagram-svg .axis { stroke: var(--axis-color); stroke-width: 1.5; }
+        .diagram-svg .axis-arrow { fill: var(--axis-color); }
+        .diagram-svg .svg-label { fill: var(--text-color); font-size: 16px; font-family: 'Inter', sans-serif; }
+        .diagram-svg .demand-curve {
+            stroke: var(--demand-curve-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        .diagram-svg .supply-curve {
+            stroke: var(--supply-curve-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        .diagram-svg .marginal-cost-curve {
+            stroke: var(--marginal-cost-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        .diagram-svg .marginal-revenue-curve {
+            stroke: var(--marginal-revenue-color);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5 5; /* Dashed for MR */
+        }
+        .diagram-svg .price-line {
+            stroke: var(--equilibrium-point-color);
+            stroke-width: 1.5;
+            stroke-dasharray: 4 2;
+        }
+        .diagram-svg .shaded-area {
+            fill: rgba(255, 255, 0, 0.2); /* Semi-transparent yellow */
+            stroke: var(--highlight-color);
+            stroke-width: 1;
+        }
+        .diagram-svg .loss-area {
+            fill: rgba(255, 0, 0, 0.2); /* Semi-transparent red */
+            stroke: var(--alert-border-color);
+            stroke-width: 1;
+        }
+        .diagram-svg .profit-area {
+            fill: rgba(0, 255, 0, 0.2); /* Semi-transparent green */
+            stroke: var(--marginal-cost-color);
+            stroke-width: 1;
+        }
+        .diagram-svg .cournot-reaction-curve {
+            stroke: var(--demand-curve-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        .diagram-svg .stackelberg-leader-curve {
+            stroke: var(--supply-curve-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        .diagram-svg .point { fill: var(--equilibrium-point-color); r: 4; }
+        .diagram-svg .label { fill: var(--text-color); font-size: 14px; }
+
+        /* Animation for drawing paths */
+        .path-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-path 2s ease-out forwards;
+        }
+        @keyframes draw-path {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title Slide -->
+            <section>
+                <h1 style="text-align: center; color: var(--highlight-color);">Microéconomie</h1>
+                <h2 style="text-align: center;">Concurrence Imparfaite</h2>
+                <p style="text-align: center;">Master SES Semestre 8 - École Normale Supérieure d'Antananarivo</p>
+            </section>
+
+            <!-- Section: Introduction - Surplus Économique -->
+            <section>
+                <section>
+                    <h2>Introduction : Le surplus économique</h2>
+                    <p class="fragment fade-up">Lors d'un échange, tous les acteurs réalisent des gains.</p>
+                </section>
+                <section>
+                    <h3>1. Le surplus du consommateur (SC)</h3>
+                    <p class="fragment fade-up">Le SC est le gain réalisé par l'achat à un prix inférieur au prix de réserve du consommateur.</p>
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <line x1="70" y1="350" x2="450" y2="350" class="axis"/>
+                            <polygon points="450,350 442,346 442,354" class="axis-arrow"/>
+                            <text x="440" y="365" class="svg-label">$q$</text>
+
+                            <line x1="70" y1="350" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$p$</text>
+
+                            <!-- Demand Curve -->
+                            <path d="M 70 300 C 150 200, 250 150, 350 100" class="demand-curve path-draw"/>
+                            <text x="360" y="90" class="svg-label">D(q)</text>
+
+                            <!-- Price line -->
+                            <line x1="70" y1="250" x2="300" y2="250" class="price-line"/>
+                            <text x="60" y="255" class="svg-label">$p^*$</text>
+                            <line x1="300" y1="250" x2="300" y2="350" class="price-line"/>
+                            <text x="290" y="365" class="svg-label">$q^*$</text>
+
+                            <!-- Consumer Surplus Area -->
+                            <polygon points="70,250 70,300 300,250" class="shaded-area"/>
+                            <text x="150" y="180" class="svg-label">SC</text>
+                        </svg>
+                        <p class="fragment fade-up">Pour une fonction de demande inverse $D(p)$, le surplus du consommateur à un prix $p^*$ est :</p>
+                        \[
+                        SC(p^*) = \int_{p^*}^{\infty} D(p) \, dp
+                        \]
+                    </div>
+                </section>
+                <section>
+                    <h3>2. Le surplus du producteur (SP)</h3>
+                    <p class="fragment fade-up">Le SP est le gain réalisé lorsque le prix de vente est supérieur au seuil de réserve (coût marginal) du producteur.</p>
+                    <p class="fragment fade-up">Condition d'échange : prix de réserve consommateur $\ge$ prix de réserve producteur.</p>
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <line x1="70" y1="350" x2="450" y2="350" class="axis"/>
+                            <polygon points="450,350 442,346 442,354" class="axis-arrow"/>
+                            <text x="440" y="365" class="svg-label">$q$</text>
+
+                            <line x1="70" y1="350" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$p$</text>
+
+                            <!-- Supply Curve (Cost Marginal) -->
+                            <path d="M 100 100 C 150 150, 250 250, 350 300" class="supply-curve path-draw"/>
+                            <text x="360" y="310" class="svg-label">Cm(q)</text>
+
+                            <!-- Price line -->
+                            <line x1="70" y1="250" x2="300" y2="250" class="price-line"/>
+                            <text x="60" y="255" class="svg-label">$p^*$</text>
+                            <line x1="300" y1="250" x2="300" y2="350" class="price-line"/>
+                            <text x="290" y="365" class="svg-label">$q^*$</text>
+
+                            <!-- Producer Surplus Area -->
+                            <polygon points="70,250 300,250 300,200 70,100" class="shaded-area"/>
+                            <text x="150" y="280" class="svg-label">SP</text>
+                        </svg>
+                        <p class="fragment fade-up">Le surplus du producteur est son profit ($\pi$) :</p>
+                        \[
+                        SP(p^*) = \int_0^{q^*} \left[ p^* - Cm(q) \right] \, dq = p^* \cdot q^* - C(q^*) = \pi
+                        \]
+                    </div>
+                </section>
+                <section>
+                    <h3>3. Le surplus total (ST)</h3>
+                    <p class="fragment fade-up">Le surplus total est la somme du surplus du consommateur et du surplus du producteur :</p>
+                    \[
+                    ST = SC + SP
+                    \]
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="550" height="450" viewBox="0 0 550 450">
+                            <!-- Axes -->
+                            <line x1="70" y1="400" x2="500" y2="400" class="axis"/>
+                            <polygon points="500,400 492,396 492,404" class="axis-arrow"/>
+                            <text x="490" y="415" class="svg-label">$q$</text>
+
+                            <line x1="70" y1="400" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$p$</text>
+
+                            <!-- Demand Curve -->
+                            <path d="M 70 350 C 150 250, 250 150, 400 100" class="demand-curve path-draw"/>
+                            <text x="410" y="90" class="svg-label">Demande (D)</text>
+
+                            <!-- Supply Curve -->
+                            <path d="M 70 100 C 150 150, 250 250, 400 350" class="supply-curve path-draw"/>
+                            <text x="410" y="360" class="svg-label">Offre (O)</text>
+
+                            <!-- Equilibrium Point -->
+                            <circle cx="280" cy="200" r="5" class="point" fill="var(--equilibrium-point-color)"/>
+                            <text x="285" y="190" class="label">E</text>
+
+                            <line x1="280" y1="200" x2="280" y2="400" class="price-line"/>
+                            <text x="270" y="415" class="svg-label">$q_{EGC}^*$</text>
+                            <line x1="280" y1="200" x2="70" y2="200" class="price-line"/>
+                            <text x="60" y="205" class="svg-label">$p_{EGC}^*$</text>
+
+                            <!-- Consumer Surplus Area -->
+                            <polygon points="70,200 280,200 70,350" class="shaded-area"/>
+                            <text x="140" y="150" class="svg-label">SC</text>
+
+                            <!-- Producer Surplus Area -->
+                            <polygon points="70,200 280,200 70,100" class="profit-area"/>
+                            <text x="140" y="280" class="svg-label">SP</text>
+                        </svg>
+                    </div>
+                </section>
+                <section>
+                    <h3>Importance de la variation du surplus total</h3>
+                    <p class="fragment fade-up">La variation du surplus total ($\Delta ST$) doit être positive pour justifier une réforme.
+                        \[
+                        \Delta ST = \Delta SC + \Delta SP
+                        \]
+                    </p>
+                    <p class="fragment fade-up">Si $\Delta ST > 0$, cela signifie que les gains des uns peuvent compenser les pertes des autres, rendant la réforme potentiellement Pareto-améliorante (avec compensation).</p>
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="550" height="450" viewBox="0 0 550 450">
+                            <!-- Axes -->
+                            <line x1="70" y1="400" x2="500" y2="400" class="axis"/>
+                            <polygon points="500,400 492,396 492,404" class="axis-arrow"/>
+                            <text x="490" y="415" class="svg-label">$q$</text>
+
+                            <line x1="70" y1="400" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$p$</text>
+
+                            <!-- Demand Curve -->
+                            <path d="M 70 350 C 150 250, 250 150, 400 100" class="demand-curve"/>
+                            <text x="410" y="90" class="svg-label">Demande (D)</text>
+
+                            <!-- Supply Curve -->
+                            <path d="M 70 100 C 150 150, 250 250, 400 350" class="supply-curve"/>
+                            <text x="410" y="360" class="svg-label">Offre (O)</text>
+
+                            <!-- Equilibrium 1 (initial) -->
+                            <circle cx="200" cy="250" r="5" class="point" fill="orange"/>
+                            <text x="205" y="240" class="label">E0</text>
+                            <line x1="200" y1="250" x2="200" y2="400" class="price-line"/>
+                            <text x="190" y="415" class="svg-label">$q_0$</text>
+                            <line x1="200" y1="250" x2="70" y2="250" class="price-line"/>
+                            <text x="60" y="255" class="svg-label">$p_0$</text>
+
+                            <!-- Equilibrium 2 (final) -->
+                            <circle cx="280" cy="200" r="5" class="point" fill="var(--equilibrium-point-color)"/>
+                            <text x="285" y="190" class="label">E1</text>
+                            <line x1="280" y1="200" x2="280" y2="400" class="price-line"/>
+                            <text x="270" y="415" class="svg-label">$q_1$</text>
+                            <line x1="280" y1="200" x2="70" y2="200" class="price-line"/>
+                            <text x="60" y="205" class="svg-label">$p_1$</text>
+
+                            <!-- Change in CS (rectangle + triangle) -->
+                            <polygon points="70,200 70,250 200,250 200,200 280,200 280,250" class="shaded-area" opacity="0.5"/>
+                            <polygon points="70,250 200,250 280,200 70,350" class="loss-area" opacity="0.5"/>
+
+                            <!-- Change in PS (rectangle + triangle) -->
+                            <polygon points="70,200 70,100 200,250 280,200" class="profit-area" opacity="0.5"/>
+                            <polygon points="200,250 280,200 280,250" class="shaded-area" opacity="0.5"/>
+
+                            <text x="350" y="150" class="svg-label">Perte Sèche</text>
+                            <polygon points="200,250 280,200 280,250" class="loss-area" opacity="0.8"/>
+                        </svg>
+                        <p class="fragment fade-up" style="text-align: center; font-size: 0.9em; color: rgba(255,255,255,0.7);">
+                            Une réforme peut entraîner une perte sèche (zone hachurée en rouge) si l'équilibre n'est pas optimal.
+                        </p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section II: Le monopole -->
+            <section>
+                <section>
+                    <h2>II. Le monopole</h2>
+                    <p class="fragment fade-up">Un monopole est un marché où une <strong style="color: var(--highlight-color);">seule firme</strong> offre un bien, lui donnant le pouvoir de fixer le prix.</p>
+                    <p class="fragment fade-up">Causes de l'existence d'un monopole :</p>
+                    <ul>
+                        <li class="fragment fade-up">Rareté des ressources (ex: mines de diamant).</li>
+                        <li class="fragment fade-up">Innovation technologique (brevets).</li>
+                        <li class="fragment fade-up">Mesures légales (services publics).</li>
+                        <li class="fragment fade-up">Lois de propriété intellectuelle.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>1. Le monopole pur</h3>
+                    <p class="fragment fade-up">Le monopoleur estime la demande globale et sa fonction inverse : $p = D^{-1}(q) = p(q)$.</p>
+                    <p class="fragment fade-up">Il maximise son profit : $\max \pi(q) = p(q) \cdot q - C(q)$.</p>
+                    <p class="fragment fade-up">Condition de premier ordre : Recette Marginale (Rm) = Coût Marginal (Cm).</p>
+                    \[
+                    Rm(q) = p(q) \left[ 1 + \frac{1}{\varepsilon} \right] = Cm(q)
+                    \quad \Rightarrow \quad
+                    \boxed{Cm(q) = p(q) \left( 1 - \frac{1}{|e|} \right)}
+                    \]
+                    <p class="fragment fade-up">Où $\varepsilon$ est l'élasticité-prix de la demande.</p>
+                </section>
+                <section>
+                    <h3>Cas limites d'élasticité</h3>
+                    <ul>
+                        <li class="fragment fade-up">Si $|e| \to \infty$ : $p = Cm(q)$ (concurrence parfaite). Le pouvoir de marché est nul.</li>
+                        <li class="fragment fade-up">Si $|e| \to 0$ : $Cm(q) = p(q) = Rm(q)$ (monopole total). Le pouvoir de monopole est absolu.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Exemple de modélisation (Monopole linéaire)</h3>
+                    <div class="block">
+                        <ul>
+                            <li class="fragment fade-up">Fonction de demande : $D(p) = a - bp \Rightarrow p(q) = \frac{a - q}{b}$</li>
+                            <li class="fragment fade-up">Fonction de coût : $C(q) = \delta q^2 \Rightarrow Cm(q) = 2\delta q$</li>
+                            <li class="fragment fade-up">Recette marginale : $Rm(q) = \frac{a - 2q}{b}$</li>
+                        </ul>
+                    </div>
+                    <p class="fragment fade-up">Condition de maximisation du profit ($Rm = Cm$) :</p>
+                    \[
+                    \frac{a - 2q}{b} = 2 \delta q \quad \Rightarrow \quad q_m = \frac{a}{2(\delta b + 1)}
+                    \]
+                </section>
+                <section>
+                    <h3>Illustration graphique du monopole</h3>
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="550" height="450" viewBox="0 0 550 450">
+                            <!-- Axes -->
+                            <line x1="70" y1="400" x2="500" y2="400" class="axis"/>
+                            <polygon points="500,400 492,396 492,404" class="axis-arrow"/>
+                            <text x="490" y="415" class="svg-label">$q$</text>
+
+                            <line x1="70" y1="400" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$p$</text>
+
+                            <!-- Demand Curve (p(q)) -->
+                            <line x1="70" y1="350" x2="450" y2="100" class="demand-curve path-draw"/>
+                            <text x="460" y="90" class="svg-label">Demande (p(q))</text>
+
+                            <!-- Marginal Revenue (Rm) -->
+                            <line x1="70" y1="350" x2="260" y2="100" class="marginal-revenue-curve path-draw"/>
+                            <text x="270" y="90" class="svg-label">Rm(q)</text>
+
+                            <!-- Marginal Cost (Cm) -->
+                            <path d="M 70 100 L 450 300" class="marginal-cost-curve path-draw"/>
+                            <text x="460" y="310" class="svg-label">Cm(q)</text>
+
+                            <!-- Monopoly Equilibrium (Rm=Cm) -->
+                            <circle cx="215" cy="200" r="5" class="point" fill="var(--equilibrium-point-color)"/>
+                            <text x="220" y="190" class="label">M</text>
+
+                            <!-- q_m and p_m -->
+                            <line x1="215" y1="200" x2="215" y2="400" class="price-line"/>
+                            <text x="205" y="415" class="svg-label">$q_m$</text>
+                            <line x1="70" y1="260" x2="215" y2="260" class="price-line"/>
+                            <text x="60" y="265" class="svg-label">$p_m$</text>
+
+                            <!-- Competitive Equilibrium (p=Cm) - intersection of D and Cm -->
+                            <circle cx="280" cy="230" r="5" class="point" fill="lightgray"/>
+                            <text x="285" y="220" class="label">C</text>
+                            <line x1="280" y1="230" x2="280" y2="400" class="price-line" stroke-dasharray="2 2"/>
+                            <text x="270" y="415" class="svg-label">$q_c$</text>
+                            <line x1="70" y1="230" x2="280" y2="230" class="price-line" stroke-dasharray="2 2"/>
+                            <text x="60" y="235" class="svg-label">$p_c$</text>
+
+                            <!-- Monopoly Profit Area (p_m x q_m) - (AC x q_m) -->
+                            <polygon points="70,260 215,260 215,200 70,200" class="profit-area"/>
+                            <text x="140" y="230" class="svg-label">Profit</text>
+                        </svg>
+                        <p class="fragment fade-up">En monopole : $q_m < q_c$ et $p_m > p_c$.</p>
+                        <p class="fragment fade-up">La <strong style="color: var(--highlight-color);">rente de monopole</strong> est le profit additionnel comparé à la concurrence.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3>2. Le monopole discriminant</h3>
+                    <p class="fragment fade-up">Le monopoleur fixe des prix différents pour différentes catégories de consommateurs (segmentation du marché).</p>
+                    <p class="fragment fade-up">Idéalement, il capterait tout le surplus du consommateur (connaissance des prix de réserve individuels).</p>
+                    <p class="fragment fade-up">Exemple (deux groupes, H et F) :</p>
+                    \[
+                    \Pi = p(q_H)q_H + p(q_F)q_F - C(q_H + q_F)
+                    \]
+                    <p class="fragment fade-up">Condition de maximisation pour chaque groupe :</p>
+                    \[
+                    Cm = p(q_F) \left( 1 - \frac{1}{e_F} \right) \quad \text{et} \quad Cm = p(q_H) \left( 1 - \frac{1}{e_H} \right)
+                    \]
+                    <p class="fragment fade-up">Cela implique : $\frac{p(q_H)}{p(q_F)} = \frac{1 - 1/e_H}{1 - 1/e_F}$.</p>
+                    <p class="fragment fade-up">Le prix est plus élevé pour les clients avec une élasticité faible (moins sensibles au prix).</p>
+                </section>
+                <section>
+                    <h3>3. Le monopole bilatéral</h3>
+                    <p class="fragment fade-up">Un seul producteur face à un seul acheteur.</p>
+                    <p class="fragment fade-up">Le prix est déterminé par un processus de négociation entre les seuils de réserve des deux parties.</p>
+                    <p class="fragment fade-up">La valeur exacte du prix dépend du <strong style="color: var(--highlight-color);">pouvoir de négociation</strong> de chacun.</p>
+                    <p class="fragment fade-up">Exemple : relation entre une grande entreprise et un sous-traitant spécialisé.</p>
+                </section>
+            </section>
+
+            <!-- Section III: Le duopole -->
+            <section>
+                <section>
+                    <h2>III. Le duopole</h2>
+                    <p class="fragment fade-up">Situation intermédiaire entre monopole et concurrence, avec deux firmes.</p>
+                    <p class="fragment fade-up">La demande globale $p = p(q_1 + q_2)$ est adressée aux deux entreprises.</p>
+                </section>
+                <section>
+                    <h3>A. Le duopole de Cournot</h3>
+                    <p class="fragment fade-up">Les firmes ne coopèrent pas. Elles choisissent leur niveau de production ($q_i$) en anticipant celui de l'autre.</p>
+                    <p class="fragment fade-up">Maximisation du profit pour la firme $i$ :</p>
+                    \[
+                    \max_{q_i} \; \Pi_i = p(q_i + q_j) \cdot q_i - C(q_i)
+                    \]
+                    <p class="fragment fade-up">Condition de premier ordre donne la <strong style="color: var(--highlight-color);">fonction de réaction</strong> $q_i = t_i(q_j)$, indiquant la quantité optimale de $i$ pour un $q_j$ donné.</p>
+                </section>
+                <section>
+                    <h3>Équilibre de Cournot</h3>
+                    <p class="fragment fade-up">C'est un <strong style="color: var(--highlight-color);">équilibre de Nash</strong> : chaque firme optimise sa décision compte tenu de celle de l'autre.</p>
+                    <p class="fragment fade-up">Obtenu en résolvant le système des fonctions de réaction :</p>
+                    \[
+                    \left\{
+                    \begin{aligned}
+                    q_i &= t_i(q_j) \\
+                    q_j &= t_j(q_i)
+                    \end{aligned}
+                    \right.
+                    \]
+                    <div class="diagram-wrap fragment fade-up">
+                        <svg class="diagram-svg" width="500" height="400" viewBox="0 0 500 400">
+                            <!-- Axes -->
+                            <line x1="70" y1="350" x2="450" y2="350" class="axis"/>
+                            <polygon points="450,350 442,346 442,354" class="axis-arrow"/>
+                            <text x="440" y="365" class="svg-label">$q_i$</text>
+
+                            <line x1="70" y1="350" x2="70" y2="50" class="axis"/>
+                            <polygon points="70,50 66,58 74,58" class="axis-arrow"/>
+                            <text x="60" y="40" class="svg-label">$q_j$</text>
+
+                            <!-- Reaction Function for Firm i -->
+                            <path d="M 70 300 C 150 200, 250 150, 350 100" class="cournot-reaction-curve path-draw" stroke="var(--demand-curve-color)"/>
+                            <text x="360" y="90" class="svg-label">$t_i(q_j)$</text>
+
+                            <!-- Reaction Function for Firm j -->
+                            <path d="M 350 70 C 250 150, 200 250, 100 350" class="cournot-reaction-curve path-draw" stroke="var(--supply-curve-color)"/>
+                            <text x="90" y="360" class="svg-label">$t_j(q_i)$</text>
+
+                            <!-- Cournot Equilibrium -->
+                            <circle cx="215" cy="215" r="5" class="point" fill="var(--equilibrium-point-color)"/>
+                            <text x="220" y="205" class="label">$(q_i^c, q_j^c)$</text>
+
+                            <line x1="215" y1="215" x2="215" y2="350" class="price-line"/>
+                            <line x1="215" y1="215" x2="70" y2="215" class="price-line"/>
+                            <text x="205" y="365" class="svg-label">$q_i^c$</text>
+                            <text x="55" y="220" class="svg-label">$q_j^c$</text>
+                        </svg>
+                        <p class="fragment fade-up" style="text-align: center; font-size: 0.9em; color: rgba(255,255,255,0.7);">
+                            L'équilibre de Cournot est l'intersection des fonctions de réaction des deux firmes.
+                        </p>
+                    </div>
+                    <p class="fragment fade-up">Les décisions sont prises simultanément, sans coordination explicite.</p>
+                </section>
+                <section>
+                    <h3>B. Le duopole de Stackelberg</h3>
+                    <p class="fragment fade-up">Une firme est <strong style="color: var(--highlight-color);">leader (pilote)</strong>, l'autre est <strong style="color: var(--highlight-color);">suiveur (satellite)</strong>.</p>
+                    <p class="fragment fade-up">Le leader connaît la fonction de réaction du suiveur et prend sa décision en premier.</p>
+                    <p class="fragment fade-up">Programme du leader :</p>
+                    \[
+                    \max_{q_p} \Pi_p = p(q_s + t_s(q_p)) \cdot q_p - C_p(q_p)
+                    \]
+                    <p class="fragment fade-up">L'équilibre de Stackelberg est asymétrique, avec des résultats différents pour le leader et le suiveur.</p>
+                </section>
+                <section>
+                    <h3>C. Ajustement par les prix</h3>
+                    <p class="fragment fade-up">Jusqu'à présent, concurrence sur les quantités. On peut aussi avoir concurrence par les prix.</p>
+                    <p class="fragment fade-up">Si les biens ne sont pas différenciés, les clients achètent au prix le plus bas, menant à une <strong style="color: var(--alert-border-color);">guerre des prix</strong> et un profit nul.</p>
+                </section>
+            </section>
+
+            <!-- Section IV: L'oligopole -->
+            <section>
+                <section>
+                    <h2>IV. L'oligopole</h2>
+                    <p class="fragment fade-up">Un marché avec un <strong style="color: var(--highlight-color);">petit nombre d'entreprises</strong> dans la branche.</p>
+                    <p class="fragment fade-up">Situation intermédiaire entre duopole et concurrence parfaite.</p>
+                </section>
+                <section>
+                    <h3>A. Généralisation de l'équilibre de Cournot (à $n$ firmes)</h3>
+                    <p class="fragment fade-up">Absence de coopération entre les $n$ firmes.</p>
+                    <p class="fragment fade-up">Chaque firme maximise son profit en tenant compte de la production de toutes les autres ($q_{-i} = \sum_{j \neq i} q_j$).</p>
+                    <p class="fragment fade-up">Système de fonctions de réaction :</p>
+                    \[
+                    \left\{
+                    \begin{aligned}
+                    q_1 &= f_1(q_{-1}) \\
+                    q_2 &= f_2(q_{-2}) \\
+                    &\vdots \\
+                    q_n &= f_n(q_{-n})
+                    \end{aligned}
+                    \right.
+                    \]
+                    <p class="fragment fade-up">Lorsque $n \to \infty$, l'équilibre de l'oligopole de Cournot converge vers la <strong style="color: var(--highlight-color);">concurrence parfaite</strong>.</p>
+                </section>
+                <section>
+                    <h3>B. Les cartels</h3>
+                    <p class="fragment fade-up">Dans un oligopole, le faible nombre de firmes facilite la <strong style="color: var(--highlight-color);">coopération</strong> (collusion) pour augmenter les profits collectifs.</p>
+                    <p class="fragment fade-up">Un cartel est une entente illégale pour restreindre la concurrence (fixer les prix, partager le marché, etc.).</p>
+                    <p class="fragment fade-up">L'impossibilité de coopérer résulte souvent :</p>
+                    <ul>
+                        <li class="fragment fade-up">D'une interdiction légale (lois antitrust).</li>
+                        <li class="fragment fade-up">D'une incitation individuelle à tricher (gain personnel > gain de coopération).</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Fonctionnement et régulation des cartels</h3>
+                    <p class="fragment fade-up">Les cartels fragmentent le surplus des consommateurs.</p>
+                    <p class="fragment fade-up">Les autorités publiques les interdisent pour la <strong style="color: var(--highlight-color);">protection des consommateurs</strong> et mettent en place des mécanismes de surveillance.</p>
+                    <p class="fragment fade-up">Un cartel nécessite un <strong style="color: var(--highlight-color);">mécanisme de surveillance</strong> pour assurer le respect des décisions collectives (ex: quotas de production).</p>
+                    <p class="fragment fade-up">Types de cartels : de prix, géographique, de distribution.</p>
+                </section>
+            </section>
+
+            <!-- Section V: La concurrence monopolistique -->
+            <section>
+                <section>
+                    <h2>V. La concurrence monopolistique</h2>
+                    <p class="fragment fade-up">Une économie où les biens sont <strong style="color: var(--highlight-color);">faiblement substituables</strong>.</p>
+                    <p class="fragment fade-up">La demande d'un bien dépend de son prix et de celui des biens concurrents.</p>
+                    <p class="fragment fade-up">Il s'agit d'un même produit différencié par les firmes (ex: marques de café).</p>
+                </section>
+                <section>
+                    <h3>Modélisation (deux entreprises)</h3>
+                    <p class="fragment fade-up">Demande pour chaque firme : $q_1^d = D_1(p_1, p_2), \quad q_2^d = D_2(p_2, p_1)$.</p>
+                    <p class="fragment fade-up">Chaque entreprise maximise son profit en fixant son prix :</p>
+                    \[
+                    \max_{p_i} \; \Pi_i = p_i \cdot D_i(p_i, p_j) - C_i(D_i(p_i, p_j))
+                    \]
+                    <p class="fragment fade-up">La condition de premier ordre donne la <strong style="color: var(--highlight-color);">fonction de réaction de prix</strong> : $p_i = g_i(p_j)$.</p>
+                    <p class="fragment fade-up">L'équilibre est atteint lorsque chaque firme fixe son prix optimal compte tenu du prix de l'autre.</p>
+                </section>
+            </section>
+
+            <!-- Section: Lecture recommandée -->
+            <section>
+                <h2>Lecture recommandée : bibliographie indicative</h2>
+                <ul>
+                    <li class="fragment fade-up">Wasner E. (2017), <em>Principes de microéconomie</em>, Pearson</li>
+                    <li class="fragment fade-up">Varian H.R. (2014) <em>Introduction à la microéconomie</em>. 8è Ed. Ouvertures Economiques. De Boeck</li>
+                    <li class="fragment fade-up">Kugrman, P., Wells, R. (2013), <em>Microéconomie</em>. 2è Ed. Ouvertures Economiques. De Boeck.</li>
+                    <li class="fragment fade-up">Mas-Colell, A., Whinston, M.D, Green, J.R., (1995). <em>Théorie microéconomique</em>. Oxford University Press.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/zoom/zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/math/math.min.js"></script>
+    <script>
+        // Initialisation de Reveal.js
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            math: {
+                mathjax3: {
+                    path: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js'
+                }
+            },
+            plugins: [
+                RevealZoom,
+                RevealNotes,
+                RevealSearch,
+                RevealMarkdown,
+                RevealHighlight,
+                RevealMath
+            ]
+        });
+
+        // Logique pour l'intégration de l'API Gemini
+        /**
+         * Appelle l'API Gemini avec une logique de relance exponentielle.
+         * @param {string} prompt Le texte de la requête pour l'API Gemini.
+         * @param {number} retries Le nombre de tentatives restantes.
+         * @param {number} delay Le délai actuel avant la prochaine tentative (en ms).
+         * @returns {Promise<string>} La réponse textuelle de l'API.
+         */
+        async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // La clé API est fournie par l'environnement Canvas
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429 && retries > 0) { // Too Many Requests
+                        console.warn(`Taux limite atteint. Réessai dans ${delay / 1000} secondes...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiAPI(prompt, retries - 1, delay * 2); // Double le délai
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Structure de réponse inattendue de l'API Gemini.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'appel à l'API Gemini:", error);
+                throw error;
+            }
+        }
+
+        /**
+         * Gère le clic sur les boutons d'explication IA.
+         * @param {string} prompt Le prompt à envoyer à l'API Gemini.
+         * @param {HTMLElement} outputElement L'élément DOM où afficher la réponse.
+         */
+        async function handleAIExplanation(prompt, outputElement) {
+            outputElement.classList.add('visible');
+            outputElement.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center;">Génération de l\'explication...</p>';
+
+            try {
+                const explanation = await callGeminiAPI(prompt);
+                outputElement.innerHTML = `<p>${explanation}</p>`;
+            } catch (error) {
+                outputElement.innerHTML = `<p style="color: red;">Désolé, une erreur est survenue lors de la récupération de l'explication. Veuillez réessayer.</p>`;
+                console.error("Erreur d'affichage de l'explication IA:", error);
+            }
+        }
+
+        // Configuration des boutons pour chaque slide
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('explainMonopolyBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce qu'un monopole en microéconomie et comment maximise-t-il son profit en une phrase simple?", document.getElementById('monopolyOutput'));
+            });
+            document.getElementById('explainCournotBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez le duopole de Cournot et le concept d'équilibre de Nash dans ce modèle en une phrase simple.", document.getElementById('cournotOutput'));
+            });
+            document.getElementById('explainStackelbergBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Expliquez le duopole de Stackelberg et la différence entre le rôle de leader et de suiveur en une phrase simple.", document.getElementById('stackelbergOutput'));
+            });
+            document.getElementById('explainCartelBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce qu'un cartel en microéconomie et pourquoi est-il généralement interdit en une phrase simple?", document.getElementById('cartelOutput'));
+            });
+            document.getElementById('explainMonopolisticCompetitionBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce que la concurrence monopolistique en microéconomie et comment les entreprises s'y différencient-elles en une phrase simple?", document.getElementById('monopolisticCompetitionOutput'));
+            });
+            document.getElementById('explainSurplusConsommateurBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce que le surplus du consommateur en microéconomie et comment est-il mesuré graphiquement en une phrase simple?", document.getElementById('surplusConsommateurOutput'));
+            });
+            document.getElementById('explainSurplusProducteurBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce que le surplus du producteur en microéconomie et comment est-il mesuré graphiquement en une phrase simple?", document.getElementById('surplusProducteurOutput'));
+            });
+            document.getElementById('explainSurplusTotalBtn')?.addEventListener('click', () => {
+                handleAIExplanation("Qu'est-ce que le surplus total en microéconomie et pourquoi est-il un indicateur clé de l'efficacité du marché en une phrase simple?", document.getElementById('surplusTotalOutput'));
+            });
+
+            // Function to handle SVG path animations
+            const animateSvgPaths = (svgElement) => {
+                const paths = svgElement.querySelectorAll('.path-draw');
+                paths.forEach(path => {
+                    // Reset animation by removing and re-adding class
+                    path.classList.remove('path-draw');
+                    void path.offsetWidth; // Trigger reflow
+                    path.classList.add('path-draw');
+                });
+            };
+
+            // Event listener for slide changes to trigger animations
+            Reveal.on('slidechanged', event => {
+                const currentSlide = event.currentSlide;
+                const svgs = currentSlide.querySelectorAll('.diagram-svg');
+                svgs.forEach(svg => animateSvgPaths(svg));
+            });
+
+            // Initial animation on page load
+            document.querySelectorAll('.diagram-svg').forEach(svg => animateSvgPaths(svg));
+        });
+    </script>
+</body>
+</html>
