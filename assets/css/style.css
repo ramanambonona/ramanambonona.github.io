@@ -1,4 +1,3 @@
-/* Styles généraux */
 body {
     font-family: 'EB Garamond', serif;
     line-height: 1.6;
@@ -14,25 +13,23 @@ body {
     padding: 1px;
 }
 
-/* En-tête et navigation */
 header {
-    /* Rendre la barre fixe */
+    
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100; /* Assurez-vous qu'elle est au-dessus du reste du contenu */
+    z-index: 100; 
 
-    /* Styles de base */
-    background-color: rgba(255, 255, 255, 0.9); /* Un fond blanc semi-transparent */
+    
+    background-color: rgba(255, 255, 255, 0.9); 
     border-bottom: 1px solid #e9ecef;
     padding: 1rem 0;
-    transition: background-color 0.3s ease; /* Pour une transition douce */
+    transition: background-color 0.3s ease; 
 }
 
-/* Ajoutez ceci pour empêcher le contenu de se cacher sous la barre fixe */
 body {
-    padding-top: 5rem; /* Ajustez cette valeur si la barre est plus haute */
+    padding-top: 5rem; 
 }
 
 header h1 {
@@ -68,7 +65,6 @@ nav a {
     font-weight: bold;
 }
 
-/* Sections principales */
 main {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -82,13 +78,11 @@ h2 {
 }
 
 
-/* Style pour le conteneur du texte */
 .bio-text {
-    flex-grow: 1; /* Le texte prend l'espace restant */
-    min-width: 300px; /* S'assure que le texte ne devient pas trop étroit */
+    flex-grow: 1; 
+    min-width: 300px; 
 }
 
-/* Pied de page */
 footer {
     text-align: center;
     padding: 1rem 0;
@@ -97,7 +91,6 @@ footer {
     color: #6c757d;
 }
 
-/* --- Footnote et boutons sociaux (version petite) --- */
 .footnote {
     margin-bottom: 0.3rem;
     font-size: 0.8rem;
@@ -123,7 +116,6 @@ footer {
     transform: translateY(-1px);
 }
 
-/* Style pour le lien de navigation actif */
 nav a.active {
     color: white;
     background-color: grey;
@@ -132,7 +124,7 @@ nav a.active {
 
 .surligner {
     color : white;
-    background-color: grey;
+    background-color: #D3D3D3;
     padding: 2px 4px;
     border-radius: 3px;
 }
@@ -144,7 +136,6 @@ nav a.active {
     border-radius: 3px;
 }
 
-/* Bouton retour en haut */
 #btn-haut {
     position: fixed;
     bottom: 20px;
@@ -165,29 +156,24 @@ nav a.active {
 
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 
-    /* état par défaut : invisible */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 
-    /* animation de fondu */
-    transition: opacity .25s ease, visibility .25s ease, transform .2s ease;
+        transition: opacity .25s ease, visibility .25s ease, transform .2s ease;
 }
 
-/* État visible (activé par JS) */
 #btn-haut.show {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
 }
 
-/* Effet survol */
 #btn-haut:hover {
     background-color: #757575;
     transform: translateY(-2px);
 }
 
-/* Accessibilité : réduit les animations si demandé */
 @media (prefers-reduced-motion: reduce) {
     #btn-haut {
         transition: none;
@@ -197,7 +183,6 @@ nav a.active {
     }
 }
 
-/* Style pour les sections de recherche */
 h3 {
     border-bottom: 1px solid #e9ecef;
     padding-bottom: 5px;
@@ -239,7 +224,7 @@ h3 {
     display: inline-block;
     margin-top: 10px;
     padding: 6px 12px;
-    background-color: #495057; /* Couleur de fond foncée pour le bouton */
+    background-color: #495057; 
     color: white;
     text-decoration: none;
     border-radius: 3px;
@@ -249,15 +234,15 @@ h3 {
 }
 
 .publication a:hover {
-    background-color: #212529; /* Couleur de fond plus foncée au survol */
+    background-color: #212529; 
 }
 
 .btn-transparent {
     display: inline-block;
     padding: 6px 12px;
-    border: 1px solid #343a40; /* Bordure noire */
-    background-color: transparent; /* Fond transparent */
-    color: #343a40; /* Texte noir */
+    border: 1px solid #343a40; 
+    background-color: transparent; 
+    color: #343a40; 
     text-decoration: none;
     border-radius: 3px;
     font-size: 0.6rem;
@@ -266,8 +251,8 @@ h3 {
 }
 
 .btn-transparent:hover {
-    background-color: #343a40; /* Fond noir au survol */
-    color: #ffffff; /* Texte blanc au survol */
+    background-color: #343a40; 
+    color: #ffffff; 
 }
 
 .research-item {
@@ -285,7 +270,7 @@ h3 {
 
 .research-item p {
     margin: 0;
-    line-height: 1.5; /* Simple line height */
+    line-height: 1.5; 
     color: #555;
 }
 
@@ -338,14 +323,13 @@ h3 {
     margin-bottom: 25px;
 }
 
-/* Styles pour le tableau */
 .table-container {
     overflow-x: auto;
 }
 
 .teaching-table {
     width: 100%;
-    border-collapse: collapse; /* Permet aux bordures de se coller */
+    border-collapse: collapse; 
     font-family: 'IBM Plex Mono', monospace;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
@@ -356,11 +340,10 @@ h3 {
 .teaching-table th, .teaching-table td {
     padding: 15px;
     text-align: left;
-    border-right: 1px solid #e5e7eb; /* Bordure verticale */
-    border-bottom: 1px solid #e5e7eb; /* Bordure horizontale */
+    border-right: 1px solid #e5e7eb; 
+    border-bottom: 1px solid #e5e7eb; 
 }
 
-/* Bordure de la dernière cellule pour éviter un double contour */
 .teaching-table th:last-child, .teaching-table td:last-child {
     border-right: none;
 }
@@ -385,12 +368,10 @@ h3 {
     background-color: #eef1f5;
 }
 
-/* Ligne de séparation entre les cours */
 .teaching-table .course-separator td {
-    border-bottom: 2px solid #1a1a1a; /* Bordure plus épaisse pour marquer la fin d'un cours */
+    border-bottom: 2px solid #1a1a1a; 
 }
 
-/* Styles pour les liens et le nom du cours */
 .teaching-table a {
     color: #4b5563;
     text-decoration: none;
@@ -410,7 +391,6 @@ h3 {
     vertical-align: middle;
 }
 
-/* Styles pour la page Tools */
 .tools-intro {
     text-align: center;
     padding: 60px 0 40px;
@@ -512,10 +492,9 @@ h3 {
     background-color: #212529;
 }
 
-/* Bio section styles */
 .bio {
     margin-bottom: 40px;
-    overflow: auto; /* Clearfix for floated image */
+    overflow: auto; 
 }
 
 .profile-pic-sticky {
@@ -528,6 +507,7 @@ h3 {
 }
 
     .bio {
-        text-align: left; /* Optional: center text for mobile */
+        text-align: left; 
     }
+
 
