@@ -124,7 +124,7 @@ nav a.active {
 
 .surligner {
     color : white;
-    background-color: #D3D3D3;
+    background-color: grey;
     padding: 2px 4px;
     border-radius: 3px;
 }
@@ -509,6 +509,7 @@ h3 {
     .bio {
         text-align: left; 
     }
+
 
 
 
