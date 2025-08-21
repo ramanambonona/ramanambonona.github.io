@@ -1,6 +1,6 @@
 /* Styles généraux */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    font-family: 'EB Garamond', serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
@@ -530,3 +530,4 @@ h3 {
     .bio {
         text-align: left; /* Optional: center text for mobile */
     }
+
