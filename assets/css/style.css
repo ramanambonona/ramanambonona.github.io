@@ -510,6 +510,75 @@ h3 {
         text-align: left; 
     }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity .2s ease;
+}
+.modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal__dialog {
+  width: min(92vw, 1100px);
+  aspect-ratio: 16 / 9;     /* look vidéo */
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  overflow: hidden;
+  position: relative;
+}
+
+
+.modal__controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+.modal__btn {
+  appearance: none;
+  border: 0;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  cursor: pointer;
+  font: 600 14px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.modal__btn:hover { background: rgba(0,0,0,.75); }
+
+.modal__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.modal.pip {
+  background: transparent;   
+  pointer-events: none;      
+}
+.modal.pip .modal__dialog {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: clamp(320px, 30vw, 480px);
+  height: auto;
+  aspect-ratio: 16/9;
+  pointer-events: auto;     
+  border: 1px solid rgba(0,0,0,.1);
+}
+
 
 
 
