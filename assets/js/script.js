@@ -108,4 +108,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Rafraîchir ScrollTrigger après le chargement
     setTimeout(() => ScrollTrigger.refresh(), 500);
+
+});
+
+// S'assure que le code se lance après le DOM
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('tool-modal');
+  const dialog = modal.querySelector('.modal__dialog');
+  const iframe = document.getElementById('tool-frame');
+  const btnClose = document.getElementById('btn-close');
+  const btnPip   = document.getElementById('btn-pip');
+
+  // Ouvre la modale avec une URL
+  function openModal(href) {
+    // charge l’outil dans l’iframe
+    iframe.src = href;
+
+    // ouvre la modale
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+
+    // petite anim "vidéo qui arrive"
+    if (window.gsap) {
+      gsap.fromTo(dialog, { y: 28, opacity: 0, scale: 0.98 },
+                          { y: 0,  opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' });
+    }
+  }
+
+  // Ferme la modale
+  function closeModal() {
+    // anim de sortie puis nettoyage
+    const onDone = () => {
+      modal.classList.remove('is-open', 'pip');
+      iframe.src = ''; // libère la page outil
+      document.body.style.overflow = '';
+    };
+
+    if (window.gsap) {
+      gsap.to(dialog, { y: 20, opacity: 0, duration: 0.18, ease: 'power1.in', onComplete: onDone });
+    } else {
+      onDone();
+    }
+  }
+
+  // Active PiP (mini-lecteur) / restore
+  function togglePiP() {
+    modal.classList.toggle('pip');
+  }
+
+  // Intercepte tous les liens des cartes
+  document.querySelectorAll('.course-list .syllabus-link').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = a.getAttribute('href');
+      // fallback si pas d’URL
+      if (!href) return;
+      openModal(href);
+    });
+  });
+
+  // Fermer en cliquant sur le fond
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal && !modal.classList.contains('pip')) {
+      closeModal();
+    }
+  });
+
+  // Boutons
+  btnClose.addEventListener('click', closeModal);
+  btnPip.addEventListener('click', togglePiP);
+
+  // Échap pour fermer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
 });
