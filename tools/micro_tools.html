@@ -113,5 +113,17 @@
     <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
 
     <script src="assets/js/script.js"></script>
+<!-- Fenêtre flottante pour les tools -->
+<div id="tool-modal" class="modal" aria-hidden="true">
+  <div class="modal__dialog" role="dialog" aria-modal="true" aria-label="Outil interactif">
+    <div class="modal__controls" aria-hidden="false">
+      <button type="button" id="btn-pip" class="modal__btn" title="Mini-lecteur (PiP)" aria-label="Mini-lecteur">↘</button>
+      <button type="button" id="btn-close" class="modal__btn" title="Fermer" aria-label="Fermer">✕</button>
+    </div>
+    <iframe id="tool-frame" class="modal__frame" src="" loading="lazy" allowfullscreen></iframe>
+  </div>
+</div>
+
 </body>
 </html>
+
