@@ -1,34 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Tools � Personal Page</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <title>Outils — Page Personnelle</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
-        img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        body {
+            font-family: 'EB Garamond', serif;
+            color: #333;
+            background-color: #f4f4f4;
+            line-height: 1.6;
         }
+
+        header {
+            background-color: #fff;
+            padding: 1.5em 0;
+            border-bottom: 2px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        header h1 a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            gap: 1em;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 400;
+            padding: 0.5em 1em;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            background-color: #34495e;
+        }
+        
+        main.container {
+            padding: 2em 0;
+        }
+
+        .tools-intro {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+
+        .tools-intro h2 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            color: #2c3e50;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2em;
+        }
+
+        .course-card {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .course-card h4 {
+            font-size: 1.5em;
+            color: #3498db;
+            margin-top: 0;
+        }
+
+        .course-card p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .syllabus-link {
+            display: inline-block;
+            margin-top: 1em;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .syllabus-link:hover {
+            color: #2980b9;
+        }
+
+        .syllabus-link i {
+            margin-right: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2em 0;
+            border-top: 2px solid #ddd;
+            margin-top: 2em;
+            background-color: #fff;
+        }
+
+        .social img {
+            width: 30px;
+            height: 30px;
+            margin: 0 0.5em;
+        }
+
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><a href="index.html">Personal Page</a></h1>
+            <h1><a href="index.html">Page Personnelle</a></h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">About</a></li>
-                    <li><a href="research.html">Research</a></li>
-                    <li><a href="administrative.html">Administrative work</a></li>
+                    <li><a href="index.html">À Propos</a></li>
+                    <li><a href="research.html">Recherche</a></li>
+                    <li><a href="administrative.html">Travaux Administratifs</a></li>
                     <li><a href="cv.html">CV</a></li>
-                    <li><a href="teaching.html">Teaching</a></li>
-                    <li><a href="index.html" class="active">Tools</a></li>
+                    <li><a href="teaching.html">Enseignement</a></li>
+                    <li><a href="micro_tools.html" class="active">Outils</a></li>
                 </ul>
             </nav>
         </div>
@@ -36,59 +156,45 @@
 
     <main class="container">
         <section class="tools-intro">
-            <h2>Microeconomics Tools</h2>
-            <p>A collection of tools to enhance learning and understanding of microeconomic concepts.</p>
+            <h2>Outils de Microéconomie</h2>
+            <p>Une collection d'outils pour améliorer l'apprentissage et la compréhension des concepts de microéconomie.</p>
         </section>
 
         <section class="course-section">
-            <div class="section-header">
-                <h3>Available Microeconomics Tools</h3>
-                <p>Explore interactive tools for understanding key microeconomic concepts.</p>
-            </div>
-            
-            <div class="course-list">
+            <div class="tools-grid">
                 <div class="course-card">
-                    <h4>Elasticity</h4>
-                    <p>Explore price elasticity, income elasticity, and cross elasticity in economic models.</p>
-                    <a href="elasticity.html" class="syllabus-link">
-                        <i class="fas fa-external-link-alt"></i>
-                        Access Elasticity Tool
-                    </a>
-                </div>
-
-                <div class="course-card">
-                    <h4>Cobb-Douglas Curve</h4>
-                    <p>Visualize and analyze production functions using the Cobb-Douglas model.</p>
+                    <h4>Courbe de Cobb-Douglas</h4>
+                    <p>Explorez la courbe d'indifférence de la fonction d'utilité de Cobb-Douglas en temps réel.</p>
                     <a href="cobbdouglass-curve.html" class="syllabus-link">
                         <i class="fas fa-external-link-alt"></i>
-                        Access Cobb-Douglas Tool
+                        Accéder à l'outil
                     </a>
                 </div>
 
                 <div class="course-card">
-                    <h4>Income Effect</h4>
-                    <p>Simulate how changes in income affect consumer behavior and demand.</p>
+                    <h4>Élasticité</h4>
+                    <p>Explorez l'élasticité prix, l'élasticité revenu et la sensibilité de la demande.</p>
+                    <a href="elasticity.html" class="syllabus-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Accéder à l'outil
+                    </a>
+                </div>
+
+                <div class="course-card">
+                    <h4>Effet Revenu</h4>
+                    <p>Analysez les changements de consommation dus aux variations du revenu et des prix.</p>
                     <a href="effet-revenu.html" class="syllabus-link">
                         <i class="fas fa-external-link-alt"></i>
-                        Access Income Effect Tool
+                        Accéder à l'outil
                     </a>
                 </div>
 
                 <div class="course-card">
-                    <h4>Example</h4>
-                    <p>A general example tool for exploring microeconomic principles.</p>
-                    <a href="exemple.html" class="syllabus-link">
-                        <i class="fas fa-external-link-alt"></i>
-                        Access Example Tool
-                    </a>
-                </div>
-
-                <div class="course-card">
-                    <h4>Budget Line</h4>
-                    <p>Analyze consumer choices within budget constraints using budget line simulations.</p>
+                    <h4>Droite Budgétaire</h4>
+                    <p>Analysez les choix du consommateur en fonction de ses contraintes budgétaires.</p>
                     <a href="droite-budgetaire.html" class="syllabus-link">
                         <i class="fas fa-external-link-alt"></i>
-                        Access Budget Line Tool
+                        Accéder à l'outil
                     </a>
                 </div>
             </div>
@@ -96,7 +202,7 @@
     </main>
 
     <footer>
-        <p class="footnote"> Ramanambonona Ambinintsoa, Ph.D</p>
+        <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
         <div class="social">
             <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
                 <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
@@ -105,13 +211,9 @@
                 <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
             </a>
             <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
-                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+                <img src="https://img.icons8.com/?size=100&id=13937&format=png&color=000000" alt="LinkedIn">
             </a>
         </div>
     </footer>
-
-    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
-
-    <script src="assets/js/script.js"></script>
 </body>
 </html>
