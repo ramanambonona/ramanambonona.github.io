@@ -111,70 +111,108 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// S'assure que le code se lance après le DOM
+// Modale outils : iOS-ready (vh fix, safe-areas, scroll-lock, PiP, iFrameResizer)
 document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('tool-modal');
-  const dialog = modal.querySelector('.modal__dialog');
-  const iframe = document.getElementById('tool-frame');
+  const modal    = document.getElementById('tool-modal');
+  const dialog   = modal.querySelector('.modal__dialog');
+  const iframe   = document.getElementById('tool-frame');
   const btnClose = document.getElementById('btn-close');
   const btnPip   = document.getElementById('btn-pip');
 
-  // Ouvre la modale avec une URL
-  function openModal(href) {
-    // charge l’outil dans l’iframe
-    iframe.src = href;
+  /* ---- 1) Fix iOS 100vh : définit --vh = innerHeight * 0.01 ---- */
+  function setVhVar() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+  setVhVar();
+  let vhTimer;
+  function onResize() {
+    clearTimeout(vhTimer);
+    vhTimer = setTimeout(setVhVar, 150);
+  }
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', onResize);
 
-    // ouvre la modale
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-
-    // petite anim "vidéo qui arrive"
-    if (window.gsap) {
-      gsap.fromTo(dialog, { y: 28, opacity: 0, scale: 0.98 },
-                          { y: 0,  opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' });
-    }
+  /* ---- 2) Scroll lock compatible iOS ---- */
+  let scrollTop = 0;
+  function lockScroll() {
+    scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.classList.add('is-locked');
+    document.body.style.top = `-${scrollTop}px`;
+  }
+  function unlockScroll() {
+    document.body.classList.remove('is-locked');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollTop);
   }
 
-  // Ferme la modale
-  function closeModal() {
-    // anim de sortie puis nettoyage
-    const onDone = () => {
-      modal.classList.remove('is-open', 'pip');
-      iframe.src = ''; // libère la page outil
-      document.body.style.overflow = '';
+  /* ---- 3) iFrame Resizer (si présent) ---- */
+  function initIFrameResizer() {
+    if (!window.iFrameResize) return;
+    // Détruit une éventuelle instance précédente
+    if (iframe.iFrameResizer) {
+      try { iframe.iFrameResizer.close(); } catch (e) {}
+    }
+    // Initialise après chargement du contenu, plus fiable sur iOS
+    const once = () => {
+      window.iFrameResize({
+        log: false,
+        checkOrigin: false,
+        heightCalculationMethod: 'max',  // robuste pour Bokeh/plots dynamiques
+        scrolling: true
+      }, iframe);
+      iframe.removeEventListener('load', once);
     };
+    iframe.addEventListener('load', once);
+  }
+
+  /* ---- 4) Ouvrir / Fermer / PiP ---- */
+  function openModal(href) {
+    iframe.src = href;
+    modal.classList.add('is-open');
+    lockScroll();
 
     if (window.gsap) {
-      gsap.to(dialog, { y: 20, opacity: 0, duration: 0.18, ease: 'power1.in', onComplete: onDone });
+      gsap.fromTo(dialog, { y: 24, opacity: 0, scale: 0.98 },
+                          { y: 0,  opacity: 1, scale: 1, duration: 0.22, ease: 'power2.out' });
+    }
+    initIFrameResizer();
+  }
+
+  function closeModal() {
+    const finish = () => {
+      modal.classList.remove('is-open', 'pip');
+      iframe.src = '';  // libère la ressource
+      unlockScroll();
+    };
+    if (window.gsap) {
+      gsap.to(dialog, { y: 16, opacity: 0, duration: 0.15, ease: 'power1.in', onComplete: finish });
     } else {
-      onDone();
+      finish();
     }
   }
 
-  // Active PiP (mini-lecteur) / restore
   function togglePiP() {
     modal.classList.toggle('pip');
   }
 
-  // Intercepte tous les liens des cartes
+  /* ---- 5) Wiring des liens / overlay / boutons ---- */
   document.querySelectorAll('.course-list .syllabus-link').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const href = a.getAttribute('href');
-      // fallback si pas d’URL
       if (!href) return;
       openModal(href);
     });
   });
 
-  // Fermer en cliquant sur le fond
+  // Fermer en cliquant l’overlay (sauf en mode PiP)
   modal.addEventListener('click', (e) => {
     if (e.target === modal && !modal.classList.contains('pip')) {
       closeModal();
     }
   });
 
-  // Boutons
   btnClose.addEventListener('click', closeModal);
   btnPip.addEventListener('click', togglePiP);
 
