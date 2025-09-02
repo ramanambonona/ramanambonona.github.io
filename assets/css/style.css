@@ -510,6 +510,12 @@ h3 {
         text-align: left; 
     }
 
+/* ===== Modale outils : version responsive iOS/Android/Desktop ===== */
+
+/* Fix vh iOS : initialisé par JS (window.innerHeight * 0.01) */
+:root { --vh: 1vh; }
+
+/* Overlay */
 .modal {
   position: fixed;
   inset: 0;
@@ -520,15 +526,19 @@ h3 {
   pointer-events: none;
   z-index: 9999;
   transition: opacity .2s ease;
+  /* Respecte les encoches iOS (safe-areas) */
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+           env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
 .modal.is-open {
   opacity: 1;
   pointer-events: auto;
 }
 
+/* Boîte "comme une vidéo" (desktop / tablettes paysage) */
 .modal__dialog {
   width: min(92vw, 1100px);
-  aspect-ratio: 16 / 9;     /* look vidéo */
+  aspect-ratio: 16 / 9;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 10px 40px rgba(0,0,0,.35);
@@ -536,11 +546,11 @@ h3 {
   position: relative;
 }
 
-
+/* Barre d’actions (fermer, PiP) + safe-area iOS */
 .modal__controls {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: max(8px, env(safe-area-inset-top, 0));
+  right: max(8px, env(safe-area-inset-right, 0));
   display: flex;
   gap: 8px;
   z-index: 2;
@@ -557,29 +567,61 @@ h3 {
 }
 .modal__btn:hover { background: rgba(0,0,0,.75); }
 
+/* iFrame interne (Bokeh) */
 .modal__frame {
   width: 100%;
   height: 100%;
   border: 0;
   background: #fff;
+  touch-action: pan-x pan-y;          /* gestes tactiles */
+  -webkit-overflow-scrolling: touch;  /* inertie iOS */
 }
 
+/* Mode PiP (mini-lecteur) */
 .modal.pip {
-  background: transparent;   
-  pointer-events: none;      
+  background: transparent;   /* pas d’overlay */
+  pointer-events: none;      /* clics passent au fond */
+  padding: 0;
 }
 .modal.pip .modal__dialog {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
+  right: max(12px, env(safe-area-inset-right, 0));
+  bottom: max(12px, env(safe-area-inset-bottom, 0));
   width: clamp(320px, 30vw, 480px);
   height: auto;
-  aspect-ratio: 16/9;
-  pointer-events: auto;     
+  aspect-ratio: 16 / 9;
+  pointer-events: auto;      /* clics actifs ici */
   border: 1px solid rgba(0,0,0,.1);
+  border-radius: 12px;
 }
 
+/* Plein écran sur mobile (meilleure UX que 16:9) */
+@media (max-width: 768px) {
+  .modal__dialog {
+    width: 100vw;                 /* fallback */
+    width: 100svw;                /* prend en compte barres iOS */
+    height: calc(var(--vh) * 100);/* fixé par JS pour iOS */
+    max-height: none;
+    aspect-ratio: auto;           /* annule 16:9 */
+    border-radius: 0;             /* full-screen */
+  }
+  /* PiP plus compact */
+  .modal.pip .modal__dialog {
+    width: min(92vw, 480px);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+  }
+  /* Option : masquer PiP sous 380px */
+  @media (max-width: 380px) {
+    #btn-pip { display: none; }
+  }
+}
 
-
-
-
+/* Scroll-lock iOS/Android/desktop : classe ajoutée côté JS */
+body.is-locked {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;       /* Android/desktop */
+  overscroll-behavior: none;
+}
