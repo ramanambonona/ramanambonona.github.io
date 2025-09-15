@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modèles Théoriques - Disparités de Peine et Biais Comportemental du Juge</title>
+
+  <!-- Plotly & MathJax -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+  <!-- MathJax config (avant le script) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        packages: ['base', 'ams', 'amssymb']
+      },
+      chtml: {
+        // Utilise les fontes CHTML par défaut, stylées via CSS ci-dessous
+        scale: 1
+      }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- (Optionnel) Ajout d'un clone libre de Palatino pour fallback -->
+  <link href="https://fonts.googleapis.com/css2?family=Piazzolla:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#000;
+      --ink-2:#333;
+      --line:#000;
+      --muted:#6c757d;
+      --panel:#fafafa;
+      --border:#ccc;
+    }
+    /* ===== Typo générale Palatino / Pagella ===== */
+    body{
+      font-family: 'Palatino Linotype','Book Antiqua',Palatino,'TeX Gyre Pagella','URW Palladio L','Piazzolla',serif;
+      line-height:1.6;
+      margin:0;
+      padding:20px;
+      background-color:#fff;
+      color:var(--ink);
+    }
+    /* Forcer les maths vers des fontes “Palatino-like” si dispo */
+    .mjx-chtml, .MathJax, .mjx-math{
+      font-family: 'TeX Gyre Pagella Math','XITS Math','STIX Two Math','Asana Math','Cambria Math','Times New Roman',serif !important;
+    }
+
+    .container{max-width:1200px;margin:0 auto;}
+    h1{
+      text-align:center;
+      border-bottom:2px solid var(--line);
+      padding-bottom:10px;
+      margin-bottom:30px;
+    }
+    .section{
+      margin:30px 0;
+      padding:20px;
+      border:1px solid var(--border);
+      background-color:var(--panel);
+    }
+    .graph-container{
+      background:#fff;
+      border:1px solid var(--line);
+      margin:20px 0;
+      padding:10px;
+    }
+    .graph-title{
+      text-align:center;
+      font-weight:700;
+      margin:10px 0;
+      font-size:14px;
+    }
+    .equation{
+      background-color:#f5f5f5;
+      padding:10px;
+      margin:10px 0;
+      border-left:3px solid var(--line);
+      /* Texte des équations aussi en Palatino-like */
+      font-family: 'Palatino Linotype','Book Antiqua',Palatino,'TeX Gyre Pagella','URW Palladio L','Piazzolla',serif;
+    }
+    .controls{
+      margin:15px 0;
+      padding:10px;
+      background-color:#f0f0f0;
+      border:1px solid #999;
+    }
+    .control-group{display:inline-block;margin:0 15px;vertical-align:top;}
+    label{font-weight:700;display:block;margin-bottom:5px;}
+    input[type="range"]{width:110px;}
+    .parameter-value{font-family:monospace;color:var(--ink-2);}
+
+    /* Barre de téléchargement sous chaque graphique */
+    .download-bar{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      margin-top:8px;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--ink);
+      padding:6px 10px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+    .btn:hover{background:var(--line);color:#fff;}
+
+    /* ===== Footer / footnotes ===== */
+    footer{
+      text-align:center;
+      padding:1rem 0;
+      border-top:1px solid #e9ecef;
+      margin-top:2rem;
+      color:var(--muted);
+      background:transparent;
+    }
+    .footnote{
+      margin-bottom:.3rem;
+      font-size:.8rem;
+      color:var(--muted);
+    }
+    .social{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      margin-top:.25rem;
+    }
+    .social a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px;
+      border-radius:50%;
+      border:1px solid transparent;
+      transition:border-color .2s, transform .1s;
+    }
+    .social a:hover{border-color:#adb5bd;transform:translateY(-1px);}
+    .social a img{width:28px;height:28px;vertical-align:middle;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Modèles Théoriques : Disparités de Peine et Biais Comportemental du Juge</h1>
+
+    <div class="section">
+      <h2>1. Modèle de Décision du Juge de Première Instance</h2>
+      <div class="equation">
+        Idéal privé du juge : $s_j(x,a) = s^*(x) + b_j + \rho A(a) + \varepsilon_j$
+      </div>
+      <div class="equation">
+        Fonction d'utilité : $U_j(s_1) = (s_1 - s_j(x,a))^2 + \lambda p_R(s_1|x)$
+      </div>
+
+      <div class="controls">
+        <div class="control-group">
+          <label>Biais idiosyncratique $b_j$ :</label>
+          <input type="range" id="bias" min="-2" max="2" step="0.1" value="0">
+          <span class="parameter-value" id="bias-val">0.0</span>
+        </div>
+        <div class="control-group">
+          <label>Sensibilité ancrage $\rho$ :</label>
+          <input type="range" id="anchor" min="0" max="1" step="0.05" value="0.3">
+          <span class="parameter-value" id="anchor-val">0.30</span>
+        </div>
+        <div class="control-group">
+          <label>Aversion réformation $\lambda$ :</label>
+          <input type="range" id="lambda" min="0" max="10" step="0.1" value="1">
+          <span class="parameter-value" id="lambda-val">1.0</span>
+        </div>
+        <div class="control-group">
+          <label>Bande tolérance $\tau$ :</label>
+          <input type="range" id="tau" min="0.1" max="10" step="0.1" value="0.5">
+          <span class="parameter-value" id="tau-val">0.5</span>
+        </div>
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 1 : Fonction d'Utilité du Juge et Choix Optimal</div>
+        <div id="judge-utility"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('judge-utility','figure_1_utility')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>2. Règle de Réformation de la Juridiction d'Appel</h2>
+      <div class="equation">
+        Règle optimale : Confirmer si $|s_1 - m(x)| \leq \tau(x)$, réformer sinon
+      </div>
+      <div class="equation">
+        Probabilité de réformation : $p_R(s_1|x) = \frac{1}{1 + \exp(-\kappa(|s_1 - m(x)| - \tau(x)))}$
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 2 : Probabilité de Réformation et Bande de Tolérance</div>
+        <div id="reform-probability"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('reform-probability','figure_2_reformation')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>3. Atténuation des Biais (Proposition 2)</h2>
+      <div class="equation">
+        Contraction affine : $s_1 - m(x) = \beta(s_j(x,a) - m(x))$ avec $\beta = \frac{1}{1 + \lambda \kappa p_R'(m(x) \pm \tau)}$
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 3 : Coefficient de Contraction $\beta$ en fonction des Paramètres</div>
+        <div id="beta-analysis"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('beta-analysis','figure_3_beta')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>4. Réduction de la Disparité</h2>
+      <div class="equation">
+        Variance des peines : $\mathrm{Var}(s_1|x) = \beta^2(\sigma_b^2 + \rho^2\mathrm{Var}(A(a)) + \sigma_\varepsilon^2) + \mathrm{Var}(m(x))$
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 4 : Impact du Contrôle d'Appel sur la Variance des Peines</div>
+        <div id="variance-reduction"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('variance-reduction','figure_4_variance')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>5. Sélection des Appels</h2>
+      <div class="equation">
+        Défense fait appel si : $\mathbb{E}[s_1 - s_2|s_1,x] \geq c_D$
+      </div>
+      <div class="equation">
+        Parquet fait appel si : $\mathbb{E}[s_2 - s_1|s_1,x] \geq c_P$
+      </div>
+
+      <div class="controls">
+        <div class="control-group">
+          <label>Coût défense $c_D$ :</label>
+          <input type="range" id="cost-defense" min="0.1" max="2" step="0.1" value="0.8">
+          <span class="parameter-value" id="cost-defense-val">0.8</span>
+        </div>
+        <div class="control-group">
+          <label>Coût parquet $c_P$ :</label>
+          <input type="range" id="cost-prosecutor" min="0.1" max="2" step="0.1" value="0.6">
+          <span class="parameter-value" id="cost-prosecutor-val">0.6</span>
+        </div>
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 5 : Régions d'Appel Asymétriques</div>
+        <div id="appeal-regions"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('appeal-regions','figure_5_appeals')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>6. Optimisation de la Bande de Tolérance</h2>
+      <div class="equation">
+        Bande optimale : $\tau^*(x) = \sigma_*(x)\sqrt{\frac{K + \psi M(x)}{\kappa(x)}}$
+      </div>
+
+      <div class="graph-container">
+        <div class="graph-title">Figure 6 : Bande de Tolérance Optimale selon les Paramètres</div>
+        <div id="optimal-band"></div>
+        <div class="download-bar">
+          <button class="btn" onclick="downloadGraph('optimal-band','figure_6_optimal_band')">Télécharger</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Footer (footnotes + réseaux) ===== -->
+  <footer role="contentinfo" aria-label="Informations de bas de page">
+    <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+    <div class="social">
+      <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+        <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+      </a>
+      <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+      </a>
+      <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Config générale Plotly (on masque la barre intégrée, on fournit nos boutons)
+    const plotConfig = { displayModeBar:false, staticPlot:false, responsive:true };
+
+    // Helper téléchargement (PNG HD, repli SVG)
+    function downloadGraph(divId, filenameBase){
+      const gd = document.getElementById(divId);
+      const ts = new Date().toISOString().slice(0,10);
+      const filename = `${filenameBase}_${ts}`;
+      const opts = { format:'png', width:1200, height:800, scale:2, filename };
+      Plotly.downloadImage(gd, opts).catch(()=>Plotly.downloadImage(gd, {...opts, format:'svg'}));
+    }
+
+    const layoutTemplate = {
+      font: { family: "'Palatino Linotype','Book Antiqua',Palatino,'TeX Gyre Pagella','URW Palladio L','Piazzolla',serif", size: 12, color: 'black' },
+      paper_bgcolor: 'white',
+      plot_bgcolor: 'white',
+      margin: { l: 60, r: 10, t: 10, b: 50 },
+      xaxis: {
+        showline: true, linecolor: 'black', linewidth: 1,
+        mirror: false, ticks: 'outside', tickcolor: 'black',
+        showgrid: false, zeroline: true, zerolinecolor: 'black', zerolinewidth: 1
+      },
+      yaxis: {
+        showline: true, linecolor: 'black', linewidth: 1,
+        mirror: false, ticks: 'outside', tickcolor: 'black',
+        showgrid: false, zeroline: true, zerolinecolor: 'black', zerolinewidth: 1
+      }
+    };
+
+    // ===== Fonctions de tracé (identiques à votre logique, inchangées) =====
+    function updateParameterDisplay(){
+      document.getElementById('bias-val').textContent = document.getElementById('bias').value;
+      document.getElementById('anchor-val').textContent = (+document.getElementById('anchor').value).toFixed(2);
+      document.getElementById('lambda-val').textContent = (+document.getElementById('lambda').value).toFixed(1);
+      document.getElementById('tau-val').textContent = (+document.getElementById('tau').value).toFixed(1);
+      document.getElementById('cost-defense-val').textContent = (+document.getElementById('cost-defense').value).toFixed(1);
+      document.getElementById('cost-prosecutor-val').textContent = (+document.getElementById('cost-prosecutor').value).toFixed(1);
+    }
+
+    function plotJudgeUtility(){
+      const bias = +document.getElementById('bias').value;
+      const lambda = +document.getElementById('lambda').value;
+      const tau = +document.getElementById('tau').value;
+      const rho = +document.getElementById('anchor').value;
+
+      const s_star = 5, m_x = s_star;
+      const s_j = s_star + bias + rho*1;
+      const kappa = 2;
+
+      const s1_range=[], utility=[];
+      for(let s1=0; s1<=10; s1+=0.1){
+        s1_range.push(s1);
+        const deviation = Math.abs(s1 - m_x);
+        const p_r = 1/(1+Math.exp(-kappa*(deviation - tau)));
+        const util = Math.pow(s1 - s_j,2) + lambda*p_r;
+        utility.push(util);
+      }
+      let min_idx=0, min_util=utility[0];
+      for(let i=1;i<utility.length;i++){ if(utility[i]<min_util){min_util=utility[i];min_idx=i;} }
+      const optimal_s1 = s1_range[min_idx];
+
+      const traces = [
+        { x:s1_range, y:utility, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:"Fonction d'utilité" },
+        { x:[optimal_s1], y:[min_util], type:'scatter', mode:'markers', marker:{color:'black',size:8}, name:'Optimum' },
+        { x:[s_j,s_j], y:[0, Math.max(...utility)], type:'scatter', mode:'lines', line:{color:'gray',width:1,dash:'dash'}, name:'Idéal privé' }
+      ];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:'Peine s₁ (années)'}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:'Utilité U_j(s₁)'}},
+        showlegend:true, legend:{x:0.7,y:0.95,bgcolor:'rgba(255,255,255,0.8)'}
+      };
+      Plotly.newPlot('judge-utility', traces, layout, plotConfig);
+    }
+
+    function plotReformProbability(){
+      const tau = +document.getElementById('tau').value;
+      const kappa = 2, m_x = 5;
+      const s1_range=[], prob_reform=[];
+      for(let s1=0; s1<=10; s1+=0.05){
+        s1_range.push(s1);
+        const deviation = Math.abs(s1 - m_x);
+        prob_reform.push(1/(1+Math.exp(-kappa*(deviation - tau))));
+      }
+      const traces = [
+        { x:s1_range, y:prob_reform, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:'P_R(s₁|x)' },
+        { x:[m_x - tau, m_x - tau], y:[0,1], type:'scatter', mode:'lines', line:{color:'gray',width:1,dash:'dot'}, name:'Seuil inférieur' },
+        { x:[m_x + tau, m_x + tau], y:[0,1], type:'scatter', mode:'lines', line:{color:'gray',width:1,dash:'dot'}, name:'Seuil supérieur' }
+      ];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:'Peine s₁ (années)'}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:'Probabilité de réformation'}},
+        showlegend:true, legend:{x:0.02,y:0.98,bgcolor:'rgba(255,255,255,0.8)'}
+      };
+      Plotly.newPlot('reform-probability', traces, layout, plotConfig);
+    }
+
+    function plotBetaAnalysis(){
+      const lambda_range=[], beta_tau_05=[], beta_tau_10=[], beta_tau_15=[];
+      const kappa = 2, p_r_prime = kappa/4; // approx
+      for(let lambda=0; lambda<=3; lambda+=0.1){
+        lambda_range.push(lambda);
+        beta_tau_05.push(1/(1 + lambda*kappa*p_r_prime));
+        beta_tau_10.push(1/(1 + lambda*kappa*p_r_prime*0.5));
+        beta_tau_15.push(1/(1 + lambda*kappa*p_r_prime*0.2));
+      }
+      const traces = [
+        { x:lambda_range, y:beta_tau_05, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:'τ = 0.5' },
+        { x:lambda_range, y:beta_tau_10, type:'scatter', mode:'lines', line:{color:'black',width:2,dash:'dash'}, name:'τ = 1.0' },
+        { x:lambda_range, y:beta_tau_15, type:'scatter', mode:'lines', line:{color:'black',width:2,dash:'dot'}, name:'τ = 1.5' }
+      ];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:'Aversion à la réformation λ'}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:'Coefficient de contraction β'}},
+        showlegend:true, legend:{x:0.7,y:0.95,bgcolor:'rgba(255,255,255,0.8)'}
+      };
+      Plotly.newPlot('beta-analysis', traces, layout, plotConfig);
+    }
+
+    function plotVarianceReduction(){
+      const tau_range=[], variance_reduction=[];
+      const sigma_b=1.5, sigma_eps=0.5, rho=0.3, var_anchor=0.8;
+      const kappa=2, lambda=1, p_r_prime=kappa/4;
+      const beta = 1/(1 + lambda*kappa*p_r_prime);
+      const var_without = sigma_b*sigma_b + rho*rho*var_anchor + sigma_eps*sigma_eps;
+      for(let tau=0.1; tau<=2; tau+=0.05){
+        const var_with = beta*beta*var_without;
+        variance_reduction.push((var_without - var_with)/var_without);
+        tau_range.push(tau);
+      }
+      const traces = [{ x:tau_range, y:variance_reduction, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:'Réduction de variance' }];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:'Bande de tolérance τ'}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:'Réduction relative de variance'}},
+        showlegend:false
+      };
+      Plotly.newPlot('variance-reduction', traces, layout, plotConfig);
+    }
+
+    function plotAppealRegions(){
+      const c_D = +document.getElementById('cost-defense').value;
+      const c_P = +document.getElementById('cost-prosecutor').value;
+      const m_x=5;
+      const s1_range=[], red_def=[], inc_pros=[];
+      for(let s1=2; s1<=8; s1+=0.05){
+        s1_range.push(s1);
+        red_def.push(Math.max(0,(s1 - m_x)*0.7));
+        inc_pros.push(Math.max(0,(m_x - s1)*0.7));
+      }
+      const traces = [
+        { x:s1_range, y:red_def, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:'Gain attendu défense' },
+        { x:s1_range, y:inc_pros, type:'scatter', mode:'lines', line:{color:'black',width:2,dash:'dash'}, name:'Gain attendu parquet' },
+        { x:s1_range, y:s1_range.map(()=>c_D), type:'scatter', mode:'lines', line:{color:'gray',width:1,dash:'dot'}, name:'Seuil défense c_D' },
+        { x:s1_range, y:s1_range.map(()=>c_P), type:'scatter', mode:'lines', line:{color:'gray',width:1,dash:'dashdot'}, name:'Seuil parquet c_P' }
+      ];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:'Peine de première instance s₁'}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:"Gain attendu d'appel"}},
+        showlegend:true, legend:{x:0.02,y:0.98,bgcolor:'rgba(255,255,255,0.8)'}
+      };
+      Plotly.newPlot('appeal-regions', traces, layout, plotConfig);
+    }
+
+    function plotOptimalBand(){
+      const K_range=[], tau_opt_05=[], tau_opt_10=[], tau_opt_20=[];
+      const sigma_star=0.8, kappa=2, M_x=1;
+      for(let K=0.1; K<=3; K+=0.1){
+        K_range.push(K);
+        tau_opt_05.push(sigma_star*Math.sqrt((K + 0.5*M_x)/kappa));
+        tau_opt_10.push(sigma_star*Math.sqrt((K + 1.0*M_x)/kappa));
+        tau_opt_20.push(sigma_star*Math.sqrt((K + 2.0*M_x)/kappa));
+      }
+      const traces = [
+        { x:K_range, y:tau_opt_05, type:'scatter', mode:'lines', line:{color:'black',width:2}, name:'ψ = 0.5' },
+        { x:K_range, y:tau_opt_10, type:'scatter', mode:'lines', line:{color:'black',width:2,dash:'dash'}, name:'ψ = 1.0' },
+        { x:K_range, y:tau_opt_20, type:'scatter', mode:'lines', line:{color:'black',width:2,dash:'dot'}, name:'ψ = 2.0' }
+      ];
+      const layout = {
+        ...layoutTemplate,
+        xaxis:{...layoutTemplate.xaxis, title:{text:"Coût social d'appel K"}},
+        yaxis:{...layoutTemplate.yaxis, title:{text:'Bande de tolérance optimale τ*'}},
+        showlegend:true, legend:{x:0.02,y:0.98,bgcolor:'rgba(255,255,255,0.8)'}
+      };
+      Plotly.newPlot('optimal-band', traces, layout, plotConfig);
+    }
+
+    function updateAllPlots(){
+      updateParameterDisplay();
+      plotJudgeUtility();
+      plotReformProbability();
+      plotBetaAnalysis();
+      plotVarianceReduction();
+      plotAppealRegions();
+      plotOptimalBand();
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      ['bias','anchor','lambda','tau','cost-defense','cost-prosecutor'].forEach(id=>{
+        document.getElementById(id).addEventListener('input', updateAllPlots);
+      });
+      updateAllPlots();
+    });
+  </script>
+</body>
+</html>
