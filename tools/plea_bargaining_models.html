@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modèles théoriques de l'aveu de culpabilité</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.25.2/plotly.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+  <style>
+    body{font-family:'Palatino Linotype','Book Antiqua',Palatino,serif;margin:0;padding:20px;background:#f8f9fa;color:#333}
+    .container{max-width:1200px;margin:0 auto 1.5rem auto;background:#fff;padding:30px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+    h1{text-align:center;color:#2c3e50;margin-bottom:30px;border-bottom:2px solid #34495e;padding-bottom:15px}
+    h2{color:#34495e;margin-top:35px;margin-bottom:20px}
+    .graph-container{margin:30px 0;padding:20px;border:1px solid #ddd;border-radius:8px;background:#fafafa}
+    .graph-title{font-size:16px;font-weight:700;margin-bottom:8px;text-align:center;color:#2c3e50}
+    .graph-description{font-size:14px;color:#555;margin-bottom:10px;line-height:1.6}
+    .controls{margin:15px 0;padding:15px;background:#ecf0f1;border-radius:5px}
+    .control-group{display:inline-block;margin:0 15px;vertical-align:top}
+    label{display:block;font-weight:700;margin-bottom:5px;color:#2c3e50}
+    input[type="range"]{width:150px}
+    .value-display{font-family:monospace;font-size:14px;color:#e74c3c;font-weight:700}
+    .download-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+    .btn{border:1px solid #2c3e50;background:#fff;color:#2c3e50;padding:6px 10px;border-radius:6px;cursor:pointer}
+    .btn:hover{background:#2c3e50;color:#fff}
+    /* Plot heights */
+    #separation-plot,#roc-plot,#pressure-plot,#corroboration-plot{height:420px}
+    #optimization-plot{height:640px}
+
+    /* ===== Footer / footnotes ===== */
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid #e9ecef;
+      margin-top: 2rem;
+      color: #6c757d;
+      background: transparent;
+    }
+    .footnote {
+      margin-bottom: 0.3rem;
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    .social {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-top: .25rem;
+    }
+    .social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      transition: border-color .2s, transform .1s;
+    }
+    .social a:hover {
+      border-color: #adb5bd;
+      transform: translateY(-1px);
+    }
+    .social a img {
+      width: 28px;
+      height: 28px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Modèles théoriques de l'aveu de culpabilité et du bénéfice du doute</h1>
+
+    <h2>1. Condition de séparation et contraintes d'incitation</h2>
+    <div class="graph-container">
+      <div class="graph-title">Contraintes d'incitation et condition de séparation</div>
+      <div class="graph-description">
+        Ce graphique illustre les contraintes d'incitation pour les coupables (CI-G) et les innocents (CI-I).
+        La séparation est possible lorsque ΔP = P<sub>g</sub> − P<sub>i</sub> ≥ 2(c<sub>P</sub> − c<sub>T</sub>)/S.
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label for="pg-slider">P<sub>g</sub> (Prob. condamnation coupable):</label>
+          <input type="range" id="pg-slider" min="0.1" max="1" step="0.01" value="0.8">
+          <span class="value-display" id="pg-value">0.80</span>
+        </div>
+        <div class="control-group">
+          <label for="pi-slider">P<sub>i</sub> (Prob. condamnation innocent):</label>
+          <input type="range" id="pi-slider" min="0" max="0.5" step="0.01" value="0.2">
+          <span class="value-display" id="pi-value">0.20</span>
+        </div>
+        <div class="control-group">
+          <label for="cp-slider">c<sub>P</sub> (Coût de résister):</label>
+          <input type="range" id="cp-slider" min="0" max="10" step="0.1" value="3">
+          <span class="value-display" id="cp-value">3.0</span>
+        </div>
+        <div class="control-group">
+          <label for="ct-slider">c<sub>T</sub> (Coût procès):</label>
+          <input type="range" id="ct-slider" min="0" max="10" step="0.1" value="2">
+          <span class="value-display" id="ct-value">2.0</span>
+        </div>
+        <div class="control-group">
+          <label for="s-slider">S (Peine statutaire):</label>
+          <input type="range" id="s-slider" min="1" max="20" step="0.5" value="10">
+          <span class="value-display" id="s-value">10.0</span>
+        </div>
+      </div>
+      <div id="separation-plot"></div>
+      <div class="download-bar">
+        <button class="btn" onclick="downloadGraph('separation-plot','separation')">Télécharger</button>
+      </div>
+    </div>
+
+    <h2>2. Courbe ROC et optimisation de la norme de preuve</h2>
+    <div class="graph-container">
+      <div class="graph-title">Courbe ROC et indice de Youden</div>
+      <div class="graph-description">
+        La courbe ROC montre le compromis entre taux de vrais positifs (TPR = P<sub>g</sub>) et taux de faux positifs (FPR = P<sub>i</sub>).
+        L'indice de Youden J = P<sub>g</sub> − P<sub>i</sub> mesure la qualité de la séparation. Le point optimal correspond à une pente de 1.
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label for="quality-slider">Qualité probatoire (m):</label>
+          <input type="range" id="quality-slider" min="0.5" max="40" step="0.1" value="1.5">
+          <span class="value-display" id="quality-value">1.50</span>
+        </div>
+      </div>
+      <div id="roc-plot"></div>
+      <div class="download-bar">
+        <button class="btn" onclick="downloadGraph('roc-plot','roc')">Télécharger</button>
+      </div>
+    </div>
+
+    <h2>3. Effet de la pression procédurale sur le rabais optimal</h2>
+    <div class="graph-container">
+      <div class="graph-title">Rabais optimal L* en fonction de la pression procédurale</div>
+      <div class="graph-description">
+        D'après la Proposition 2, une augmentation de la pression procédurale κ nécessite une réduction du rabais
+        (augmentation de L*) pour préserver la séparation : ∂L*/∂κ &lt; 0.
+      </div>
+      <div id="pressure-plot"></div>
+      <div class="download-bar">
+        <button class="btn" onclick="downloadGraph('pressure-plot','pression_rabais')">Télécharger</button>
+      </div>
+    </div>
+
+    <h2>4. Effet de la corroboration</h2>
+    <div class="graph-container">
+      <div class="graph-title">Impact de l'exigence de corroboration sur la séparation</div>
+      <div class="graph-description">
+        La corroboration (seuil minimal de preuve ρ) filtre les aveux à faible évidence, servant de substitut partiel au relèvement de la norme de preuve τ.
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label for="corr-slider">Seuil de corroboration (ρ):</label>
+          <input type="range" id="corr-slider" min="0" max="0.95" step="0.05" value="0.3">
+          <span class="value-display" id="corr-value">0.30</span>
+        </div>
+      </div>
+      <div id="corroboration-plot"></div>
+      <div class="download-bar">
+        <button class="btn" onclick="downloadGraph('corroboration-plot','corroboration')">Télécharger</button>
+      </div>
+    </div>
+
+    <h2>5. Optimisation jointe : norme de preuve et effort d'enquête</h2>
+    <div class="graph-container">
+      <div class="graph-title">Surface d'optimisation (τ, m) sous contrainte de séparation</div>
+      <div class="graph-description">
+        Surface 3D du bien-être social W en fonction de la norme de preuve τ et de l'effort d'enquête m, avec contrainte ΔP(τ,m) ≥ seuil minimal.
+      </div>
+      <div id="optimization-plot"></div>
+      <div class="download-bar">
+        <button class="btn" onclick="downloadGraph('optimization-plot','welfare_surface')">Télécharger</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Footer with footnotes & social ===== -->
+  <footer role="contentinfo" aria-label="Informations de bas de page">
+    <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+    <div class="social">
+      <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+        <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+      </a>
+      <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+      </a>
+      <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Config Plotly (mode bar masquée, on fournit nos boutons)
+    const config = { displayModeBar: false, responsive: true };
+
+    // Helper téléchargement (DOM element, pas string)
+    function downloadGraph(divId, filenameBase){
+      const gd = document.getElementById(divId);
+      const timestamp = new Date().toISOString().slice(0,10);
+      const filename = `${filenameBase}_${timestamp}`;
+      const opts = {format:'png',width:1200,height:800,scale:2,filename};
+      Plotly.downloadImage(gd, opts).catch(()=>{
+        Plotly.downloadImage(gd, {...opts, format:'svg'});
+      });
+    }
+
+    const layout_base = {
+      font:{family:'Palatino Linotype, Book Antiqua, Palatino, serif',size:12,color:'black'},
+      paper_bgcolor:'white', plot_bgcolor:'white',
+      showlegend:true, legend:{bgcolor:'rgba(255,255,255,0.85)',bordercolor:'black',borderwidth:1},
+      margin:{l:60,r:30,t:40,b:60}
+    };
+
+    // 1) Séparation
+    function updateSeparationPlot(){
+      const pg = +document.getElementById('pg-slider').value;
+      const pi = +document.getElementById('pi-slider').value;
+      const cp = +document.getElementById('cp-slider').value;
+      const ct = +document.getElementById('ct-slider').value;
+      const s  = +document.getElementById('s-slider').value;
+
+      document.getElementById('pg-value').textContent = pg.toFixed(2);
+      document.getElementById('pi-value').textContent = pi.toFixed(2);
+      document.getElementById('cp-value').textContent = cp.toFixed(1);
+      document.getElementById('ct-value').textContent = ct.toFixed(1);
+      document.getElementById('s-value').textContent  = s.toFixed(1);
+
+      const deltaP = pg - pi;
+      const threshold = 2*(cp-ct)/s;
+      const L_star = pi*s + ct - cp;
+
+      const L_range = [], feasible = [], infeasible = [];
+      for(let i=0;i<=100;i++){
+        const L = i * s / 50; // 0 -> 2S
+        L_range.push(L);
+        const ci_g = pg*s + ct - cp;
+        const ci_i = pi*s + ct - cp;
+        if(L <= ci_g && L >= ci_i){ feasible.push(L); infeasible.push(null); }
+        else { feasible.push(null); infeasible.push(L); }
+      }
+
+      const tr1 = {x:L_range,y:feasible,mode:'lines',name:'Zone de séparation',line:{color:'black',width:3}};
+      const tr2 = {x:L_range,y:infeasible,mode:'lines',name:'Zone non-séparante',line:{color:'gray',width:2,dash:'dash'}};
+      const tr3 = {x:[L_star],y:[L_star],mode:'markers',name:'L* optimal',marker:{color:'black',size:10,symbol:'diamond'}};
+
+      const layout = {
+        ...layout_base,
+        title:`ΔP = ${deltaP.toFixed(3)}, Seuil = ${threshold.toFixed(3)}, L* = ${L_star.toFixed(2)}`,
+        xaxis:{title:"Peine d'aveu L",showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        yaxis:{title:'Faisabilité',showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        annotations:[{
+          x:L_star,y:L_star,
+          text: deltaP>=threshold ? 'Séparation possible' : 'Séparation impossible',
+          showarrow:true, arrowhead:2, arrowcolor: deltaP>=threshold?'black':'red',
+          font:{color: deltaP>=threshold?'black':'red'}
+        }]
+      };
+      Plotly.newPlot('separation-plot',[tr1,tr2,tr3],layout,config);
+    }
+
+    // 2) ROC
+    function updateROCPlot(){
+      const m = +document.getElementById('quality-slider').value;
+      document.getElementById('quality-value').textContent = m.toFixed(2);
+
+      const fpr=[], tpr=[], youden=[], thr=[];
+      for(let i=0;i<=100;i++){
+        const t = i/100;
+        thr.push(t);
+        const alpha = 2 + m/2;
+        const beta  = 1 + m/4;
+        const fpr_val = Math.pow(1-t, alpha/2);
+        const tpr_val = 1 - Math.pow(t, beta/alpha);
+        fpr.push(Math.min(Math.max(fpr_val,0),1));
+        tpr.push(Math.min(Math.max(tpr_val,0),1));
+        youden.push(tpr_val - fpr_val);
+      }
+      const imax = youden.indexOf(Math.max(...youden));
+      const optF = fpr[imax], optT = tpr[imax], Jmax = youden[imax];
+
+      let auc=0;
+      for(let i=1;i<fpr.length;i++){ auc += (fpr[i]-fpr[i-1])*(tpr[i]+tpr[i-1])/2; }
+      auc = Math.abs(1-auc);
+
+      const tr1={x:fpr,y:tpr,mode:'lines',name:'Courbe ROC',line:{color:'black',width:3}};
+      const tr2={x:[0,1],y:[0,1],mode:'lines',name:'Hasard',line:{color:'gray',width:1,dash:'dot'}};
+      const tr3={x:[optF],y:[optT],mode:'markers',name:`Point optimal (J=${Jmax.toFixed(3)})`,marker:{color:'red',size:10,symbol:'diamond'}};
+      const tr4={x:[Math.max(0,optF-0.2),Math.min(1,optF+0.2)],y:[Math.max(0,optT-0.2),Math.min(1,optT+0.2)],
+                 mode:'lines',name:'Tangente (pente = 1)',line:{color:'red',width:2,dash:'dash'}};
+
+      const layout={
+        ...layout_base,
+        title:`Qualité probatoire m = ${m.toFixed(2)} | AUC ≈ ${auc.toFixed(3)} | Youden max = ${Jmax.toFixed(3)}`,
+        xaxis:{title:'Taux de faux positifs (P<sub>i</sub>)',range:[0,1],showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:true,gridcolor:'lightgray'},
+        yaxis:{title:'Taux de vrais positifs (P<sub>g</sub>)',range:[0,1],showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:true,gridcolor:'lightgray'},
+        annotations:[{x:optF,y:optT,text:'Optimum<br>ℓ(t*) = 1',showarrow:true,arrowhead:2,arrowcolor:'red',
+                      font:{color:'red',size:12},bgcolor:'rgba(255,255,255,0.8)',bordercolor:'red',borderwidth:1}]
+      };
+      Plotly.newPlot('roc-plot',[tr1,tr2,tr3,tr4],layout,config);
+    }
+
+    // 3) Pression -> L*
+    function createPressurePlot(){
+      const kappa_values=[], L_star_values=[];
+      for(let i=0;i<=100;i++){
+        const kappa=i/20; // 0..5
+        kappa_values.push(kappa);
+        const cp_kappa = 2 + Math.pow(kappa,1.5);
+        const pi=0.2, s=10, ct=2;
+        const L_star = Math.max(pi*s + ct - cp_kappa, 0);
+        L_star_values.push(L_star);
+      }
+      const tr={x:kappa_values,y:L_star_values,mode:'lines',name:'L*(κ)',line:{color:'black',width:2}};
+      const layout={
+        ...layout_base,
+        title:'Relation négative entre pression procédurale et rabais optimal',
+        xaxis:{title:'Pression procédurale κ',showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        yaxis:{title:'Rabais optimal L*',showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        annotations:[{x:2.5,y:L_star_values[50],text:'∂L*/∂κ < 0',showarrow:true,arrowhead:2,font:{size:14}}]
+      };
+      Plotly.newPlot('pressure-plot',[tr],layout,config);
+    }
+
+    // 4) Corroboration
+    function updateCorroborationPlot(){
+      const rho = +document.getElementById('corr-slider').value;
+      document.getElementById('corr-value').textContent = rho.toFixed(2);
+
+      const evidence=[], pg=[], pi=[], dP=[];
+      for(let i=0;i<=100;i++){
+        const e=i/100; evidence.push(e);
+        const pgv = e>=rho ? 0.9*e + 0.1 : 0;
+        const piv = e>=rho ? 0.3*e : 0;
+        pg.push(Math.min(pgv,1)); pi.push(Math.min(piv,1));
+        dP.push(pgv - piv);
+      }
+      const tr1={x:evidence,y:pg,mode:'lines',name:'P<sub>g</sub> (coupables)',line:{color:'black',width:2}};
+      const tr2={x:evidence,y:pi,mode:'lines',name:'P<sub>i</sub> (innocents)',line:{color:'gray',width:2,dash:'dash'}};
+      const tr3={x:evidence,y:dP,mode:'lines',name:'ΔP = P<sub>g</sub> − P<sub>i</sub>',line:{color:'black',width:3},yaxis:'y2'};
+      const tr4={x:[rho,rho],y:[0,1],mode:'lines',name:'Seuil ρ',line:{color:'red',width:2,dash:'dot'}};
+
+      const layout={
+        ...layout_base,
+        title:`Seuil de corroboration ρ = ${rho.toFixed(2)}`,
+        xaxis:{title:'Force probatoire e',range:[0,1],showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        yaxis:{title:'Probabilités de condamnation',range:[0,1],showline:true,linecolor:'black',mirror:true,ticks:'outside',showgrid:false},
+        yaxis2:{title:'ΔP',overlaying:'y',side:'right',showgrid:false}
+      };
+      Plotly.newPlot('corroboration-plot',[tr1,tr2,tr3,tr4],layout,config);
+    }
+
+    // 5) Surface 3D W(τ,m)
+    function createOptimizationPlot(){
+      const T = 21, M = 21;
+      const tau_list = Array.from({length:T}, (_,i)=> 0.5 + i*0.025); // 0.5..1.0
+      const m_list   = Array.from({length:M}, (_,j)=> 0.5 + j*0.125); // 0.5..3.0
+
+      const Z = [];
+      for(let i=0;i<T;i++){
+        const row=[];
+        const tau = tau_list[i];
+        for(let j=0;j<M;j++){
+          const m = m_list[j];
+          const pg = Math.min(0.95, 0.3 + 0.4*tau + 0.2*m);
+          const pi = Math.max(0.05, 0.4*(1 - tau) - 0.1*m);
+          const dP = pg - pi;
+          const feasible = (dP >= 0.2);
+          const W = feasible ? (100*dP - 10*m*m - 50*pi) : null; // null = trou
+          row.push(W);
+        }
+        Z.push(row);
+      }
+
+      const trace = {
+        x: m_list, y: tau_list, z: Z,
+        type: 'surface',
+        colorscale: [[0,'#f7f7f7'],[0.5,'#bdbdbd'],[1,'#252525']],
+        showscale: true,
+        contours: { z: {show:true, usecolormap:false, highlightcolor:'#444', project:{z:true}}},
+        opacity: 1.0,
+        hovertemplate: 'm=%{x:.2f}<br>τ=%{y:.3f}<br>W=%{z:.2f}<extra></extra>'
+      };
+
+      const layout = {
+        ...layout_base,
+        title: 'Surface de bien-être W(τ, m) — zones non faisables masquées',
+        height: 640,
+        scene: {
+          xaxis:{title:"Effort d'enquête m",showspikes:false,gridcolor:'#eee',zeroline:false},
+          yaxis:{title:"Norme de preuve τ",showspikes:false,gridcolor:'#eee',zeroline:false},
+          zaxis:{title:"Bien-être social W",showspikes:false,gridcolor:'#eee',zeroline:false},
+          bgcolor:'white',
+          camera:{eye:{x:1.6,y:1.6,z:0.9}}
+        }
+      };
+
+      Plotly.newPlot('optimization-plot',[trace],layout,config);
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', ()=>{
+      ['pg-slider','pi-slider','cp-slider','ct-slider','s-slider'].forEach(id=>{
+        document.getElementById(id).addEventListener('input', updateSeparationPlot);
+      });
+      document.getElementById('quality-slider').addEventListener('input', updateROCPlot);
+      document.getElementById('corr-slider').addEventListener('input', updateCorroborationPlot);
+
+      updateSeparationPlot();
+      updateROCPlot();
+      createPressurePlot();
+      updateCorroborationPlot();
+      createOptimizationPlot();
+    });
+  </script>
+</body>
+</html>
