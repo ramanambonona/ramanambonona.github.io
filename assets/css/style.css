@@ -122,14 +122,13 @@ nav a.active {
     border-radius: 3px;
 }
 
-/* ===== Badge "gris plastique 3D" ===== */
+/* ===== surligneur ===== */
 .surligner {
-  /* Palette (ajuste si besoin) */
-  --g1: #bfbfbf;   /* haut (plus clair) */
-  --g2: #9a9a9a;   /* milieu */
-  --g3: #6f6f6f;   /* bas (plus sombre) */
-  --bd1: #5a5a5a;  /* bord général */
-  --bd2: #444444;  /* bord bas (ombre) */
+  --g1: #8d8d8d;   /* haut */
+  --g2: #666666;   /* milieu */
+  --g3: #3f3f3f;   /* bas  */
+  --bd1: #2f2f2f;  /* bord général */
+  --bd2: #1a1a1a;  /* bord bas (ombre) */
   --txt: #ffffff;  /* texte (blanc) */
 
   position: relative;
@@ -693,5 +692,6 @@ body.is-locked {
   overflow: hidden;       /* Android/desktop */
   overscroll-behavior: none;
 }
+
 
 
