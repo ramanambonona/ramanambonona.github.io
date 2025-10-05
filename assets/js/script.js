@@ -1,4 +1,6 @@
-// Get the button
+// =======================
+// Back to top
+// =======================
 const mybutton = document.getElementById('btn-haut');
 const THRESHOLD = 200; // px avant d'afficher le bouton
 
@@ -22,11 +24,44 @@ function backToTop(e) {
 }
 
 window.addEventListener('scroll', toggleBackToTop, { passive: true });
-mybutton.addEventListener('click', backToTop);
-
+if (mybutton) mybutton.addEventListener('click', backToTop);
 toggleBackToTop();
 
-// Code pour les abstracts (ajouté)
+
+// =======================
+// Marquage automatique du lien de menu actif
+// =======================
+document.addEventListener('DOMContentLoaded', function () {
+  const navLinks = document.querySelectorAll('header nav a');
+
+  // Normalise un chemin : enlève "index.html" et trailing slash
+  const normalize = (path) => {
+    try {
+      path = path.split('?')[0].split('#')[0];       // sans query/hash
+      path = path.replace(/\/index\.html$/i, '/');    // /index.html -> /
+      path = path.replace(/\/+$/, '/');               // trailing slashes -> /
+      return path;
+    } catch (e) {
+      return path;
+    }
+  };
+
+  const current = normalize(window.location.pathname);
+
+  navLinks.forEach(a => {
+    const hrefPath = normalize(new URL(a.getAttribute('href'), window.location.origin).pathname);
+    if (hrefPath === current) {
+      a.classList.add('active');   // => CSS 3D plastique gris appliqué
+    } else {
+      a.classList.remove('active');
+    }
+  });
+});
+
+
+// =======================
+// Toggle des abstracts (boutons .btn-transparent[data-abstract-id])
+// =======================
 document.addEventListener('DOMContentLoaded', function() {
     const absButtons = document.querySelectorAll('.btn-transparent[data-abstract-id]');
 
@@ -55,42 +90,42 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+// =======================
+// HTML viewer via param ?page=...
+// =======================
 document.addEventListener('DOMContentLoaded', function() {
-    // Récupère les paramètres de l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page');
-    
-    // Sélectionne le conteneur où l'iframe sera inséré
+
     const viewerContainer = document.getElementById('html-viewer');
     const loadingMessage = document.getElementById('loading-message');
 
     if (page && viewerContainer) {
-        // Crée une nouvelle balise iframe
         const iframe = document.createElement('iframe');
         iframe.src = page;
         iframe.style.width = '100%';
-        iframe.style.minHeight = '800px'; 
+        iframe.style.minHeight = '800px';
         iframe.style.border = '1px solid #e9ecef';
         iframe.style.borderRadius = '5px';
         iframe.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
-        
-        // Supprime le message de chargement et ajoute l'iframe
-        if (loadingMessage) {
-            loadingMessage.remove();
-        }
+
+        if (loadingMessage) loadingMessage.remove();
         viewerContainer.appendChild(iframe);
     } else if (viewerContainer && loadingMessage) {
-        // Affiche un message si aucun fichier n'est spécifié
         loadingMessage.textContent = 'Aucune ressource à afficher.';
     }
 });
 
-// Initialisation de GSAP pour les animations de la page Tools
+
+// =======================
+// GSAP animations (Tools)
+// =======================
 document.addEventListener('DOMContentLoaded', function() {
-    // Enregistre le plugin ScrollTrigger
+    if (!(window.gsap && window.ScrollTrigger)) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animation des cartes de cours
     gsap.utils.toArray('.course-card').forEach((card, i) => {
         gsap.from(card, {
             scrollTrigger: {
@@ -106,20 +141,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Rafraîchir ScrollTrigger après le chargement
     setTimeout(() => ScrollTrigger.refresh(), 500);
-
 });
 
+
+// =======================
 // Modale outils : iOS-ready (vh fix, safe-areas, scroll-lock, PiP, iFrameResizer)
+// =======================
 document.addEventListener('DOMContentLoaded', () => {
   const modal    = document.getElementById('tool-modal');
+  if (!modal) return;
+
   const dialog   = modal.querySelector('.modal__dialog');
   const iframe   = document.getElementById('tool-frame');
   const btnClose = document.getElementById('btn-close');
   const btnPip   = document.getElementById('btn-pip');
 
-  /* ---- 1) Fix iOS 100vh : définit --vh = innerHeight * 0.01 ---- */
+  /* ---- 1) Fix iOS 100vh ---- */
   function setVhVar() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -133,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', onResize);
   window.addEventListener('orientationchange', onResize);
 
-  /* ---- 2) Scroll lock compatible iOS ---- */
+  /* ---- 2) Scroll lock ---- */
   let scrollTop = 0;
   function lockScroll() {
     scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
@@ -148,17 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- 3) iFrame Resizer (si présent) ---- */
   function initIFrameResizer() {
-    if (!window.iFrameResize) return;
-    // Détruit une éventuelle instance précédente
+    if (!window.iFrameResize || !iframe) return;
     if (iframe.iFrameResizer) {
       try { iframe.iFrameResizer.close(); } catch (e) {}
     }
-    // Initialise après chargement du contenu, plus fiable sur iOS
     const once = () => {
       window.iFrameResize({
         log: false,
         checkOrigin: false,
-        heightCalculationMethod: 'max',  // robuste pour Bokeh/plots dynamiques
+        heightCalculationMethod: 'max',
         scrolling: true
       }, iframe);
       iframe.removeEventListener('load', once);
@@ -168,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- 4) Ouvrir / Fermer / PiP ---- */
   function openModal(href) {
+    if (!iframe) return;
     iframe.src = href;
     modal.classList.add('is-open');
     lockScroll();
@@ -182,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeModal() {
     const finish = () => {
       modal.classList.remove('is-open', 'pip');
-      iframe.src = '';  // libère la ressource
+      if (iframe) iframe.src = '';
       unlockScroll();
     };
     if (window.gsap) {
@@ -196,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.toggle('pip');
   }
 
-  /* ---- 5) Wiring des liens / overlay / boutons ---- */
+  /* ---- 5) Wiring ---- */
   document.querySelectorAll('.course-list .syllabus-link').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -206,17 +243,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Fermer en cliquant l’overlay (sauf en mode PiP)
   modal.addEventListener('click', (e) => {
     if (e.target === modal && !modal.classList.contains('pip')) {
       closeModal();
     }
   });
 
-  btnClose.addEventListener('click', closeModal);
-  btnPip.addEventListener('click', togglePiP);
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnPip)   btnPip.addEventListener('click', togglePiP);
 
-  // Échap pour fermer
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('is-open')) {
       closeModal();
