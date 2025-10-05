@@ -122,48 +122,79 @@ nav a.active {
     border-radius: 3px;
 }
 
+/* ===== Badge "gris plastique 3D" ===== */
 .surligner {
-  /* Palette (modifiable) */
-  --g1: #e6e6e6;  /* éclat haut */
-  --g2: #cfcfcf;  /* milieu clair */
-  --g3: #b5b5b5;  /* bas plus sombre */
-  --bd1: #9a9a9a; /* bord général */
-  --bd2: #737373; /* bord bas (ombre) */
+  /* Palette (ajuste si besoin) */
+  --g1: #bfbfbf;   /* haut (plus clair) */
+  --g2: #9a9a9a;   /* milieu */
+  --g3: #6f6f6f;   /* bas (plus sombre) */
+  --bd1: #5a5a5a;  /* bord général */
+  --bd2: #444444;  /* bord bas (ombre) */
+  --txt: #ffffff;  /* texte (blanc) */
 
-  display: inline-block;
-  color: #ffffff;
-  background: linear-gradient(to bottom, var(--g1), var(--g2) 40%, var(--g3));
-  padding: 2px 8px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: text-bottom;
+  white-space: nowrap;
+
+  color: var(--txt);
+  background: linear-gradient(to bottom, var(--g1), var(--g2) 45%, var(--g3));
+  padding: 3px 10px;
   border: 1px solid var(--bd1);
   border-bottom-color: var(--bd2);
-  border-radius: 4px;
+  border-radius: 6px;
   line-height: 1.2;
   font-weight: 600;
   letter-spacing: .02em;
   text-decoration: none; /* si utilisé sur <a> */
-  
+
+  /* Effets 3D + lisibilité */
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .7),  /* liseré haut brillant */
-    inset 0 -1px 0 rgba(0, 0, 0, .12),      /* liseré bas sombre */
-    0 1px 0 rgba(255, 255, 255, .6),        /* reflet externe fin */
-    0 2px 3px rgba(0, 0, 0, .18);           /* ombre portée */
+    inset 0 1px 0 rgba(255,255,255,.55), /* liseré haut brillant */
+    inset 0 -1px 0 rgba(0,0,0,.18),      /* liseré bas sombre */
+    0 1px 0 rgba(255,255,255,.4),        /* reflet externe fin */
+    0 2px 3px rgba(0,0,0,.2);            /* ombre portée */
+  font-style: normal; /* neutralise l'italique hérité d'un <i> parent */
 }
 
+/* Reflet glossy supérieur */
+.surligner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255,255,255,.35), rgba(255,255,255,0) 55%);
+  pointer-events: none;
+}
+
+/* Hover / Active (pression) */
 .surligner:hover {
   filter: brightness(1.05);
 }
 .surligner:active {
   transform: translateY(1px);
   box-shadow:
-    inset 0 1px 1px rgba(0, 0, 0, .15),
-    0 1px 1px rgba(0, 0, 0, .12);
+    inset 0 1px 1px rgba(0,0,0,.18),
+    0 1px 1px rgba(0,0,0,.12);
 }
 
+/* Accessibilité clavier quand c'est un lien */
 a.surligner,
 a.surligner:hover {
-  color: #ffffff;
+  color: var(--txt);
   text-decoration: none;
 }
+a.surligner:focus-visible {
+  outline: 2px solid #adb5bd;     /* anneau focus */
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.9);
+}
+
+/* Variantes utiles (optionnel) */
+.surligner--pill { border-radius: 999px; }
+.surligner--sm   { padding: 2px 8px; font-size: .95em; }
 
 
 .authorlink {
@@ -662,4 +693,5 @@ body.is-locked {
   overflow: hidden;       /* Android/desktop */
   overscroll-behavior: none;
 }
+
 
