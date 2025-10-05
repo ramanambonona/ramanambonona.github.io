@@ -25,86 +25,126 @@
             font-size: 2.5rem;
             font-weight: 600;
             color: #1a1a1a;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             text-align: center;
             letter-spacing: -0.5px;
         }
         
-        .content-wrapper {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 30px;
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-bottom: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: #5a5a5a;
+        }
+        
+        .tab-btn.active {
+            background: #2a2a2a;
+            color: white;
+            border-color: #2a2a2a;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #f5f5f5;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
         
-        @media (max-width: 1024px) {
-            .content-wrapper {
-                grid-template-columns: 1fr;
-            }
+        .tab-content.active {
+            display: block;
         }
         
-        .controls-section {
-            background: white;
-            padding: 25px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            height: fit-content;
-        }
-        
-        .canvas-section {
-            background: white;
-            padding: 25px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .utility-functions {
+        .utility-display {
             padding: 20px;
             background: #f8f8f8;
             border-left: 3px solid #3a3a3a;
             margin-bottom: 25px;
         }
         
-        .utility-functions h3 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
+        .utility-display h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             color: #1a1a1a;
             font-weight: 600;
         }
         
-        .utility-functions p {
+        .utility-display p {
             margin: 8px 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-style: italic;
             color: #3a3a3a;
         }
         
-        .control-group {
-            margin-bottom: 20px;
+        .form-group {
+            margin-bottom: 25px;
         }
         
-        .control-group label {
+        .form-group label {
             display: block;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
+            font-size: 1rem;
+            margin-bottom: 8px;
             color: #2a2a2a;
             font-weight: 600;
         }
         
-        .control-group input[type="number"] {
+        .form-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #d0d0d0;
             border-radius: 3px;
             font-family: inherit;
             font-size: 1rem;
             background: white;
-            transition: border-color 0.2s;
         }
         
-        .control-group input[type="number"]:focus {
-            outline: none;
-            border-color: #4a4a4a;
+        table.param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        table.param-table th,
+        table.param-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #d0d0d0;
+        }
+        
+        table.param-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #2a2a2a;
+        }
+        
+        table.param-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
         }
         
         .calculate-btn {
@@ -119,11 +159,38 @@
             font-size: 1.05rem;
             font-weight: 600;
             transition: background 0.2s;
-            margin-top: 10px;
         }
         
         .calculate-btn:hover {
             background: #1a1a1a;
+        }
+        
+        .canvas-container {
+            position: relative;
+            text-align: center;
+        }
+        
+        .canvas-controls {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .canvas-controls button {
+            padding: 8px 16px;
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        
+        .canvas-controls button:hover {
+            background: #2a2a2a;
         }
         
         #canvas {
@@ -132,34 +199,7 @@
             border: 1px solid #d0d0d0;
             background: white;
             max-width: 100%;
-            height: auto;
-        }
-        
-        .results {
-            background: white;
-            padding: 25px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-top: 30px;
-        }
-        
-        .results h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            margin-top: 0;
-        }
-        
-        .results p {
-            margin: 10px 0;
-            font-size: 1rem;
-            color: #3a3a3a;
-            line-height: 1.6;
-        }
-        
-        .results strong {
-            color: #1a1a1a;
+            cursor: move;
         }
         
         .legend {
@@ -198,23 +238,50 @@
             flex-shrink: 0;
         }
         
-        .param-group {
-            border-top: 1px solid #e0e0e0;
-            padding-top: 20px;
-            margin-top: 20px;
+        .checkbox-group {
+            margin-bottom: 15px;
         }
         
-        .param-group:first-child {
-            border-top: none;
-            padding-top: 0;
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .results {
+            background: white;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        .results h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
             margin-top: 0;
         }
         
-        .param-group h4 {
+        .results p {
+            margin: 10px 0;
             font-size: 1rem;
-            font-weight: 600;
-            color: #2a2a2a;
-            margin-bottom: 15px;
+            color: #3a3a3a;
+            line-height: 1.6;
+        }
+        
+        .results strong {
+            color: #1a1a1a;
         }
     </style>
 </head>
@@ -239,95 +306,154 @@
         <div class="edgeworth-container">
             <h2 class="edgeworth-title">Boîte d'Edgeworth</h2>
             
-            <div class="content-wrapper">
-                <aside class="controls-section">
-                    <div class="utility-functions">
-                        <h3>Fonctions d'utilité</h3>
-                        <p>Agent 1: U₁(x₁, y₁) = x₁<sup>α₁</sup> · y₁<sup>β₁</sup></p>
-                        <p>Agent 2: U₂(x₂, y₂) = x₂<sup>α₂</sup> · y₂<sup>β₂</sup></p>
-                    </div>
-                    
-                    <div class="param-group">
-                        <h4>Dotations initiales</h4>
-                        <div class="control-group">
-                            <label for="x1">Dotation initiale X̄₁:</label>
-                            <input type="number" id="x1" value="6" step="0.1" min="0.1">
-                        </div>
-                        <div class="control-group">
-                            <label for="y1">Dotation initiale Ȳ₁:</label>
-                            <input type="number" id="y1" value="2" step="0.1" min="0.1">
-                        </div>
-                        <div class="control-group">
-                            <label for="x2">Dotation initiale X̄₂:</label>
-                            <input type="number" id="x2" value="4" step="0.1" min="0.1">
-                        </div>
-                        <div class="control-group">
-                            <label for="y2">Dotation initiale Ȳ₂:</label>
-                            <input type="number" id="y2" value="6" step="0.1" min="0.1">
-                        </div>
-                    </div>
-                    
-                    <div class="param-group">
-                        <h4>Paramètres Agent 1</h4>
-                        <div class="control-group">
-                            <label for="alpha1">Paramètre α₁:</label>
-                            <input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9">
-                        </div>
-                        <div class="control-group">
-                            <label for="beta1">Paramètre β₁:</label>
-                            <input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9">
-                        </div>
-                    </div>
-                    
-                    <div class="param-group">
-                        <h4>Paramètres Agent 2</h4>
-                        <div class="control-group">
-                            <label for="alpha2">Paramètre α₂:</label>
-                            <input type="number" id="alpha2" value="0.4" step="0.05" min="0.1" max="0.9">
-                        </div>
-                        <div class="control-group">
-                            <label for="beta2">Paramètre β₂:</label>
-                            <input type="number" id="beta2" value="0.6" step="0.05" min="0.1" max="0.9">
-                        </div>
-                    </div>
-                    
-                    <button class="calculate-btn" onclick="calculate()">Calculer et Tracer</button>
-                    
-                    <div class="legend">
-                        <h3>Légende</h3>
-                        <div class="legend-item">
-                            <div class="legend-circle" style="background: #5a5a5a;"></div>
-                            <span>Dotation initiale (X̄₁, Ȳ₁)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-circle" style="background: #1a1a1a;"></div>
-                            <span>Équilibre de Walras (x₁*, y₁*)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-line" style="background: #2a2a2a;"></div>
-                            <span>Courbe de Pareto</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-line" style="background: #707070; height: 1px; border-top: 2px dashed #707070;"></div>
-                            <span>Courbes d'indifférence (dotation)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-line" style="background: #4a4a4a;"></div>
-                            <span>Courbes d'indifférence (équilibre)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-line" style="background: #505050; height: 1px; border-top: 2px dashed #505050;"></div>
-                            <span>Droite budgétaire</span>
-                        </div>
-                    </div>
-                </aside>
-                
-                <section class="canvas-section">
-                    <canvas id="canvas" width="800" height="800"></canvas>
-                </section>
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="openTab('utility')">Fonction d'utilité</button>
+                <button class="tab-btn" onclick="openTab('params')">Paramétrage</button>
+                <button class="tab-btn" onclick="openTab('calculate')">Calcul</button>
+                <button class="tab-btn" onclick="openTab('graph')">Graphique</button>
             </div>
             
-            <section class="results" id="results"></section>
+            <div id="utility-tab" class="tab-content active">
+                <h3>Choix de la fonction d'utilité</h3>
+                <div class="form-group">
+                    <label for="utility-type">Type de fonction d'utilité:</label>
+                    <select id="utility-type" onchange="updateUtilityDisplay()">
+                        <option value="cobb-douglas">Cobb-Douglas</option>
+                        <option value="ces">CES (Constant Elasticity of Substitution)</option>
+                        <option value="log-linear">Log-linéaire</option>
+                        <option value="linear">Linéaire</option>
+                    </select>
+                </div>
+                
+                <div class="utility-display" id="utility-display">
+                    <h3>Fonctions d'utilité</h3>
+                    <p id="utility-agent1">Agent 1: U₁(x₁, y₁) = x₁<sup>α₁</sup> · y₁<sup>β₁</sup></p>
+                    <p id="utility-agent2">Agent 2: U₂(x₂, y₂) = x₂<sup>α₂</sup> · y₂<sup>β₂</sup></p>
+                </div>
+            </div>
+            
+            <div id="params-tab" class="tab-content">
+                <h3>Paramétrage</h3>
+                
+                <h4>Dotations initiales</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Agent 1</th>
+                            <th>Agent 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>x</th>
+                            <td><input type="number" id="x1" value="6" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="x2" value="4" step="0.1" min="0.1"></td>
+                        </tr>
+                        <tr>
+                            <th>y</th>
+                            <td><input type="number" id="y1" value="2" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="y2" value="6" step="0.1" min="0.1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>Paramètres de la fonction d'utilité</h4>
+                <table class="param-table" id="param-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Agent 1</th>
+                            <th>Agent 2</th>
+                        </tr>
+                    </thead>
+                    <tbody id="param-tbody">
+                        <tr>
+                            <th>α</th>
+                            <td><input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="alpha2" value="0.4" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>
+                        <tr>
+                            <th>β</th>
+                            <td><input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="beta2" value="0.6" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="calculate-tab" class="tab-content">
+                <h3>Calcul de l'équilibre</h3>
+                <p>Cliquez sur le bouton ci-dessous pour calculer l'équilibre de Walras et tracer la boîte d'Edgeworth.</p>
+                <button class="calculate-btn" onclick="calculate()">Calculer l'équilibre</button>
+                
+                <div class="results" id="results" style="margin-top: 20px; display: none;"></div>
+            </div>
+            
+            <div id="graph-tab" class="tab-content">
+                <h3>Affichage graphique</h3>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="show-grid" checked onchange="redraw()">
+                        Afficher la grille
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-pareto" checked onchange="redraw()">
+                        Afficher la courbe de Pareto
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-indiff-init" checked onchange="redraw()">
+                        Afficher les courbes d'indifférence (dotation)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-indiff-eq" checked onchange="redraw()">
+                        Afficher les courbes d'indifférence (équilibre)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-budget" checked onchange="redraw()">
+                        Afficher la droite budgétaire
+                    </label>
+                </div>
+                
+                <div class="canvas-container">
+                    <div class="canvas-controls">
+                        <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> Zoom +</button>
+                        <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> Zoom -</button>
+                        <button onclick="resetZoom()"><i class="fas fa-redo"></i> Réinitialiser</button>
+                        <button onclick="downloadCanvas()"><i class="fas fa-download"></i> Télécharger</button>
+                    </div>
+                    <canvas id="canvas" width="800" height="800"></canvas>
+                </div>
+                
+                <div class="legend">
+                    <h3>Légende</h3>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #5a5a5a;"></div>
+                        <span>Dotation initiale (X̄₁, Ȳ₁)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #1a1a1a;"></div>
+                        <span>Équilibre de Walras (x₁*, y₁*)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #2a2a2a;"></div>
+                        <span>Courbe de Pareto</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #707070; height: 1px; border-top: 2px dashed #707070;"></div>
+                        <span>Courbes d'indifférence (dotation)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #4a4a4a;"></div>
+                        <span>Courbes d'indifférence (équilibre)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #505050; height: 1px; border-top: 2px dashed #505050;"></div>
+                        <span>Droite budgétaire</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     
@@ -352,20 +478,129 @@
     <script src="../assets/js/script.js"></script>
 
     <script>
-        function u1(x, y, alpha, beta) {
-            return Math.pow(x, alpha) * Math.pow(y, beta);
+        let calculatedData = null;
+        let zoomLevel = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
+        
+        function openTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
         }
-
-        function u2(x, y, alpha, beta) {
-            return Math.pow(x, alpha) * Math.pow(y, beta);
+        
+        function updateUtilityDisplay() {
+            const type = document.getElementById('utility-type').value;
+            const agent1 = document.getElementById('utility-agent1');
+            const agent2 = document.getElementById('utility-agent2');
+            const paramTbody = document.getElementById('param-tbody');
+            
+            let html = '';
+            
+            switch(type) {
+                case 'cobb-douglas':
+                    agent1.innerHTML = 'Agent 1: U₁(x₁, y₁) = x₁<sup>α₁</sup> · y₁<sup>β₁</sup>';
+                    agent2.innerHTML = 'Agent 2: U₂(x₂, y₂) = x₂<sup>α₂</sup> · y₂<sup>β₂</sup>';
+                    html = `
+                        <tr><th>α</th>
+                            <td><input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="alpha2" value="0.4" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>
+                        <tr><th>β</th>
+                            <td><input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="beta2" value="0.6" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>`;
+                    break;
+                case 'ces':
+                    agent1.innerHTML = 'Agent 1: U₁(x₁, y₁) = (α₁·x₁<sup>ρ₁</sup> + β₁·y₁<sup>ρ₁</sup>)<sup>1/ρ₁</sup>';
+                    agent2.innerHTML = 'Agent 2: U₂(x₂, y₂) = (α₂·x₂<sup>ρ₂</sup> + β₂·y₂<sup>ρ₂</sup>)<sup>1/ρ₂</sup>';
+                    html = `
+                        <tr><th>α</th>
+                            <td><input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="alpha2" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>
+                        <tr><th>β</th>
+                            <td><input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                            <td><input type="number" id="beta2" value="0.5" step="0.05" min="0.1" max="0.9"></td>
+                        </tr>
+                        <tr><th>ρ</th>
+                            <td><input type="number" id="rho1" value="0.5" step="0.1" min="-5" max="5"></td>
+                            <td><input type="number" id="rho2" value="0.5" step="0.1" min="-5" max="5"></td>
+                        </tr>`;
+                    break;
+                case 'log-linear':
+                    agent1.innerHTML = 'Agent 1: U₁(x₁, y₁) = α₁·ln(x₁) + β₁·ln(y₁)';
+                    agent2.innerHTML = 'Agent 2: U₂(x₂, y₂) = α₂·ln(x₂) + β₂·ln(y₂)';
+                    html = `
+                        <tr><th>α</th>
+                            <td><input type="number" id="alpha1" value="0.5" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="alpha2" value="0.4" step="0.1" min="0.1"></td>
+                        </tr>
+                        <tr><th>β</th>
+                            <td><input type="number" id="beta1" value="0.5" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="beta2" value="0.6" step="0.1" min="0.1"></td>
+                        </tr>`;
+                    break;
+                case 'linear':
+                    agent1.innerHTML = 'Agent 1: U₁(x₁, y₁) = α₁·x₁ + β₁·y₁';
+                    agent2.innerHTML = 'Agent 2: U₂(x₂, y₂) = α₂·x₂ + β₂·y₂';
+                    html = `
+                        <tr><th>α</th>
+                            <td><input type="number" id="alpha1" value="1" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="alpha2" value="1" step="0.1" min="0.1"></td>
+                        </tr>
+                        <tr><th>β</th>
+                            <td><input type="number" id="beta1" value="1" step="0.1" min="0.1"></td>
+                            <td><input type="number" id="beta2" value="1" step="0.1" min="0.1"></td>
+                        </tr>`;
+                    break;
+            }
+            
+            paramTbody.innerHTML = html;
         }
-
-        function MRS1(x, y, alpha, beta) {
-            return (alpha / beta) * (y / x);
+        
+        function getUtilityFunction(agent) {
+            const type = document.getElementById('utility-type').value;
+            const alpha = parseFloat(document.getElementById(`alpha${agent}`).value);
+            const beta = parseFloat(document.getElementById(`beta${agent}`).value);
+            
+            switch(type) {
+                case 'cobb-douglas':
+                    return (x, y) => Math.pow(x, alpha) * Math.pow(y, beta);
+                case 'ces':
+                    const rho = parseFloat(document.getElementById(`rho${agent}`).value);
+                    return (x, y) => Math.pow(alpha * Math.pow(x, rho) + beta * Math.pow(y, rho), 1/rho);
+                case 'log-linear':
+                    return (x, y) => alpha * Math.log(x) + beta * Math.log(y);
+                case 'linear':
+                    return (x, y) => alpha * x + beta * y;
+            }
         }
-
-        function MRS2(x, y, alpha, beta) {
-            return (alpha / beta) * (y / x);
+        
+        function getMRS(agent) {
+            const type = document.getElementById('utility-type').value;
+            const alpha = parseFloat(document.getElementById(`alpha${agent}`).value);
+            const beta = parseFloat(document.getElementById(`beta${agent}`).value);
+            
+            switch(type) {
+                case 'cobb-douglas':
+                    return (x, y) => (alpha / beta) * (y / x);
+                case 'ces':
+                    const rho = parseFloat(document.getElementById(`rho${agent}`).value);
+                    return (x, y) => (alpha / beta) * Math.pow(x / y, rho - 1);
+                case 'log-linear':
+                    return (x, y) => (alpha / beta) * (y / x);
+                case 'linear':
+                    return (x, y) => alpha / beta;
+            }
         }
 
         function findRoot(f, a, b, tolerance = 1e-6, maxIter = 100) {
@@ -373,8 +608,7 @@
             let fb = f(b);
             
             if (fa * fb > 0) {
-                let mid = (a + b) / 2;
-                return mid;
+                return (a + b) / 2;
             }
             
             for (let i = 0; i < maxIter; i++) {
@@ -402,16 +636,17 @@
             const y1_init = parseFloat(document.getElementById('y1').value);
             const x2_init = parseFloat(document.getElementById('x2').value);
             const y2_init = parseFloat(document.getElementById('y2').value);
-            const alpha1 = parseFloat(document.getElementById('alpha1').value);
-            const beta1 = parseFloat(document.getElementById('beta1').value);
-            const alpha2 = parseFloat(document.getElementById('alpha2').value);
-            const beta2 = parseFloat(document.getElementById('beta2').value);
             
             const X_total = x1_init + x2_init;
             const Y_total = y1_init + y2_init;
             
-            const U1_init = u1(x1_init, y1_init, alpha1, beta1);
-            const U2_init = u2(x2_init, y2_init, alpha2, beta2);
+            const u1 = getUtilityFunction(1);
+            const u2 = getUtilityFunction(2);
+            const MRS1 = getMRS(1);
+            const MRS2 = getMRS(2);
+            
+            const U1_init = u1(x1_init, y1_init);
+            const U2_init = u2(x2_init, y2_init);
             
             const N = 200;
             const paretoPoints = [];
@@ -421,8 +656,8 @@
                 try {
                     const y = findRoot(
                         (y) => {
-                            const mrs1 = MRS1(x, y, alpha1, beta1);
-                            const mrs2 = MRS2(X_total - x, Y_total - y, alpha2, beta2);
+                            const mrs1 = MRS1(x, y);
+                            const mrs2 = MRS2(X_total - x, Y_total - y);
                             return mrs1 - mrs2;
                         },
                         0.01,
@@ -440,7 +675,7 @@
                 const x = (i / N) * X_total;
                 try {
                     const y = findRoot(
-                        (y) => u1(x, y, alpha1, beta1) - U1_init,
+                        (y) => u1(x, y) - U1_init,
                         0.01,
                         Y_total - 0.01
                     );
@@ -455,7 +690,7 @@
                 const x = (i / N) * X_total;
                 try {
                     const y = findRoot(
-                        (y) => u2(X_total - x, Y_total - y, alpha2, beta2) - U2_init,
+                        (y) => u2(X_total - x, Y_total - y) - U2_init,
                         0.01,
                         Y_total - 0.01
                     );
@@ -472,15 +707,15 @@
                     (x) => {
                         const y = findRoot(
                             (y) => {
-                                const mrs1 = MRS1(x, y, alpha1, beta1);
-                                const mrs2 = MRS2(X_total - x, Y_total - y, alpha2, beta2);
+                                const mrs1 = MRS1(x, y);
+                                const mrs2 = MRS2(X_total - x, Y_total - y);
                                 return mrs1 - mrs2;
                             },
                             0.01,
                             Y_total - 0.01
                         );
                         
-                        const mrs = MRS1(x, y, alpha1, beta1);
+                        const mrs = MRS1(x, y);
                         const budgetY = mrs * (x1_init - x) + y1_init;
                         return y - budgetY;
                     },
@@ -490,15 +725,15 @@
                 
                 eqY = findRoot(
                     (y) => {
-                        const mrs1 = MRS1(eqX, y, alpha1, beta1);
-                        const mrs2 = MRS2(X_total - eqX, Y_total - y, alpha2, beta2);
+                        const mrs1 = MRS1(eqX, y);
+                        const mrs2 = MRS2(X_total - eqX, Y_total - y);
                         return mrs1 - mrs2;
                     },
                     0.01,
                     Y_total - 0.01
                 );
                 
-                priceRatio = MRS1(eqX, eqY, alpha1, beta1);
+                priceRatio = MRS1(eqX, eqY);
             } catch (e) {}
             
             const budgetLine = [];
@@ -515,14 +750,14 @@
             const indiffEq1Points = [];
             const indiffEq2Points = [];
             if (eqX !== null && eqY !== null) {
-                const U1_eq = u1(eqX, eqY, alpha1, beta1);
-                const U2_eq = u2(X_total - eqX, Y_total - eqY, alpha2, beta2);
+                const U1_eq = u1(eqX, eqY);
+                const U2_eq = u2(X_total - eqX, Y_total - eqY);
                 
                 for (let i = 1; i < N; i++) {
                     const x = (i / N) * X_total;
                     try {
                         const y = findRoot(
-                            (y) => u1(x, y, alpha1, beta1) - U1_eq,
+                            (y) => u1(x, y) - U1_eq,
                             0.01,
                             Y_total - 0.01
                         );
@@ -536,7 +771,7 @@
                     const x = (i / N) * X_total;
                     try {
                         const y = findRoot(
-                            (y) => u2(X_total - x, Y_total - y, alpha2, beta2) - U2_eq,
+                            (y) => u2(X_total - x, Y_total - y) - U2_eq,
                             0.01,
                             Y_total - 0.01
                         );
@@ -547,124 +782,146 @@
                 }
             }
             
-            draw(X_total, Y_total, x1_init, y1_init, x2_init, y2_init, paretoPoints, indiff1Points, indiff2Points, 
-                 eqX, eqY, budgetLine, indiffEq1Points, indiffEq2Points, priceRatio, U1_init, U2_init, alpha1, beta1, alpha2, beta2);
+            calculatedData = {
+                X_total, Y_total, x1_init, y1_init, x2_init, y2_init,
+                paretoPoints, indiff1Points, indiff2Points,
+                eqX, eqY, budgetLine, indiffEq1Points, indiffEq2Points,
+                priceRatio, U1_init, U2_init
+            };
+            
+            displayResults(calculatedData);
+            redraw();
+            
+            openTab('graph');
+            document.querySelectorAll('.tab-btn')[3].classList.add('active');
+        }
+        
+        function redraw() {
+            if (!calculatedData) return;
+            draw(calculatedData);
         }
 
-        function draw(X_total, Y_total, x1_init, y1_init, x2_init, y2_init, paretoPoints, indiff1Points, indiff2Points,
-                      eqX, eqY, budgetLine, indiffEq1Points, indiffEq2Points, priceRatio, U1_init, U2_init, alpha1, beta1, alpha2, beta2) {
+        function draw(data) {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             const width = canvas.width;
             const height = canvas.height;
             
+            const showGrid = document.getElementById('show-grid').checked;
+            const showPareto = document.getElementById('show-pareto').checked;
+            const showIndiffInit = document.getElementById('show-indiff-init').checked;
+            const showIndiffEq = document.getElementById('show-indiff-eq').checked;
+            const showBudget = document.getElementById('show-budget').checked;
+            
             const margin = 80;
             const plotWidth = width - 2 * margin;
             const plotHeight = height - 2 * margin;
             
-            const scaleX = plotWidth / X_total;
-            const scaleY = plotHeight / Y_total;
+            const scaleX = (plotWidth / data.X_total) * zoomLevel;
+            const scaleY = (plotHeight / data.Y_total) * zoomLevel;
             
             function toCanvasX(x) {
-                return margin + x * scaleX;
+                return margin + x * scaleX + panX;
             }
             
             function toCanvasY(y) {
-                return height - margin - y * scaleY;
+                return height - margin - y * scaleY + panY;
             }
             
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, width, height);
             
-            ctx.strokeStyle = '#e8e8e8';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i <= 10; i++) {
-                const x = margin + (i / 10) * plotWidth;
-                const y = margin + (i / 10) * plotHeight;
-                
-                ctx.beginPath();
-                ctx.moveTo(x, margin);
-                ctx.lineTo(x, height - margin);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.moveTo(margin, y);
-                ctx.lineTo(width - margin, y);
-                ctx.stroke();
+            if (showGrid) {
+                ctx.strokeStyle = '#e8e8e8';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i <= 10; i++) {
+                    const x = margin + (i / 10) * plotWidth * zoomLevel + panX;
+                    const y = margin + (i / 10) * plotHeight * zoomLevel + panY;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x, margin);
+                    ctx.lineTo(x, height - margin);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(margin, y);
+                    ctx.lineTo(width - margin, y);
+                    ctx.stroke();
+                }
             }
             
             ctx.strokeStyle = '#2a2a2a';
             ctx.lineWidth = 2;
-            ctx.strokeRect(margin, margin, plotWidth, plotHeight);
+            ctx.strokeRect(margin + panX, margin + panY, plotWidth * zoomLevel, plotHeight * zoomLevel);
             
-            if (indiff1Points.length > 0) {
+            if (showIndiffInit && data.indiff1Points.length > 0) {
                 ctx.strokeStyle = '#707070';
                 ctx.lineWidth = 1.5;
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(indiff1Points[0].x), toCanvasY(indiff1Points[0].y));
-                for (let p of indiff1Points) {
+                ctx.moveTo(toCanvasX(data.indiff1Points[0].x), toCanvasY(data.indiff1Points[0].y));
+                for (let p of data.indiff1Points) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
                 ctx.setLineDash([]);
             }
             
-            if (indiff2Points.length > 0) {
+            if (showIndiffInit && data.indiff2Points.length > 0) {
                 ctx.strokeStyle = '#707070';
                 ctx.lineWidth = 1.5;
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(indiff2Points[0].x), toCanvasY(indiff2Points[0].y));
-                for (let p of indiff2Points) {
+                ctx.moveTo(toCanvasX(data.indiff2Points[0].x), toCanvasY(data.indiff2Points[0].y));
+                for (let p of data.indiff2Points) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
                 ctx.setLineDash([]);
             }
             
-            if (paretoPoints.length > 0) {
+            if (showPareto && data.paretoPoints.length > 0) {
                 ctx.strokeStyle = '#2a2a2a';
                 ctx.lineWidth = 2.5;
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(paretoPoints[0].x), toCanvasY(paretoPoints[0].y));
-                for (let p of paretoPoints) {
+                ctx.moveTo(toCanvasX(data.paretoPoints[0].x), toCanvasY(data.paretoPoints[0].y));
+                for (let p of data.paretoPoints) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
             }
             
-            if (budgetLine.length > 0) {
+            if (showBudget && data.budgetLine.length > 0) {
                 ctx.strokeStyle = '#505050';
                 ctx.lineWidth = 1.5;
                 ctx.setLineDash([3, 3]);
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(budgetLine[0].x), toCanvasY(budgetLine[0].y));
-                for (let p of budgetLine) {
+                ctx.moveTo(toCanvasX(data.budgetLine[0].x), toCanvasY(data.budgetLine[0].y));
+                for (let p of data.budgetLine) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
                 ctx.setLineDash([]);
             }
             
-            if (indiffEq1Points.length > 0) {
+            if (showIndiffEq && data.indiffEq1Points.length > 0) {
                 ctx.strokeStyle = '#4a4a4a';
                 ctx.lineWidth = 1.8;
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(indiffEq1Points[0].x), toCanvasY(indiffEq1Points[0].y));
-                for (let p of indiffEq1Points) {
+                ctx.moveTo(toCanvasX(data.indiffEq1Points[0].x), toCanvasY(data.indiffEq1Points[0].y));
+                for (let p of data.indiffEq1Points) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
             }
             
-            if (indiffEq2Points.length > 0) {
+            if (showIndiffEq && data.indiffEq2Points.length > 0) {
                 ctx.strokeStyle = '#4a4a4a';
                 ctx.lineWidth = 1.8;
                 ctx.beginPath();
-                ctx.moveTo(toCanvasX(indiffEq2Points[0].x), toCanvasY(indiffEq2Points[0].y));
-                for (let p of indiffEq2Points) {
+                ctx.moveTo(toCanvasX(data.indiffEq2Points[0].x), toCanvasY(data.indiffEq2Points[0].y));
+                for (let p of data.indiffEq2Points) {
                     ctx.lineTo(toCanvasX(p.x), toCanvasY(p.y));
                 }
                 ctx.stroke();
@@ -672,24 +929,24 @@
             
             ctx.fillStyle = '#5a5a5a';
             ctx.beginPath();
-            ctx.arc(toCanvasX(x1_init), toCanvasY(y1_init), 6, 0, 2 * Math.PI);
+            ctx.arc(toCanvasX(data.x1_init), toCanvasY(data.y1_init), 6, 0, 2 * Math.PI);
             ctx.fill();
             
             ctx.fillStyle = '#2a2a2a';
             ctx.font = '13px EB Garamond, serif';
-            ctx.fillText(`(X̄₁=${x1_init.toFixed(1)}, Ȳ₁=${y1_init.toFixed(1)})`, 
-                        toCanvasX(x1_init) + 10, toCanvasY(y1_init) - 10);
+            ctx.fillText(`(X̄₁=${data.x1_init.toFixed(1)}, Ȳ₁=${data.y1_init.toFixed(1)})`, 
+                        toCanvasX(data.x1_init) + 10, toCanvasY(data.y1_init) - 10);
             
-            if (eqX !== null && eqY !== null) {
+            if (data.eqX !== null && data.eqY !== null) {
                 ctx.fillStyle = '#1a1a1a';
                 ctx.beginPath();
-                ctx.arc(toCanvasX(eqX), toCanvasY(eqY), 7, 0, 2 * Math.PI);
+                ctx.arc(toCanvasX(data.eqX), toCanvasY(data.eqY), 7, 0, 2 * Math.PI);
                 ctx.fill();
                 
                 ctx.fillStyle = '#1a1a1a';
                 ctx.font = '13px EB Garamond, serif';
-                ctx.fillText(`(x₁*=${eqX.toFixed(2)}, y₁*=${eqY.toFixed(2)})`, 
-                            toCanvasX(eqX) + 10, toCanvasY(eqY) + 20);
+                ctx.fillText(`(x₁*=${data.eqX.toFixed(2)}, y₁*=${data.eqY.toFixed(2)})`, 
+                            toCanvasX(data.eqX) + 10, toCanvasY(data.eqY) + 20);
             }
             
             ctx.fillStyle = '#2a2a2a';
@@ -715,51 +972,48 @@
             ctx.textAlign = 'left';
             ctx.font = '12px EB Garamond, serif';
             for (let i = 0; i <= 10; i++) {
-                const val = (i / 10) * X_total;
-                const x = margin + (i / 10) * plotWidth;
+                const val = (i / 10) * data.X_total;
+                const x = margin + (i / 10) * plotWidth * zoomLevel + panX;
                 ctx.fillText(val.toFixed(1), x - 10, height - margin + 20);
             }
             
             ctx.textAlign = 'right';
             for (let i = 0; i <= 10; i++) {
-                const val = (i / 10) * Y_total;
-                const y = height - margin - (i / 10) * plotHeight;
+                const val = (i / 10) * data.Y_total;
+                const y = height - margin - (i / 10) * plotHeight * zoomLevel + panY;
                 ctx.fillText(val.toFixed(1), margin - 10, y + 5);
             }
-            
-            ctx.fillStyle = '#3a3a3a';
-            ctx.font = '11px EB Garamond, serif';
-            ctx.textAlign = 'left';
-            ctx.fillText(`X̄ = ${X_total.toFixed(1)}`, margin + 5, height - margin - 5);
-            ctx.fillText(`Ȳ = ${Y_total.toFixed(1)}`, width - margin - 50, margin + 15);
-            
-            displayResults(eqX, eqY, priceRatio, U1_init, U2_init, X_total, Y_total, x1_init, y1_init, x2_init, y2_init, alpha1, beta1, alpha2, beta2);
         }
 
-        function displayResults(eqX, eqY, priceRatio, U1_init, U2_init, X_total, Y_total, x1_init, y1_init, x2_init, y2_init, alpha1, beta1, alpha2, beta2) {
+        function displayResults(data) {
             const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            
+            const u1 = getUtilityFunction(1);
+            const u2 = getUtilityFunction(2);
+            
             let html = '<h2>Résultats Numériques</h2>';
             
             html += '<p><strong>Dotations totales:</strong></p>';
-            html += `<p style="margin-left: 20px;">X̄ = X̄₁ + X̄₂ = ${x1_init.toFixed(2)} + ${x2_init.toFixed(2)} = ${X_total.toFixed(2)}</p>`;
-            html += `<p style="margin-left: 20px;">Ȳ = Ȳ₁ + Ȳ₂ = ${y1_init.toFixed(2)} + ${y2_init.toFixed(2)} = ${Y_total.toFixed(2)}</p>`;
+            html += `<p style="margin-left: 20px;">X̄ = X̄₁ + X̄₂ = ${data.x1_init.toFixed(2)} + ${data.x2_init.toFixed(2)} = ${data.X_total.toFixed(2)}</p>`;
+            html += `<p style="margin-left: 20px;">Ȳ = Ȳ₁ + Ȳ₂ = ${data.y1_init.toFixed(2)} + ${data.y2_init.toFixed(2)} = ${data.Y_total.toFixed(2)}</p>`;
             
             html += '<p><strong>Utilités initiales:</strong></p>';
-            html += `<p style="margin-left: 20px;">U₁(X̄₁, Ȳ₁) = ${x1_init.toFixed(2)}<sup>${alpha1}</sup> × ${y1_init.toFixed(2)}<sup>${beta1}</sup> = ${U1_init.toFixed(4)}</p>`;
-            html += `<p style="margin-left: 20px;">U₂(X̄₂, Ȳ₂) = ${x2_init.toFixed(2)}<sup>${alpha2}</sup> × ${y2_init.toFixed(2)}<sup>${beta2}</sup> = ${U2_init.toFixed(4)}</p>`;
+            html += `<p style="margin-left: 20px;">U₁(X̄₁, Ȳ₁) = ${data.U1_init.toFixed(4)}</p>`;
+            html += `<p style="margin-left: 20px;">U₂(X̄₂, Ȳ₂) = ${data.U2_init.toFixed(4)}</p>`;
             
-            if (eqX !== null && eqY !== null) {
-                const eqX2 = X_total - eqX;
-                const eqY2 = Y_total - eqY;
-                const U1_eq = u1(eqX, eqY, alpha1, beta1);
-                const U2_eq = u2(eqX2, eqY2, alpha2, beta2);
+            if (data.eqX !== null && data.eqY !== null) {
+                const eqX2 = data.X_total - data.eqX;
+                const eqY2 = data.Y_total - data.eqY;
+                const U1_eq = u1(data.eqX, data.eqY);
+                const U2_eq = u2(eqX2, eqY2);
                 
                 html += '<p><strong>Équilibre de Walras:</strong></p>';
-                html += `<p style="margin-left: 20px;">Agent 1: (x₁*, y₁*) = (${eqX.toFixed(4)}, ${eqY.toFixed(4)})</p>`;
+                html += `<p style="margin-left: 20px;">Agent 1: (x₁*, y₁*) = (${data.eqX.toFixed(4)}, ${data.eqY.toFixed(4)})</p>`;
                 html += `<p style="margin-left: 20px;">Agent 2: (x₂*, y₂*) = (${eqX2.toFixed(4)}, ${eqY2.toFixed(4)})</p>`;
                 
-                if (priceRatio !== null) {
-                    html += `<p style="margin-left: 20px;">Ratio de prix: p<sub>x</sub>/p<sub>y</sub> = ${priceRatio.toFixed(4)}</p>`;
+                if (data.priceRatio !== null) {
+                    html += `<p style="margin-left: 20px;">Ratio de prix: p<sub>x</sub>/p<sub>y</sub> = ${data.priceRatio.toFixed(4)}</p>`;
                 }
                 
                 html += '<p><strong>Utilités à l\'équilibre:</strong></p>';
@@ -767,14 +1021,73 @@
                 html += `<p style="margin-left: 20px;">U₂(x₂*, y₂*) = ${U2_eq.toFixed(4)}</p>`;
                 
                 html += '<p><strong>Gain d\'utilité:</strong></p>';
-                html += `<p style="margin-left: 20px;">ΔU₁ = ${(U1_eq - U1_init).toFixed(4)} (${((U1_eq/U1_init - 1) * 100).toFixed(2)}%)</p>`;
-                html += `<p style="margin-left: 20px;">ΔU₂ = ${(U2_eq - U2_init).toFixed(4)} (${((U2_eq/U2_init - 1) * 100).toFixed(2)}%)</p>`;
+                html += `<p style="margin-left: 20px;">ΔU₁ = ${(U1_eq - data.U1_init).toFixed(4)} (${((U1_eq/data.U1_init - 1) * 100).toFixed(2)}%)</p>`;
+                html += `<p style="margin-left: 20px;">ΔU₂ = ${(U2_eq - data.U2_init).toFixed(4)} (${((U2_eq/data.U2_init - 1) * 100).toFixed(2)}%)</p>`;
             }
             
             resultsDiv.innerHTML = html;
         }
         
-        calculate();
+        function zoomIn() {
+            zoomLevel *= 1.2;
+            redraw();
+        }
+        
+        function zoomOut() {
+            zoomLevel /= 1.2;
+            redraw();
+        }
+        
+        function resetZoom() {
+            zoomLevel = 1;
+            panX = 0;
+            panY = 0;
+            redraw();
+        }
+        
+        function downloadCanvas() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.download = 'edgeworth_box.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        const canvas = document.getElementById('canvas');
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                panX += e.clientX - lastX;
+                panY += e.clientY - lastY;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                redraw();
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+        
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        });
+        
+        updateUtilityDisplay();
     </script>
 </body>
 </html>
