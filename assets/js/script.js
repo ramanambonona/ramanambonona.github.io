@@ -29,32 +29,43 @@ toggleBackToTop();
 
 
 // =======================
-// Highlight current menu link (active)
+// Highlight current menu link (active) — works in subfolders
 // =======================
 document.addEventListener('DOMContentLoaded', function () {
   const navLinks = document.querySelectorAll('header nav a');
 
-  // Normalize a path: drop query/hash, collapse trailing slashes, map /index.html -> /
+  // Normalize a path: strip query/hash, map /index.html -> /, collapse trailing slashes
   const normalize = (path) => {
     try {
       path = path.split('?')[0].split('#')[0];
-      path = path.replace(/\/index\.html$/i, '/');
-      path = path.replace(/\/+$/, '/');
+      path = path.replace(/\/index\.html$/i, '/'); // treat /index.html as /
+      path = path.replace(/\/+$/, '/');            // collapse trailing slashes
       return path;
     } catch (e) {
       return path;
     }
   };
 
-  const current = normalize(window.location.pathname);
+  // Current path (normalized)
+  const current = normalize(new URL(window.location.href).pathname);
 
   navLinks.forEach(a => {
-    const hrefPath = normalize(new URL(a.getAttribute('href'), window.location.origin).pathname);
-    if (hrefPath === current) {
-      a.classList.add('active'); // CSS will render it with 3D plastic gray style
-    } else {
-      a.classList.remove('active');
+    const href = a.getAttribute('href') || '';
+    // Resolve relative to the current document location (not just origin)
+    const hrefPath = normalize(new URL(href, document.baseURI).pathname);
+
+    // Primary check: full normalized path match
+    let isActive = (hrefPath === current);
+
+    // Fallback: match by filename (helps if directories differ)
+    if (!isActive) {
+      const currFile = (current.split('/').pop() || '').toLowerCase() || 'index.html';
+      const hrefFile = (hrefPath.split('/').pop() || '').toLowerCase() || 'index.html';
+      if (currFile === hrefFile) isActive = true;
     }
+
+    if (isActive) a.classList.add('active');
+    else a.classList.remove('active');
   });
 });
 
@@ -92,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // =======================
-// HTML viewer via ?page=... (optional widget on some pages)
+// HTML viewer via ?page=... (if used on a page)
 // =======================
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -146,8 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // =======================
-// Tools modal (iOS-ready, vh fix, safe-areas, scroll-lock, PiP, iFrameResizer)
-// Only used if a link has data-modal="true"
+// Tools modal (iOS-ready) — only for links with data-modal="true"
 // =======================
 document.addEventListener('DOMContentLoaded', () => {
   const modal  = document.getElementById('tool-modal');
@@ -234,8 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.toggle('pip');
   }
 
-  // 5) Wiring
-  // IMPORTANT: Only intercept links explicitly marked with data-modal="true".
+  // 5) Wiring — ONLY intercept links explicitly marked with data-modal="true"
   document.querySelectorAll('.course-list .syllabus-link[data-modal="true"]').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
