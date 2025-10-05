@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Équilibre Général Concurrentiel — Ramanambonona Ambinintsoa</title>
+  <!-- Conserver la même charte (police, top bar, etc.) que le fichier source -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    // MathJax pour l'affichage des équations LaTeX
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+
+  <style>
+    /* Styles complémentaires (nous gardons la charte : EB Garamond, top bar, container, etc.) */
+    img { display: block; margin-left: auto; margin-right: auto; }
+
+    .egc-container { max-width: 1400px; margin: 0 auto; }
+
+    .egc-title {
+      font-size: 2.5rem; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; text-align: center; letter-spacing: -0.5px;
+    }
+
+    .tab-navigation { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+    .tab-btn { padding: 12px 24px; background: white; border: 1px solid #d0d0d0; border-bottom: none; cursor: pointer; font-family: inherit; font-size: 1rem; font-weight: 600; transition: all 0.2s; color: #5a5a5a; }
+    .tab-btn.active { background: #2a2a2a; color: white; border-color: #2a2a2a; }
+    .tab-btn:hover:not(.active) { background: #f5f5f5; }
+
+    .tab-content { display: none; background: white; padding: 30px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 30px; }
+    .tab-content.active { display: block; }
+
+    .footnote { font-size: 0.85rem; color: #6a6a6a; }
+
+    .callout { padding: 18px 20px; background: #f8f8f8; border-left: 3px solid #3a3a3a; margin: 18px 0; }
+    .callout h3 { margin: 0 0 10px 0; font-size: 1.15rem; }
+
+    .param-grid { display: grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 16px; }
+    .param-card { background: #fff; border: 1px solid #e3e3e3; border-radius: 6px; padding: 16px; }
+    .param-card h4 { margin: 0 0 12px 0; }
+    .param-card label { display: block; font-weight: 600; margin: 8px 0 6px; }
+    .param-card input[type="number"], .param-card select { width: 100%; padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-family: inherit; }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 0; }
+    .btn-main { background: #2a2a2a; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .btn-main:hover { filter: brightness(1.05); }
+
+    .results { background: #fff; padding: 20px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .results h3 { margin-top: 0; }
+    .results p { margin: 6px 0; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.85rem; background: #efefef; }
+
+    .canvas-wrap { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px; }
+    .canvas-controls { display: flex; gap: 8px; margin-bottom: 8px; }
+    .canvas-controls button { background: white; border: 1px solid #d0d0d0; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+    .canvas-controls button:hover { background: #f7f7f7; }
+
+    .legend { margin-top: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+    .legend-line { width: 40px; height: 2px; background: #2a2a2a; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; background: #2a2a2a; }
+
+    .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 960px) { .param-grid, .two-col { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Top bar identique au style existant -->
+  <header>
+    <div class="container">
+      <h1><a href="./index.html">Ramanambonona Ambinintsoa</a></h1>
+      <nav>
+        <ul>
+          <li><a href="./index.html">About</a></li>
+          <li><a href="./research.html">Research</a></li>
+          <li><a href="./administrative.html">Administrative work</a></li>
+          <li><a href="./cv.html">CV</a></li>
+          <li><a href="./teaching.html">Teaching</a></li>
+          <li><a href="./tools.html" class="active">Tools</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="egc-container">
+      <h2 class="egc-title">Équilibre Général Concurrentiel (EGC)</h2>
+
+      <!-- Onglets -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" onclick="openTab('overview')">Rappels</button>
+        <button class="tab-btn" onclick="openTab('params')">Paramétrer</button>
+        <button class="tab-btn" onclick="openTab('compute')">Calculer</button>
+        <button class="tab-btn" onclick="openTab('viz')">Visualiser</button>
+        <button class="tab-btn" onclick="openTab('exercises')">Exercices</button>
+      </div>
+
+      <!-- Rappels & Définitions -->
+      <section id="overview-tab" class="tab-content active">
+        <div class="callout">
+          <h3>Définition (économie d'échange $2\times2$)</h3>
+          <p>
+            Un vecteur de prix $p^* = (p_1^*, p_2^*)$ est un prix d'EGC si, à $p^*$, tous les marchés sont équilibrés : $$x_1^A(p^*) + x_1^B(p^*) = \bar X_1^A + \bar X_1^B,\qquad x_2^A(p^*) + x_2^B(p^*) = \bar X_2^A + \bar X_2^B.$$ 
+            On note <em>allocation d'EGC</em> $E(p^*) = (x_1^A(p^*), x_2^A(p^*), x_1^B(p^*), x_2^B(p^*))$.
+          </p>
+          <p class="footnote">Numéraire : fixer $p_2=1$ (le niveau général des prix est indéterminé, seuls les prix relatifs importent).</p>
+        </div>
+        <div class="two-col">
+          <div class="callout">
+            <h3>Demande marshallienne (formes utilisées)</h3>
+            <p><strong>Cobb‑Douglas \(U = x^{\alpha} y^{\beta}\)</strong> : \(x = \tfrac{\alpha}{\alpha+\beta}\,\tfrac{R}{p_x}\), \(y = \tfrac{\beta}{\alpha+\beta}\,\tfrac{R}{p_y}\).</p>
+            <p><strong>Log‑linéaire \(U = \alpha\ln x + \beta\ln y\)</strong> : identique à Cobb‑Douglas (parts \(\alpha/(\alpha+\beta)\)).</p>
+            <p><strong>CES \(U = (\alpha x^\rho + \beta y^\rho)^{1/\rho}\)</strong>, \(\sigma=1/(1-\rho)\) : $$x = \frac{R}{p_x}\,\frac{\alpha^{\sigma} p_x^{1-\sigma}}{\alpha^{\sigma} p_x^{1-\sigma}+\beta^{\sigma} p_y^{1-\sigma}},\qquad y = \frac{R}{p_y}\,\frac{\beta^{\sigma} p_y^{1-\sigma}}{\alpha^{\sigma} p_x^{1-\sigma}+\beta^{\sigma} p_y^{1-\sigma}}.$$</p>
+            <p><strong>Leontief \(U = \min\{x/a,\, y/b\}\)</strong> : \(x = \dfrac{aR}{p_x a + p_y b}\), \(y = \dfrac{bR}{p_x a + p_y b}\).</p>
+          </div>
+          <div class="callout">
+            <h3>Théorème de Walras</h3>
+            <p>Dans une économie concurrentielle, si \((n-1)\) marchés sont en équilibre, le dernier l'est aussi. On normalise en fixant un numéraire et l'on résout \((n-1)\) équations pour \((n-1)\) prix relatifs.</p>
+            <p class="footnote">Vérification pratique : il suffit d'imposer l'équilibre du bien 1, le second suivra automatiquement.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Paramétrage -->
+      <section id="params-tab" class="tab-content">
+        <div class="param-grid">
+          <div class="param-card">
+            <h4>Dotations initiales (biens 1 et 2)</h4>
+            <label>\(\bar X_1^A\)</label>
+            <input type="number" id="w1A" value="6" step="0.1" min="0.01">
+            <label>\(\bar X_2^A\)</label>
+            <input type="number" id="w2A" value="2" step="0.1" min="0.01">
+            <hr>
+            <label>\(\bar X_1^B\)</label>
+            <input type="number" id="w1B" value="4" step="0.1" min="0.01">
+            <label>\(\bar X_2^B\)</label>
+            <input type="number" id="w2B" value="6" step="0.1" min="0.01">
+          </div>
+
+          <div class="param-card">
+            <h4>Type d'utilité — Agent A</h4>
+            <label for="uA">Forme</label>
+            <select id="uA" onchange="renderParams('A')">
+              <option value="cd" selected>Cobb‑Douglas</option>
+              <option value="log">Log‑linéaire</option>
+              <option value="ces">CES</option>
+              <option value="leontief">Leontief</option>
+            </select>
+            <div id="uA-params"></div>
+          </div>
+
+          <div class="param-card">
+            <h4>Type d'utilité — Agent B</h4>
+            <label for="uB">Forme</label>
+            <select id="uB" onchange="renderParams('B')">
+              <option value="cd">Cobb‑Douglas</option>
+              <option value="log">Log‑linéaire</option>
+              <option value="ces" selected>CES</option>
+              <option value="leontief">Leontief</option>
+            </select>
+            <div id="uB-params"></div>
+          </div>
+
+          <div class="param-card">
+            <h4>Affichage</h4>
+            <div class="callout" id="utility-display">
+              <h3>Utilités sélectionnées</h3>
+              <p id="uA-text" style="margin:0"></p>
+              <p id="uB-text" style="margin:0"></p>
+            </div>
+            <div class="actions">
+              <button class="btn-main" onclick="updateUtilityDisplay()"><i class="fa-solid fa-wand-magic-sparkles"></i> Mettre à jour</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calcul -->
+      <section id="compute-tab" class="tab-content">
+        <div class="actions">
+          <button class="btn-main" onclick="computeEGC()"><i class="fa-solid fa-calculator"></i> Calculer l'équilibre (numéraire $p_2=1$)</button>
+          <button class="btn-main" onclick="resetAll()"><i class="fa-solid fa-rotate"></i> Réinitialiser</button>
+        </div>
+        <div id="results" class="results" style="margin-top:14px; display:none;"></div>
+      </section>
+
+      <!-- Visualisation (excès de demande du bien 1) -->
+      <section id="viz-tab" class="tab-content">
+        <div class="canvas-wrap">
+          <div class="canvas-controls">
+            <button onclick="plotRange(0.01, 50)"><i class="fa-solid fa-chart-line"></i> Domaine [0.01, 50]</button>
+            <button onclick="plotRange(0.1, 10)"><i class="fa-solid fa-chart-line"></i> Domaine [0.1, 10]</button>
+            <button onclick="downloadCanvas()"><i class="fa-solid fa-download"></i> Télécharger</button>
+          </div>
+          <canvas id="canvas" width="900" height="480"></canvas>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-line"></span> Excès de demande $z_1(p_1)$</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span> Prix d'équilibre $p_1^*$</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exercices -->
+      <section id="exercises-tab" class="tab-content">
+        <div class="callout">
+          <h3>Exercice (économie d'échange)</h3>
+          <p>Considérer deux consommateurs A et B avec dotations données. Déterminer l'EGC : (i) calculer les demandes marshalliennes \(x_i^j(p,R_j)\), (ii) poser l'équilibre du bien 1, (iii) choisir un numéraire, (iv) résoudre \(p_1^*\) et l'allocation.</p>
+        </div>
+        <div class="callout">
+          <h3>Exercice (avec production)</h3>
+          <p>Introduire deux entreprises F et G avec fonctions de production de type Cobb‑Douglas. Écrire les conditions d'optimalité des firmes, intégrer les demandes d'inputs, et imposer l'équilibre « ressource = emploi » sur chaque marché (biens et facteurs). Discuter l'existence (rôle des rendements).</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // --- Gestion des onglets ---
+    function openTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[onclick="openTab('${name}')"]`).classList.add('active');
+      document.getElementById(`${name}-tab`).classList.add('active');
+      if (name === 'viz' && lastSolution) drawExcess();
+    }
+
+    // --- Paramétrage des utilités ---
+    function renderParams(agent) {
+      const sel = document.getElementById(agent === 'A' ? 'uA' : 'uB');
+      const box = document.getElementById(agent === 'A' ? 'uA-params' : 'uB-params');
+      const t = sel.value;
+      let html = '';
+      if (t === 'cd' || t === 'log') {
+        html = `
+          <label>α</label><input type="number" id="${agent}-alpha" value="0.5" min="0.05" step="0.05">
+          <label>β</label><input type="number" id="${agent}-beta" value="0.5" min="0.05" step="0.05">
+        `;
+      } else if (t === 'ces') {
+        html = `
+          <label>α</label><input type="number" id="${agent}-alpha" value="0.5" min="0.05" step="0.05">
+          <label>β</label><input type="number" id="${agent}-beta" value="0.5" min="0.05" step="0.05">
+          <label>ρ (élasticité σ = 1/(1-ρ))</label><input type="number" id="${agent}-rho" value="0.5" step="0.1" min="-5" max="0.99">
+        `;
+      } else if (t === 'leontief') {
+        html = `
+          <label>a (coefficient pour x)</label><input type="number" id="${agent}-a" value="1" min="0.01" step="0.1">
+          <label>b (coefficient pour y)</label><input type="number" id="${agent}-b" value="1" min="0.01" step="0.1">
+        `;
+      }
+      box.innerHTML = html;
+      updateUtilityDisplay();
+    }
+
+    function getParams(agent) {
+      const t = document.getElementById(agent === 'A' ? 'uA' : 'uB').value;
+      const P = { type: t };
+      if (t === 'cd' || t === 'log') {
+        P.alpha = parseFloat(document.getElementById(`${agent}-alpha`).value);
+        P.beta  = parseFloat(document.getElementById(`${agent}-beta`).value);
+      } else if (t === 'ces') {
+        P.alpha = parseFloat(document.getElementById(`${agent}-alpha`).value);
+        P.beta  = parseFloat(document.getElementById(`${agent}-beta`).value);
+        P.rho   = parseFloat(document.getElementById(`${agent}-rho`).value);
+      } else if (t === 'leontief') {
+        P.a = parseFloat(document.getElementById(`${agent}-a`).value);
+        P.b = parseFloat(document.getElementById(`${agent}-b`).value);
+      }
+      return P;
+    }
+
+    function utilText(agent) {
+      const t = document.getElementById(agent === 'A' ? 'uA' : 'uB').value;
+      if (t === 'cd') return `${agent}: $U(x,y)=x^{\\alpha}y^{\\beta}$`;
+      if (t === 'log') return `${agent}: $U(x,y)=\\alpha\\ln x + \\beta\\ln y$`;
+      if (t === 'ces') return `${agent}: $U(x,y)=(\\alpha x^{\\rho}+\\beta y^{\\rho})^{1/\\rho}$`;
+      if (t === 'leontief') return `${agent}: $U(x,y)=\\min\\{x/a,\,y/b\\}$`;
+      return '';
+    }
+
+    function updateUtilityDisplay() {
+      document.getElementById('uA-text').innerHTML = utilText('A');
+      document.getElementById('uB-text').innerHTML = utilText('B');
+      if (window.MathJax) MathJax.typeset();
+    }
+
+    // --- Demandes marshalliennes pour chaque forme (p2 = 1) ---
+    function demand_x1(p1, R, params) {
+      const t = params.type;
+      if (t === 'cd' || t === 'log') {
+        const s = params.alpha / (params.alpha + params.beta);
+        return (s * R) / p1;
+      }
+      if (t === 'ces') {
+        const rho = params.rho;
+        const sigma = 1 / (1 - rho);
+        const A = Math.pow(params.alpha, sigma) * Math.pow(p1, 1 - sigma);
+        const B = Math.pow(params.beta,  sigma) * 1; // p2=1 => 1^{1-sigma}=1
+        const W = A + B;
+        const s1 = A / W;
+        return (R / p1) * s1;
+      }
+      if (t === 'leontief') {
+        const a = params.a, b = params.b;
+        return (a * R) / (p1 * a + b);
+      }
+      return NaN;
+    }
+
+    function demand_x2(p1, R, params) {
+      const t = params.type;
+      if (t === 'cd' || t === 'log') {
+        const s = params.beta / (params.alpha + params.beta);
+        return (s * R); // p2=1
+      }
+      if (t === 'ces') {
+        const rho = params.rho;
+        const sigma = 1 / (1 - rho);
+        const A = Math.pow(params.alpha, sigma) * Math.pow(p1, 1 - sigma);
+        const B = Math.pow(params.beta,  sigma) * 1;
+        const W = A + B;
+        const s2 = B / W;
+        return (R) * s2; // p2=1
+      }
+      if (t === 'leontief') {
+        const a = params.a, b = params.b;
+        return (b * R) / (p1 * a + b);
+      }
+      return NaN;
+    }
+
+    // Excès de demande du bien 1 pour un p1 donné
+    function excess_good1(p1, W1A, W2A, W1B, W2B, PA, PB) {
+      const R_A = p1 * W1A + W2A; // p2=1
+      const R_B = p1 * W1B + W2B;
+      const x1A = demand_x1(p1, R_A, PA);
+      const x1B = demand_x1(p1, R_B, PB);
+      const Xtot = W1A + W1B;
+      return (x1A + x1B) - Xtot; // z1(p1)
+    }
+
+    // Résolution robuste par bissection + élargissement de l'intervalle
+    function solve_price(W1A, W2A, W1B, W2B, PA, PB) {
+      let lo = 1e-4, hi = 1e4;
+      let f_lo = excess_good1(lo, W1A, W2A, W1B, W2B, PA, PB);
+      let f_hi = excess_good1(hi, W1A, W2A, W1B, W2B, PA, PB);
+      // élargir si besoin
+      let iter = 0;
+      while (f_lo * f_hi > 0 && iter < 40) {
+        lo /= 10; hi *= 10; iter++;
+        f_lo = excess_good1(lo, W1A, W2A, W1B, W2B, PA, PB);
+        f_hi = excess_good1(hi, W1A, W2A, W1B, W2B, PA, PB);
+      }
+      if (f_lo * f_hi > 0) return null; // échec du bornage
+      // bissection
+      for (let k = 0; k < 120; k++) {
+        const mid = (lo + hi) / 2;
+        const f_mid = excess_good1(mid, W1A, W2A, W1B, W2B, PA, PB);
+        if (Math.abs(f_mid) < 1e-9) return mid;
+        if (f_lo * f_mid <= 0) { hi = mid; f_hi = f_mid; } else { lo = mid; f_lo = f_mid; }
+      }
+      return (lo + hi) / 2;
+    }
+
+    let lastSolution = null;
+
+    function computeEGC() {
+      const W1A = parseFloat(document.getElementById('w1A').value);
+      const W2A = parseFloat(document.getElementById('w2A').value);
+      const W1B = parseFloat(document.getElementById('w1B').value);
+      const W2B = parseFloat(document.getElementById('w2B').value);
+      const PA = getParams('A');
+      const PB = getParams('B');
+
+      const p1 = solve_price(W1A, W2A, W1B, W2B, PA, PB);
+      const resultsDiv = document.getElementById('results');
+      if (p1 === null || !isFinite(p1)) {
+        resultsDiv.style.display = 'block';
+        resultsDiv.innerHTML = `<h3>Résultat</h3><p>Impossible de trouver un $p_1^*$ dans un intervalle raisonnable. Vérifiez vos paramètres (positivité, poids, etc.).</p>`;
+        lastSolution = null;
+        return;
+      }
+
+      // Revenus
+      const R_A = p1 * W1A + W2A; // p2=1
+      const R_B = p1 * W1B + W2B;
+
+      // Allocations à l'équilibre
+      const x1A = demand_x1(p1, R_A, PA);
+      const x2A = demand_x2(p1, R_A, PA);
+      const x1B = demand_x1(p1, R_B, PB);
+      const x2B = demand_x2(p1, R_B, PB);
+
+      // Vérifications (Walras)
+      const z1 = (x1A + x1B) - (W1A + W1B);
+      const z2 = (x2A + x2B) - (W2A + W2B);
+
+      // Utilités (affichage simple par forme)
+      function util(x, y, P) {
+        if (P.type === 'cd') return Math.pow(x, P.alpha) * Math.pow(y, P.beta);
+        if (P.type === 'log') return P.alpha * Math.log(x) + P.beta * Math.log(y);
+        if (P.type === 'ces') return Math.pow(P.alpha * Math.pow(x, P.rho) + P.beta * Math.pow(y, P.rho), 1 / P.rho);
+        if (P.type === 'leontief') return Math.min(x / P.a, y / P.b);
+        return NaN;
+      }
+      const U_A = util(x1A, x2A, PA);
+      const U_B = util(x1B, x2B, PB);
+
+      resultsDiv.style.display = 'block';
+      resultsDiv.innerHTML = `
+        <h3>Résultat — numéraire $p_2=1$</h3>
+        <p><span class="badge">Prix relatif</span> $p_1^* = ${p1.toFixed(6)}$</p>
+        <p><strong>Revenus</strong> : $R_A = ${R_A.toFixed(4)}$, $R_B = ${R_B.toFixed(4)}$</p>
+        <p><strong>Allocation d'EGC</strong> : 
+          $x_1^A = ${x1A.toFixed(4)}$, $x_2^A = ${x2A.toFixed(4)}$; 
+          $x_1^B = ${x1B.toFixed(4)}$, $x_2^B = ${x2B.toFixed(4)}$.
+        </p>
+        <p><strong>Utilités</strong> : $U_A = ${Number.isFinite(U_A)?U_A.toFixed(6):'—'}$, $U_B = ${Number.isFinite(U_B)?U_B.toFixed(6):'—'}$</p>
+        <p><em>Vérification (Walras)</em> : $z_1 = ${z1.toExponential(2)}$, $z_2 = ${z2.toExponential(2)}$.</p>
+      `;
+      if (window.MathJax) MathJax.typeset();
+
+      lastSolution = { p1, W1A, W2A, W1B, W2B, PA, PB };
+      // Mettre à jour le graphe si l'onglet Viz est actif
+      if (document.getElementById('viz-tab').classList.contains('active')) drawExcess();
+    }
+
+    function resetAll() {
+      renderParams('A'); renderParams('B'); updateUtilityDisplay();
+      document.getElementById('results').style.display = 'none';
+      lastSolution = null; drawExcess();
+    }
+
+    // --- Visualisation : excès de demande du bien 1 ---
+    let plotMin = 0.1, plotMax = 10;
+    function plotRange(a, b) { plotMin = a; plotMax = b; drawExcess(); }
+
+    function drawExcess() {
+      const c = document.getElementById('canvas');
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0,0,c.width,c.height);
+      // axes
+      const pad = 48; const W = c.width - 2*pad; const H = c.height - 2*pad;
+      ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = 1.5;
+      ctx.strokeRect(pad, pad, W, H);
+      ctx.beginPath(); ctx.moveTo(pad, pad + H/2); ctx.lineTo(pad+W, pad+H/2); ctx.stroke();
+
+      // Helper: scale
+      const xs = p => pad + ( (p - plotMin) / (plotMax - plotMin) ) * W;
+      // y: map z in [-Z,Z]
+      let Z = 1; // auto-scale using few samples
+      if (lastSolution) {
+        const { W1A, W2A, W1B, W2B, PA, PB } = lastSolution;
+        for (let p=0; p<=50; p++) {
+          const pp = plotMin + (p/50)*(plotMax-plotMin);
+          const z = excess_good1(pp, W1A, W2A, W1B, W2B, PA, PB);
+          Z = Math.max(Z, Math.abs(z));
+        }
+        Z = Z || 1;
+        const ys = z => pad + H/2 - (z/Z) * (H/2 - 10);
+        // grid horizontal 0
+        ctx.strokeStyle = '#bbbbbb'; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(pad, ys(0)); ctx.lineTo(pad+W, ys(0)); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // curve z1(p1)
+        ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let p=0; p<=200; p++) {
+          const pp = plotMin + (p/200)*(plotMax-plotMin);
+          const z = excess_good1(pp, W1A, W2A, W1B, W2B, PA, PB);
+          const X = xs(pp), Y = ys(z);
+          if (p===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
+        }
+        ctx.stroke();
+
+        // equilibrium point
+        if (lastSolution && isFinite(lastSolution.p1)) {
+          const X = xs(lastSolution.p1), Y = ys(0);
+          ctx.fillStyle = '#c0392b';
+          ctx.beginPath(); ctx.arc(X, Y, 5, 0, 2*Math.PI); ctx.fill();
+        }
+
+        // axes labels
+        ctx.fillStyle = '#1a1a1a'; ctx.font = '14px EB Garamond, serif';
+        ctx.fillText('Prix relatif p₁ (numéraire p₂=1)', pad + W/2 - 90, c.height - 10);
+        ctx.save(); ctx.translate(10, pad + H/2 - 20); ctx.rotate(-Math.PI/2);
+        ctx.fillText('Excès de demande z₁(p₁)', 0, 0); ctx.restore();
+      }
+    }
+
+    function downloadCanvas() {
+      const canvas = document.getElementById('canvas');
+      const link = document.createElement('a');
+      link.download = 'egc_excess_demand.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    // Initialisation
+    renderParams('A'); renderParams('B'); updateUtilityDisplay();
+  </script>
+</body>
+</html>
