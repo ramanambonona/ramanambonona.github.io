@@ -1,233 +1,355 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boîte d'Edgeworth</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Boîte d'Edgeworth — Ramanambonona Ambinintsoa</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&display=swap');
-        
-        body {
-            font-family: 'EB Garamond', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-            background: #f5f5f5;
-            padding: 20px;
-            color: #2a2a2a;
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .container {
-            max-width: 1200px;
+        .edgeworth-container {
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        h1 {
-            text-align: center;
+        .edgeworth-title {
+            font-size: 2.5rem;
             font-weight: 600;
             color: #1a1a1a;
-            margin-bottom: 30px;
-            font-size: 28px;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: -0.5px;
         }
         
-        .controls {
+        .content-wrapper {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
             margin-bottom: 30px;
-            padding: 20px;
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
         }
         
-        .control-group {
-            display: flex;
-            flex-direction: column;
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .controls-section {
+            background: white;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .canvas-section {
+            background: white;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .utility-functions {
-            grid-column: 1 / -1;
-            padding: 15px;
-            background: #f0f0f0;
-            border: 1px solid #d0d0d0;
-            margin-bottom: 10px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-left: 3px solid #3a3a3a;
+            margin-bottom: 25px;
         }
         
         .utility-functions h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
             color: #1a1a1a;
+            font-weight: 600;
         }
         
         .utility-functions p {
-            margin: 5px 0;
-            font-size: 15px;
+            margin: 8px 0;
+            font-size: 1rem;
             font-style: italic;
+            color: #3a3a3a;
         }
         
-        label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #3a3a3a;
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-group label {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: #2a2a2a;
             font-weight: 600;
         }
         
-        input[type="number"] {
-            padding: 8px;
-            border: 1px solid #c0c0c0;
+        .control-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 1rem;
             background: white;
+            transition: border-color 0.2s;
         }
         
-        button {
-            grid-column: 1 / -1;
-            padding: 12px;
-            background: #4a4a4a;
+        .control-group input[type="number"]:focus {
+            outline: none;
+            border-color: #4a4a4a;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2a2a2a;
             color: white;
             border: none;
+            border-radius: 3px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 16px;
+            font-size: 1.05rem;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: background 0.2s;
+            margin-top: 10px;
         }
         
-        button:hover {
-            background: #2a2a2a;
+        .calculate-btn:hover {
+            background: #1a1a1a;
         }
         
         #canvas {
             display: block;
             margin: 0 auto;
-            border: 2px solid #3a3a3a;
+            border: 1px solid #d0d0d0;
             background: white;
+            max-width: 100%;
+            height: auto;
         }
         
         .results {
+            background: white;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-top: 30px;
-            padding: 20px;
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
         }
         
         .results h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: #1a1a1a;
+            margin-bottom: 1rem;
+            margin-top: 0;
         }
         
         .results p {
-            margin: 8px 0;
-            font-size: 14px;
+            margin: 10px 0;
+            font-size: 1rem;
             color: #3a3a3a;
+            line-height: 1.6;
+        }
+        
+        .results strong {
+            color: #1a1a1a;
         }
         
         .legend {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 4px;
             margin-top: 20px;
-            padding: 15px;
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
+        }
+        
+        .legend h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            font-weight: 600;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            margin: 8px 0;
-            font-size: 13px;
+            margin: 10px 0;
+            font-size: 0.95rem;
         }
         
         .legend-line {
-            width: 30px;
+            width: 35px;
             height: 2px;
-            margin-right: 10px;
+            margin-right: 12px;
+            flex-shrink: 0;
         }
         
         .legend-circle {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .param-group {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .param-group:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        
+        .param-group h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2a2a2a;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Boîte d'Edgeworth</h1>
-        
-        <div class="controls">
-            <div class="utility-functions">
-                <h3>Fonctions d'utilité (Cobb-Douglas)</h3>
-                <p>Agent 1: U₁(x₁, y₁) = x₁<sup>α₁</sup> · y₁<sup>β₁</sup></p>
-                <p>Agent 2: U₂(x₂, y₂) = x₂<sup>α₂</sup> · y₂<sup>β₂</sup></p>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">About</a></li>
+                    <li><a href="../research.html">Research</a></li>
+                    <li><a href="../administrative.html">Administrative work</a></li>
+                    <li><a href="../cv.html">CV</a></li>
+                    <li><a href="../teaching.html">Teaching</a></li>
+                    <li><a href="../tools.html" class="active">Tools</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="edgeworth-container">
+            <h2 class="edgeworth-title">Boîte d'Edgeworth</h2>
+            
+            <div class="content-wrapper">
+                <aside class="controls-section">
+                    <div class="utility-functions">
+                        <h3>Fonctions d'utilité</h3>
+                        <p>Agent 1: U₁(x₁, y₁) = x₁<sup>α₁</sup> · y₁<sup>β₁</sup></p>
+                        <p>Agent 2: U₂(x₂, y₂) = x₂<sup>α₂</sup> · y₂<sup>β₂</sup></p>
+                    </div>
+                    
+                    <div class="param-group">
+                        <h4>Dotations initiales</h4>
+                        <div class="control-group">
+                            <label for="x1">Dotation initiale X̄₁:</label>
+                            <input type="number" id="x1" value="6" step="0.1" min="0.1">
+                        </div>
+                        <div class="control-group">
+                            <label for="y1">Dotation initiale Ȳ₁:</label>
+                            <input type="number" id="y1" value="2" step="0.1" min="0.1">
+                        </div>
+                        <div class="control-group">
+                            <label for="x2">Dotation initiale X̄₂:</label>
+                            <input type="number" id="x2" value="4" step="0.1" min="0.1">
+                        </div>
+                        <div class="control-group">
+                            <label for="y2">Dotation initiale Ȳ₂:</label>
+                            <input type="number" id="y2" value="6" step="0.1" min="0.1">
+                        </div>
+                    </div>
+                    
+                    <div class="param-group">
+                        <h4>Paramètres Agent 1</h4>
+                        <div class="control-group">
+                            <label for="alpha1">Paramètre α₁:</label>
+                            <input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9">
+                        </div>
+                        <div class="control-group">
+                            <label for="beta1">Paramètre β₁:</label>
+                            <input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9">
+                        </div>
+                    </div>
+                    
+                    <div class="param-group">
+                        <h4>Paramètres Agent 2</h4>
+                        <div class="control-group">
+                            <label for="alpha2">Paramètre α₂:</label>
+                            <input type="number" id="alpha2" value="0.4" step="0.05" min="0.1" max="0.9">
+                        </div>
+                        <div class="control-group">
+                            <label for="beta2">Paramètre β₂:</label>
+                            <input type="number" id="beta2" value="0.6" step="0.05" min="0.1" max="0.9">
+                        </div>
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculate()">Calculer et Tracer</button>
+                    
+                    <div class="legend">
+                        <h3>Légende</h3>
+                        <div class="legend-item">
+                            <div class="legend-circle" style="background: #5a5a5a;"></div>
+                            <span>Dotation initiale (X̄₁, Ȳ₁)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-circle" style="background: #1a1a1a;"></div>
+                            <span>Équilibre de Walras (x₁*, y₁*)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #2a2a2a;"></div>
+                            <span>Courbe de Pareto</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #707070; height: 1px; border-top: 2px dashed #707070;"></div>
+                            <span>Courbes d'indifférence (dotation)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #4a4a4a;"></div>
+                            <span>Courbes d'indifférence (équilibre)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #505050; height: 1px; border-top: 2px dashed #505050;"></div>
+                            <span>Droite budgétaire</span>
+                        </div>
+                    </div>
+                </aside>
+                
+                <section class="canvas-section">
+                    <canvas id="canvas" width="800" height="800"></canvas>
+                </section>
             </div>
             
-            <div class="control-group">
-                <label>Dotation initiale X̄₁:</label>
-                <input type="number" id="x1" value="6" step="0.1" min="0.1">
-            </div>
-            <div class="control-group">
-                <label>Dotation initiale Ȳ₁:</label>
-                <input type="number" id="y1" value="2" step="0.1" min="0.1">
-            </div>
-            <div class="control-group">
-                <label>Dotation initiale X̄₂:</label>
-                <input type="number" id="x2" value="4" step="0.1" min="0.1">
-            </div>
-            <div class="control-group">
-                <label>Dotation initiale Ȳ₂:</label>
-                <input type="number" id="y2" value="6" step="0.1" min="0.1">
-            </div>
-            <div class="control-group">
-                <label>Paramètre α₁ (Agent 1):</label>
-                <input type="number" id="alpha1" value="0.5" step="0.05" min="0.1" max="0.9">
-            </div>
-            <div class="control-group">
-                <label>Paramètre β₁ (Agent 1):</label>
-                <input type="number" id="beta1" value="0.5" step="0.05" min="0.1" max="0.9">
-            </div>
-            <div class="control-group">
-                <label>Paramètre α₂ (Agent 2):</label>
-                <input type="number" id="alpha2" value="0.4" step="0.05" min="0.1" max="0.9">
-            </div>
-            <div class="control-group">
-                <label>Paramètre β₂ (Agent 2):</label>
-                <input type="number" id="beta2" value="0.6" step="0.05" min="0.1" max="0.9">
-            </div>
-            <button onclick="calculate()">Calculer et Tracer</button>
+            <section class="results" id="results"></section>
         </div>
-        
-        <canvas id="canvas" width="800" height="800"></canvas>
-        
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-circle" style="background: #5a5a5a;"></div>
-                <span>Dotation initiale (X̄₁, Ȳ₁)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-circle" style="background: #1a1a1a;"></div>
-                <span>Équilibre de Walras (x₁*, y₁*)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-line" style="background: #2a2a2a;"></div>
-                <span>Courbe de Pareto (Courbe de contrat)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-line" style="background: #707070; height: 1px; border-top: 2px dashed #707070;"></div>
-                <span>Courbes d'indifférence à la dotation initiale</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-line" style="background: #4a4a4a;"></div>
-                <span>Courbes d'indifférence à l'équilibre</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-line" style="background: #505050; height: 1px; border-top: 2px dashed #505050;"></div>
-                <span>Droite budgétaire</span>
-            </div>
+    </main>
+    
+    <footer>
+        <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+        <div class="social">
+            <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+                <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+            </a>
+            <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+                <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+            </a>
+            <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+            </a>
         </div>
-        
-        <div class="results" id="results"></div>
-    </div>
+    </footer>
+    
+    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
+    <script src="../assets/js/script.js"></script>
 
     <script>
         function u1(x, y, alpha, beta) {
@@ -419,7 +541,7 @@
                             Y_total - 0.01
                         );
                         if (y > 0 && y < Y_total) {
-                            indiff2Points.push({x, y});
+                            indiffEq2Points.push({x, y});
                         }
                     } catch (e) {}
                 }
@@ -455,7 +577,7 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, width, height);
             
-            ctx.strokeStyle = '#e0e0e0';
+            ctx.strokeStyle = '#e8e8e8';
             ctx.lineWidth = 0.5;
             for (let i = 0; i <= 10; i++) {
                 const x = margin + (i / 10) * plotWidth;
@@ -472,7 +594,7 @@
                 ctx.stroke();
             }
             
-            ctx.strokeStyle = '#1a1a1a';
+            ctx.strokeStyle = '#2a2a2a';
             ctx.lineWidth = 2;
             ctx.strokeRect(margin, margin, plotWidth, plotHeight);
             
@@ -504,7 +626,7 @@
             
             if (paretoPoints.length > 0) {
                 ctx.strokeStyle = '#2a2a2a';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 2.5;
                 ctx.beginPath();
                 ctx.moveTo(toCanvasX(paretoPoints[0].x), toCanvasY(paretoPoints[0].y));
                 for (let p of paretoPoints) {
@@ -528,7 +650,7 @@
             
             if (indiffEq1Points.length > 0) {
                 ctx.strokeStyle = '#4a4a4a';
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1.8;
                 ctx.beginPath();
                 ctx.moveTo(toCanvasX(indiffEq1Points[0].x), toCanvasY(indiffEq1Points[0].y));
                 for (let p of indiffEq1Points) {
@@ -539,7 +661,7 @@
             
             if (indiffEq2Points.length > 0) {
                 ctx.strokeStyle = '#4a4a4a';
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1.8;
                 ctx.beginPath();
                 ctx.moveTo(toCanvasX(indiffEq2Points[0].x), toCanvasY(indiffEq2Points[0].y));
                 for (let p of indiffEq2Points) {
