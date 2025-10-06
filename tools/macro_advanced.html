@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Modèles macroéconomiques avancés — Ramanambonona Ambinintsoa</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    /* ——— Style iOS monochrome + EB Garamond (aligné à votre design) ——— */
+    body { font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; color:#1c1c1c; background:#fff; }
+    .macro-container { max-width:1180px; margin:0 auto; padding:24px 16px 64px 16px; }
+    .macro-title { font-size:2.2rem; font-weight:700; letter-spacing:.3px; margin:16px 0 6px 0; color:#111; text-align:center; }
+    .macro-subtitle { text-align:center; color:#555; margin-bottom:28px; font-style:italic; }
+    .grid { display:grid; grid-template-columns:1.1fr .9fr; gap:22px; }
+    @media(max-width:980px){ .grid{ grid-template-columns:1fr; } }
+    .card { background:#fff; border:1px solid #e8e8e8; box-shadow:0 6px 18px rgba(0,0,0,.04); border-radius:18px; padding:18px 18px 20px 18px; }
+    .card h3 { margin:0 0 10px 0; font-size:1.35rem; color:#222; }
+    .equation-block { background:#fafafa; border:1px dashed #ddd; border-radius:14px; padding:14px 14px 2px 14px; margin-top:10px; }
+    .explanation { background:#f8f8f8; border:1px solid #eee; border-radius:14px; padding:12px 14px; margin-top:14px; color:#333; }
+
+    .tab-navigation { display:flex; gap:10px; margin:22px 0 16px 0; flex-wrap:wrap; }
+    .tab-btn { background:#fff; color:#222; border:1px solid #ddd; border-radius:999px; padding:8px 14px; cursor:pointer; transition:transform .08s ease, box-shadow .12s ease, background .2s ease; }
+    .tab-btn:hover { transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,.08); }
+    .tab-btn.active { background:#111; color:#fff; border-color:#111; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+
+    .param-table { width:100%; border-collapse:collapse; font-size:1.05rem; }
+    .param-table th, .param-table td { border-bottom:1px solid #eee; padding:8px 6px; }
+    .param-table th { text-align:left; color:#333; width:64%; }
+    .param-table input[type=number]{ width:140px; padding:6px 8px; font-family:inherit; border-radius:10px; border:1px solid #ddd; background:#fff; }
+
+    .results-section { margin-top:12px; }
+    .multiplier-box { background:#fafafa; border:1px solid #eee; border-radius:14px; padding:12px 14px; margin-top:10px; }
+    .comparison-table { width:100%; border-collapse:collapse; margin-top:8px; }
+    .comparison-table th, .comparison-table td { border-bottom:1px solid #eee; padding:8px; }
+    .comparison-table td.initial { color:#666; } .comparison-table td.current { color:#222; } .comparison-table td.change { color:#444; }
+
+    .canvas-wrap { background:#fff; border:1px solid #eee; border-radius:18px; padding:16px; }
+    #canvas { width:100%; height:440px; border-radius:12px; border:1px dashed #ddd; background:#fdfdfd; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 4px 0; }
+    .controls button { background:#111; color:#fff; border:1px solid #111; border-radius:10px; padding:6px 12px; cursor:pointer; }
+    .legend { display:flex; gap:16px; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #eee; }
+    .legend-item { display:inline-flex; align-items:center; gap:6px; font-size:.98rem; color:#444; }
+    .legend-line { display:inline-block; width:20px; height:3px; background:#000; border-radius:2px; }
+
+    .slider-control { margin-bottom:16px; padding-bottom:8px; border-bottom:1px dashed #eee; }
+    .slider-control label { display:block; font-weight:600; margin-bottom:6px; color:#333; }
+    .slider-control input[type=range] { width:100%; }
+    .slider-value { text-align:right; color:#666; font-size:.95rem; }
+
+    .footer-actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+    .footer-actions button { background:#111; color:#fff; border:1px solid #111; border-radius:10px; padding:8px 12px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="macro-container">
+      <h1 class="macro-title">Modèles macroéconomiques — Volet avancé</h1>
+      <div class="macro-subtitle">RBC • Croissance endogène (AK) • Anticipations (adaptatives & rationnelles) • DSGE (NK)</div>
+    </div>
+  </header>
+
+  <main class="macro-container">
+    <div class="grid">
+      <section class="card">
+        <h3>Choisir un modèle</h3>
+        <label for="model-type" style="display:block;margin-bottom:6px;color:#333;">Modèle</label>
+        <select id="model-type" onchange="updateModelDisplay()" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:12px;font-family:inherit;">
+          <option value="rbc">RBC (chocs TFP)</option>
+          <option value="ak">Croissance endogène (AK)</option>
+          <option value="adaptive">Anticipations adaptatives</option>
+          <option value="rational">Anticipations rationnelles (NKPC)</option>
+          <option value="dsge">DSGE (Néo-Keynésien 3-équations)</option>
+        </select>
+        <div id="model-display" style="margin-top:16px;"></div>
+      </section>
+
+      <section class="card">
+        <h3>Paramétrage</h3>
+        <div id="params-content"></div>
+        <div class="footer-actions">
+          <button onclick="solveModel()">Solve</button>
+          <button onclick="exportLatex()">Export .tex</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-navigation">
+      <button class="tab-btn active" onclick="openTab('models', this)">Modèles</button>
+      <button class="tab-btn" onclick="openTab('params', this)">Paramétrage</button>
+      <button class="tab-btn" onclick="openTab('solve', this)">Résolution</button>
+      <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
+    </div>
+
+    <!-- ONGLET MODÈLES -->
+    <section id="models-tab" class="tab-content active">
+      <div class="card">
+        <h3>Aperçu théorique</h3>
+        <p style="margin-top:-4px;color:#555;">Le contenu ci-dessus se met à jour avec le modèle sélectionné et rend automatiquement les équations en LaTeX (KaTeX).</p>
+      </div>
+    </section>
+
+    <!-- ONGLET PARAMÈTRES -->
+    <section id="params-tab" class="tab-content">
+      <div class="card">
+        <h3>Table des paramètres</h3>
+        <div id="params-table-mirror">
+          <em>Utilisez le panneau “Paramétrage” à droite pour modifier les valeurs, puis cliquez sur <strong>Solve</strong>.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET RÉSOLUTION -->
+    <section id="solve-tab" class="tab-content">
+      <div class="card">
+        <h3>Résultats</h3>
+        <div id="detailed-results" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ONGLET AFFICHAGE -->
+    <section id="display-tab" class="tab-content">
+      <div class="card">
+        <h3>Graphiques & interactions</h3>
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="1024" height="440"></canvas>
+          <div class="controls">
+            <button onclick="zoomIn()"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom in</button>
+            <button onclick="zoomOut()"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom out</button>
+            <button onclick="resetZoom()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+            <button onclick="downloadCanvas()"><i class="fa-regular fa-image"></i> PNG</button>
+          </div>
+          <div class="legend" id="legend-display"></div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <h4 style="margin-bottom:6px;">Chocs / Déplacements</h4>
+          <div id="sliders-container"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="macro-container" style="text-align:center;color:#777;">
+      © <span id="year"></span> Ramanambonona Ambinintsoa — EB Garamond • Monochrome iOS-like
+      <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+'use strict';
+
+/* ========= État global & helpers canvas ========= */
+let currentModel = 'rbc';
+let modelParams = {};
+let initialParams = {};
+let solution = null;           // contiendra { series: {...}, ss:{...}, metrics:{...} } ou des scalaires selon modèle
+let initialSolution = null;
+
+let zoomLevel = 1, panX = 0, panY = 0;
+let isDragging = false, lastX = 0, lastY = 0;
+
+const canvas = () => document.getElementById('canvas');
+const ctx = () => canvas().getContext('2d');
+
+function openTab(tabName, btnEl) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById(`${tabName}-tab`);
+  if (target) target.classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+}
+
+/* ========= Définition des modèles avancés ========= */
+const models = {
+  rbc: {
+    name: 'RBC — cycle réel avec choc TFP (AR(1))',
+    equations: [
+      { latex: 'Y_t = A_t K_t^{\\alpha}', desc: 'Production (travail normalisé à 1)' },
+      { latex: 'K_{t+1} = I_t + (1-\\delta)K_t', desc: 'Accumulation du capital' },
+      { latex: 'C_t = Y_t - I_t', desc: 'Ressources' },
+      { latex: 'A_t = \\bar A\\, e^{z_t},\\quad z_t = \\rho_A z_{t-1} + \\varepsilon_t', desc: 'TFP AR(1)' },
+      { latex: '\\alpha A (K^*)^{\\alpha-1} = \\tfrac{1}{\\beta} - (1-\\delta)', desc: 'État stationnaire (Euler)' }
+    ],
+    explanation:
+      "On approxime la politique optimale par un taux d'investissement constant égal à l'investissement stationnaire $i^* = \\delta K^*$, d'où $s^* = i^*/Y^*$ ; le choc TFP suit un AR(1).",
+    params: [
+      { id:'alpha', label:'α (part du capital)', default:0.33, min:0.1, max:0.6, step:0.01 },
+      { id:'delta', label:'δ (dépréciation)', default:0.08, min:0.01, max:0.2, step:0.01 },
+      { id:'beta',  label:'β (escompte)', default:0.96, min:0.85, max:0.995, step:0.001 },
+      { id:'Abar',  label:'Â (niveau TFP de base)', default:1.0, min:0.5, max:2.0, step:0.01 },
+      { id:'rhoA',  label:'ρ_A (persistance TFP)', default:0.9, min:0.0, max:0.99, step:0.01 },
+      { id:'epsA',  label:'Choc TFP (log, %)', default:1.0, min:0.0, max:10.0, step:0.1 },
+      { id:'T',     label:'Horizon (T périodes)', default:80, min:20, max:300, step:1 },
+      { id:'k0',    label:'K₀ (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 }
+    ],
+    sliders: [
+      { id:'epsA', label:'Amplitude du choc TFP (log, %)', desc:'Un cran = un choc ponctuel sur A au début' },
+      { id:'rhoA', label:'Persistance ρ_A', desc:'Plus ρ_A est élevé, plus le choc persiste' },
+      { id:'alpha', label:'α (part du capital)', desc:'Affecte k* via l’Euler et l’ampleur des réponses' }
+    ]
+  },
+
+  ak: {
+    name: 'Croissance endogène (AK)',
+    equations: [
+      { latex: 'Y_t = A K_t', desc: 'Technologie de type AK' },
+      { latex: 'K_{t+1} = s Y_t + (1-\\delta) K_t', desc: 'Accumulation' },
+      { latex: 'C_t = (1-s) Y_t', desc: 'Consommation' },
+      { latex: 'g \\approx sA - \\delta', desc: 'Taux de croissance de long terme' }
+    ],
+    explanation:
+      "Le modèle AK génère une croissance soutenue si $sA > \\delta$. On simule les trajectoires (K, Y, C) et on affiche les % écarts au niveau initial.",
+    params: [
+      { id:'A',   label:'A (productivité)', default:0.15, min:0.01, max:0.6, step:0.01 },
+      { id:'s',   label:'s (taux d’épargne)', default:0.25, min:0.0, max:0.8, step:0.01 },
+      { id:'delta', label:'δ (dépréciation)', default:0.05, min:0.0, max:0.2, step:0.01 },
+      { id:'T',   label:'Horizon (T périodes)', default:80, min:20, max:300, step:1 },
+      { id:'k0',  label:'K₀ (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 },
+      { id:'shockA', label:'Choc ponctuel A (%)', default:0.0, min:-10, max:10, step:0.5 }
+    ],
+    sliders: [
+      { id:'s', label:'Taux d’épargne s', desc:'Plus s est grand, plus la croissance AK est forte' },
+      { id:'A', label:'Productivité A', desc:'Accroît directement le rendement du capital' },
+      { id:'shockA', label:'Choc A (%)', desc:'Impulsion ponctuelle en t=1 sur A' }
+    ]
+  },
+
+  adaptive: {
+    name: 'Anticipations adaptatives (Phillips simple)',
+    equations: [
+      { latex: '\\pi_t = \\pi^e_t + \\gamma x_t + u_t', desc:'Inflation et écart de production' },
+      { latex: '\\pi^e_{t+1} = \\pi^e_t + \\lambda(\\pi_t - \\pi^e_t)', desc:'Mise à jour adaptative' },
+      { latex: 'x_t = \\rho_x x_{t-1} + \\varepsilon_t', desc:'Processus de l’écart de production' }
+    ],
+    explanation:
+      "Les agents ajustent leurs anticipations d’inflation en comblant une fraction de l’erreur passée. On trace \\(\\pi_t, \\pi^e_t, x_t\\).",
+    params: [
+      { id:'gamma', label:'γ (pente PC)', default:0.5, min:0.0, max:2.0, step:0.05 },
+      { id:'lambda', label:'λ (vitesse d’adaptation)', default:0.4, min:0.0, max:1.0, step:0.05 },
+      { id:'rho_x', label:'ρ_x (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_x', label:'Choc sur x (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'pi_e0', label:'π^e₀ (pts annuels)', default:5.0, min:-10, max:20, step:0.1 },
+      { id:'T', label:'Horizon (T)', default:80, min:20, max:300, step:1 }
+    ],
+    sliders: [
+      { id:'lambda', label:'Vitesse λ', desc:'Plus λ est élevé, plus l’anticipation colle vite à π' },
+      { id:'gamma', label:'Pente γ', desc:'Sensibilité de π à l’écart de production' },
+      { id:'eps_x', label:'Choc x (pts)', desc:'Impulsion initiale sur l’écart de production' }
+    ]
+  },
+
+  rational: {
+    name: 'Anticipations rationnelles (NKPC prospective)',
+    equations: [
+      { latex: '\\pi_t = \\beta E_t\\pi_{t+1} + \\kappa x_t', desc:'Courbe de Phillips néo-keynésienne' },
+      { latex: 'x_t = \\rho_x x_{t-1} + \\varepsilon_t', desc:'Processus de l’écart de production' },
+      { latex: '\\pi_t = \\kappa \\sum_{j\\ge 0} \\beta^j E_t x_{t+j}', desc:'Solution prospective (horizon fini en code)' }
+    ],
+    explanation:
+      "On calcule \\(\\pi_t\\) par somme prospective finie, en supposant \\(x_t\\) AR(1) et horizon T (anticipations rationnelles de parfaite prévision sur T).",
+    params: [
+      { id:'beta', label:'β (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
+      { id:'kappa', label:'κ (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
+      { id:'rho_x', label:'ρ_x (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_x', label:'Choc sur x (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'T', label:'Horizon (T)', default:80, min:20, max:300, step:1 }
+    ],
+    sliders: [
+      { id:'beta', label:'β', desc:'Poids des anticipations futures' },
+      { id:'kappa', label:'κ', desc:'Rôle de l’écart dans l’inflation' },
+      { id:'eps_x', label:'Choc x (pts)', desc:'Impulsion initiale de l’écart' }
+    ]
+  },
+
+  dsge: {
+    name: 'DSGE (NK: IS, NKPC, règle de Taylor)',
+    equations: [
+      { latex: 'x_t = E_t x_{t+1} - \\tfrac{1}{\\sigma}(i_t - E_t\\pi_{t+1} - r^n_t)', desc:'IS intertemporelle' },
+      { latex: '\\pi_t = \\beta E_t\\pi_{t+1} + \\kappa x_t', desc:'Courbe de Phillips' },
+      { latex: 'i_t = \\phi_\\pi \\pi_t + \\phi_x x_t', desc:'Règle de Taylor (sans lissage ici)' },
+      { latex: 'r^n_t = \\rho_r r^n_{t-1} + \\varepsilon^r_t', desc:'Taux naturel AR(1)' }
+    ],
+    explanation:
+      "Résolution backward sur un horizon fini T, avec conditions terminales nulles. À chaque date t, on résout un système 2x2 en \\((x_t,\\pi_t)\\) sachant \\((x_{t+1},\\pi_{t+1})\\) et le choc sur \\(r^n_t\\).",
+    params: [
+      { id:'sigma', label:'σ (élasticité IS)', default:1.0, min:0.2, max:5.0, step:0.1 },
+      { id:'beta',  label:'β (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
+      { id:'kappa', label:'κ (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
+      { id:'phi_pi', label:'φ_π (réactivité inflation)', default:1.5, min:1.0, max:3.0, step:0.1 },
+      { id:'phi_x',  label:'φ_x (réactivité écart)', default:0.5, min:0.0, max:2.0, step:0.05 },
+      { id:'rho_r',  label:'ρ_r (persistance r^n)', default:0.8, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_r',  label:'Choc r^n (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'T',      label:'Horizon (T)', default:80, min:20, max:300, step:1 }
+    ],
+    sliders: [
+      { id:'phi_pi', label:'φ_π', desc:'Plus élevé ⇒ stabilise mieux l’inflation' },
+      { id:'phi_x',  label:'φ_x', desc:'Sensibilité de la règle à l’écart' },
+      { id:'eps_r',  label:'Choc r^n (pts)', desc:'Impulsion du taux naturel au début' }
+    ]
+  }
+};
+
+/* ========= Rendu des équations & UI ========= */
+function updateModelDisplay() {
+  currentModel = document.getElementById('model-type').value;
+  const model = models[currentModel];
+  const display = document.getElementById('model-display');
+
+  let html = `<h3>${model.name}</h3>`;
+  html += '<div class="equation-block"><h4 style="color:#2a2a2a;margin-bottom:15px;">Équations du modèle</h4>';
+  model.equations.forEach(eq => {
+    html += `<div style="margin:15px 0;"><div>$$${eq.latex}$$</div><div style="color:#5a5a5a;font-size:.9rem;margin-top:5px;font-style:italic;">${eq.desc}</div></div>`;
+  });
+  html += '</div>';
+  html += `<div class="explanation"><strong>Explication pédagogique :</strong><br>${model.explanation}</div>`;
+  display.innerHTML = html;
+  if (window.renderMathInElement) renderMathInElement(display);
+
+  solution = null; initialSolution = null;
+  updateParamsDisplay();
+  updateSliders();
+  updateLegend();
+  drawGraph();
+}
+
+function updateParamsDisplay() {
+  const model = models[currentModel];
+  const container = document.getElementById('params-content');
+
+  let html = '<table class="param-table"><thead><tr><th>Paramètre</th><th>Valeur</th></tr></thead><tbody>';
+  model.params.forEach(p => {
+    const step = p.step || 1;
+    html += `<tr>
+      <th>${p.label}</th>
+      <td><input type="number" id="param-${p.id}" value="${p.default}" min="${p.min}" max="${p.max}" step="${step}"></td>
+    </tr>`;
+    modelParams[p.id] = p.default;
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+
+  model.params.forEach(p => {
+    document.getElementById(`param-${p.id}`).addEventListener('input', (e) => {
+      modelParams[p.id] = parseFloat(e.target.value);
+    });
+  });
+}
+
+/* ========= Solveurs ========= */
+
+// Utilitaires
+function ar1_path(T, rho, shock0=0) {
+  const x = new Array(T).fill(0);
+  if (T>0) x[0] = shock0;
+  for (let t=1; t<T; t++) x[t] = rho * x[t-1];
+  return x;
+}
+function solve2x2(a,b,c,d, u, v){ // [[a,b],[c,d]] [x;y] = [u;v]
+  const det = a*d - b*c;
+  return { x: (u*d - b*v)/det, y: (a*v - u*c)/det };
+}
+
+function solveModel() {
+  if (!initialSolution) initialParams = JSON.parse(JSON.stringify(modelParams));
+
+  // sync inputs
+  models[currentModel].params.forEach(p => {
+    modelParams[p.id] = parseFloat(document.getElementById(`param-${p.id}`).value);
+  });
+
+  if (currentModel === 'rbc') solveRBC();
+  else if (currentModel === 'ak') solveAK();
+  else if (currentModel === 'adaptive') solveAdaptive();
+  else if (currentModel === 'rational') solveRational();
+  else if (currentModel === 'dsge') solveDSGE();
+
+  if (!initialSolution) initialSolution = JSON.parse(JSON.stringify(solution));
+  displayDetailedResults();
+  updateLegend();
+  drawGraph();
+
+  openTab('solve', document.querySelectorAll('.tab-btn')[2]);
+}
+
+/* ----- RBC ----- */
+function steadyStateRBC(alpha,beta,delta,Abar){
+  // α A k^{α-1} = 1/β - (1-δ)
+  const term = (1.0/beta) - (1.0 - delta);
+  const k = Math.pow(alpha*Abar/term, 1.0/(1.0-alpha));
+  const y = Abar*Math.pow(k, alpha);
+  const i = delta*k;
+  const c = y - i;
+  const s = i / y;
+  return {k,y,i,c,s};
+}
+function solveRBC() {
+  const { alpha, beta, delta, Abar, rhoA, epsA, T, k0 } = modelParams;
+  const Tint = Math.max(2, Math.floor(T));
+  // choc TFP en log-points (epsA %)
+  const z = ar1_path(Tint, rhoA, epsA/100.0); // z_t
+  const A = z.map(zt => Abar * Math.exp(zt));
+
+  const ss = steadyStateRBC(alpha,beta,delta,Abar);
+  const sStar = ss.s;
+
+  const K = new Array(Tint+1).fill(0); K[0] = k0;
+  const Y = new Array(Tint).fill(0);
+  const I = new Array(Tint).fill(0);
+  const C = new Array(Tint).fill(0);
+
+  for (let t=0; t<Tint; t++){
+    Y[t] = A[t]*Math.pow(K[t], alpha);
+    I[t] = sStar * Y[t];
+    C[t] = Y[t] - I[t];
+    K[t+1] = I[t] + (1.0 - delta)*K[t];
+  }
+
+  // % écarts vs état stationnaire initial (Abar)
+  const dev = (arr, ssVal) => arr.map(v => 100*(v-ssVal)/ssVal);
+  const Ydev = dev(Y, ss.y);
+  const Cdev = dev(C, ss.c);
+  const Idev = dev(I, ss.i);
+
+  solution = {
+    series: { t: [...Array(Tint).keys()], Y, C, I, K:K.slice(0,Tint+1), A, Ydev, Cdev, Idev },
+    ss, metrics: { sStar }
+  };
+}
+
+/* ----- AK ----- */
+function solveAK() {
+  const { A, s, delta, T, k0, shockA } = modelParams;
+  const Tint = Math.max(2, Math.floor(T));
+  const Apath = new Array(Tint).fill(A);
+  if (Tint>1) Apath[1] = A*(1+shockA/100.0);
+
+  const K = new Array(Tint+1).fill(0); K[0]=k0;
+  const Y = new Array(Tint).fill(0);
+  const C = new Array(Tint).fill(0);
+  for (let t=0; t<Tint; t++){
+    Y[t] = Apath[t]*K[t];
+    const I = s*Y[t];
+    C[t] = (1-s)*Y[t];
+    K[t+1] = I + (1-delta)*K[t];
+  }
+  const Y0 = Y[0]||1, C0 = C[0]||1, K0 = K[0]||1;
+  const dev = (arr, base) => arr.map(v => 100*(v-base)/base);
+  const g = s*A - delta;
+
+  solution = {
+    series:{ t:[...Array(Tint).keys()], Y, C, K:K.slice(0,Tint+1),
+             Ydev:dev(Y,Y0), Cdev:dev(C,C0), Kdev:dev(K.slice(0,Tint),K0) },
+    ss:null,
+    metrics:{ g }
+  };
+}
+
+/* ----- Anticipations adaptatives ----- */
+function solveAdaptive() {
+  const { gamma, lambda, rho_x, eps_x, pi_e0, T } = modelParams;
+  const Tint = Math.max(2, Math.floor(T));
+  const x = ar1_path(Tint, rho_x, eps_x); // pts
+  const pi_e = new Array(Tint+1).fill(0); pi_e[0]=pi_e0;
+  const pi = new Array(Tint).fill(0);
+
+  for (let t=0; t<Tint; t++){
+    pi[t] = pi_e[t] + gamma*x[t];
+    pi_e[t+1] = pi_e[t] + lambda*(pi[t]-pi_e[t]);
+  }
+  solution = {
+    series:{ t:[...Array(Tint).keys()], x, pi, pi_e:pi_e.slice(0,Tint) },
+    metrics:{ final_pi: pi[Tint-1], final_pi_e: pi_e[Tint] }
+  };
+}
+
+/* ----- Anticipations rationnelles (NKPC) ----- */
+function solveRational() {
+  const { beta, kappa, rho_x, eps_x, T } = modelParams;
+  const Tint = Math.max(2, Math.floor(T));
+  const x = ar1_path(Tint, rho_x, eps_x);
+  const pi = new Array(Tint).fill(0);
+
+  // π_t = κ Σ_{j=0}^{T-1-t} β^j x_{t+j}
+  for (let t=0; t<Tint; t++){
+    let s=0, pow=1;
+    for (let j=0; j<Tint-t; j++){
+      if (j>0) pow *= beta;
+      s += pow * x[t+j];
+    }
+    pi[t] = kappa * s;
+  }
+  solution = { series:{ t:[...Array(Tint).keys()], x, pi }, metrics:{ pi0: pi[0] } };
+}
+
+/* ----- DSGE NK (IS-NKPC-Taylor sans lissage) ----- */
+function solveDSGE() {
+  const { sigma, beta, kappa, phi_pi, phi_x, rho_r, eps_r, T } = modelParams;
+  const Tint = Math.max(2, Math.floor(T));
+
+  const rn = ar1_path(Tint, rho_r, eps_r);    // r^n_t (pts)
+  const x = new Array(Tint).fill(0);
+  const pi = new Array(Tint).fill(0);
+  const i = new Array(Tint).fill(0);
+
+  // Conditions terminales
+  const x_next = new Array(Tint+1).fill(0);
+  const pi_next = new Array(Tint+1).fill(0);
+  x_next[Tint]=0; pi_next[Tint]=0;
+
+  // Backward: pour t = T-1...0
+  for (let t=Tint-1; t>=0; t--){
+    const A1 = 1 + (phi_x/sigma);
+    const A2 = (phi_pi/sigma);
+    const Kt = x_next[t+1] + (1.0/sigma)*(pi_next[t+1] + rn[t]);
+    // Système:
+    // A1 x_t + A2 π_t = Kt
+    // -κ x_t + 1*π_t  = β π_{t+1}
+    const sol = solve2x2(A1, A2, -kappa, 1.0, Kt, beta*pi_next[t+1]);
+    x[t] = sol.x; pi[t] = sol.y;
+    i[t] = phi_pi*pi[t] + phi_x*x[t];
+
+    // pour l'étape précédente (t-1), ces valeurs servent d'anticipations
+    x_next[t] = x[t]; pi_next[t] = pi[t];
+  }
+
+  solution = { series:{ t:[...Array(Tint).keys()], x, pi, i, rn }, metrics:{ peak_pi: Math.max(...pi), peak_x: Math.max(...x) } };
+}
+
+/* ========= Résultats (texte) ========= */
+function displayDetailedResults() {
+  const c = document.getElementById('detailed-results');
+  c.style.display = 'block';
+  let html = '<h4>Résultats détaillés</h4>';
+
+  if (currentModel === 'rbc') {
+    const { ss, metrics, series } = solution;
+    html += '<div class="results-section"><h5>1. État stationnaire (A=Â)</h5>';
+    html += `<p>k* = ${ss.k.toFixed(4)}, &nbsp; y* = ${ss.y.toFixed(4)}, &nbsp; c* = ${ss.c.toFixed(4)}, &nbsp; i* = ${ss.i.toFixed(4)}, &nbsp; s* = ${(metrics.sStar*100).toFixed(2)}%.</p></div>`;
+    html += '<div class="multiplier-box"><h5>2. Choc TFP</h5>';
+    html += `<p>Amplitude (log) = ${modelParams.epsA.toFixed(2)} %, persistance ρ_A=${modelParams.rhoA.toFixed(2)}. Pic de Y: ${(Math.max(...series.Ydev)).toFixed(2)}%.</p></div>`;
+  }
+
+  if (currentModel === 'ak') {
+    const g = solution.metrics.g;
+    html += '<div class="results-section"><h5>1. Taux de croissance de long terme</h5>';
+    html += `<p>g ≈ sA − δ = ${(g*100).toFixed(2)} % par période.</p></div>`;
+    html += '<div class="multiplier-box"><h5>2. Choc ponctuel sur A</h5>';
+    html += `<p>Choc A = ${modelParams.shockA.toFixed(2)} %, effet initial sur Y: ${(solution.series.Ydev[1]||0).toFixed(2)} %.</p></div>`;
+  }
+
+  if (currentModel === 'adaptive') {
+    const m = solution.metrics;
+    html += '<div class="results-section"><h5>1. Convergence des anticipations</h5>';
+    html += `<p>Derniers niveaux: π_T = ${m.final_pi.toFixed(2)} pts, π^e_T = ${m.final_pi_e.toFixed(2)} pts.</p></div>`;
+    html += '<div class="multiplier-box"><h5>2. Paramètres clés</h5>';
+    html += `<p>λ=${modelParams.lambda.toFixed(2)}, γ=${modelParams.gamma.toFixed(2)}, ρ_x=${modelParams.rho_x.toFixed(2)}.</p></div>`;
+  }
+
+  if (currentModel === 'rational') {
+    html += '<div class="results-section"><h5>1. Solution prospective</h5>';
+    html += `<p>π₀ = ${solution.metrics.pi0.toFixed(2)} pts pour un choc initial x de ${modelParams.eps_x.toFixed(2)} pt.</p></div>`;
+    html += '<div class="multiplier-box"><h5>2. Paramètres</h5>';
+    html += `<p>β=${modelParams.beta.toFixed(3)}, κ=${modelParams.kappa.toFixed(2)}, ρ_x=${modelParams.rho_x.toFixed(2)}.</p></div>`;
+  }
+
+  if (currentModel === 'dsge') {
+    const m = solution.metrics;
+    html += '<div class="results-section"><h5>1. Réponses impulsionnelles (horizon fini)</h5>';
+    html += `<p>Pic inflation: ${m.peak_pi.toFixed(2)} pts ; pic écart: ${m.peak_x.toFixed(2)} pts.</p></div>`;
+    html += '<div class="multiplier-box"><h5>2. Règle monétaire & chocs</h5>';
+    html += `<p>φ_π=${modelParams.phi_pi.toFixed(2)}, φ_x=${modelParams.phi_x.toFixed(2)}, choc r^n=${modelParams.eps_r.toFixed(2)} pt, persistance ρ_r=${modelParams.rho_r.toFixed(2)}.</p></div>`;
+  }
+
+  c.innerHTML = html;
+}
+
+/* ========= Légende ========= */
+function updateLegend() {
+  const legend = document.getElementById('legend-display');
+  let items = [];
+  if (currentModel === 'rbc') {
+    items = [
+      { label:'Y (écart %)', color:'#000' },
+      { label:'C (écart %)', color:'#555' },
+      { label:'I (écart %)', color:'#888' }
+    ];
+  } else if (currentModel === 'ak') {
+    items = [
+      { label:'Y (écart %)', color:'#000' },
+      { label:'C (écart %)', color:'#555' },
+      { label:'K (écart %)', color:'#888' }
+    ];
+  } else if (currentModel === 'adaptive') {
+    items = [
+      { label:'π (pts)', color:'#000' },
+      { label:'π^e (pts)', color:'#555' },
+      { label:'x (pts)', color:'#888' }
+    ];
+  } else if (currentModel === 'rational') {
+    items = [
+      { label:'π (pts)', color:'#000' },
+      { label:'x (pts)', color:'#666' }
+    ];
+  } else if (currentModel === 'dsge') {
+    items = [
+      { label:'π (pts)', color:'#000' },
+      { label:'x (pts)', color:'#555' },
+      { label:'i (pts)', color:'#888' }
+    ];
+  }
+  let html=''; items.forEach(it => html += `<span class="legend-item"><span class="legend-line" style="background:${it.color};"></span>${it.label}</span>`);
+  legend.innerHTML = html;
+}
+
+/* ========= Sliders (onglet Affichage) ========= */
+function updateSliders() {
+  const model = models[currentModel];
+  const container = document.getElementById('sliders-container');
+  let html = '<h4 style="margin-bottom:20px;color:#2a2a2a;">Ajuster les paramètres clés & observer les trajectoires</h4>';
+
+  model.sliders.forEach(sl => {
+    const p = model.params.find(pp => pp.id === sl.id);
+    const value = modelParams[sl.id];
+    html += `
+      <div class="slider-control">
+        <label>${sl.label}</label>
+        <p style="font-size:.9rem;color:#5a5a5a;margin:5px 0;">${sl.desc}</p>
+        <input type="range" id="slider-${sl.id}" min="${p.min}" max="${p.max}" step="${p.step || 1}" value="${value}">
+        <div class="slider-value"><span id="slider-val-${sl.id}">${value}</span></div>
+      </div>`;
+  });
+  container.innerHTML = html;
+
+  model.sliders.forEach(sl => {
+    const el = document.getElementById(`slider-${sl.id}`);
+    el.addEventListener('input', e => {
+      const v = parseFloat(e.target.value);
+      modelParams[sl.id] = v;
+      document.getElementById(`slider-val-${sl.id}`).textContent = v;
+      // Re-solve live
+      solveModel();
+    });
+  });
+}
+
+/* ========= Canvas: axes & time-series ========= */
+function clearCanvas() {
+  const c = canvas(); const context = ctx();
+  context.save(); context.setTransform(1,0,0,1,0,0);
+  context.clearRect(0,0,c.width,c.height); context.restore();
+}
+function drawAxesTS(context, yMin, yMax, T) {
+  const m = 50;
+  context.strokeStyle = '#BBBBBB'; context.lineWidth = 1;
+  // axes
+  context.beginPath();
+  context.moveTo(m+panX, (canvas().height - m) + panY);
+  context.lineTo((canvas().width - m) + panX, (canvas().height - m) + panY);
+  context.moveTo(m+panX, m + panY);
+  context.lineTo(m+panX, (canvas().height - m) + panY);
+  context.stroke();
+
+  // ticks
+  const ticks = 4; context.fillStyle='#666'; context.font='12px serif';
+  for (let i=0;i<=ticks;i++){
+    const x = m + (i/ticks)*(canvas().width-2*m);
+    const tLab = Math.round(i/ticks*(T-1));
+    context.fillText(tLab.toString(), x-4+panX, (canvas().height - m)+20+panY);
+  }
+  for (let j=0;j<=ticks;j++){
+    const y = (canvas().height - m) - (j/ticks)*(canvas().height-2*m);
+    const v = yMin + (j/ticks)*(yMax - yMin);
+    context.fillText(v.toFixed(1), m-40+panX, y+4+panY);
+  }
+}
+function xMapTS(t, T){
+  const m=50, W = canvas().width - 2*m;
+  return m + (t/(T-1))*W;
+}
+function yMapTS(v, yMin, yMax){
+  const m=50, H = canvas().height - 2*m;
+  return (canvas().height - m) - ((v - yMin)/(yMax - yMin))*H;
+}
+function drawSeries(context, tArr, yArr, yMin, yMax, color='#000', width=2){
+  context.strokeStyle=color; context.lineWidth=width; context.beginPath();
+  tArr.forEach((t,i)=>{
+    const x = xMapTS(t, tArr.length);
+    const y = yMapTS(yArr[i], yMin, yMax);
+    if (i===0) context.moveTo(x+panX, y+panY); else context.lineTo(x+panX, y+panY);
+  }); context.stroke();
+}
+
+function drawGraph() {
+  const c = canvas(); if (!c) return;
+  const context = ctx();
+  clearCanvas();
+
+  context.save();
+  context.translate((c.width/2)*(1-zoomLevel), (c.height/2)*(1-zoomLevel));
+  context.scale(zoomLevel, zoomLevel);
+
+  if (!solution || !solution.series) { context.restore(); return; }
+
+  const s = solution.series;
+  const T = (s.t||[]).length || 2;
+
+  // Sélection des séries à tracer (monochrome)
+  let bundles = [];
+  if (currentModel==='rbc') {
+    bundles = [
+      { arr: s.Ydev, color:'#000' },
+      { arr: s.Cdev, color:'#555' },
+      { arr: s.Idev, color:'#888' }
+    ];
+  } else if (currentModel==='ak') {
+    bundles = [
+      { arr: s.Ydev, color:'#000' },
+      { arr: s.Cdev, color:'#555' },
+      { arr: s.Kdev, color:'#888' }
+    ];
+  } else if (currentModel==='adaptive') {
+    bundles = [
+      { arr: s.pi, color:'#000' },
+      { arr: s.pi_e, color:'#555' },
+      { arr: s.x, color:'#888' }
+    ];
+  } else if (currentModel==='rational') {
+    bundles = [
+      { arr: s.pi, color:'#000' },
+      { arr: s.x, color:'#666' }
+    ];
+  } else if (currentModel==='dsge') {
+    bundles = [
+      { arr: s.pi, color:'#000' },
+      { arr: s.x, color:'#555' },
+      { arr: s.i, color:'#888' }
+    ];
+  }
+
+  // bornes Y automatiques (marges)
+  let ymin=+Infinity, ymax=-Infinity;
+  bundles.forEach(b => b.arr.forEach(v => { if(isFinite(v)){ ymin=Math.min(ymin,v); ymax=Math.max(ymax,v); }}));
+  if (!isFinite(ymin) || !isFinite(ymax)) { ymin=-1; ymax=1; }
+  const pad = 0.1*(ymax - ymin || 1);
+  ymin -= pad; ymax += pad;
+
+  drawAxesTS(context, ymin, ymax, T);
+  bundles.forEach(b => drawSeries(context, s.t, b.arr, ymin, ymax, b.color, 2));
+
+  context.restore();
+}
+
+/* ========= Zoom & export ========= */
+function zoomIn(){ zoomLevel = Math.min(3, zoomLevel*1.2); drawGraph(); }
+function zoomOut(){ zoomLevel = Math.max(0.4, zoomLevel/1.2); drawGraph(); }
+function resetZoom(){ zoomLevel = 1; panX = 0; panY = 0; drawGraph(); }
+function downloadCanvas(){
+  const link = document.createElement('a');
+  link.download = `macro_adv_${currentModel}.png`;
+  link.href = canvas().toDataURL('image/png');
+  link.click();
+}
+
+/* ========= Export LaTeX ========= */
+function exportLatex(){
+  const now = new Date().toISOString().slice(0,10);
+  const model = models[currentModel];
+  const num = (x, d=3) => (typeof x === 'number' ? x.toFixed(d) : x);
+
+  let body = '';
+  body += '\\section*{Modèle sélectionné: ' + model.name.replaceAll('&','\\&') + '}\\n';
+  body += '\\subsection*{Équations}\\n\\begin{align*}\\n';
+  model.equations.forEach(eq => { body += eq.latex + '\\\\n'; });
+  body += '\\end{align*}\\n';
+
+  // Paramètres
+  body += '\\subsection*{Paramètres}\\n\\begin{tabular}{ll}\\hline\\nParamètre & Valeur\\\\\\\\\\hline\\n';
+  model.params.forEach(p => { body += `${p.label.replaceAll('&','\\&')} & ${num(modelParams[p.id], 6)}\\\\\\n`; });
+  body += '\\hline\\end{tabular}\\n';
+
+  // Résultats (selon modèle)
+  body += '\\subsection*{Quelques résultats}\\n';
+  if (currentModel==='rbc' && solution?.ss){
+    const ss = solution.ss, sStar = solution.metrics.sStar;
+    body += `k^{*}=${num(ss.k)}\\,,\\; y^{*}=${num(ss.y)}\\,,\\; c^{*}=${num(ss.c)}\\,,\\; i^{*}=${num(ss.i)}\\,,\\; s^{*}=${num(sStar)}.\\\\n`;
+  } else if (currentModel==='ak') {
+    body += `g \\approx sA - \\delta = ${num(solution?.metrics?.g)}.\\\\n`;
+  } else if (currentModel==='adaptive') {
+    body += `\\pi_T=${num(solution?.metrics?.final_pi)}\\,,\\; \\pi^e_T=${num(solution?.metrics?.final_pi_e)}.\\\\n`;
+  } else if (currentModel==='rational') {
+    body += `\\pi_0=${num(solution?.metrics?.pi0)}.\\\\n`;
+  } else if (currentModel==='dsge') {
+    body += `\\max_t\\,\\pi_t = ${num(solution?.metrics?.peak_pi)}\\,,\\; \\max_t\\,x_t = ${num(solution?.metrics?.peak_x)}.\\\\n`;
+  }
+
+  const tex = `
+\\documentclass[11pt,a4paper]{article}
+\\usepackage[margin=2.5cm]{geometry}
+\\usepackage{amsmath,amssymb}
+\\usepackage{ifthen}
+\\usepackage{iftex}
+\\IfFileExists{EBGaramond.sty}{\\usepackage{EBGaramond}}{\\usepackage{mathpazo}}
+\\usepackage[T1]{fontenc}
+\\usepackage[utf8]{inputenc}
+\\title{Export automatique — Modèles macroéconomiques avancés}
+\\author{Ramanambonona Ambinintsoa}
+\\date{${now}}
+\\begin{document}
+\\maketitle
+${body}
+\\end{document}`.trim();
+
+  const blob = new Blob([tex], {type:'text/x-tex'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `macro_advanced_${currentModel}.tex`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ========= Interactions canvas ========= */
+function attachCanvasInteractions() {
+  const c = canvas(); c.style.cursor = 'grab';
+  c.addEventListener('mousedown', e => { isDragging=true; lastX=e.offsetX; lastY=e.offsetY; c.style.cursor='grabbing'; });
+  window.addEventListener('mouseup', () => { isDragging=false; canvas().style.cursor='grab'; });
+  c.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    panX += (e.offsetX - lastX); panY += (e.offsetY - lastY);
+    lastX = e.offsetX; lastY = e.offsetY; drawGraph();
+  });
+  c.addEventListener('wheel', e => { e.preventDefault(); (e.deltaY<0)?zoomIn():zoomOut(); }, { passive:false });
+}
+
+/* ========= INIT ========= */
+function initialSetup(){
+  if (window.gsap){
+    gsap.from('.macro-title', {y:10, opacity:0, duration:.6, ease:'power2.out'});
+    gsap.from('.tab-navigation', {y:8, opacity:0, duration:.5, delay:.1});
+  }
+  updateModelDisplay();
+  attachCanvasInteractions();
+  solveModel();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  try { renderMathInElement(document.body); } catch(e){}
+  initialSetup();
+});
+  </script>
+</body>
+</html>
