@@ -858,11 +858,11 @@ function exportLatex(){
   const model = models[currentModel];
   const num = (x, d=3) => (typeof x === 'number' ? x.toFixed(d) : x);
 
-  // Fonction d'échappement LaTeX
-  const escapeLatex = (str) => {
+  // Fonction d'échappement LaTeX CORRIGÉE - seulement pour le texte, pas pour les maths
+  const escapeLatexText = (str) => {
     if (typeof str !== 'string') return str;
+    // Ne pas échapper les commandes LaTeX existantes, seulement les caractères spéciaux dans le texte
     return str
-      .replace(/\\/g, '\\textbackslash{}')
       .replace(/#/g, '\\#')
       .replace(/\$/g, '\\$')
       .replace(/%/g, '\\%')
@@ -875,22 +875,28 @@ function exportLatex(){
   };
 
   let body = '';
-  body += '\\section*{Modèle sélectionné: ' + escapeLatex(model.name) + '}\n';
+  body += '\\section*{Modèle sélectionné: ' + escapeLatexText(model.name) + '}\n';
   body += '\\subsection*{Équations}\n\\begin{align*}\n';
   model.equations.forEach(eq => { 
-    body += escapeLatex(eq.latex) + ' \\\\\n'; 
+    // NE PAS échapper les équations - elles sont déjà en LaTeX valide
+    body += eq.latex + ' \\\\\n'; 
   });
   body += '\\end{align*}\n\n';
 
-  // Paramètres
+  // Paramètres - CORRIGÉ
   body += '\\subsection*{Paramètres}\n\\begin{tabular}{ll}\n\\hline\n';
   body += 'Paramètre & Valeur \\\\\n\\hline\n';
   model.params.forEach(p => { 
-    body += escapeLatex(p.label.replace(/\\\(/g, '$').replace(/\\\)/g, '$')) + ' & ' + num(modelParams[p.id], 6) + ' \\\\\n'; 
+    // Convertir \(...\) en $...$ pour LaTeX et échapper seulement le texte
+    const label = p.label
+      .replace(/\\\(/g, '$')  // Remplace \( par $
+      .replace(/\\\)/g, '$')  // Remplace \) par $
+      .replace(/\\([a-zA-Z]+)/g, '\\\\$1');  // Échappe les backslashes restants
+    body += escapeLatexText(label) + ' & ' + num(modelParams[p.id], 6) + ' \\\\\n'; 
   });
   body += '\\hline\n\\end{tabular}\n\n';
 
-  // Résultats
+  // Résultats - CORRIGÉ
   body += '\\subsection*{Résultats}\n';
   if (currentModel === 'rbc' && solution?.ss){
     const ss = solution.ss, sStar = solution.metrics.sStar;
