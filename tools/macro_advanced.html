@@ -852,19 +852,19 @@ function downloadCanvas(){
   link.click();
 }
 
-/* ========= Export LaTeX CORRIGÉ ========= */
+/* ========= Export LaTeX  ========= */
+/* ========= Export LaTeX COMPLÈTEMENT CORRIGÉ ========= */
 function exportLatex(){
   const now = new Date().toISOString().slice(0,10);
   const model = models[currentModel];
   const num = (x, d=3) => (typeof x === 'number' ? x.toFixed(d) : x);
 
-  // Fonction d'échappement LaTeX CORRIGÉE - seulement pour le texte, pas pour les maths
+  // Fonction d'échappement LaTeX pour le texte uniquement
   const escapeLatexText = (str) => {
     if (typeof str !== 'string') return str;
-    // Ne pas échapper les commandes LaTeX existantes, seulement les caractères spéciaux dans le texte
+    // Échapper seulement les caractères spéciaux qui posent problème en mode texte
     return str
       .replace(/#/g, '\\#')
-      .replace(/\$/g, '\\$')
       .replace(/%/g, '\\%')
       .replace(/&/g, '\\&')
       .replace(/_/g, '\\_')
@@ -872,27 +872,44 @@ function exportLatex(){
       .replace(/}/g, '\\}')
       .replace(/~/g, '\\textasciitilde{}')
       .replace(/\^/g, '\\textasciicircum{}');
+    // NE PAS échapper \$ car on veut garder les formules mathématiques
   };
 
   let body = '';
   body += '\\section*{Modèle sélectionné: ' + escapeLatexText(model.name) + '}\n';
   body += '\\subsection*{Équations}\n\\begin{align*}\n';
   model.equations.forEach(eq => { 
-    // NE PAS échapper les équations - elles sont déjà en LaTeX valide
+    // Les équations sont déjà en LaTeX valide - NE PAS les échapper
     body += eq.latex + ' \\\\\n'; 
   });
   body += '\\end{align*}\n\n';
 
-  // Paramètres - CORRIGÉ
+  // Paramètres - CORRECTION COMPLÈTE
   body += '\\subsection*{Paramètres}\n\\begin{tabular}{ll}\n\\hline\n';
   body += 'Paramètre & Valeur \\\\\n\\hline\n';
   model.params.forEach(p => { 
-    // Convertir \(...\) en $...$ pour LaTeX et échapper seulement le texte
-    const label = p.label
-      .replace(/\\\(/g, '$')  // Remplace \( par $
-      .replace(/\\\)/g, '$')  // Remplace \) par $
-      .replace(/\\([a-zA-Z]+)/g, '\\\\$1');  // Échappe les backslashes restants
-    body += escapeLatexText(label) + ' & ' + num(modelParams[p.id], 6) + ' \\\\\n'; 
+    // Pour les labels, traiter spécifiquement les formules mathématiques
+    let label = p.label;
+    
+    // Remplacer \( et \) par $ pour un meilleur rendu
+    label = label.replace(/\\\(/g, '$').replace(/\\\)/g, '$');
+    
+    // Échapper seulement le texte, pas les commandes LaTeX
+    // On va séparer les parties texte et mathématiques
+    const parts = label.split(/(\$[^$]*\$)/g);
+    let processedLabel = '';
+    
+    for (let part of parts) {
+      if (part.startsWith('$') && part.endsWith('$')) {
+        // Partie mathématique - ne pas échapper
+        processedLabel += part;
+      } else {
+        // Partie texte - échapper
+        processedLabel += escapeLatexText(part);
+      }
+    }
+    
+    body += processedLabel + ' & ' + num(modelParams[p.id], 6) + ' \\\\\n'; 
   });
   body += '\\hline\n\\end{tabular}\n\n';
 
@@ -946,7 +963,6 @@ ${body}
   a.click();
   URL.revokeObjectURL(url);
 }
-
 /* ========= Interactions canvas ========= */
 function attachCanvasInteractions() {
   const c = canvas(); c.style.cursor = 'grab';
@@ -991,3 +1007,4 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
 </body>
 </html>
+
