@@ -716,105 +716,117 @@
         
         // Fonction pour formater les expressions LaTeX
         function formatLatex(expr) {
+            // Remplacements spécifiques pour les variables
             return expr
-                .replace(/\*/g, ' \\cdot ')
-                .replace(/X1f/g, '(X_1^f)')
-                .replace(/X2f/g, '(X_2^f)')
-                .replace(/X1g/g, '(X_1^g)')
-                .replace(/X2g/g, '(X_2^g)')
-                .replace(/x1a/g, '(x_1^A)')
-                .replace(/x2a/g, '(x_2^A)')
-                .replace(/x1b/g, '(x_1^B)')
-                .replace(/x2b/g, '(x_2^B)')
-                .replace(/Xf/g, '(X^f)')
-                .replace(/Xg/g, '(X^g)');
+                .replace(/\*\*/g, '^') // Remplacer ** par ^ pour LaTeX
+                .replace(/\*/g, ' \\cdot ') // Remplacer * par \cdot pour la multiplication
+                .replace(/X1f/g, 'X_1^f')
+                .replace(/X2f/g, 'X_2^f')
+                .replace(/X1g/g, 'X_1^g')
+                .replace(/X2g/g, 'X_2^g')
+                .replace(/x1a/g, 'x_1^A')
+                .replace(/x2a/g, 'x_2^A')
+                .replace(/x1b/g, 'x_1^B')
+                .replace(/x2b/g, 'x_2^B')
+                .replace(/Xf/g, 'X^f')
+                .replace(/Xg/g, 'X^g')
+                .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}') // Remplacer sqrt(...) par \sqrt{...}
+                .replace(/log\(([^)]+)\)/g, '\\ln{$1}') // Remplacer log(...) par \ln{...}
+                .replace(/exp\(([^)]+)\)/g, 'e^{$1}'); // Remplacer exp(...) par e^{...}
         }
 
-        // Fonction pour calculer les dérivées symboliques
+        /**
+         * Calcule la dérivée partielle symbolique d'une expression en utilisant Math.js.
+         * @param {string} expr L'expression à dériver.
+         * @param {string} variable La variable par rapport à laquelle dériver.
+         * @returns {string} La dérivée formatée en LaTeX.
+         */
         function symbolicDerivative(expr, variable) {
             try {
-                // Remplacer les notations pour faciliter le traitement
-                let cleanExpr = expr
-                    .replace(/\^/g, '**')
-                    .replace(/sqrt\(/g, 'sqrt(')
-                    .replace(/log\(/g, 'log(')
-                    .replace(/exp\(/g, 'exp(');
+                // Remplacer les notations LaTeX (ex: \sqrt) par les notations Math.js
+                let cleanExpr = expr.replace(/\\sqrt\(([^)]+)\)/g, 'sqrt($1)');
+
+                // Parser l'expression
+                const node = math.parse(cleanExpr);
                 
-                // Gestion des fonctions spécifiques
-                if (cleanExpr.includes(variable + '**')) {
-                    // Cas des puissances: x^a -> a*x^(a-1)
-                    const powerMatch = cleanExpr.match(new RegExp(variable + '\\*\\*(\\d*\\.?\\d+)'));
-                    if (powerMatch) {
-                        const exponent = parseFloat(powerMatch[1]);
-                        return `${exponent}*${variable}**${exponent - 1}`;
-                    }
-                }
+                // Dériver
+                const derivativeNode = math.derivative(node, variable);
+
+                // Simplifier l'expression
+                const simplified = math.simplify(derivativeNode);
                 
-                if (cleanExpr.includes('sqrt(' + variable + ')')) {
-                    // Dérivée de sqrt(x) = 1/(2*sqrt(x))
-                    return `1/(2*\sqrt(${variable}))`;
-                }
-                
-                if (cleanExpr.includes('log(' + variable + ')')) {
-                    // Dérivée de log(x) = 1/x
-                    return `1/${variable}`;
-                }
-                
-                if (cleanExpr.includes('exp(' + variable + ')')) {
-                    // Dérivée de exp(x) = exp(x)
-                    return `exp(${variable})`;
-                }
-                
-                // Cas linéaire: a*x -> a
-                if (cleanExpr.includes('*' + variable)) {
-                    const coefMatch = cleanExpr.match(/(\d*\.?\d+)\*" + variable + "/);
-                    if (coefMatch) {
-                        return coefMatch[1];
-                    }
-                }
-                
-                return `d(${expr})/d${variable}`;
+                // Formater en LaTeX (Math.js output)
+                // Le toTex() peut parfois être limité, on utilise toString() pour avoir l'expression, 
+                // puis on la nettoie pour un meilleur LaTeX.
+                let derivativeString = simplified.toString();
+
+                // Nettoyage spécifique de la sortie Math.js
+                // Remplacer ' / ' par '/'. Remplacer ' * ' par '*'.
+                derivativeString = derivativeString.replace(/ \/ /g, '/').replace(/ \* /g, '*');
+
+                return formatLatex(derivativeString);
             } catch (e) {
-                return `d(${expr})/d${variable}`;
+                console.error("Erreur de dérivation symbolique Math.js:", e);
+                return `\\frac{\\partial (${formatLatex(expr)})}{\\partial ${variable}}`;
             }
         }
         
-        // Fonction pour calculer le TMS
+        /**
+         * Calcule le Taux Marginal de Substitution (TMS) : |MU1 / MU2|.
+         * @param {string} utilityExpr Expression de la fonction d'utilité.
+         * @param {string} var1 Variable 1 (dans le numérateur).
+         * @param {string} var2 Variable 2 (dans le dénominateur).
+         * @returns {string} Le TMS formaté en LaTeX.
+         */
         function calculateTMS(utilityExpr, var1, var2) {
             try {
                 const deriv1 = symbolicDerivative(utilityExpr, var1);
                 const deriv2 = symbolicDerivative(utilityExpr, var2);
                 
-                // Simplifier le ratio
-                if (deriv1.includes('**') && deriv2.includes('**')) {
-                    // Cas Cobb-Douglas: U = x^a * y^b -> TMS = (a/b)*(y/x)
-                    const match1 = utilityExpr.match(new RegExp(var1 + '\\*\\*(\\d*\\.?\\d+)'));
-                    const match2 = utilityExpr.match(new RegExp(var2 + '\\*\\*(\\d*\\.?\\d+)'));
+                // Simplifier le ratio si possible (spécifique Cobb-Douglas pour une meilleure sortie)
+                if (utilityExpr.includes('^0.5') && utilityExpr.includes('^0.5')) {
+                    const cdMatch1 = utilityExpr.match(new RegExp(`(\\d*\\.?\\d+|[a-z])\\s*\\*?\\s*${var1}\\^(\\d*\\.?\\d+)`, 'i'));
+                    const cdMatch2 = utilityExpr.match(new RegExp(`(\\d*\\.?\\d+|[a-z])\\s*\\*?\\s*${var2}\\^(\\d*\\.?\\d+)`, 'i'));
                     
-                    if (match1 && match2) {
-                        const a = parseFloat(match1[1]);
-                        const b = parseFloat(match2[1]);
-                        return `(${a}/${b})*(${var2}/${var1})`;
+                    if (cdMatch1 && cdMatch2) {
+                        const a = parseFloat(cdMatch1[2]);
+                        const b = parseFloat(cdMatch2[2]);
+                        
+                        // TMS = (a/b)*(x2/x1) pour U = x1^a * x2^b
+                        return `\\frac{${a}}{${b}} \\cdot \\frac{${formatLatex(var2)}}{${formatLatex(var1)}}`;
                     }
                 }
-                
-                return `(${deriv1})/(${deriv2})`;
+
+                // Affichage général du ratio des dérivées
+                return `\\frac{${deriv1}}{${deriv2}}`;
             } catch (e) {
-                return `∂U/∂${var1} / ∂U/∂${var2}`;
+                return `\\frac{\\partial U/\\partial ${var1}}{\\partial U/\\partial ${var2}}`;
             }
         }
         
-        // Fonction pour calculer le TMST
+        /**
+         * Calcule le Taux Marginal de Substitution Technique (TMST) : |PM1 / PM2|.
+         * @param {string} productionExpr Expression de la fonction de production.
+         * @param {string} input1 Input 1 (dans le numérateur).
+         * @param {string} input2 Input 2 (dans le dénominateur).
+         * @returns {string} Le TMST formaté en LaTeX.
+         */
         function calculateTMST(productionExpr, input1, input2) {
-            try {
-                const deriv1 = symbolicDerivative(productionExpr, input1);
-                const deriv2 = symbolicDerivative(productionExpr, input2);
-                return `(${deriv1})/(${deriv2})`;
-            } catch (e) {
-                return `∂F/∂${input1} / ∂F/∂${input2}`;
-            }
+            // Le TMST est structurellement identique au TMS, mais pour une fonction de production.
+            return calculateTMS(productionExpr, input1, input2);
         }
+
         
+        // Reste du code de résolution (solveIntraBranch, solveInterBranches, solveConsumption, solvePareto)
+        // Les fonctions utilisent maintenant les versions améliorées de la dérivation.
+
+        // ... [Le contenu de solveIntraBranch, solveInterBranches, solveConsumption, solvePareto]
+        // est laissé tel quel mais bénéficiera des nouvelles fonctions de dérivation.
+        // Seules les fonctions de résolution simples (comme l'exemple Cobb-Douglas dans intra-branche)
+        // sont maintenues pour l'illustration de la résolution, les cas complexes affichent 
+        // les conditions d'optimalité correctement dérivées.
+
+
         // Résolution pour l'optimalité intra-branche
         function solveIntraBranch() {
             const fExpr = document.getElementById('intra-function-f').value;
@@ -867,7 +879,8 @@
                     <p>À l'optimum, les productivités marginales doivent être égales:</p>
                     <div class="math-container">
                         <p>\\[ f'(X^f) = g'(X^g) \\]</p>
-                        <p>\\[ ${formatLatex(derivF)} = ${formatLatex(derivG)} \\]</p>
+                        <p>Ce qui donne:</p>
+                        <p>\\[ ${derivF} = ${derivG} \\]</p>
                     </div>
                     <p>Et la contrainte de ressources doit être respectée:</p>
                     <div class="math-container">
@@ -885,44 +898,49 @@
             stepsDiv.appendChild(step2Div);
             currentResults.intra.steps.push(step2);
             
-            // Étape 3: Résolution
-            let step3Content = "";
+            // Étape 3: Résolution (L'exemple simple est conservé pour la démonstration)
+            let step3Content = `
+                <p>Le système à résoudre est:</p>
+                <div class="math-container">
+                    <p>\\[ ${derivF} = ${derivG} \\]</p>
+                    <p>\\[ X^f + X^g = ${totalX} \\]</p>
+                </div>
+            `;
+            
+            // Tenter une résolution pour le cas racine carrée simple pour démonstration
             try {
-                if (fExpr.includes('\sqrt(Xf)') && gExpr.includes('\sqrt(Xg)')) {
-                    const coefMatch = gExpr.match(/(\d*\.?\d+)\*?\sqrt/);
+                if (fExpr.includes('sqrt(Xf)') && gExpr.includes('sqrt(Xg)')) {
+                    const cleanG = gExpr.replace(/\\sqrt\(([^)]+)\)/g, 'sqrt($1)');
+                    const coefMatch = cleanG.match(/^(\d*\.?\d+)\*sqrt/);
                     const coef = coefMatch ? parseFloat(coefMatch[1]) : 1;
                     
-                    const Xf = parseFloat(totalX) / (1 + coef*coef);
-                    const Xg = parseFloat(totalX) - Xf;
-                    const prodF = Math.sqrt(Xf);
-                    const prodG = coef * Math.sqrt(Xg);
-                    const totalProd = prodF + prodG;
+                    const totalX_num = parseFloat(totalX);
+                    const Xf = totalX_num / (1 + coef*coef);
+                    const Xg = totalX_num - Xf;
                     
-                    step3Content = `
-                        <p>Pour \\( f(X^f) = \\sqrt{X^f} \\) et \\( g(X^g) = ${coef}\\sqrt{X^g} \\):</p>
-                        <div class="math-container">
-                            <p>\\[ f'(X^f) = \\frac{1}{2\\sqrt{X^f}} \\]</p>
-                            <p>\\[ g'(X^g) = \\frac{${coef}}{2\\sqrt{X^g}} \\]</p>
-                            <p>À l'optimum: \\[ \\frac{1}{2\\sqrt{X^f}} = \\frac{${coef}}{2\\sqrt{X^g}} \\Rightarrow \\sqrt{X^g} = ${coef} \\sqrt{X^f} \\]</p>
-                            <p>Avec \\( X^f + X^g = ${totalX} \\), on obtient:</p>
-                            <p>\\[ X^f + ${coef*coef} X^f = ${totalX} \\Rightarrow X^{f*} = \\frac{${totalX}}{${1 + coef*coef}} = ${Xf.toFixed(4)} \\]</p>
-                            <p>\\[ X^{g*} = ${totalX} - ${Xf.toFixed(4)} = ${Xg.toFixed(4)} \\]</p>
-                        </div>
-                        <p>Production totale: \\( f(X^{f*}) + g(X^{g*}) = \\sqrt{${Xf.toFixed(4)}} + ${coef}\\sqrt{${Xg.toFixed(4)}} = ${totalProd.toFixed(4)} \\)</p>
-                    `;
+                    if (!isNaN(Xf) && !isNaN(Xg)) {
+                        const prodF = Math.sqrt(Xf);
+                        const prodG = coef * Math.sqrt(Xg);
+                        const totalProd = prodF + prodG;
+                        
+                        step3Content += `
+                            <p>Pour l'exemple spécifique \\( f(X^f) = \\sqrt{X^f} \\) et \\( g(X^g) = ${coef}\\sqrt{X^g} \\) (ou cas similaire), la résolution est:</p>
+                            <div class="math-container">
+                                <p>\\[ X^{f*} \\approx ${Xf.toFixed(4)} \\]</p>
+                                <p>\\[ X^{g*} \\approx ${Xg.toFixed(4)} \\]</p>
+                                <p>Production totale: \\( f(X^{f*}) + g(X^{g*}) \\approx ${totalProd.toFixed(4)} \\)</p>
+                            </div>
+                        `;
+                    } else {
+                         step3Content += `<p>La résolution symbolique ou numérique est complexe pour ces fonctions. Le système est affiché ci-dessus.</p>`;
+                    }
                 } else {
-                    step3Content = `
-                        <p>Le système à résoudre est:</p>
-                        <div class="math-container">
-                            <p>\\[ ${formatLatex(derivF)} = ${formatLatex(derivG)} \\]</p>
-                            <p>\\[ X^f + X^g = ${totalX} \\]</p>
-                        </div>
-                        <p>Cette solution nécessite une résolution numérique pour les fonctions spécifiques.</p>
-                    `;
+                    step3Content += `<p>La résolution symbolique ou numérique est complexe pour ces fonctions. Le système est affiché ci-dessus.</p>`;
                 }
             } catch (e) {
-                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
+                step3Content += `<p>Erreur dans le calcul symbolique. Le système est affiché ci-dessus.</p>`;
             }
+
             
             let step3 = {
                 title: 'Résolution',
@@ -1001,7 +1019,8 @@
                     <p>À l'optimum, les taux marginaux de substitution techniques doivent être égaux:</p>
                     <div class="math-container">
                         <p>\\[ TMST_{1/2}^f = TMST_{1/2}^g \\]</p>
-                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
+                        <p>Ce qui donne:</p>
+                        <p>\\[ ${tmstF} = ${tmstG} \\]</p>
                     </div>
                     <p>Et les contraintes de ressources doivent être respectées:</p>
                     <div class="math-container">
@@ -1021,32 +1040,15 @@
             currentResults.inter.steps.push(step2);
             
             // Étape 3: Résolution
-            let step3Content = "";
-            try {
-                if (fExpr.includes('^0.5') && gExpr.includes('^0.3')) {
-                    step3Content = `
-                        <p>Pour les fonctions Cobb-Douglas:</p>
-                        <div class="math-container">
-                            <p>\\[ TMST^f = \\frac{X_2^f}{X_1^f} \\]</p>
-                            <p>\\[ TMST^g = \\frac{0.3}{0.7} \\frac{X_2^g}{X_1^g} = \\frac{3}{7} \\frac{X_2^g}{X_1^g} \\]</p>
-                        </div>
-                        <p>À l'optimum: \\[ \\frac{X_2^f}{X_1^f} = \\frac{3}{7} \\frac{X_2^g}{X_1^g} \\]</p>
-                        <p>Avec les contraintes de ressources, on peut résoudre ce système.</p>
-                    `;
-                } else {
-                    step3Content = `
-                        <p>Le système à résoudre est:</p>
-                        <div class="math-container">
-                            <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
-                            <p>\\[ X_1^f + X_1^g = ${totalX1} \\]</p>
-                            <p>\\[ X_2^f + X_2^g = ${totalX2} \\]</p>
-                        </div>
-                        <p>Cette solution nécessite une résolution numérique pour les fonctions spécifiques.</p>
-                    `;
-                }
-            } catch (e) {
-                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
-            }
+            let step3Content = `
+                <p>Le système à résoudre est:</p>
+                <div class="math-container">
+                    <p>\\[ ${tmstF} = ${tmstG} \\]</p>
+                    <p>\\[ X_1^f + X_1^g = ${totalX1} \\]</p>
+                    <p>\\[ X_2^f + X_2^g = ${totalX2} \\]</p>
+                </div>
+                <p>La résolution symbolique de ce système d'équations (souvent non-linéaires) est complexe et nécessiterait une résolution numérique pour obtenir des valeurs spécifiques. Les conditions d'optimalité sont établies ci-dessus.</p>
+            `;
             
             let step3 = {
                 title: 'Résolution',
@@ -1084,6 +1086,9 @@
             const stepsDiv = document.getElementById('cons-steps');
             stepsDiv.innerHTML = '';
             
+            const totalX1 = parseFloat(x1a) + parseFloat(x1b);
+            const totalX2 = parseFloat(x2a) + parseFloat(x2b);
+
             // Stocker les données pour l'export
             currentResults.cons = {
                 type: 'consommation',
@@ -1107,15 +1112,15 @@
                     </div>
                     <p>Les dotations initiales sont:</p>
                     <div class="math-container">
-                        <p>\\[ (x_1^A, x_2^A) = (${x1a}, ${x2a}) \\]</p>
-                        <p>\\[ (x_1^B, x_2^B) = (${x1b}, ${x2b}) \\]</p>
+                        <p>Agent A: \\( (x_1^A, x_2^A) = (${x1a}, ${x2a}) \\)</p>
+                        <p>Agent B: \\( (x_1^B, x_2^B) = (${x1b}, ${x2b}) \\)</p>
                     </div>
                     <p>Les dotations totales sont donc:</p>
                     <div class="math-container">
-                        <p>\\[ X_1 = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
-                        <p>\\[ X_2 = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
+                        <p>\\[ X_1 = ${totalX1} \\]</p>
+                        <p>\\[ X_2 = ${totalX2} \\]</p>
                     </div>
-                    <p>Nous cherchons l'allocation optimale de consommation.</p>
+                    <p>Nous cherchons l'allocation optimale de consommation (sur la courbe des contrats).</p>
                 `
             };
             
@@ -1138,12 +1143,13 @@
                     <p>À l'optimum, les taux marginaux de substitution doivent être égaux:</p>
                     <div class="math-container">
                         <p>\\[ TMS^A = TMS^B \\]</p>
-                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
+                        <p>Ce qui donne:</p>
+                        <p>\\[ ${tmsA} = ${tmsB} \\]</p>
                     </div>
-                    <p>Et les contraintes de ressources doivent être respectées:</p>
+                    <p>Et les contraintes de ressources (fermeture de la boîte d'Edgeworth) doivent être respectées:</p>
                     <div class="math-container">
-                        <p>\\[ x_1^A + x_1^B = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
-                        <p>\\[ x_2^A + x_2^B = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
+                        <p>\\[ x_1^A + x_1^B = ${totalX1} \\]</p>
+                        <p>\\[ x_2^A + x_2^B = ${totalX2} \\]</p>
                     </div>
                 `
             };
@@ -1158,32 +1164,16 @@
             currentResults.cons.steps.push(step2);
             
             // Étape 3: Résolution
-            let step3Content = "";
-            try {
-                if (uAExpr.includes('^0.5') && uBExpr.includes('^0.3')) {
-                    step3Content = `
-                        <p>Pour les fonctions Cobb-Douglas:</p>
-                        <div class="math-container">
-                            <p>\\[ TMS^A = \\frac{x_2^A}{x_1^A} \\]</p>
-                            <p>\\[ TMS^B = \\frac{0.3}{0.7} \\frac{x_2^B}{x_1^B} = \\frac{3}{7} \\frac{x_2^B}{x_1^B} \\]</p>
-                        </div>
-                        <p>À l'optimum: \\[ \\frac{x_2^A}{x_1^A} = \\frac{3}{7} \\frac{x_2^B}{x_1^B} \\]</p>
-                        <p>Avec les contraintes de ressources, on peut résoudre ce système.</p>
-                    `;
-                } else {
-                    step3Content = `
-                        <p>Le système à résoudre est:</p>
-                        <div class="math-container">
-                            <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
-                            <p>\\[ x_1^A + x_1^B = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
-                            <p>\\[ x_2^A + x_2^B = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
-                        </div>
-                        <p>Cette solution nécessite une résolution numérique pour les fonctions spécifiques.</p>
-                    `;
-                }
-            } catch (e) {
-                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
-            }
+            let step3Content = `
+                <p>Le système à résoudre est:</p>
+                <div class="math-container">
+                    <p>\\[ ${tmsA} = ${tmsB} \\]</p>
+                    <p>\\[ x_1^A = ${totalX1} - x_1^B \\]</p>
+                    <p>\\[ x_2^A = ${totalX2} - x_2^B \\]</p>
+                </div>
+                <p>L'ensemble des solutions à ces équations définit la **Courbe des Contrats** (Contract Curve), représentant tous les optima de Pareto possibles dans l'échange.</p>
+                <p>La résolution symbolique de ce système (souvent non-linéaire) est complexe et nécessiterait une résolution numérique pour obtenir des valeurs spécifiques. Les conditions d'optimalité sont établies ci-dessus.</p>
+            `;
             
             let step3 = {
                 title: 'Résolution',
@@ -1243,13 +1233,13 @@
                         <p>\\[ U^A = ${formatLatex(uAExpr)} \\]</p>
                         <p>\\[ U^B = ${formatLatex(uBExpr)} \\]</p>
                     </div>
-                    <p>Fonctions de production:</p>
+                    <p>Fonctions de production (ici pour un modèle simplifié à un input):</p>
                     <div class="math-container">
-                        <p>\\[ f = ${formatLatex(fExpr)} \\]</p>
-                        <p>\\[ g = ${formatLatex(gExpr)} \\]</p>
+                        <p>\\[ Y_f = f(X^f) = ${formatLatex(fExpr)} \\]</p>
+                        <p>\\[ Y_g = g(X^g) = ${formatLatex(gExpr)} \\]</p>
                     </div>
                     <p>Dotations totales: \\( \\bar{X}_1 = ${totalX1} \\), \\( \\bar{X}_2 = ${totalX2} \\)</p>
-                    <p>Nous cherchons un optimum de Pareto.</p>
+                    <p>Nous cherchons un optimum de Pareto (une allocation et une production Pareto-optimales).</p>
                 `
             };
             
@@ -1265,23 +1255,33 @@
             // Étape 2: Conditions d'optimalité
             const tmsA = calculateTMS(uAExpr, 'x1a', 'x2a');
             const tmsB = calculateTMS(uBExpr, 'x1b', 'x2b');
-            const tmstF = calculateTMST(fExpr, 'Xf', 'Xf');
-            const tmstG = calculateTMST(gExpr, 'Xg', 'Xg');
             
+            // Pour le modèle simplifié (un seul input X pour f et g), le TMST est f'(Xf) = g'(Xg)
+            const pmf = symbolicDerivative(fExpr, 'Xf');
+            const pmg = symbolicDerivative(gExpr, 'Xg');
+            
+            // Calculer le Taux Marginal de Transformation (TMT)
+            // TMT = |dYf / dYg| = |dYf/dXf * dXf/dYg|
+            // En modèle à deux outputs Yf et Yg et deux inputs X1 et X2 (plus général), TMST_f = TMST_g.
+            // Pour le modèle à deux outputs Yf, Yg et un seul input X (X=Xf+Xg), l'optimalité de production est TMST = 1
+            
+            // Simplification: Afficher les trois conditions générales
             let step2 = {
                 title: 'Conditions d\'optimalité de Pareto',
                 content: `
                     <p>Un optimum de Pareto doit satisfaire trois conditions:</p>
                     <ol>
                         <li>Optimalité dans l'échange: \\( TMS^A = TMS^B \\)</li>
-                        <li>Optimalité dans la production: \\( TMST^f = TMST^g \\)</li>
-                        <li>Optimalité dans la répartition produit-facteur: \\( TMS = TMT \\)</li>
+                        <li>Optimalité dans la production (général): \\( TMST_{1/2}^f = TMST_{1/2}^g \\)</li>
+                        <li>Optimalité dans la répartition produit-facteur (efficience globale): \\( TMS = TMT \\)</li>
                     </ol>
+                    <p>Pour le modèle donné, les conditions d'optimalité se traduisent par:</p>
                     <div class="math-container">
-                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
-                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
-                        <p>\\[ TMS^A = TMT \\]</p>
+                        <p>1. Échange: \\[ ${tmsA} = ${tmsB} \\]</p>
+                        <p>2. Production (simplifiée pour un input): \\[ f'(X^f) = g'(X^g) \\Rightarrow ${pmf} = ${pmg} \\]</p>
+                        <p>3. Globale: \\[ TMS^A = TMT \\]</p>
                     </div>
+                    <p>Le Taux Marginal de Transformation (TMT) est défini comme le coût marginal d'une production en termes de l'autre.</p>
                 `
             };
             
@@ -1298,16 +1298,15 @@
             let step3 = {
                 title: 'Résolution',
                 content: `
-                    <p>Le système d'équations à résoudre est complexe et nécessite une résolution numérique spécifique.</p>
-                    <p>Les équations sont:</p>
+                    <p>Le système d'équations à résoudre (qui inclut les conditions d'optimalité et les contraintes de ressources) est complexe et nécessite une résolution numérique spécifique.</p>
+                    <p>Les équations de contraintes sont:</p>
                     <div class="math-container">
-                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
-                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
-                        <p>\\[ TMS^A = TMT \\]</p>
-                        <p>\\[ x_1^A + x_1^B + X_1^f + X_1^g = ${totalX1} \\]</p>
-                        <p>\\[ x_2^A + x_2^B = ${totalX2} + f(X^f) + g(X^g) \\]</p>
+                        <p>Contrainte sur l'input (simplifiée à 1 input X): \\[ X^f + X^g = \\bar{X}_1 \\]</p>
+                        <p>Contrainte sur l'output (les outputs deviennent des biens de consommation): \\[ x_1^A + x_1^B = Y_f \\]</p>
+                        <p>\\[ x_2^A + x_2^B = Y_g \\]</p>
+                        <p>où \\( Y_f = f(X^f) \\) et \\( Y_g = g(X^g) \\).</p>
                     </div>
-                    <p>Ce système peut avoir une infinité de solutions (ensemble des optima de Pareto).</p>
+                    <p>L'ensemble des solutions de ce système représente l'ensemble des optima de Pareto.</p>
                 `
             };
             
@@ -1328,8 +1327,8 @@
                 setTimeout(() => MathJax.typeset(), 100);
             }
         }
-
-        // Fonction d'export LaTeX
+        
+        // Fonction d'export LaTeX (inchangée)
         function exportLatex(type) {
             const results = currentResults[type];
             if (!results || !results.steps || results.steps.length === 0) {
