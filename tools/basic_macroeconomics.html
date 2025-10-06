@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Modèles Macroéconomiques — Ramanambonona Ambinintsoa</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .macro-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .macro-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-bottom: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: #5a5a5a;
+        }
+        
+        .tab-btn.active {
+            background: #2a2a2a;
+            color: white;
+            border-color: #2a2a2a;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #f5f5f5;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .model-display {
+            padding: 25px;
+            background: #f8f8f8;
+            border-left: 3px solid #3a3a3a;
+            margin-bottom: 25px;
+        }
+        
+        .model-display h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        
+        .equation-block {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 3px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .equation-block .katex-display {
+            margin: 10px 0;
+        }
+        
+        .explanation {
+            color: #3a3a3a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fafafa;
+            border-left: 2px solid #c0c0c0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: #2a2a2a;
+            font-weight: 600;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: white;
+        }
+        
+        table.param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        table.param-table th,
+        table.param-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #d0d0d0;
+        }
+        
+        table.param-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #2a2a2a;
+            width: 40%;
+        }
+        
+        table.param-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .solve-btn, .export-btn {
+            padding: 14px 24px;
+            background: #2a2a2a;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .solve-btn:hover, .export-btn:hover {
+            background: #1a1a1a;
+        }
+        
+        .results-display {
+            background: #f8f8f8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 3px;
+            border: 1px solid #d0d0d0;
+        }
+        
+        .results-display h4 {
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .slider-control {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 3px;
+        }
+        
+        .slider-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2a2a2a;
+        }
+        
+        .slider-control input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .slider-control .slider-value {
+            text-align: center;
+            color: #5a5a5a;
+            font-size: 0.9rem;
+        }
+        
+        .canvas-container {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .canvas-controls {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .canvas-controls button {
+            padding: 8px 16px;
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        
+        .canvas-controls button:hover {
+            background: #2a2a2a;
+        }
+        
+        #canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #d0d0d0;
+            background: white;
+            max-width: 100%;
+            cursor: move;
+        }
+        
+        .legend {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin: 5px 15px 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .legend-line {
+            display: inline-block;
+            width: 30px;
+            height: 2px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">About</a></li>
+                    <li><a href="../research.html">Research</a></li>
+                    <li><a href="../administrative.html">Administrative work</a></li>
+                    <li><a href="../cv.html">CV</a></li>
+                    <li><a href="../teaching.html">Teaching</a></li>
+                    <li><a href="../tools.html" class="active">Tools</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="macro-container">
+            <h2 class="macro-title">Modèles Macroéconomiques</h2>
+            
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="openTab('models')">Modèles</button>
+                <button class="tab-btn" onclick="openTab('params')">Paramétrage</button>
+                <button class="tab-btn" onclick="openTab('solve')">Résolution</button>
+                <button class="tab-btn" onclick="openTab('display')">Affichage</button>
+            </div>
+            
+            <!-- ONGLET MODÈLES -->
+            <div id="models-tab" class="tab-content active">
+                <h3>Choix du modèle macroéconomique</h3>
+                <div class="form-group">
+                    <label for="model-type">Type de modèle:</label>
+                    <select id="model-type" onchange="updateModelDisplay()">
+                        <option value="islm">IS-LM</option>
+                        <option value="islm-bp">IS-LM-BP</option>
+                        <option value="megc">MEGC (Modèle d'Équilibre Général Calculable)</option>
+                    </select>
+                </div>
+                
+                <div class="model-display" id="model-display">
+                    <!-- Contenu dynamique -->
+                </div>
+            </div>
+            
+            <!-- ONGLET PARAMÉTRAGE -->
+            <div id="params-tab" class="tab-content">
+                <h3>Paramétrage du modèle</h3>
+                <div id="params-content">
+                    <!-- Contenu dynamique -->
+                </div>
+            </div>
+            
+            <!-- ONGLET RÉSOLUTION -->
+            <div id="solve-tab" class="tab-content">
+                <h3>Résolution du modèle</h3>
+                <button class="solve-btn" onclick="solveModel()">Résoudre le modèle</button>
+                
+                <div id="symbolic-results" class="results-display" style="display:none;">
+                    <h4>Résolution symbolique</h4>
+                    <div id="symbolic-content"></div>
+                </div>
+                
+                <div id="numeric-results" class="results-display" style="display:none;">
+                    <h4>Résolution numérique</h4>
+                    <div id="numeric-content"></div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button class="export-btn" onclick="exportLatex()">
+                        <i class="fas fa-file-code"></i> Exporter en LaTeX (.tex)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ONGLET AFFICHAGE -->
+            <div id="display-tab" class="tab-content">
+                <h3>Affichage graphique</h3>
+                
+                <div id="sliders-container">
+                    <!-- Sliders dynamiques -->
+                </div>
+                
+                <div class="canvas-container">
+                    <div class="canvas-controls">
+                        <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> Zoom +</button>
+                        <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> Zoom -</button>
+                        <button onclick="resetZoom()"><i class="fas fa-redo"></i> Réinitialiser</button>
+                        <button onclick="downloadCanvas()"><i class="fas fa-download"></i> Télécharger PNG</button>
+                    </div>
+                    <canvas id="canvas" width="800" height="600"></canvas>
+                </div>
+                
+                <div class="legend" id="legend-display">
+                    <!-- Légende dynamique -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+        <div class="social">
+            <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+                <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+            </a>
+            <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+                <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+            </a>
+            <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+            </a>
+        </div>
+    </footer>
+    
+    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
+    <script src="../assets/js/script.js"></script>
+
+    <script>
+        let currentModel = 'islm';
+        let modelParams = {};
+        let solution = null;
+        let zoomLevel = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
+        
+        const models = {
+            islm: {
+                name: 'Modèle IS-LM',
+                equations: [
+                    { latex: 'Y = C(Y - T) + I(r) + G', desc: 'Courbe IS (équilibre du marché des biens)' },
+                    { latex: '\\frac{M}{P} = L(Y, r)', desc: 'Courbe LM (équilibre du marché monétaire)' }
+                ],
+                explanation: 'Le modèle IS-LM représente l\'équilibre simultané sur le marché des biens (courbe IS) et le marché monétaire (courbe LM). La courbe IS décrit les combinaisons de production Y et de taux d\'intérêt r pour lesquelles le marché des biens est en équilibre. La courbe LM représente les combinaisons pour lesquelles l\'offre de monnaie réelle égale la demande de monnaie.',
+                params: [
+                    { id: 'c0', label: 'Consommation autonome (c₀)', default: 100, min: 0, max: 500 },
+                    { id: 'c1', label: 'Propension marginale à consommer (c₁)', default: 0.8, min: 0, max: 1, step: 0.01 },
+                    { id: 'b', label: 'Sensibilité de l\'investissement au taux d\'intérêt (b)', default: 50, min: 0, max: 200 },
+                    { id: 'I0', label: 'Investissement autonome (I₀)', default: 150, min: 0, max: 500 },
+                    { id: 'G', label: 'Dépenses publiques (G)', default: 200, min: 0, max: 500 },
+                    { id: 'T', label: 'Taxes (T)', default: 100, min: 0, max: 500 },
+                    { id: 'M', label: 'Offre de monnaie (M)', default: 1000, min: 0, max: 3000 },
+                    { id: 'P', label: 'Niveau des prix (P)', default: 1, min: 0.1, max: 5, step: 0.1 },
+                    { id: 'k', label: 'Sensibilité de la demande de monnaie au revenu (k)', default: 0.5, min: 0, max: 1, step: 0.01 },
+                    { id: 'h', label: 'Sensibilité de la demande de monnaie au taux (h)', default: 100, min: 0, max: 500 }
+                ],
+                sliders: [
+                    { id: 'G', label: 'Dépenses publiques (G)', onChange: 'updateGraph' },
+                    { id: 'M', label: 'Offre de monnaie (M)', onChange: 'updateGraph' },
+                    { id: 'T', label: 'Taxes (T)', onChange: 'updateGraph' }
+                ]
+            },
+            'islm-bp': {
+                name: 'Modèle IS-LM-BP',
+                equations: [
+                    { latex: 'Y = C(Y - T) + I(r) + G + NX(Y, e)', desc: 'Courbe IS (avec exportations nettes)' },
+                    { latex: '\\frac{M}{P} = L(Y, r)', desc: 'Courbe LM' },
+                    { latex: 'NX(Y, e) + KA(r - r^*) = 0', desc: 'Courbe BP (balance des paiements)' }
+                ],
+                explanation: 'Le modèle IS-LM-BP étend le modèle IS-LM en économie ouverte. La courbe BP représente l\'équilibre de la balance des paiements, incluant la balance commerciale NX (exportations nettes) et les mouvements de capitaux KA qui dépendent du différentiel de taux d\'intérêt entre le pays et l\'étranger.',
+                params: [
+                    { id: 'c0', label: 'Consommation autonome (c₀)', default: 100, min: 0, max: 500 },
+                    { id: 'c1', label: 'Propension marginale à consommer (c₁)', default: 0.8, min: 0, max: 1, step: 0.01 },
+                    { id: 'b', label: 'Sensibilité de l\'investissement (b)', default: 50, min: 0, max: 200 },
+                    { id: 'I0', label: 'Investissement autonome (I₀)', default: 150, min: 0, max: 500 },
+                    { id: 'G', label: 'Dépenses publiques (G)', default: 200, min: 0, max: 500 },
+                    { id: 'T', label: 'Taxes (T)', default: 100, min: 0, max: 500 },
+                    { id: 'M', label: 'Offre de monnaie (M)', default: 1000, min: 0, max: 3000 },
+                    { id: 'P', label: 'Niveau des prix (P)', default: 1, min: 0.1, max: 5, step: 0.1 },
+                    { id: 'k', label: 'Sensibilité de la demande de monnaie au revenu (k)', default: 0.5, min: 0, max: 1, step: 0.01 },
+                    { id: 'h', label: 'Sensibilité de la demande de monnaie au taux (h)', default: 100, min: 0, max: 500 },
+                    { id: 'm', label: 'Propension marginale à importer (m)', default: 0.1, min: 0, max: 0.5, step: 0.01 },
+                    { id: 'NX0', label: 'Exportations nettes autonomes (NX₀)', default: 50, min: -200, max: 200 },
+                    { id: 'n', label: 'Sensibilité mobilité des capitaux (n)', default: 100, min: 0, max: 500 },
+                    { id: 'r_star', label: 'Taux d\'intérêt étranger (r*)', default: 5, min: 0, max: 20, step: 0.1 }
+                ],
+                sliders: [
+                    { id: 'G', label: 'Dépenses publiques (G)', onChange: 'updateGraph' },
+                    { id: 'M', label: 'Offre de monnaie (M)', onChange: 'updateGraph' },
+                    { id: 'NX0', label: 'Exportations nettes (NX₀)', onChange: 'updateGraph' }
+                ]
+            },
+            megc: {
+                name: 'MEGC - Modèle d\'Équilibre Général Calculable',
+                equations: [
+                    { latex: 'Y = F(K, L) = K^\\alpha L^{1-\\alpha}', desc: 'Fonction de production' },
+                    { latex: 'C + I = Y', desc: 'Équilibre ressources-emplois' },
+                    { latex: 'w = (1-\\alpha) \\frac{Y}{L}', desc: 'Demande de travail' },
+                    { latex: 'r = \\alpha \\frac{Y}{K}', desc: 'Demande de capital' },
+                    { latex: 'C = (1-s) (wL + rK)', desc: 'Fonction de consommation' }
+                ],
+                explanation: 'Le MEGC est un modèle d\'équilibre général qui détermine simultanément la production, les prix des facteurs (salaire w et rendement du capital r), la consommation et l\'investissement. Le modèle utilise une fonction de production Cobb-Douglas et suppose que les marchés sont parfaitement concurrentiels.',
+                params: [
+                    { id: 'K', label: 'Stock de capital (K)', default: 100, min: 10, max: 500 },
+                    { id: 'L', label: 'Offre de travail (L)', default: 100, min: 10, max: 500 },
+                    { id: 'alpha', label: 'Part du capital dans la production (α)', default: 0.3, min: 0.1, max: 0.9, step: 0.01 },
+                    { id: 's', label: 'Taux d\'épargne (s)', default: 0.2, min: 0, max: 1, step: 0.01 }
+                ],
+                sliders: [
+                    { id: 'K', label: 'Stock de capital (K)', onChange: 'updateGraph' },
+                    { id: 'L', label: 'Offre de travail (L)', onChange: 'updateGraph' },
+                    { id: 's', label: 'Taux d\'épargne (s)', onChange: 'updateGraph' }
+                ]
+            }
+        };
+        
+        function openTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function updateModelDisplay() {
+            currentModel = document.getElementById('model-type').value;
+            const model = models[currentModel];
+            const display = document.getElementById('model-display');
+            
+            let html = `<h3>${model.name}</h3>`;
+            
+            html += '<div class="equation-block">';
+            html += '<h4>Équations du modèle</h4>';
+            model.equations.forEach(eq => {
+                html += `<div style="margin: 15px 0;">`;
+                html += `<div>$$${eq.latex}$$</div>`;
+                html += `<div style="color: #5a5a5a; font-size: 0.9rem; margin-top: 5px;">${eq.desc}</div>`;
+                html += `</div>`;
+            });
+            html += '</div>';
+            
+            html += `<div class="explanation"><strong>Explication pédagogique:</strong><br>${model.explanation}</div>`;
+            
+            display.innerHTML = html;
+            
+            renderMathInElement(display);
+            
+            updateParamsDisplay();
+        }
+        
+        function updateParamsDisplay() {
+            const model = models[currentModel];
+            const container = document.getElementById('params-content');
+            
+            let html = '<table class="param-table"><thead><tr><th>Paramètre</th><th>Valeur</th></tr></thead><tbody>';
+            
+            model.params.forEach(param => {
+                const step = param.step || 1;
+                html += `<tr>
+                    <th>${param.label}</th>
+                    <td><input type="number" id="param-${param.id}" value="${param.default}" 
+                        min="${param.min}" max="${param.max}" step="${step}"></td>
+                </tr>`;
+                modelParams[param.id] = param.default;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            
+            model.params.forEach(param => {
+                document.getElementById(`param-${param.id}`).addEventListener('input', (e) => {
+                    modelParams[param.id] = parseFloat(e.target.value);
+                });
+            });
+        }
+        
+        function solveModel() {
+            const model = models[currentModel];
+            
+            model.params.forEach(param => {
+                const value = parseFloat(document.getElementById(`param-${param.id}`).value);
+                modelParams[param.id] = value;
+            });
+            
+            if (currentModel === 'islm') {
+                solveISLM();
+            } else if (currentModel === 'islm-bp') {
+                solveISLMBP();
+            } else if (currentModel === 'megc') {
+                solveMEGC();
+            }
+            
+            document.getElementById('symbolic-results').style.display = 'block';
+            document.getElementById('numeric-results').style.display = 'block';
+            
+            updateSliders();
+            drawGraph();
+            
+            openTab('display');
+            document.querySelectorAll('.tab-btn')[3].classList.add('active');
+        }
+        
+        function solveISLM() {
+            const { c0, c1, b, I0, G, T, M, P, k, h } = modelParams;
+            
+            const symbolicContent = document.getElementById('symbolic-content');
+            symbolicContent.innerHTML = `
+                <p><strong>Équation IS:</strong></p>
+                <div>$$Y = \\frac{1}{1-c_1}(c_0 + I_0 - c_1 T + G - br)$$</div>
+                <p><strong>Équation LM:</strong></p>
+                <div>$$r = \\frac{k}{h}Y - \\frac{M/P}{h}$$</div>
+                <p><strong>Résolution:</strong></p>
+                <div>$$Y^* = \\frac{h(c_0 + I_0 - c_1 T + G) + b(M/P)}{h(1-c_1) + kb}$$</div>
+                <div>$$r^* = \\frac{k(c_0 + I_0 - c_1 T + G) - (1-c_1)(M/P)}{h(1-c_1) + kb}$$</div>
+            `;
+            
+            const Y_star = (h * (c0 + I0 - c1 * T + G) + b * (M / P)) / (h * (1 - c1) + k * b);
+            const r_star = (k * (c0 + I0 - c1 * T + G) - (1 - c1) * (M / P)) / (h * (1 - c1) + k * b);
+            
+            solution = { Y: Y_star, r: r_star };
+            
+            const numericContent = document.getElementById('numeric-content');
+            numericContent.innerHTML = `
+                <p><strong>Production d'équilibre:</strong> Y* = ${Y_star.toFixed(2)}</p>
+                <p><strong>Taux d'intérêt d'équilibre:</strong> r* = ${r_star.toFixed(2)}%</p>
+                <p><strong>Consommation:</strong> C = ${(c0 + c1 * (Y_star - T)).toFixed(2)}</p>
+                <p><strong>Investissement:</strong> I = ${(I0 - b * r_star).toFixed(2)}</p>
+            `;
+            
+            renderMathInElement(symbolicContent);
+        }
+        
+        function solveISLMBP() {
+            const { c0, c1, b, I0, G, T, M, P, k, h, m, NX0, n, r_star } = modelParams;
+            
+            const symbolicContent = document.getElementById('symbolic-content');
+            symbolicContent.innerHTML = `
+                <p><strong>Système d'équations:</strong></p>
+                <div>$$Y = \\frac{1}{1-c_1+m}(c_0 + I_0 - c_1 T + G + NX_0 - br)$$</div>
+                <div>$$r = \\frac{k}{h}Y - \\frac{M/P}{h}$$</div>
+                <div>$$r = r^* + \\frac{NX_0 - mY}{n}$$</div>
+            `;
+            
+            const denominator = h * (1 - c1 + m) + k * b + h * m * n / h;
+            const Y_eq = (h * (c0 + I0 - c1 * T + G + NX0) + b * (M / P) + (1 - c1 + m) * n * r_star) / denominator;
+            const r_eq = (k * (c0 + I0 - c1 * T + G + NX0) - (1 - c1 + m) * (M / P) + h * n * r_star) / denominator;
+            
+            solution = { Y: Y_eq, r: r_eq };
+            
+            const numericContent = document.getElementById('numeric-content');
+            numericContent.innerHTML = `
+                <p><strong>Production d'équilibre:</strong> Y* = ${Y_eq.toFixed(2)}</p>
+                <p><strong>Taux d'intérêt d'équilibre:</strong> r* = ${r_eq.toFixed(2)}%</p>
+                <p><strong>Exportations nettes:</strong> NX = ${(NX0 - m * Y_eq).toFixed(2)}</p>
+                <p><strong>Balance des paiements:</strong> BP = ${((NX0 - m * Y_eq) + n * (r_eq - r_star)).toFixed(2)}</p>
+            `;
+            
+            renderMathInElement(symbolicContent);
+        }
+        
+        function solveMEGC() {
+            const { K, L, alpha, s } = modelParams;
+            
+            const symbolicContent = document.getElementById('symbolic-content');
+            symbolicContent.innerHTML = `
+                <p><strong>Résolution du MEGC:</strong></p>
+                <div>$$Y = K^\\alpha L^{1-\\alpha}$$</div>
+                <div>$$w = (1-\\alpha) \\frac{Y}{L}$$</div>
+                <div>$$r = \\alpha \\frac{Y}{K}$$</div>
+                <div>$$C = (1-s)(wL + rK) = (1-s)Y$$</div>
+                <div>$$I = s Y$$</div>
+            `;
+            
+            const Y = Math.pow(K, alpha) * Math.pow(L, 1 - alpha);
+            const w = (1 - alpha) * Y / L;
+            const r = alpha * Y / K;
+            const C = (1 - s) * Y;
+            const I = s * Y;
+            
+            solution = { Y, w, r, C, I, K, L };
+            
+            const numericContent = document.getElementById('numeric-content');
+            numericContent.innerHTML = `
+                <p><strong>Production totale:</strong> Y = ${Y.toFixed(2)}</p>
+                <p><strong>Salaire:</strong> w = ${w.toFixed(2)}</p>
+                <p><strong>Rendement du capital:</strong> r = ${r.toFixed(2)}</p>
+                <p><strong>Consommation:</strong> C = ${C.toFixed(2)}</p>
+                <p><strong>Investissement:</strong> I = ${I.toFixed(2)}</p>
+                <p><strong>Revenu du travail:</strong> wL = ${(w * L).toFixed(2)}</p>
+                <p><strong>Revenu du capital:</strong> rK = ${(r * K).toFixed(2)}</p>
+            `;
+            
+            renderMathInElement(symbolicContent);
+        }
+        
+        function updateSliders() {
+            const model = models[currentModel];
+            const container = document.getElementById('sliders-container');
+            
+            let html = '';
+            model.sliders.forEach(slider => {
+                const param = model.params.find(p => p.id === slider.id);
+                const value = modelParams[slider.id];
+                html += `
+                    <div class="slider-control">
+                        <label>${slider.label}</label>
+                        <input type="range" id="slider-${slider.id}" 
+                            min="${param.min}" max="${param.max}" 
+                            step="${param.step || 1}" value="${value}"
+                            oninput="updateSliderValue('${slider.id}')">
+                        <div class="slider-value" id="value-${slider.id}">${value}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function updateSliderValue(id) {
+            const value = parseFloat(document.getElementById(`slider-${id}`).value);
+            document.getElementById(`value-${id}`).textContent = value;
+            modelParams[id] = value;
+            
+            if (currentModel === 'islm') {
+                solveISLM();
+            } else if (currentModel === 'islm-bp') {
+                solveISLMBP();
+            } else if (currentModel === 'megc') {
+                solveMEGC();
+            }
+            
+            drawGraph();
+        }
+        
+        function drawGraph() {
+            if (!solution) return;
+            
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            const margin = 60;
+            const plotWidth = width - 2 * margin;
+            const plotHeight = height - 2 * margin;
+            
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            
+            if (currentModel === 'islm' || currentModel === 'islm-bp') {
+                drawISLMGraph(ctx, width, height, margin, plotWidth, plotHeight);
+            } else if (currentModel === 'megc') {
+                drawMEGCGraph(ctx, width, height, margin, plotWidth, plotHeight);
+            }
+            
+            updateLegend();
+        }
+        
+        function drawISLMGraph(ctx, width, height, margin, plotWidth, plotHeight) {
+            const { c0, c1, b, I0, G, T, M, P, k, h } = modelParams;
+            
+            const maxY = solution.Y * 1.5;
+            const maxR = solution.r * 1.5;
+            
+            const scaleX = plotWidth / maxY * zoomLevel;
+            const scaleY = plotHeight / maxR * zoomLevel;
+            
+            function toCanvasX(y) {
+                return margin + y * scaleX + panX;
+            }
+            
+            function toCanvasY(r) {
+                return height - margin - r * scaleY + panY;
+            }
+            
+            // Axes
+            ctx.strokeStyle = '#2a2a2a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin + panX, margin);
+            ctx.lineTo(margin + panX, height - margin);
+            ctx.lineTo(width - margin, height - margin + panY);
+            ctx.stroke();
+            
+            // Courbe IS
+            ctx.strokeStyle = '#4a7c9e';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let y = 0; y <= maxY; y += maxY / 100) {
+                const r = ((1 - c1) * y - (c0 + I0 - c1 * T + G)) / b;
+                if (r >= 0 && r <= maxR) {
+                    if (y === 0) {
+                        ctx.moveTo(toCanvasX(y), toCanvasY(r));
+                    } else {
+                        ctx.lineTo(toCanvasX(y), toCanvasY(r));
+                    }
+                }
+            }
+            ctx.stroke();
+            
+            // Courbe LM
+            ctx.strokeStyle = '#9e4a4a';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let y = 0; y <= maxY; y += maxY / 100) {
+                const r = (k * y - M / P) / h;
+                if (r >= 0 && r <= maxR) {
+                    if (y === 0) {
+                        ctx.moveTo(toCanvasX(y), toCanvasY(r));
+                    } else {
+                        ctx.lineTo(toCanvasX(y), toCanvasY(r));
+                    }
+                }
+            }
+            ctx.stroke();
+            
+            // Point d'équilibre
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(solution.Y), toCanvasY(solution.r), 7, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#2a2a2a';
+            ctx.font = '16px EB Garamond, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Y', width - margin + 20, height - margin + panY + 5);
+            ctx.fillText('r', margin + panX - 5, margin - 20);
+            
+            // Valeurs d'équilibre
+            ctx.font = '13px EB Garamond, serif';
+            ctx.fillText(`Y*=${solution.Y.toFixed(1)}`, toCanvasX(solution.Y), height - margin + 20);
+            ctx.textAlign = 'right';
+            ctx.fillText(`r*=${solution.r.toFixed(1)}`, margin - 10, toCanvasY(solution.r) + 5);
+        }
+        
+        function drawMEGCGraph(ctx, width, height, margin, plotWidth, plotHeight) {
+            const { K, L, alpha } = modelParams;
+            
+            const maxL = L * 2;
+            const maxY = solution.Y * 1.5;
+            
+            const scaleX = plotWidth / maxL * zoomLevel;
+            const scaleY = plotHeight / maxY * zoomLevel;
+            
+            function toCanvasX(l) {
+                return margin + l * scaleX + panX;
+            }
+            
+            function toCanvasY(y) {
+                return height - margin - y * scaleY + panY;
+            }
+            
+            // Axes
+            ctx.strokeStyle = '#2a2a2a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin + panX, margin);
+            ctx.lineTo(margin + panX, height - margin);
+            ctx.lineTo(width - margin, height - margin + panY);
+            ctx.stroke();
+            
+            // Fonction de production
+            ctx.strokeStyle = '#4a7c9e';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let l = 0; l <= maxL; l += maxL / 100) {
+                const y = Math.pow(K, alpha) * Math.pow(l, 1 - alpha);
+                if (y <= maxY) {
+                    if (l === 0) {
+                        ctx.moveTo(toCanvasX(l), toCanvasY(y));
+                    } else {
+                        ctx.lineTo(toCanvasX(l), toCanvasY(y));
+                    }
+                }
+            }
+            ctx.stroke();
+            
+            // Point d'équilibre
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(L), toCanvasY(solution.Y), 7, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#2a2a2a';
+            ctx.font = '16px EB Garamond, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('L', width - margin + 20, height - margin + panY + 5);
+            ctx.fillText('Y', margin + panX - 5, margin - 20);
+            
+            ctx.font = '13px EB Garamond, serif';
+            ctx.fillText(`L*=${L.toFixed(1)}`, toCanvasX(L), height - margin + 20);
+            ctx.textAlign = 'right';
+            ctx.fillText(`Y*=${solution.Y.toFixed(1)}`, margin - 10, toCanvasY(solution.Y) + 5);
+        }
+        
+        function updateLegend() {
+            const legend = document.getElementById('legend-display');
+            
+            if (currentModel === 'islm' || currentModel === 'islm-bp') {
+                legend.innerHTML = `
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #4a7c9e;"></div>
+                        <span>Courbe IS</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #9e4a4a;"></div>
+                        <span>Courbe LM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="display: inline-block; width: 12px; height: 12px; background: #1a1a1a; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></div>
+                        <span>Équilibre (Y*, r*)</span>
+                    </div>
+                `;
+            } else if (currentModel === 'megc') {
+                legend.innerHTML = `
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #4a7c9e;"></div>
+                        <span>Fonction de production Y = F(K, L)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="display: inline-block; width: 12px; height: 12px; background: #1a1a1a; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></div>
+                        <span>Équilibre (L*, Y*)</span>
+                    </div>
+                `;
+            }
+        }
+        
+        function exportLatex() {
+            if (!solution) {
+                alert('Veuillez d\'abord résoudre le modèle.');
+                return;
+            }
+            
+            const model = models[currentModel];
+            let latex = `\\documentclass{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage{amsmath}
+\\usepackage{amssymb}
+
+\\title{${model.name}}
+\\author{Ramanambonona Ambinintsoa, Ph.D}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+\\section{Équations du modèle}
+`;
+            
+            model.equations.forEach((eq, i) => {
+                latex += `\n\\subsection*{${eq.desc}}\n`;
+                latex += `\\begin{equation}\n${eq.latex}\n\\end{equation}\n`;
+            });
+            
+            latex += `\n\\section{Paramètres}\n\\begin{itemize}\n`;
+            model.params.forEach(param => {
+                latex += `\\item ${param.label}: $${modelParams[param.id]}$\n`;
+            });
+            latex += `\\end{itemize}\n`;
+            
+            latex += `\n\\section{Solution}\n`;
+            
+            if (currentModel === 'islm' || currentModel === 'islm-bp') {
+                latex += `\\begin{align*}\nY^* &= ${solution.Y.toFixed(2)} \\\\\nr^* &= ${solution.r.toFixed(2)}\n\\end{align*}\n`;
+            } else if (currentModel === 'megc') {
+                latex += `\\begin{align*}\nY &= ${solution.Y.toFixed(2)} \\\\\nw &= ${solution.w.toFixed(2)} \\\\\nr &= ${solution.r.toFixed(2)} \\\\\nC &= ${solution.C.toFixed(2)} \\\\\nI &= ${solution.I.toFixed(2)}\n\\end{align*}\n`;
+            }
+            
+            latex += `\n\\end{document}`;
+            
+            const blob = new Blob([latex], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.download = `${currentModel}_results.tex`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+        
+        function zoomIn() {
+            zoomLevel *= 1.2;
+            drawGraph();
+        }
+        
+        function zoomOut() {
+            zoomLevel /= 1.2;
+            drawGraph();
+        }
+        
+        function resetZoom() {
+            zoomLevel = 1;
+            panX = 0;
+            panY = 0;
+            drawGraph();
+        }
+        
+        function downloadCanvas() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.download = `${currentModel}_graph.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Gestion du pan (déplacement) du graphique
+        const canvas = document.getElementById('canvas');
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            canvas.style.cursor = 'grabbing';
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                panX += e.clientX - lastX;
+                panY += e.clientY - lastY;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                drawGraph();
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.style.cursor = 'move';
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            canvas.style.cursor = 'move';
+        });
+        
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const zoom = e.deltaY < 0 ? 1.1 : 0.9;
+            const oldZoom = zoomLevel;
+            zoomLevel *= zoom;
+            
+            // Ajuster le pan pour zoomer vers la position de la souris
+            panX = x - (x - panX) * (zoomLevel / oldZoom);
+            panY = y - (y - panY) * (zoomLevel / oldZoom);
+            
+            drawGraph();
+        });
+        
+        // Initialisation
+        updateModelDisplay();
+    </script>
+</body>
+</html>
