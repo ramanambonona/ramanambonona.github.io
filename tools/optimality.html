@@ -469,12 +469,12 @@
                 
                 <div class="form-group">
                     <label for="intra-function-f">Fonction de production f (en fonction de X^f):</label>
-                    <input type="text" id="intra-function-f" value="sqrt(Xf)" placeholder="Ex: sqrt(Xf), Xf^0.5, 2*Xf">
+                    <input type="text" id="intra-function-f" value="\sqrt(Xf)" placeholder="Ex: \sqrt(Xf), Xf^{0.5}, 2*Xf">
                 </div>
                 
                 <div class="form-group">
                     <label for="intra-function-g">Fonction de production g (en fonction de X^g):</label>
-                    <input type="text" id="intra-function-g" value="2*sqrt(Xg)" placeholder="Ex: 2*sqrt(Xg), 3*Xg^0.5">
+                    <input type="text" id="intra-function-g" value="2*\sqrt(Xg)" placeholder="Ex: 2*\sqrt(Xg), 3*Xg^{0.5}">
                 </div>
                 
                 <div class="form-group">
@@ -502,13 +502,13 @@
                     <div class="form-col">
                         <div class="form-group">
                             <label for="inter-function-f">Fonction de production f (X1, X2):</label>
-                            <input type="text" id="inter-function-f" value="X1f^0.5 * X2f^0.5" placeholder="Ex: X1f^0.5 * X2f^0.5">
+                            <input type="text" id="inter-function-f" value="X1f^{0.5} * X2f^{0.5}" placeholder="Ex: X1f^0.5 * X2f^0.5">
                         </div>
                     </div>
                     <div class="form-col">
                         <div class="form-group">
                             <label for="inter-function-g">Fonction de production g (X1, X2):</label>
-                            <input type="text" id="inter-function-g" value="X1g^0.3 * X2g^0.7" placeholder="Ex: X1g^0.3 * X2g^0.7">
+                            <input type="text" id="inter-function-g" value="X1g^{0.3} * X2g^{0.7}" placeholder="Ex: X1g^{0.3} * X2g^{0.7}">
                         </div>
                     </div>
                 </div>
@@ -547,14 +547,14 @@
                 <div class="form-row">
                     <div class="form-col">
                         <div class="form-group">
-                            <label for="cons-utility-a">Utilité de l'agent A (x1, x2):</label>
-                            <input type="text" id="cons-utility-a" value="x1a^0.5 * x2a^0.5" placeholder="Ex: x1a^0.5 * x2a^0.5">
+                            <label for="cons-utility-a">Utilité de l'agent A}(x1, x2):</label>
+                            <input type="text" id="cons-utility-a" value="x1a^{0.5} * x2a^{0.5}" placeholder="Ex: x1a^{0.5} * x2a^{0.5}">
                         </div>
                     </div>
                     <div class="form-col">
                         <div class="form-group">
                             <label for="cons-utility-b">Utilité de l'agent B (x1, x2):</label>
-                            <input type="text" id="cons-utility-b" value="x1b^0.3 * x2b^0.7" placeholder="Ex: x1b^0.3 * x2b^0.7">
+                            <input type="text" id="cons-utility-b" value="x1b^{0.3} * x2b^{0.7}" placeholder="Ex: x1b^{0.3} * x2b^{0.7}">
                         </div>
                     </div>
                 </div>
@@ -611,13 +611,13 @@
                     <div class="form-col">
                         <div class="form-group">
                             <label for="pareto-utility-a">Utilité de l'agent A (x1, x2):</label>
-                            <input type="text" id="pareto-utility-a" value="x1a^0.5 * x2a^0.5" placeholder="Ex: x1a^0.5 * x2a^0.5">
+                            <input type="text" id="pareto-utility-a" value="x1a^{0.5} * x2a^{0.5}" placeholder="Ex: x1a^{0.5} * x2a^{0.5}">
                         </div>
                     </div>
                     <div class="form-col">
                         <div class="form-group">
                             <label for="pareto-utility-b">Utilité de l'agent B (x1, x2):</label>
-                            <input type="text" id="pareto-utility-b" value="x1b^0.3 * x2b^0.7" placeholder="Ex: x1b^0.3 * x2b^0.7">
+                            <input type="text" id="pareto-utility-b" value="x1b^{0.3} * x2b^{0.7}" placeholder="Ex: x1b^{0.3} * x2b^{0.7}">
                         </div>
                     </div>
                 </div>
@@ -628,13 +628,13 @@
                     <div class="form-col">
                         <div class="form-group">
                             <label for="pareto-production-f">Production f (input):</label>
-                            <input type="text" id="pareto-production-f" value="sqrt(Xf)" placeholder="Ex: sqrt(Xf), 2*Xf^0.5">
+                            <input type="text" id="pareto-production-f" value="\sqrt(Xf)" placeholder="Ex: sqrt(Xf), 2*Xf^{0.5}">
                         </div>
                     </div>
                     <div class="form-col">
                         <div class="form-group">
                             <label for="pareto-production-g">Production g (input):</label>
-                            <input type="text" id="pareto-production-g" value="2*sqrt(Xg)" placeholder="Ex: 2*sqrt(Xg), 3*Xg^0.5">
+                            <input type="text" id="pareto-production-g" value="2*\sqrt(Xg)" placeholder="Ex: 2*\sqrt(Xg), 3*Xg^{0.5}">
                         </div>
                     </div>
                 </div>
@@ -888,8 +888,8 @@
             // Étape 3: Résolution
             let step3Content = "";
             try {
-                if (fExpr.includes('sqrt(Xf)') && gExpr.includes('sqrt(Xg)')) {
-                    const coefMatch = gExpr.match(/(\d*\.?\d+)\*?sqrt/);
+                if (fExpr.includes('\sqrt(Xf)') && gExpr.includes('\sqrt(Xg)')) {
+                    const coefMatch = gExpr.match(/(\d*\.?\d+)\*?\sqrt/);
                     const coef = coefMatch ? parseFloat(coefMatch[1]) : 1;
                     
                     const Xf = parseFloat(totalX) / (1 + coef*coef);
