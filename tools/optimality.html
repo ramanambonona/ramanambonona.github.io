@@ -333,6 +333,22 @@
             color: var(--accent-color);
         }
         
+        .footer-actions {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-actions button {
+            background: #111;
+            color: #fff;
+            border: 1px solid #111;
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
         footer {
             background-color: var(--primary-color);
             color: white;
@@ -471,6 +487,9 @@
                 <div class="results" id="intra-results" style="display: none;">
                     <h2>Résultats</h2>
                     <div id="intra-steps"></div>
+                    <div class="footer-actions">
+                        <button class="export-btn" onclick="exportLatex('intra')">Exporter en LaTeX</button>
+                    </div>
                 </div>
             </div>
             
@@ -514,6 +533,9 @@
                 <div class="results" id="inter-results" style="display: none;">
                     <h2>Résultats</h2>
                     <div id="inter-steps"></div>
+                    <div class="footer-actions">
+                        <button class="export-btn" onclick="exportLatex('inter')">Exporter en LaTeX</button>
+                    </div>
                 </div>
             </div>
             
@@ -572,6 +594,9 @@
                 <div class="results" id="cons-results" style="display: none;">
                     <h2>Résultats</h2>
                     <div id="cons-steps"></div>
+                    <div class="footer-actions">
+                        <button class="export-btn" onclick="exportLatex('cons')">Exporter en LaTeX</button>
+                    </div>
                 </div>
             </div>
             
@@ -636,6 +661,9 @@
                 <div class="results" id="pareto-results" style="display: none;">
                     <h2>Résultats</h2>
                     <div id="pareto-steps"></div>
+                    <div class="footer-actions">
+                        <button class="export-btn" onclick="exportLatex('pareto')">Exporter en LaTeX</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -661,6 +689,14 @@
     <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
     
     <script>
+        // Variables globales pour stocker les résultats
+        let currentResults = {
+            intra: null,
+            inter: null,
+            cons: null,
+            pareto: null
+        };
+
         // Navigation par onglets
         function openTab(tabName) {
             const tabs = document.querySelectorAll('.tab-content');
@@ -678,6 +714,22 @@
             }
         }
         
+        // Fonction pour formater les expressions LaTeX
+        function formatLatex(expr) {
+            return expr
+                .replace(/\*/g, ' \\cdot ')
+                .replace(/X1f/g, 'X_1^f')
+                .replace(/X2f/g, 'X_2^f')
+                .replace(/X1g/g, 'X_1^g')
+                .replace(/X2g/g, 'X_2^g')
+                .replace(/x1a/g, 'x_1^A')
+                .replace(/x2a/g, 'x_2^A')
+                .replace(/x1b/g, 'x_1^B')
+                .replace(/x2b/g, 'x_2^B')
+                .replace(/Xf/g, 'X^f')
+                .replace(/Xg/g, 'X^g');
+        }
+
         // Fonction pour calculer les dérivées symboliques
         function symbolicDerivative(expr, variable) {
             try {
@@ -763,17 +815,6 @@
             }
         }
         
-        // Fonction pour résoudre un système d'équations symboliquement
-        function solveSymbolicSystem(equations, variables) {
-            let solution = "Système d'équations à résoudre:\n";
-            equations.forEach((eq, i) => {
-                solution += `Équation ${i+1}: ${eq}\n`;
-            });
-            solution += `Variables: ${variables.join(', ')}\n\n`;
-            solution += "La solution nécessite une résolution numérique spécifique pour les valeurs données.";
-            return solution;
-        }
-        
         // Résolution pour l'optimalité intra-branche
         function solveIntraBranch() {
             const fExpr = document.getElementById('intra-function-f').value;
@@ -784,48 +825,68 @@
             const stepsDiv = document.getElementById('intra-steps');
             stepsDiv.innerHTML = '';
             
+            // Stocker les données pour l'export
+            currentResults.intra = {
+                type: 'intra-branche',
+                fExpr: fExpr,
+                gExpr: gExpr,
+                totalX: totalX,
+                steps: []
+            };
+            
             // Étape 1: Énoncé du problème
-            let step1 = document.createElement('div');
-            step1.className = 'step';
-            step1.innerHTML = `
-                <div class="step-title">Étape 1: Énoncé du problème</div>
-                <p>Nous avons deux entreprises avec les fonctions de production:</p>
-                <div class="math-container">
-                    <p>\\[ f(X^f) = ${fExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xf/g, 'X^f')} \\]</p>
-                    <p>\\[ g(X^g) = ${gExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xg/g, 'X^g')} \\]</p>
-                </div>
-                <p>La dotation totale est: \\( \\bar{X} = ${totalX} \\)</p>
-                <p>Nous cherchons la répartition optimale \\( (X^{f*}, X^{g*}) \\) qui maximise \\( f(X^f) + g(X^g) \\) sous la contrainte \\( X^f + X^g = \\bar{X} \\).</p>
+            let step1 = {
+                title: 'Énoncé du problème',
+                content: `
+                    <p>Nous avons deux entreprises avec les fonctions de production:</p>
+                    <div class="math-container">
+                        <p>\\[ f(X^f) = ${formatLatex(fExpr)} \\]</p>
+                        <p>\\[ g(X^g) = ${formatLatex(gExpr)} \\]</p>
+                    </div>
+                    <p>La dotation totale est: \\( \\bar{X} = ${totalX} \\)</p>
+                    <p>Nous cherchons la répartition optimale \\( (X^{f*}, X^{g*}) \\) qui maximise \\( f(X^f) + g(X^g) \\) sous la contrainte \\( X^f + X^g = \\bar{X} \\).</p>
+                `
+            };
+            
+            let step1Div = document.createElement('div');
+            step1Div.className = 'step';
+            step1Div.innerHTML = `
+                <div class="step-title">${step1.title}</div>
+                ${step1.content}
             `;
-            stepsDiv.appendChild(step1);
+            stepsDiv.appendChild(step1Div);
+            currentResults.intra.steps.push(step1);
             
             // Étape 2: Condition d'optimalité
-            let step2 = document.createElement('div');
-            step2.className = 'step';
+            const derivF = symbolicDerivative(fExpr, 'Xf');
+            const derivG = symbolicDerivative(gExpr, 'Xg');
             
-            const derivF = symbolicDerivative(fExpr, 'Xf').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xf/g, 'X^f');
-            const derivG = symbolicDerivative(gExpr, 'Xg').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xg/g, 'X^g');
+            let step2 = {
+                title: 'Condition d\'optimalité',
+                content: `
+                    <p>À l'optimum, les productivités marginales doivent être égales:</p>
+                    <div class="math-container">
+                        <p>\\[ f'(X^f) = g'(X^g) \\]</p>
+                        <p>\\[ ${formatLatex(derivF)} = ${formatLatex(derivG)} \\]</p>
+                    </div>
+                    <p>Et la contrainte de ressources doit être respectée:</p>
+                    <div class="math-container">
+                        <p>\\[ X^f + X^g = ${totalX} \\]</p>
+                    </div>
+                `
+            };
             
-            step2.innerHTML = `
-                <div class="step-title">Étape 2: Condition d'optimalité</div>
-                <p>À l'optimum, les productivités marginales doivent être égales:</p>
-                <div class="math-container">
-                    <p>\\[ f'(X^f) = g'(X^g) \\]</p>
-                    <p>\\[ ${derivF} = ${derivG} \\]</p>
-                </div>
-                <p>Et la contrainte de ressources doit être respectée:</p>
-                <div class="math-container">
-                    <p>\\[ X^f + X^g = ${totalX} \\]</p>
-                </div>
+            let step2Div = document.createElement('div');
+            step2Div.className = 'step';
+            step2Div.innerHTML = `
+                <div class="step-title">${step2.title}</div>
+                ${step2.content}
             `;
-            stepsDiv.appendChild(step2);
+            stepsDiv.appendChild(step2Div);
+            currentResults.intra.steps.push(step2);
             
-            // Étape 3: Résolution symbolique
-            let step3 = document.createElement('div');
-            step3.className = 'step';
-            
-            // Résoudre symboliquement si possible
-            let solutionText = "";
+            // Étape 3: Résolution
+            let step3Content = "";
             try {
                 if (fExpr.includes('sqrt(Xf)') && gExpr.includes('sqrt(Xg)')) {
                     const coefMatch = gExpr.match(/(\d*\.?\d+)\*?sqrt/);
@@ -837,7 +898,7 @@
                     const prodG = coef * Math.sqrt(Xg);
                     const totalProd = prodF + prodG;
                     
-                    solutionText = `
+                    step3Content = `
                         <p>Pour \\( f(X^f) = \\sqrt{X^f} \\) et \\( g(X^g) = ${coef}\\sqrt{X^g} \\):</p>
                         <div class="math-container">
                             <p>\\[ f'(X^f) = \\frac{1}{2\\sqrt{X^f}} \\]</p>
@@ -850,24 +911,32 @@
                         <p>Production totale: \\( f(X^{f*}) + g(X^{g*}) = \\sqrt{${Xf.toFixed(4)}} + ${coef}\\sqrt{${Xg.toFixed(4)}} = ${totalProd.toFixed(4)} \\)</p>
                     `;
                 } else {
-                    solutionText = `
+                    step3Content = `
                         <p>Le système à résoudre est:</p>
                         <div class="math-container">
-                            <p>\\[ ${derivF} = ${derivG} \\]</p>
+                            <p>\\[ ${formatLatex(derivF)} = ${formatLatex(derivG)} \\]</p>
                             <p>\\[ X^f + X^g = ${totalX} \\]</p>
                         </div>
                         <p>Cette solution nécessite une résolution numérique pour les fonctions spécifiques.</p>
                     `;
                 }
             } catch (e) {
-                solutionText = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
+                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
             }
             
-            step3.innerHTML = `
-                <div class="step-title">Étape 3: Résolution</div>
-                ${solutionText}
+            let step3 = {
+                title: 'Résolution',
+                content: step3Content
+            };
+            
+            let step3Div = document.createElement('div');
+            step3Div.className = 'step';
+            step3Div.innerHTML = `
+                <div class="step-title">${step3.title}</div>
+                ${step3.content}
             `;
-            stepsDiv.appendChild(step3);
+            stepsDiv.appendChild(step3Div);
+            currentResults.intra.steps.push(step3);
             
             // Afficher les résultats
             document.getElementById('intra-results').style.display = 'block';
@@ -889,52 +958,73 @@
             const stepsDiv = document.getElementById('inter-steps');
             stepsDiv.innerHTML = '';
             
+            // Stocker les données pour l'export
+            currentResults.inter = {
+                type: 'inter-branches',
+                fExpr: fExpr,
+                gExpr: gExpr,
+                totalX1: totalX1,
+                totalX2: totalX2,
+                steps: []
+            };
+            
             // Étape 1: Énoncé du problème
-            let step1 = document.createElement('div');
-            step1.className = 'step';
-            step1.innerHTML = `
-                <div class="step-title">Étape 1: Énoncé du problème</div>
-                <p>Nous avons deux branches avec les fonctions de production:</p>
-                <div class="math-container">
-                    <p>\\[ Y = f(X_1^f, X_2^f) = ${fExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/X1f/g, 'X_1^f').replace(/X2f/g, 'X_2^f')} \\]</p>
-                    <p>\\[ Z = g(X_1^g, X_2^g) = ${gExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/X1g/g, 'X_1^g').replace(/X2g/g, 'X_2^g')} \\]</p>
-                </div>
-                <p>Les dotations totales sont: \\( \\bar{X}_1 = ${totalX1} \\), \\( \\bar{X}_2 = ${totalX2} \\)</p>
-                <p>Nous cherchons la répartition optimale des inputs entre les deux branches.</p>
+            let step1 = {
+                title: 'Énoncé du problème',
+                content: `
+                    <p>Nous avons deux branches avec les fonctions de production:</p>
+                    <div class="math-container">
+                        <p>\\[ Y = f(X_1^f, X_2^f) = ${formatLatex(fExpr)} \\]</p>
+                        <p>\\[ Z = g(X_1^g, X_2^g) = ${formatLatex(gExpr)} \\]</p>
+                    </div>
+                    <p>Les dotations totales sont: \\( \\bar{X}_1 = ${totalX1} \\), \\( \\bar{X}_2 = ${totalX2} \\)</p>
+                    <p>Nous cherchons la répartition optimale des inputs entre les deux branches.</p>
+                `
+            };
+            
+            let step1Div = document.createElement('div');
+            step1Div.className = 'step';
+            step1Div.innerHTML = `
+                <div class="step-title">${step1.title}</div>
+                ${step1.content}
             `;
-            stepsDiv.appendChild(step1);
+            stepsDiv.appendChild(step1Div);
+            currentResults.inter.steps.push(step1);
             
             // Étape 2: Condition d'optimalité
-            let step2 = document.createElement('div');
-            step2.className = 'step';
+            const tmstF = calculateTMST(fExpr, 'X1f', 'X2f');
+            const tmstG = calculateTMST(gExpr, 'X1g', 'X2g');
             
-            const tmstF = calculateTMST(fExpr, 'X1f', 'X2f').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/X1f/g, 'X_1^f').replace(/X2f/g, 'X_2^f');
-            const tmstG = calculateTMST(gExpr, 'X1g', 'X2g').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/X1g/g, 'X_1^g').replace(/X2g/g, 'X_2^g');
+            let step2 = {
+                title: 'Condition d\'optimalité',
+                content: `
+                    <p>À l'optimum, les taux marginaux de substitution techniques doivent être égaux:</p>
+                    <div class="math-container">
+                        <p>\\[ TMST_{1/2}^f = TMST_{1/2}^g \\]</p>
+                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
+                    </div>
+                    <p>Et les contraintes de ressources doivent être respectées:</p>
+                    <div class="math-container">
+                        <p>\\[ X_1^f + X_1^g = ${totalX1} \\]</p>
+                        <p>\\[ X_2^f + X_2^g = ${totalX2} \\]</p>
+                    </div>
+                `
+            };
             
-            step2.innerHTML = `
-                <div class="step-title">Étape 2: Condition d'optimalité</div>
-                <p>À l'optimum, les taux marginaux de substitution techniques doivent être égaux:</p>
-                <div class="math-container">
-                    <p>\\[ TMST_{1/2}^f = TMST_{1/2}^g \\]</p>
-                    <p>\\[ ${tmstF} = ${tmstG} \\]</p>
-                </div>
-                <p>Et les contraintes de ressources doivent être respectées:</p>
-                <div class="math-container">
-                    <p>\\[ X_1^f + X_1^g = ${totalX1} \\]</p>
-                    <p>\\[ X_2^f + X_2^g = ${totalX2} \\]</p>
-                </div>
+            let step2Div = document.createElement('div');
+            step2Div.className = 'step';
+            step2Div.innerHTML = `
+                <div class="step-title">${step2.title}</div>
+                ${step2.content}
             `;
-            stepsDiv.appendChild(step2);
+            stepsDiv.appendChild(step2Div);
+            currentResults.inter.steps.push(step2);
             
-            // Étape 3: Résolution symbolique
-            let step3 = document.createElement('div');
-            step3.className = 'step';
-            
-            let solutionText = "";
+            // Étape 3: Résolution
+            let step3Content = "";
             try {
                 if (fExpr.includes('^0.5') && gExpr.includes('^0.3')) {
-                    // Cas Cobb-Douglas spécifique
-                    solutionText = `
+                    step3Content = `
                         <p>Pour les fonctions Cobb-Douglas:</p>
                         <div class="math-container">
                             <p>\\[ TMST^f = \\frac{X_2^f}{X_1^f} \\]</p>
@@ -944,10 +1034,10 @@
                         <p>Avec les contraintes de ressources, on peut résoudre ce système.</p>
                     `;
                 } else {
-                    solutionText = `
+                    step3Content = `
                         <p>Le système à résoudre est:</p>
                         <div class="math-container">
-                            <p>\\[ ${tmstF} = ${tmstG} \\]</p>
+                            <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
                             <p>\\[ X_1^f + X_1^g = ${totalX1} \\]</p>
                             <p>\\[ X_2^f + X_2^g = ${totalX2} \\]</p>
                         </div>
@@ -955,14 +1045,22 @@
                     `;
                 }
             } catch (e) {
-                solutionText = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
+                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
             }
             
-            step3.innerHTML = `
-                <div class="step-title">Étape 3: Résolution</div>
-                ${solutionText}
+            let step3 = {
+                title: 'Résolution',
+                content: step3Content
+            };
+            
+            let step3Div = document.createElement('div');
+            step3Div.className = 'step';
+            step3Div.innerHTML = `
+                <div class="step-title">${step3.title}</div>
+                ${step3.content}
             `;
-            stepsDiv.appendChild(step3);
+            stepsDiv.appendChild(step3Div);
+            currentResults.inter.steps.push(step3);
             
             // Afficher les résultats
             document.getElementById('inter-results').style.display = 'block';
@@ -986,60 +1084,84 @@
             const stepsDiv = document.getElementById('cons-steps');
             stepsDiv.innerHTML = '';
             
+            // Stocker les données pour l'export
+            currentResults.cons = {
+                type: 'consommation',
+                uAExpr: uAExpr,
+                uBExpr: uBExpr,
+                x1a: x1a,
+                x2a: x2a,
+                x1b: x1b,
+                x2b: x2b,
+                steps: []
+            };
+            
             // Étape 1: Énoncé du problème
-            let step1 = document.createElement('div');
-            step1.className = 'step';
-            step1.innerHTML = `
-                <div class="step-title">Étape 1: Énoncé du problème</div>
-                <p>Nous avons deux consommateurs avec les fonctions d'utilité:</p>
-                <div class="math-container">
-                    <p>\\[ U^A(x_1^A, x_2^A) = ${uAExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1a/g, 'x_1^A').replace(/x2a/g, 'x_2^A')} \\]</p>
-                    <p>\\[ U^B(x_1^B, x_2^B) = ${uBExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1b/g, 'x_1^B').replace(/x2b/g, 'x_2^B')} \\]</p>
-                </div>
-                <p>Les dotations initiales sont:</p>
-                <div class="math-container">
-                    <p>\\[ (x_1^A, x_2^A) = (${x1a}, ${x2a}) \\]</p>
-                    <p>\\[ (x_1^B, x_2^B) = (${x1b}, ${x2b}) \\]</p>
-                </div>
-                <p>Les dotations totales sont donc:</p>
-                <div class="math-container">
-                    <p>\\[ X_1 = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
-                    <p>\\[ X_2 = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
-                </div>
-                <p>Nous cherchons l'allocation optimale de consommation.</p>
+            let step1 = {
+                title: 'Énoncé du problème',
+                content: `
+                    <p>Nous avons deux consommateurs avec les fonctions d'utilité:</p>
+                    <div class="math-container">
+                        <p>\\[ U^A(x_1^A, x_2^A) = ${formatLatex(uAExpr)} \\]</p>
+                        <p>\\[ U^B(x_1^B, x_2^B) = ${formatLatex(uBExpr)} \\]</p>
+                    </div>
+                    <p>Les dotations initiales sont:</p>
+                    <div class="math-container">
+                        <p>\\[ (x_1^A, x_2^A) = (${x1a}, ${x2a}) \\]</p>
+                        <p>\\[ (x_1^B, x_2^B) = (${x1b}, ${x2b}) \\]</p>
+                    </div>
+                    <p>Les dotations totales sont donc:</p>
+                    <div class="math-container">
+                        <p>\\[ X_1 = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
+                        <p>\\[ X_2 = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
+                    </div>
+                    <p>Nous cherchons l'allocation optimale de consommation.</p>
+                `
+            };
+            
+            let step1Div = document.createElement('div');
+            step1Div.className = 'step';
+            step1Div.innerHTML = `
+                <div class="step-title">${step1.title}</div>
+                ${step1.content}
             `;
-            stepsDiv.appendChild(step1);
+            stepsDiv.appendChild(step1Div);
+            currentResults.cons.steps.push(step1);
             
             // Étape 2: Condition d'optimalité
-            let step2 = document.createElement('div');
-            step2.className = 'step';
+            const tmsA = calculateTMS(uAExpr, 'x1a', 'x2a');
+            const tmsB = calculateTMS(uBExpr, 'x1b', 'x2b');
             
-            const tmsA = calculateTMS(uAExpr, 'x1a', 'x2a').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1a/g, 'x_1^A').replace(/x2a/g, 'x_2^A');
-            const tmsB = calculateTMS(uBExpr, 'x1b', 'x2b').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1b/g, 'x_1^B').replace(/x2b/g, 'x_2^B');
+            let step2 = {
+                title: 'Condition d\'optimalité',
+                content: `
+                    <p>À l'optimum, les taux marginaux de substitution doivent être égaux:</p>
+                    <div class="math-container">
+                        <p>\\[ TMS^A = TMS^B \\]</p>
+                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
+                    </div>
+                    <p>Et les contraintes de ressources doivent être respectées:</p>
+                    <div class="math-container">
+                        <p>\\[ x_1^A + x_1^B = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
+                        <p>\\[ x_2^A + x_2^B = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
+                    </div>
+                `
+            };
             
-            step2.innerHTML = `
-                <div class="step-title">Étape 2: Condition d'optimalité</div>
-                <p>À l'optimum, les taux marginaux de substitution doivent être égaux:</p>
-                <div class="math-container">
-                    <p>\\[ TMS^A = TMS^B \\]</p>
-                    <p>\\[ ${tmsA} = ${tmsB} \\]</p>
-                </div>
-                <p>Et les contraintes de ressources doivent être respectées:</p>
-                <div class="math-container">
-                    <p>\\[ x_1^A + x_1^B = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
-                    <p>\\[ x_2^A + x_2^B = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
-                </div>
+            let step2Div = document.createElement('div');
+            step2Div.className = 'step';
+            step2Div.innerHTML = `
+                <div class="step-title">${step2.title}</div>
+                ${step2.content}
             `;
-            stepsDiv.appendChild(step2);
+            stepsDiv.appendChild(step2Div);
+            currentResults.cons.steps.push(step2);
             
-            // Étape 3: Résolution symbolique
-            let step3 = document.createElement('div');
-            step3.className = 'step';
-            
-            let solutionText = "";
+            // Étape 3: Résolution
+            let step3Content = "";
             try {
                 if (uAExpr.includes('^0.5') && uBExpr.includes('^0.3')) {
-                    solutionText = `
+                    step3Content = `
                         <p>Pour les fonctions Cobb-Douglas:</p>
                         <div class="math-container">
                             <p>\\[ TMS^A = \\frac{x_2^A}{x_1^A} \\]</p>
@@ -1049,10 +1171,10 @@
                         <p>Avec les contraintes de ressources, on peut résoudre ce système.</p>
                     `;
                 } else {
-                    solutionText = `
+                    step3Content = `
                         <p>Le système à résoudre est:</p>
                         <div class="math-container">
-                            <p>\\[ ${tmsA} = ${tmsB} \\]</p>
+                            <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
                             <p>\\[ x_1^A + x_1^B = ${parseFloat(x1a) + parseFloat(x1b)} \\]</p>
                             <p>\\[ x_2^A + x_2^B = ${parseFloat(x2a) + parseFloat(x2b)} \\]</p>
                         </div>
@@ -1060,14 +1182,22 @@
                     `;
                 }
             } catch (e) {
-                solutionText = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
+                step3Content = `<p>Erreur dans le calcul symbolique. Vérifiez les expressions saisies.</p>`;
             }
             
-            step3.innerHTML = `
-                <div class="step-title">Étape 3: Résolution</div>
-                ${solutionText}
+            let step3 = {
+                title: 'Résolution',
+                content: step3Content
+            };
+            
+            let step3Div = document.createElement('div');
+            step3Div.className = 'step';
+            step3Div.innerHTML = `
+                <div class="step-title">${step3.title}</div>
+                ${step3.content}
             `;
-            stepsDiv.appendChild(step3);
+            stepsDiv.appendChild(step3Div);
+            currentResults.cons.steps.push(step3);
             
             // Afficher les résultats
             document.getElementById('cons-results').style.display = 'block';
@@ -1091,69 +1221,104 @@
             const stepsDiv = document.getElementById('pareto-steps');
             stepsDiv.innerHTML = '';
             
+            // Stocker les données pour l'export
+            currentResults.pareto = {
+                type: 'pareto',
+                uAExpr: uAExpr,
+                uBExpr: uBExpr,
+                fExpr: fExpr,
+                gExpr: gExpr,
+                totalX1: totalX1,
+                totalX2: totalX2,
+                steps: []
+            };
+            
             // Étape 1: Énoncé du problème
-            let step1 = document.createElement('div');
-            step1.className = 'step';
-            step1.innerHTML = `
-                <div class="step-title">Étape 1: Énoncé du problème</div>
-                <p>Nous avons une économie avec production et consommation.</p>
-                <p>Fonctions d'utilité:</p>
-                <div class="math-container">
-                    <p>\\[ U^A = ${uAExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1a/g, 'x_1^A').replace(/x2a/g, 'x_2^A')} \\]</p>
-                    <p>\\[ U^B = ${uBExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1b/g, 'x_1^B').replace(/x2b/g, 'x_2^B')} \\]</p>
-                </div>
-                <p>Fonctions de production:</p>
-                <div class="math-container">
-                    <p>\\[ f = ${fExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xf/g, 'X^f')} \\]</p>
-                    <p>\\[ g = ${gExpr.replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xg/g, 'X^g')} \\]</p>
-                </div>
-                <p>Dotations totales: \\( \\bar{X}_1 = ${totalX1} \\), \\( \\bar{X}_2 = ${totalX2} \\)</p>
-                <p>Nous cherchons un optimum de Pareto.</p>
+            let step1 = {
+                title: 'Énoncé du problème',
+                content: `
+                    <p>Nous avons une économie avec production et consommation.</p>
+                    <p>Fonctions d'utilité:</p>
+                    <div class="math-container">
+                        <p>\\[ U^A = ${formatLatex(uAExpr)} \\]</p>
+                        <p>\\[ U^B = ${formatLatex(uBExpr)} \\]</p>
+                    </div>
+                    <p>Fonctions de production:</p>
+                    <div class="math-container">
+                        <p>\\[ f = ${formatLatex(fExpr)} \\]</p>
+                        <p>\\[ g = ${formatLatex(gExpr)} \\]</p>
+                    </div>
+                    <p>Dotations totales: \\( \\bar{X}_1 = ${totalX1} \\), \\( \\bar{X}_2 = ${totalX2} \\)</p>
+                    <p>Nous cherchons un optimum de Pareto.</p>
+                `
+            };
+            
+            let step1Div = document.createElement('div');
+            step1Div.className = 'step';
+            step1Div.innerHTML = `
+                <div class="step-title">${step1.title}</div>
+                ${step1.content}
             `;
-            stepsDiv.appendChild(step1);
+            stepsDiv.appendChild(step1Div);
+            currentResults.pareto.steps.push(step1);
             
             // Étape 2: Conditions d'optimalité
-            let step2 = document.createElement('div');
-            step2.className = 'step';
+            const tmsA = calculateTMS(uAExpr, 'x1a', 'x2a');
+            const tmsB = calculateTMS(uBExpr, 'x1b', 'x2b');
+            const tmstF = calculateTMST(fExpr, 'Xf', 'Xf');
+            const tmstG = calculateTMST(gExpr, 'Xg', 'Xg');
             
-            const tmsA = calculateTMS(uAExpr, 'x1a', 'x2a').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1a/g, 'x_1^A').replace(/x2a/g, 'x_2^A');
-            const tmsB = calculateTMS(uBExpr, 'x1b', 'x2b').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/x1b/g, 'x_1^B').replace(/x2b/g, 'x_2^B');
-            const tmstF = calculateTMST(fExpr, 'Xf', 'Xf').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xf/g, 'X^f');
-            const tmstG = calculateTMST(gExpr, 'Xg', 'Xg').replace(/\*/g, '\\cdot ').replace(/\^/g, '^').replace(/Xg/g, 'X^g');
+            let step2 = {
+                title: 'Conditions d\'optimalité de Pareto',
+                content: `
+                    <p>Un optimum de Pareto doit satisfaire trois conditions:</p>
+                    <ol>
+                        <li>Optimalité dans l'échange: \\( TMS^A = TMS^B \\)</li>
+                        <li>Optimalité dans la production: \\( TMST^f = TMST^g \\)</li>
+                        <li>Optimalité dans la répartition produit-facteur: \\( TMS = TMT \\)</li>
+                    </ol>
+                    <div class="math-container">
+                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
+                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
+                        <p>\\[ TMS^A = TMT \\]</p>
+                    </div>
+                `
+            };
             
-            step2.innerHTML = `
-                <div class="step-title">Étape 2: Conditions d'optimalité de Pareto</div>
-                <p>Un optimum de Pareto doit satisfaire trois conditions:</p>
-                <ol>
-                    <li>Optimalité dans l'échange: \\( TMS^A = TMS^B \\)</li>
-                    <li>Optimalité dans la production: \\( TMST^f = TMST^g \\)</li>
-                    <li>Optimalité dans la répartition produit-facteur: \\( TMS = TMT \\)</li>
-                </ol>
-                <div class="math-container">
-                    <p>\\[ ${tmsA} = ${tmsB} \\]</p>
-                    <p>\\[ ${tmstF} = ${tmstG} \\]</p>
-                    <p>\\[ TMS^A = TMT \\]</p>
-                </div>
+            let step2Div = document.createElement('div');
+            step2Div.className = 'step';
+            step2Div.innerHTML = `
+                <div class="step-title">${step2.title}</div>
+                ${step2.content}
             `;
-            stepsDiv.appendChild(step2);
+            stepsDiv.appendChild(step2Div);
+            currentResults.pareto.steps.push(step2);
             
             // Étape 3: Résolution
-            let step3 = document.createElement('div');
-            step3.className = 'step';
-            step3.innerHTML = `
-                <div class="step-title">Étape 3: Résolution</div>
-                <p>Le système d'équations à résoudre est complexe et nécessite une résolution numérique spécifique.</p>
-                <p>Les équations sont:</p>
-                <div class="math-container">
-                    <p>\\[ ${tmsA} = ${tmsB} \\]</p>
-                    <p>\\[ ${tmstF} = ${tmstG} \\]</p>
-                    <p>\\[ TMS^A = TMT \\]</p>
-                    <p>\\[ x_1^A + x_1^B + X_1^f + X_1^g = ${totalX1} \\]</p>
-                    <p>\\[ x_2^A + x_2^B = ${totalX2} + f(X^f) + g(X^g) \\]</p>
-                </div>
-                <p>Ce système peut avoir une infinité de solutions (ensemble des optima de Pareto).</p>
+            let step3 = {
+                title: 'Résolution',
+                content: `
+                    <p>Le système d'équations à résoudre est complexe et nécessite une résolution numérique spécifique.</p>
+                    <p>Les équations sont:</p>
+                    <div class="math-container">
+                        <p>\\[ ${formatLatex(tmsA)} = ${formatLatex(tmsB)} \\]</p>
+                        <p>\\[ ${formatLatex(tmstF)} = ${formatLatex(tmstG)} \\]</p>
+                        <p>\\[ TMS^A = TMT \\]</p>
+                        <p>\\[ x_1^A + x_1^B + X_1^f + X_1^g = ${totalX1} \\]</p>
+                        <p>\\[ x_2^A + x_2^B = ${totalX2} + f(X^f) + g(X^g) \\]</p>
+                    </div>
+                    <p>Ce système peut avoir une infinité de solutions (ensemble des optima de Pareto).</p>
+                `
+            };
+            
+            let step3Div = document.createElement('div');
+            step3Div.className = 'step';
+            step3Div.innerHTML = `
+                <div class="step-title">${step3.title}</div>
+                ${step3.content}
             `;
-            stepsDiv.appendChild(step3);
+            stepsDiv.appendChild(step3Div);
+            currentResults.pareto.steps.push(step3);
             
             // Afficher les résultats
             document.getElementById('pareto-results').style.display = 'block';
@@ -1162,6 +1327,86 @@
             if (window.MathJax) {
                 setTimeout(() => MathJax.typeset(), 100);
             }
+        }
+
+        // Fonction d'export LaTeX
+        function exportLatex(type) {
+            const results = currentResults[type];
+            if (!results || !results.steps || results.steps.length === 0) {
+                alert('Aucun résultat à exporter. Veuillez d\'abord résoudre le problème.');
+                return;
+            }
+
+            const now = new Date().toISOString().slice(0,10);
+            let latexContent = '';
+            
+            // En-tête du document
+            latexContent += `\\documentclass[11pt,a4paper]{article}
+\\usepackage[margin=2.5cm]{geometry}
+\\usepackage{amsmath,amssymb}
+\\usepackage{booktabs}
+\\usepackage{ifthen}
+\\usepackage{iftex}
+
+\\ifPDFTeX
+  \\usepackage{mathpazo}
+\\else
+  \\IfFileExists{EBGaramond.sty}{
+    \\usepackage{EBGaramond}
+  }{
+    \\usepackage{mathpazo}
+  }
+\\fi
+
+\\usepackage[T1]{fontenc}
+\\usepackage[utf8]{inputenc}
+\\title{Export automatique — Optimalité économique}
+\\author{Ramanambonona Ambinintsoa}
+\\date{${now}}
+\\begin{document}
+\\maketitle
+`;
+
+            // Titre selon le type
+            const titles = {
+                'intra': 'Optimalité Intra-Branche',
+                'inter': 'Optimalité Inter-Branches', 
+                'cons': 'Optimalité dans la Consommation',
+                'pareto': 'Optimum de Pareto'
+            };
+            
+            latexContent += `\\section*{${titles[type]}}\n\n`;
+
+            // Contenu des étapes
+            results.steps.forEach((step, index) => {
+                latexContent += `\\subsection*{Étape ${index + 1}: ${step.title}}\n`;
+                
+                // Convertir le contenu HTML en LaTeX (simplifié)
+                let stepContent = step.content
+                    .replace(/<div class="math-container">/g, '\\begin{align*}\n')
+                    .replace(/<\/div>/g, '\n\\end{align*}\n')
+                    .replace(/<p>/g, '')
+                    .replace(/<\/p>/g, '\n\n')
+                    .replace(/<ol>/g, '\\begin{enumerate}\n')
+                    .replace(/<\/ol>/g, '\\end{enumerate}\n')
+                    .replace(/<li>/g, '\\item ')
+                    .replace(/<\/li>/g, '\n')
+                    .replace(/\\\[/g, '$')
+                    .replace(/\\\]/g, '$');
+                
+                latexContent += stepContent + '\n\n';
+            });
+
+            latexContent += `\\end{document}`;
+
+            // Télécharger le fichier
+            const blob = new Blob([latexContent], {type: 'text/x-tex;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `optimalite_${type}_${now}.tex`;
+            a.click();
+            URL.revokeObjectURL(url);
         }
         
         // Bouton pour remonter en haut de page
