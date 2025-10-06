@@ -718,16 +718,16 @@
         function formatLatex(expr) {
             return expr
                 .replace(/\*/g, ' \\cdot ')
-                .replace(/X1f/g, 'X_1^f')
-                .replace(/X2f/g, 'X_2^f')
-                .replace(/X1g/g, 'X_1^g')
-                .replace(/X2g/g, 'X_2^g')
-                .replace(/x1a/g, 'x_1^A')
-                .replace(/x2a/g, 'x_2^A')
-                .replace(/x1b/g, 'x_1^B')
-                .replace(/x2b/g, 'x_2^B')
-                .replace(/Xf/g, 'X^f')
-                .replace(/Xg/g, 'X^g');
+                .replace(/X1f/g, 'X_1^{f}')
+                .replace(/X2f/g, 'X_2^{f}')
+                .replace(/X1g/g, 'X_1^{g}')
+                .replace(/X2g/g, 'X_2^{g}')
+                .replace(/x1a/g, 'x_1^{A}')
+                .replace(/x2a/g, 'x_2^{A}')
+                .replace(/x1b/g, 'x_1^{B}')
+                .replace(/x2b/g, 'x_2^{B}')
+                .replace(/Xf/g, 'X^{f}')
+                .replace(/Xg/g, 'X^{g}');
         }
 
         // Fonction pour calculer les dérivées symboliques
