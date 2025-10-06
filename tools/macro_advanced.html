@@ -182,7 +182,7 @@
   <script>
 'use strict';
 
-/* ========= État global & helpers canvas ========= */
+/* ========= État global & helpers ========= */
 let currentModel = 'rbc';
 let modelParams = {};
 let initialParams = {};
@@ -194,6 +194,19 @@ let isDragging = false, lastX = 0, lastY = 0;
 
 const canvas = () => document.getElementById('canvas');
 const ctx = () => canvas().getContext('2d');
+
+/* ========= Helper KaTeX unique ========= */
+function renderAllMath(scopeEl){
+  if (!window.renderMathInElement) return;
+  renderMathInElement(scopeEl, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$",  right: "$",  display: false}
+    ]
+  });
+}
 
 /* ========= Onglets ========= */
 function openTab(tabName, btnEl) {
@@ -216,7 +229,7 @@ const models = {
       { latex: '\\alpha A (K^*)^{\\alpha-1} = \\tfrac{1}{\\beta} - (1-\\delta)', desc: 'État stationnaire (Euler)' }
     ],
     explanation:
-      "On approxime la politique optimale par un taux d'investissement constant égal à l'investissement stationnaire $i^* = \\delta K^*$, d'où $s^* = i^*/Y^*$ ; le choc TFP suit un AR(1).",
+      "On approxime la politique optimale par un taux d'investissement constant égal à l'investissement stationnaire \( i^* = \\delta K^* \), d'où \( s^* = i^*/Y^* \) ; le choc TFP suit un AR(1).",
     params: [
       { id:'alpha', label:'\\(\\alpha\\) (part du capital)', default:0.33, min:0.1, max:0.6, step:0.01 },
       { id:'delta', label:'\\(\\delta\\) (dépréciation)', default:0.08, min:0.01, max:0.2, step:0.01 },
@@ -230,7 +243,7 @@ const models = {
     sliders: [
       { id:'epsA', label:'Amplitude du choc TFP (log, %)', desc:'Un cran = un choc ponctuel sur A au début' },
       { id:'rhoA', label:'Persistance \\(\\rho_A\\)', desc:'Plus \\(\\rho_A\\) est élevé, plus le choc persiste' },
-      { id:'alpha', label:'α (part du capital)', desc:'Affecte k* via l’Euler et l’ampleur des réponses' }
+      { id:'alpha', label:'\\(\\alpha\\) (part du capital)', desc:'Affecte \(k^*\) via l’Euler et l’ampleur des réponses' }
     ]
   },
 
@@ -243,19 +256,19 @@ const models = {
       { latex: 'g \\approx sA - \\delta', desc: 'Taux de croissance de long terme' }
     ],
     explanation:
-      "Le modèle AK génère une croissance soutenue si $sA > \\delta$. On simule les trajectoires (K, Y, C) et on affiche les % écarts au niveau initial.",
+      "Le modèle AK génère une croissance soutenue si \( sA > \\delta \). On simule les trajectoires (K, Y, C) et on affiche les % écarts au niveau initial.",
     params: [
       { id:'A',   label:'A (productivité)', default:0.15, min:0.01, max:0.6, step:0.01 },
       { id:'s',   label:'s (taux d’épargne)', default:0.25, min:0.0, max:0.8, step:0.01 },
       { id:'delta', label:'\\(\\delta\\) (dépréciation)', default:0.05, min:0.0, max:0.2, step:0.01 },
       { id:'T',   label:'Horizon (T périodes)', default:80, min:20, max:300, step:1 },
-      { id:'k0',  label:'\\(K_0\\)(capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 },
+      { id:'k0',  label:'\\(K_0\\) (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 },
       { id:'shockA', label:'Choc ponctuel A (%)', default:0.0, min:-10, max:10, step:0.5 }
     ],
     sliders: [
-      { id:'s', label:'Taux d’épargne s', desc:'Plus s est grand, plus la croissance AK est forte' },
-      { id:'A', label:'Productivité A', desc:'Accroît directement le rendement du capital' },
-      { id:'shockA', label:'Choc A (%)', desc:'Impulsion ponctuelle en t=1 sur A' }
+      { id:'s', label:'Taux d’épargne \(s\)', desc:'Plus \(s\) est grand, plus la croissance AK est forte' },
+      { id:'A', label:'Productivité \(A\)', desc:'Accroît directement le rendement du capital' },
+      { id:'shockA', label:'Choc \(A\) (%)', desc:'Impulsion ponctuelle en \(t=1\) sur \(A\)' }
     ]
   },
 
@@ -267,7 +280,7 @@ const models = {
       { latex: 'x_t = \\rho_x x_{t-1} + \\varepsilon_t', desc:'Processus de l’écart de production' }
     ],
     explanation:
-      "Les agents ajustent leurs anticipations d’inflation en comblant une fraction de l’erreur passée. On trace \\(\\pi_t, \\pi^e_t, x_t\\).",
+      "Les agents ajustent leurs anticipations d’inflation en comblant une fraction de l’erreur passée. On trace \(\\pi_t, \\pi^e_t, x_t\).",
     params: [
       { id:'gamma',  label:'\\(\\gamma\\) (pente PC)', default:0.5, min:0.0, max:2.0, step:0.05 },
       { id:'lambda', label:'\\(\\lambda\\) (vitesse d’adaptation)', default:0.4, min:0.0, max:1.0, step:0.05 },
@@ -277,9 +290,9 @@ const models = {
       { id:'T',      label:'Horizon (T)', default:80, min:20, max:300, step:1 }
     ],
     sliders: [
-      { id:'lambda', label:'Vitesse λ', desc:'Plus λ est élevé, plus l’anticipation colle vite à π' },
-      { id:'gamma', label:'Pente γ', desc:'Sensibilité de π à l’écart de production' },
-      { id:'eps_x', label:'Choc x (pts)', desc:'Impulsion initiale sur l’écart de production' }
+      { id:'lambda', label:'Vitesse \(\\lambda\)', desc:'Plus \(\\lambda\) est élevé, plus l’anticipation colle vite à \(\\pi\)' },
+      { id:'gamma',  label:'Pente \(\\gamma\)', desc:'Sensibilité de \(\\pi\) à l’écart de production' },
+      { id:'eps_x',  label:'Choc \(x\) (pts)', desc:'Impulsion initiale sur l’écart de production' }
     ]
   },
 
@@ -291,7 +304,7 @@ const models = {
       { latex: '\\pi_t = \\kappa \\sum_{j\\ge 0} \\beta^j E_t x_{t+j}', desc:'Solution prospective (horizon fini en code)' }
     ],
     explanation:
-      "On calcule \\(\\pi_t\\) par somme prospective finie, en supposant \\(x_t\\) AR(1) et horizon T (anticipations rationnelles de parfaite prévision sur T).",
+      "On calcule \(\\pi_t\) par somme prospective finie, en supposant \(x_t\) AR(1) et horizon \(T\) (anticipations rationnelles de parfaite prévision sur \(T\)).",
     params: [
       { id:'beta',  label:'\\(\\beta\\) (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
       { id:'kappa', label:'\\(\\kappa\\) (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
@@ -300,9 +313,9 @@ const models = {
       { id:'T',     label:'Horizon (T)', default:80, min:20, max:300, step:1 }
     ],
     sliders: [
-      { id:'beta', label:'β', desc:'Poids des anticipations futures' },
-      { id:'kappa', label:'κ', desc:'Rôle de l’écart dans l’inflation' },
-      { id:'eps_x', label:'Choc x (pts)', desc:'Impulsion initiale de l’écart' }
+      { id:'beta',  label:'\\(\\beta\\)', desc:'Poids des anticipations futures' },
+      { id:'kappa', label:'\\(\\kappa\\)', desc:'Rôle de l’écart dans l’inflation' },
+      { id:'eps_x', label:'Choc \(x\) (pts)', desc:'Impulsion initiale de l’écart' }
     ]
   },
 
@@ -315,7 +328,7 @@ const models = {
       { latex: 'r^n_t = \\rho_r r^n_{t-1} + \\varepsilon^r_t', desc:'Taux naturel AR(1)' }
     ],
     explanation:
-      "Résolution backward sur un horizon fini T, avec conditions terminales nulles. À chaque date t, on résout un système 2x2 en \\((x_t,\\pi_t)\\) sachant \\((x_{t+1},\\pi_{t+1})\\) et le choc sur \\(r^n_t\\).",
+      "Résolution backward sur un horizon fini \(T\), avec conditions terminales nulles. À chaque date \(t\), on résout un système 2×2 en \((x_t,\\pi_t)\) sachant \((x_{t+1},\\pi_{t+1})\) et le choc sur \(r^n_t\).",
     params: [
       { id:'sigma',  label:'\\(\\sigma\\) (élasticité IS)', default:1.0, min:0.2, max:5.0, step:0.1 },
       { id:'beta',   label:'\\(\\beta\\) (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
@@ -329,7 +342,7 @@ const models = {
     sliders: [
       { id:'phi_pi', label:'\\(\\phi_{\\pi}\\)', desc:'Plus élevé ⇒ stabilise mieux l’inflation' },
       { id:'phi_x',  label:'\\(\\phi_x\\)', desc:'Sensibilité de la règle à l’écart' },
-      { id:'eps_r',  label:'Choc \\(r^n\\) (pts)', desc:'Impulsion du taux naturel au début' }
+      { id:'eps_r',  label:'Choc \(r^n\) (pts)', desc:'Impulsion du taux naturel au début' }
     ]
   }
 };
@@ -342,15 +355,17 @@ function updateModelDisplay() {
 
   let html = '<div class="equation-block"><h4 style="color:#2a2a2a;margin-bottom:15px;">Équations</h4>';
   model.equations.forEach(eq => {
-    html += `<div style="margin:15px 0;"><div>$$${eq.latex}$$</div><div style="color:#5a5a5a;font-size:.9rem;margin-top:5px;font-style:italic;">${eq.desc}</div></div>`;
+    html += `<div style="margin:15px 0;">
+               <div>$$${eq.latex}$$</div>
+               <div style="color:#5a5a5a;font-size:.9rem;margin-top:5px;font-style:italic;">${eq.desc}</div>
+             </div>`;
   });
   html += '</div>';
   html += `<div class="explanation"><strong>Aperçu :</strong><br>${model.explanation}</div>`;
   display.innerHTML = html;
   renderAllMath(display);
-}
 
-  // Reset & MAJ autres vues
+  // Reset & MAJ autres vues (à l'intérieur de la fonction)
   solution = null; initialSolution = null;
   updateParamsDisplay();
   updateSliders();
@@ -378,7 +393,9 @@ function updateParamsDisplay() {
 
   // Input live + synchro sliders + graph
   model.params.forEach(p => {
-    document.getElementById(`param-${p.id}`).addEventListener('input', (e) => {
+    const el = document.getElementById(`param-${p.id}`);
+    if (!el) return;
+    el.addEventListener('input', (e) => {
       modelParams[p.id] = parseFloat(e.target.value);
       syncSlidersFromParams();
       liveSolve(); // recalcul sans changer d’onglet
@@ -681,6 +698,7 @@ function updateSliders() {
   // Sliders => solve live (pas de redirection)
   model.sliders.forEach(sl => {
     const el = document.getElementById(`slider-${sl.id}`);
+    if (!el) return;
     el.addEventListener('input', e => {
       const v = parseFloat(e.target.value);
       modelParams[sl.id] = v;
@@ -903,33 +921,11 @@ function initialSetup(){
   attachCanvasInteractions();
   liveSolve(); // premier calcul SANS redirection (on reste sur Modèles)
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-  try {
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "\\(", right: "\\)", display: false},
-      {left: "$",  right: "$",  display: false}
-    ]
-  });
-} catch(e) {}
+  try { renderAllMath(document.body); } catch(e) {}
   initialSetup();
 });
-function renderAllMath(scopeEl){
-  if (!window.renderMathInElement) return;
-  renderMathInElement(scopeEl, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "\\(", right: "\\)", display: false},
-      {left: "$",  right: "$",  display: false}
-    ]
-  });
-}
   </script>
 </body>
 </html>
-
-
-
