@@ -218,18 +218,18 @@ const models = {
     explanation:
       "On approxime la politique optimale par un taux d'investissement constant égal à l'investissement stationnaire $i^* = \\delta K^*$, d'où $s^* = i^*/Y^*$ ; le choc TFP suit un AR(1).",
     params: [
-      { id:'alpha', label:'α (part du capital)', default:0.33, min:0.1, max:0.6, step:0.01 },
-      { id:'delta', label:'δ (dépréciation)', default:0.08, min:0.01, max:0.2, step:0.01 },
-      { id:'beta',  label:'β (escompte)', default:0.96, min:0.85, max:0.995, step:0.001 },
-      { id:'Abar',  label:'Â (niveau TFP de base)', default:1.0, min:0.5, max:2.0, step:0.01 },
-      { id:'rhoA',  label:'ρ_A (persistance TFP)', default:0.9, min:0.0, max:0.99, step:0.01 },
+      { id:'alpha', label:'\\(\\alpha\\) (part du capital)', default:0.33, min:0.1, max:0.6, step:0.01 },
+      { id:'delta', label:'\\(\\delta\\) (dépréciation)', default:0.08, min:0.01, max:0.2, step:0.01 },
+      { id:'beta',  label:'\\(\\beta\\) (escompte)', default:0.96, min:0.85, max:0.995, step:0.001 },
+      { id:'Abar',  label:'\\(\\bar A\\) (niveau TFP de base)', default:1.0, min:0.5, max:2.0, step:0.01 },
+      { id:'rhoA',  label:'\\(\\rho_A\\) (persistance TFP)', default:0.9, min:0.0, max:0.99, step:0.01 },
       { id:'epsA',  label:'Choc TFP (log, %)', default:1.0, min:0.0, max:10.0, step:0.1 },
       { id:'T',     label:'Horizon (T périodes)', default:80, min:20, max:300, step:1 },
-      { id:'k0',    label:'K₀ (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 }
+      { id:'k0',    label:'\\(K_0\\) (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 }
     ],
     sliders: [
       { id:'epsA', label:'Amplitude du choc TFP (log, %)', desc:'Un cran = un choc ponctuel sur A au début' },
-      { id:'rhoA', label:'Persistance ρ_A', desc:'Plus ρ_A est élevé, plus le choc persiste' },
+      { id:'rhoA', label:'Persistance \\(\\rho_A\\)', desc:'Plus \\(\\rho_A\\) est élevé, plus le choc persiste' },
       { id:'alpha', label:'α (part du capital)', desc:'Affecte k* via l’Euler et l’ampleur des réponses' }
     ]
   },
@@ -247,9 +247,9 @@ const models = {
     params: [
       { id:'A',   label:'A (productivité)', default:0.15, min:0.01, max:0.6, step:0.01 },
       { id:'s',   label:'s (taux d’épargne)', default:0.25, min:0.0, max:0.8, step:0.01 },
-      { id:'delta', label:'δ (dépréciation)', default:0.05, min:0.0, max:0.2, step:0.01 },
+      { id:'delta', label:'\\(\\delta\\) (dépréciation)', default:0.05, min:0.0, max:0.2, step:0.01 },
       { id:'T',   label:'Horizon (T périodes)', default:80, min:20, max:300, step:1 },
-      { id:'k0',  label:'K₀ (capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 },
+      { id:'k0',  label:'\\(K_0\\)(capital initial)', default:1.0, min:0.1, max:5.0, step:0.1 },
       { id:'shockA', label:'Choc ponctuel A (%)', default:0.0, min:-10, max:10, step:0.5 }
     ],
     sliders: [
@@ -269,12 +269,12 @@ const models = {
     explanation:
       "Les agents ajustent leurs anticipations d’inflation en comblant une fraction de l’erreur passée. On trace \\(\\pi_t, \\pi^e_t, x_t\\).",
     params: [
-      { id:'gamma', label:'γ (pente PC)', default:0.5, min:0.0, max:2.0, step:0.05 },
-      { id:'lambda', label:'λ (vitesse d’adaptation)', default:0.4, min:0.0, max:1.0, step:0.05 },
-      { id:'rho_x', label:'$\rho_x$ (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
-      { id:'eps_x', label:'Choc sur x (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
-      { id:'pi_e0', label:'π^e₀ (pts annuels)', default:5.0, min:-10, max:20, step:0.1 },
-      { id:'T', label:'Horizon (T)', default:80, min:20, max:300, step:1 }
+      { id:'gamma',  label:'\\(\\gamma\\) (pente PC)', default:0.5, min:0.0, max:2.0, step:0.05 },
+      { id:'lambda', label:'\\(\\lambda\\) (vitesse d’adaptation)', default:0.4, min:0.0, max:1.0, step:0.05 },
+      { id:'rho_x',  label:'\\(\\rho_x\\) (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_x',  label:'Choc sur \\(x\\) (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'pi_e0',  label:'\\(\\pi^e_0\\) (pts annuels)', default:5.0, min:-10, max:20, step:0.1 },
+      { id:'T',      label:'Horizon (T)', default:80, min:20, max:300, step:1 }
     ],
     sliders: [
       { id:'lambda', label:'Vitesse λ', desc:'Plus λ est élevé, plus l’anticipation colle vite à π' },
@@ -293,11 +293,11 @@ const models = {
     explanation:
       "On calcule \\(\\pi_t\\) par somme prospective finie, en supposant \\(x_t\\) AR(1) et horizon T (anticipations rationnelles de parfaite prévision sur T).",
     params: [
-      { id:'beta', label:'β (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
-      { id:'kappa', label:'κ (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
-      { id:'rho_x', label:'ρ_x (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
-      { id:'eps_x', label:'Choc sur x (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
-      { id:'T', label:'Horizon (T)', default:80, min:20, max:300, step:1 }
+      { id:'beta',  label:'\\(\\beta\\) (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
+      { id:'kappa', label:'\\(\\kappa\\) (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
+      { id:'rho_x', label:'\\(\\rho_x\\) (persistance écart)', default:0.6, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_x', label:'Choc sur \\(x\\) (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'T',     label:'Horizon (T)', default:80, min:20, max:300, step:1 }
     ],
     sliders: [
       { id:'beta', label:'β', desc:'Poids des anticipations futures' },
@@ -317,19 +317,19 @@ const models = {
     explanation:
       "Résolution backward sur un horizon fini T, avec conditions terminales nulles. À chaque date t, on résout un système 2x2 en \\((x_t,\\pi_t)\\) sachant \\((x_{t+1},\\pi_{t+1})\\) et le choc sur \\(r^n_t\\).",
     params: [
-      { id:'sigma', label:'σ (élasticité IS)', default:1.0, min:0.2, max:5.0, step:0.1 },
-      { id:'beta',  label:'β (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
-      { id:'kappa', label:'κ (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
-      { id:'phi_pi', label:'φ_π (réactivité inflation)', default:1.5, min:1.0, max:3.0, step:0.1 },
-      { id:'phi_x',  label:'φ_x (réactivité écart)', default:0.5, min:0.0, max:2.0, step:0.05 },
-      { id:'rho_r',  label:'ρ_r (persistance r^n)', default:0.8, min:0.0, max:0.99, step:0.01 },
-      { id:'eps_r',  label:'Choc r^n (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
+      { id:'sigma',  label:'\\(\\sigma\\) (élasticité IS)', default:1.0, min:0.2, max:5.0, step:0.1 },
+      { id:'beta',   label:'\\(\\beta\\) (escompte)', default:0.99, min:0.9, max:0.999, step:0.001 },
+      { id:'kappa',  label:'\\(\\kappa\\) (pente NKPC)', default:0.1, min:0.01, max:1.0, step:0.01 },
+      { id:'phi_pi', label:'\\(\\phi_{\\pi}\\) (réactivité inflation)', default:1.5, min:1.0, max:3.0, step:0.1 },
+      { id:'phi_x',  label:'\\(\\phi_x\\) (réactivité écart)', default:0.5, min:0.0, max:2.0, step:0.05 },
+      { id:'rho_r',  label:'\\(\\rho_r\\) (persistance \\(r^n\\))', default:0.8, min:0.0, max:0.99, step:0.01 },
+      { id:'eps_r',  label:'Choc \\(r^n\\) (pts)', default:1.0, min:-5.0, max:5.0, step:0.1 },
       { id:'T',      label:'Horizon (T)', default:80, min:20, max:300, step:1 }
     ],
     sliders: [
-      { id:'phi_pi', label:'φ_π', desc:'Plus élevé ⇒ stabilise mieux l’inflation' },
-      { id:'phi_x',  label:'φ_x', desc:'Sensibilité de la règle à l’écart' },
-      { id:'eps_r',  label:'Choc r^n (pts)', desc:'Impulsion du taux naturel au début' }
+      { id:'phi_pi', label:'\\(\\phi_{\\pi}\\)', desc:'Plus élevé ⇒ stabilise mieux l’inflation' },
+      { id:'phi_x',  label:'\\(\\phi_x\\)', desc:'Sensibilité de la règle à l’écart' },
+      { id:'eps_r',  label:'Choc \\(r^n\\) (pts)', desc:'Impulsion du taux naturel au début' }
     ]
   }
 };
@@ -347,15 +347,7 @@ function updateModelDisplay() {
   html += '</div>';
   html += `<div class="explanation"><strong>Aperçu :</strong><br>${model.explanation}</div>`;
   display.innerHTML = html;
-  if (window.renderMathInElement) {
-  renderMathInElement(display, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "\\(", right: "\\)", display: false},
-      {left: "$",  right: "$",  display: false}
-    ]
-  });
+  renderAllMath(display);
 }
 
   // Reset & MAJ autres vues
@@ -382,6 +374,7 @@ function updateParamsDisplay() {
   });
   html += '</tbody></table>';
   container.innerHTML = html;
+  renderAllMath(container);
 
   // Input live + synchro sliders + graph
   model.params.forEach(p => {
@@ -683,6 +676,7 @@ function updateSliders() {
       </div>`;
   });
   container.innerHTML = html;
+  renderAllMath(container);
 
   // Sliders => solve live (pas de redirection)
   model.sliders.forEach(sl => {
@@ -922,8 +916,20 @@ document.addEventListener('DOMContentLoaded', () => {
 } catch(e) {}
   initialSetup();
 });
+function renderAllMath(scopeEl){
+  if (!window.renderMathInElement) return;
+  renderMathInElement(scopeEl, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$",  right: "$",  display: false}
+    ]
+  });
+}
   </script>
 </body>
 </html>
+
 
 
