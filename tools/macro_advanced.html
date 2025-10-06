@@ -4,7 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Modèles macroéconomiques avancés — Ramanambonona Ambinintsoa</title>
+
+  <!-- Style -->
   <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <!-- Fonts / Icons / KaTeX / GSAP -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -13,22 +17,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
   <style>
-    /* ——— Style iOS monochrome + EB Garamond (aligné à votre design) ——— */
+    /* ——— Style monochrome + EB Garamond ——— */
     body { font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; color:#1c1c1c; background:#fff; }
     .macro-container { max-width:1180px; margin:0 auto; padding:24px 16px 64px 16px; }
     .macro-title { font-size:2.2rem; font-weight:700; letter-spacing:.3px; margin:16px 0 6px 0; color:#111; text-align:center; }
     .macro-subtitle { text-align:center; color:#555; margin-bottom:28px; font-style:italic; }
-    .grid { display:grid; grid-template-columns:1.1fr .9fr; gap:22px; }
-    @media(max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
     .card { background:#fff; border:1px solid #e8e8e8; box-shadow:0 6px 18px rgba(0,0,0,.04); border-radius:18px; padding:18px 18px 20px 18px; }
     .card h3 { margin:0 0 10px 0; font-size:1.35rem; color:#222; }
+
     .equation-block { background:#fafafa; border:1px dashed #ddd; border-radius:14px; padding:14px 14px 2px 14px; margin-top:10px; }
     .explanation { background:#f8f8f8; border:1px solid #eee; border-radius:14px; padding:12px 14px; margin-top:14px; color:#333; }
 
-    .tab-navigation { display:flex; gap:10px; margin:22px 0 16px 0; flex-wrap:wrap; }
+    .tab-navigation { display:flex; gap:10px; margin:22px 0 16px 0; flex-wrap:wrap; justify-content:center; }
     .tab-btn { background:#fff; color:#222; border:1px solid #ddd; border-radius:999px; padding:8px 14px; cursor:pointer; transition:transform .08s ease, box-shadow .12s ease, background .2s ease; }
     .tab-btn:hover { transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,.08); }
     .tab-btn.active { background:#111; color:#fff; border-color:#111; }
+
     .tab-content { display:none; }
     .tab-content.active { display:block; }
 
@@ -39,9 +44,6 @@
 
     .results-section { margin-top:12px; }
     .multiplier-box { background:#fafafa; border:1px solid #eee; border-radius:14px; padding:12px 14px; margin-top:10px; }
-    .comparison-table { width:100%; border-collapse:collapse; margin-top:8px; }
-    .comparison-table th, .comparison-table td { border-bottom:1px solid #eee; padding:8px; }
-    .comparison-table td.initial { color:#666; } .comparison-table td.current { color:#222; } .comparison-table td.change { color:#444; }
 
     .canvas-wrap { background:#fff; border:1px solid #eee; border-radius:18px; padding:16px; }
     #canvas { width:100%; height:440px; border-radius:12px; border:1px dashed #ddd; background:#fdfdfd; }
@@ -61,35 +63,37 @@
   </style>
 </head>
 <body>
+  <!-- En-tête du site (conservé) -->
   <header>
-        <div class="container">
-            <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
-            <nav>
-                <ul>
-                    <li><a href="../index.html">About</a></li>
-                    <li><a href="../research.html">Research</a></li>
-                    <li><a href="../administrative.html">Administrative work</a></li>
-                    <li><a href="../cv.html">CV</a></li>
-                    <li><a href="../teaching.html">Teaching</a></li>
-                    <li><a href="../tools.html" class="active">Tools</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div class="container">
+      <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
+      <nav>
+        <ul>
+          <li><a href="../index.html">About</a></li>
+          <li><a href="../research.html">Research</a></li>
+          <li><a href="../administrative.html">Administrative work</a></li>
+          <li><a href="../cv.html">CV</a></li>
+          <li><a href="../teaching.html">Teaching</a></li>
+          <li><a href="../tools.html" class="active">Tools</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <main class="macro-container">
-    <h1 class="macro-title">Modèles macroéconomiques avancés </h1>
-    <div class="macro-subtitle">RBC • Croissance endogène (AK) • Anticipations (adaptatives & rationnelles) • DSGE (NK)</div>
+    <h1 class="macro-title">Modèles macroéconomiques avancés</h1>
 
+    <!-- Onglets -->
     <div class="tab-navigation">
       <button class="tab-btn active" onclick="openTab('models', this)">Modèles</button>
       <button class="tab-btn" onclick="openTab('params', this)">Paramétrage</button>
       <button class="tab-btn" onclick="openTab('solve', this)">Résolution</button>
       <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
     </div>
-    
-    <div class="grid">
-      <section class="card">
+
+    <!-- ONGLET MODÈLES : choix + contenu du modèle -->
+    <section id="models-tab" class="tab-content active">
+      <div class="card" style="margin-bottom:16px;">
         <h3>Choisir un modèle</h3>
         <label for="model-type" style="display:block;margin-bottom:6px;color:#333;">Modèle</label>
         <select id="model-type" onchange="updateModelDisplay()" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:12px;font-family:inherit;">
@@ -99,47 +103,36 @@
           <option value="rational">Anticipations rationnelles (NKPC)</option>
           <option value="dsge">DSGE (Néo-Keynésien 3-équations)</option>
         </select>
-        <div id="model-display" style="margin-top:16px;"></div>
-      </section>
+      </div>
+      <div class="card">
+        <h3>Aperçu du modèle</h3>
+        <div id="model-display" style="margin-top:6px;"></div>
+      </div>
+    </section>
 
-      <section class="card">
+    <!-- ONGLET PARAMÉTRAGE  -->
+    <section id="params-tab" class="tab-content">
+      <div class="card">
         <h3>Paramétrage</h3>
         <div id="params-content"></div>
         <div class="footer-actions">
-          <button onclick="solveModel()">Solve</button>
-          <button onclick="exportLatex()">Export .tex</button>
-        </div>
-      </section>
-    </div>
-
-
-    <!-- ONGLET MODÈLES -->
-    <section id="models-tab" class="tab-content active">
-      <div class="card">
-        <h3>Aperçu théorique</h3>
-        <p style="margin-top:-4px;color:#555;">Le contenu ci-dessus se met à jour avec le modèle sélectionné et rend automatiquement les équations en LaTeX (KaTeX).</p>
-      </div>
-    </section>
-
-    <!-- ONGLET PARAMÈTRES -->
-    <section id="params-tab" class="tab-content">
-      <div class="card">
-        <h3>Table des paramètres</h3>
-        <div id="params-table-mirror">
-          <em>Utilisez le panneau “Paramétrage” à droite pour modifier les valeurs, puis cliquez sur <strong>Solve</strong>.</em>
+          <button onclick="solveModel()">Résoudre le modèle</button>
         </div>
       </div>
     </section>
 
-    <!-- ONGLET RÉSOLUTION -->
+    <!-- ONGLET RÉSOLUTION : détails + export LaTeX -->
     <section id="solve-tab" class="tab-content">
       <div class="card">
-        <h3>Résultats</h3>
+        <h3>Résolution</h3>
         <div id="detailed-results" style="display:none;"></div>
+        <div class="footer-actions">
+          <button class="export-btn" onclick="exportLatex()">Exporter en .tex</button>
+        </div>
       </div>
     </section>
 
-    <!-- ONGLET AFFICHAGE -->
+    <!-- ONGLET AFFICHAGE : graphes + sliders -->
     <section id="display-tab" class="tab-content">
       <div class="card">
         <h3>Graphiques & interactions</h3>
@@ -162,22 +155,23 @@
     </section>
   </main>
 
+  <!-- Pied de page -->
   <footer>
-        <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
-        <div class="social">
-            <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
-                <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
-            </a>
-            <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
-                <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
-            </a>
-            <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
-                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
-            </a>
-        </div>
-    </footer>
-    
-    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
+    <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+    <div class="social">
+      <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+        <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+      </a>
+      <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+      </a>
+      <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+      </a>
+    </div>
+  </footer>
+
+  <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
   <script src="../assets/js/script.js"></script>
@@ -198,6 +192,7 @@ let isDragging = false, lastX = 0, lastY = 0;
 const canvas = () => document.getElementById('canvas');
 const ctx = () => canvas().getContext('2d');
 
+/* ========= Onglets ========= */
 function openTab(tabName, btnEl) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -206,7 +201,7 @@ function openTab(tabName, btnEl) {
   if (btnEl) btnEl.classList.add('active');
 }
 
-/* ========= Définition des modèles avancés ========= */
+/* ========= Définition des modèles ========= */
 const models = {
   rbc: {
     name: 'RBC — cycle réel avec choc TFP (AR(1))',
@@ -336,22 +331,22 @@ const models = {
   }
 };
 
-/* ========= Rendu des équations & UI ========= */
+/* ========= Rendu du modèle & UI ========= */
 function updateModelDisplay() {
   currentModel = document.getElementById('model-type').value;
   const model = models[currentModel];
   const display = document.getElementById('model-display');
 
-  let html = `<h3>${model.name}</h3>`;
-  html += '<div class="equation-block"><h4 style="color:#2a2a2a;margin-bottom:15px;">Équations du modèle</h4>';
+  let html = '<div class="equation-block"><h4 style="color:#2a2a2a;margin-bottom:15px;">Équations</h4>';
   model.equations.forEach(eq => {
     html += `<div style="margin:15px 0;"><div>$$${eq.latex}$$</div><div style="color:#5a5a5a;font-size:.9rem;margin-top:5px;font-style:italic;">${eq.desc}</div></div>`;
   });
   html += '</div>';
-  html += `<div class="explanation"><strong>Explication pédagogique :</strong><br>${model.explanation}</div>`;
+  html += `<div class="explanation"><strong>Aperçu :</strong><br>${model.explanation}</div>`;
   display.innerHTML = html;
   if (window.renderMathInElement) renderMathInElement(display);
 
+  // Reset & MAJ autres vues
   solution = null; initialSolution = null;
   updateParamsDisplay();
   updateSliders();
@@ -359,6 +354,7 @@ function updateModelDisplay() {
   drawGraph();
 }
 
+/* ========= Paramétrage ========= */
 function updateParamsDisplay() {
   const model = models[currentModel];
   const container = document.getElementById('params-content');
@@ -399,9 +395,10 @@ function solve2x2(a,b,c,d, u, v){ // [[a,b],[c,d]] [x;y] = [u;v]
 function solveModel() {
   if (!initialSolution) initialParams = JSON.parse(JSON.stringify(modelParams));
 
-  // sync inputs
+  // Sync inputs depuis Paramétrage
   models[currentModel].params.forEach(p => {
-    modelParams[p.id] = parseFloat(document.getElementById(`param-${p.id}`).value);
+    const input = document.getElementById(`param-${p.id}`);
+    if (input) modelParams[p.id] = parseFloat(input.value);
   });
 
   if (currentModel === 'rbc') solveRBC();
@@ -415,7 +412,9 @@ function solveModel() {
   updateLegend();
   drawGraph();
 
-  openTab('solve', document.querySelectorAll('.tab-btn')[2]);
+  // Aller à l’onglet Résolution après calcul
+  const solveBtn = document.querySelectorAll('.tab-btn')[2];
+  openTab('solve', solveBtn);
 }
 
 /* ----- RBC ----- */
@@ -432,8 +431,7 @@ function steadyStateRBC(alpha,beta,delta,Abar){
 function solveRBC() {
   const { alpha, beta, delta, Abar, rhoA, epsA, T, k0 } = modelParams;
   const Tint = Math.max(2, Math.floor(T));
-  // choc TFP en log-points (epsA %)
-  const z = ar1_path(Tint, rhoA, epsA/100.0); // z_t
+  const z = ar1_path(Tint, rhoA, epsA/100.0); // log-choc
   const A = z.map(zt => Abar * Math.exp(zt));
 
   const ss = steadyStateRBC(alpha,beta,delta,Abar);
@@ -528,7 +526,7 @@ function solveRational() {
   solution = { series:{ t:[...Array(Tint).keys()], x, pi }, metrics:{ pi0: pi[0] } };
 }
 
-/* ----- DSGE NK (IS-NKPC-Taylor sans lissage) ----- */
+/* ----- DSGE NK (IS–NKPC–Taylor) ----- */
 function solveDSGE() {
   const { sigma, beta, kappa, phi_pi, phi_x, rho_r, eps_r, T } = modelParams;
   const Tint = Math.max(2, Math.floor(T));
@@ -543,7 +541,7 @@ function solveDSGE() {
   const pi_next = new Array(Tint+1).fill(0);
   x_next[Tint]=0; pi_next[Tint]=0;
 
-  // Backward: pour t = T-1...0
+  // Backward: t = T-1...0
   for (let t=Tint-1; t>=0; t--){
     const A1 = 1 + (phi_x/sigma);
     const A2 = (phi_pi/sigma);
@@ -554,8 +552,6 @@ function solveDSGE() {
     const sol = solve2x2(A1, A2, -kappa, 1.0, Kt, beta*pi_next[t+1]);
     x[t] = sol.x; pi[t] = sol.y;
     i[t] = phi_pi*pi[t] + phi_x*x[t];
-
-    // pour l'étape précédente (t-1), ces valeurs servent d'anticipations
     x_next[t] = x[t]; pi_next[t] = pi[t];
   }
 
@@ -673,7 +669,7 @@ function updateSliders() {
       const v = parseFloat(e.target.value);
       modelParams[sl.id] = v;
       document.getElementById(`slider-val-${sl.id}`).textContent = v;
-      // Re-solve live
+      // Simulation live
       solveModel();
     });
   });
@@ -740,7 +736,7 @@ function drawGraph() {
   const s = solution.series;
   const T = (s.t||[]).length || 2;
 
-  // Sélection des séries à tracer (monochrome)
+  // Séries à tracer (monochrome)
   let bundles = [];
   if (currentModel==='rbc') {
     bundles = [
@@ -773,7 +769,7 @@ function drawGraph() {
     ];
   }
 
-  // bornes Y automatiques (marges)
+  // bornes Y automatiques (avec marge)
   let ymin=+Infinity, ymax=-Infinity;
   bundles.forEach(b => b.arr.forEach(v => { if(isFinite(v)){ ymin=Math.min(ymin,v); ymax=Math.max(ymax,v); }}));
   if (!isFinite(ymin) || !isFinite(ymax)) { ymin=-1; ymax=1; }
@@ -873,7 +869,7 @@ function initialSetup(){
   }
   updateModelDisplay();
   attachCanvasInteractions();
-  solveModel();
+  solveModel(); // premier calcul pour activer Résolution/Affichage
 }
 document.addEventListener('DOMContentLoaded', () => {
   try { renderMathInElement(document.body); } catch(e){}
@@ -882,5 +878,3 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
 </body>
 </html>
-
-
