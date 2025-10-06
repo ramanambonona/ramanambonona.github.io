@@ -116,7 +116,7 @@
         <h3>Paramétrage</h3>
         <div id="params-content"></div>
         <div class="footer-actions">
-          <button onclick="solveModel()">Résoudre le modèle</button>
+          <button onclick="solveModel(true)">Résoudre le modèle</button>
         </div>
       </div>
     </section>
@@ -132,10 +132,18 @@
       </div>
     </section>
 
-    <!-- ONGLET AFFICHAGE : graphes + sliders -->
+    <!-- ONGLET AFFICHAGE : sliders en HAUT + graphes en BAS -->
     <section id="display-tab" class="tab-content">
       <div class="card">
-        <h3>Graphiques & interactions</h3>
+        <h3>Affichage & simulation</h3>
+
+        <!-- Sliders en haut -->
+        <div style="margin-bottom:16px;">
+          <h4 style="margin-bottom:6px;">Chocs / Déplacements</h4>
+          <div id="sliders-container"></div>
+        </div>
+
+        <!-- Graphiques en bas -->
         <div class="canvas-wrap">
           <canvas id="canvas" width="1024" height="440"></canvas>
           <div class="controls">
@@ -145,11 +153,6 @@
             <button onclick="downloadCanvas()"><i class="fa-regular fa-image"></i> PNG</button>
           </div>
           <div class="legend" id="legend-display"></div>
-        </div>
-
-        <div style="margin-top:16px;">
-          <h4 style="margin-bottom:6px;">Chocs / Déplacements</h4>
-          <div id="sliders-container"></div>
         </div>
       </div>
     </section>
@@ -183,7 +186,7 @@
 let currentModel = 'rbc';
 let modelParams = {};
 let initialParams = {};
-let solution = null;           // contiendra { series: {...}, ss:{...}, metrics:{...} } ou des scalaires selon modèle
+let solution = null;
 let initialSolution = null;
 
 let zoomLevel = 1, panX = 0, panY = 0;
@@ -351,7 +354,7 @@ function updateModelDisplay() {
   updateParamsDisplay();
   updateSliders();
   updateLegend();
-  drawGraph();
+  liveSolve(); // recalcul sans redirection
 }
 
 /* ========= Paramétrage ========= */
@@ -371,9 +374,12 @@ function updateParamsDisplay() {
   html += '</tbody></table>';
   container.innerHTML = html;
 
+  // Input live + synchro sliders + graph
   model.params.forEach(p => {
     document.getElementById(`param-${p.id}`).addEventListener('input', (e) => {
       modelParams[p.id] = parseFloat(e.target.value);
+      syncSlidersFromParams();
+      liveSolve(); // recalcul sans changer d’onglet
     });
   });
 }
@@ -392,7 +398,8 @@ function solve2x2(a,b,c,d, u, v){ // [[a,b],[c,d]] [x;y] = [u;v]
   return { x: (u*d - b*v)/det, y: (a*v - u*c)/det };
 }
 
-function solveModel() {
+// Calcul avec option de redirection
+function solveModel(redirect=true) {
   if (!initialSolution) initialParams = JSON.parse(JSON.stringify(modelParams));
 
   // Sync inputs depuis Paramétrage
@@ -401,6 +408,7 @@ function solveModel() {
     if (input) modelParams[p.id] = parseFloat(input.value);
   });
 
+  // Dispatch solveur
   if (currentModel === 'rbc') solveRBC();
   else if (currentModel === 'ak') solveAK();
   else if (currentModel === 'adaptive') solveAdaptive();
@@ -412,10 +420,14 @@ function solveModel() {
   updateLegend();
   drawGraph();
 
-  // Aller à l’onglet Résolution après calcul
-  const solveBtn = document.querySelectorAll('.tab-btn')[2];
-  openTab('solve', solveBtn);
+  if (redirect) {
+    const solveBtn = document.querySelectorAll('.tab-btn')[2];
+    openTab('solve', solveBtn);
+  }
 }
+
+// Version live (sans redirection)
+function liveSolve() { solveModel(false); }
 
 /* ----- RBC ----- */
 function steadyStateRBC(alpha,beta,delta,Abar){
@@ -663,15 +675,32 @@ function updateSliders() {
   });
   container.innerHTML = html;
 
+  // Sliders => solve live (pas de redirection)
   model.sliders.forEach(sl => {
     const el = document.getElementById(`slider-${sl.id}`);
     el.addEventListener('input', e => {
       const v = parseFloat(e.target.value);
       modelParams[sl.id] = v;
-      document.getElementById(`slider-val-${sl.id}`).textContent = v;
-      // Simulation live
-      solveModel();
+      const lab = document.getElementById(`slider-val-${sl.id}`);
+      if (lab) lab.textContent = v;
+      // mettre à jour l’input numérique correspondant s’il existe
+      const num = document.getElementById(`param-${sl.id}`);
+      if (num) num.value = v;
+      liveSolve();
     });
+  });
+}
+
+// Synchroniser sliders depuis les inputs numériques
+function syncSlidersFromParams() {
+  const model = models[currentModel];
+  model.sliders.forEach(sl => {
+    const el = document.getElementById(`slider-${sl.id}`);
+    if (el) {
+      el.value = modelParams[sl.id];
+      const lab = document.getElementById(`slider-val-${sl.id}`);
+      if (lab) lab.textContent = modelParams[sl.id];
+    }
   });
 }
 
@@ -869,7 +898,7 @@ function initialSetup(){
   }
   updateModelDisplay();
   attachCanvasInteractions();
-  solveModel(); // premier calcul pour activer Résolution/Affichage
+  liveSolve(); // premier calcul SANS redirection (on reste sur Modèles)
 }
 document.addEventListener('DOMContentLoaded', () => {
   try { renderMathInElement(document.body); } catch(e){}
