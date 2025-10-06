@@ -80,6 +80,14 @@
   <main class="macro-container">
     <h1 class="macro-title">Modèles macroéconomiques avancés </h1>
     <div class="macro-subtitle">RBC • Croissance endogène (AK) • Anticipations (adaptatives & rationnelles) • DSGE (NK)</div>
+
+    <div class="tab-navigation">
+      <button class="tab-btn active" onclick="openTab('models', this)">Modèles</button>
+      <button class="tab-btn" onclick="openTab('params', this)">Paramétrage</button>
+      <button class="tab-btn" onclick="openTab('solve', this)">Résolution</button>
+      <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
+    </div>
+    
     <div class="grid">
       <section class="card">
         <h3>Choisir un modèle</h3>
@@ -104,12 +112,6 @@
       </section>
     </div>
 
-    <div class="tab-navigation">
-      <button class="tab-btn active" onclick="openTab('models', this)">Modèles</button>
-      <button class="tab-btn" onclick="openTab('params', this)">Paramétrage</button>
-      <button class="tab-btn" onclick="openTab('solve', this)">Résolution</button>
-      <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
-    </div>
 
     <!-- ONGLET MODÈLES -->
     <section id="models-tab" class="tab-content active">
@@ -160,13 +162,24 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="macro-container" style="text-align:center;color:#777;">
-      © <span id="year"></span> Ramanambonona Ambinintsoa — EB Garamond • Monochrome iOS-like
-      <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-    </div>
-  </footer>
+  <footer>
+        <p class="footnote">Ramanambonona Ambinintsoa, Ph.D</p>
+        <div class="social">
+            <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+                <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+            </a>
+            <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+                <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+            </a>
+            <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+            </a>
+        </div>
+    </footer>
+    
+    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
   <script src="../assets/js/script.js"></script>
 
   <script>
@@ -869,4 +882,5 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
 </body>
 </html>
+
 
