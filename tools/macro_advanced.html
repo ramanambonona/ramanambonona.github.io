@@ -347,7 +347,16 @@ function updateModelDisplay() {
   html += '</div>';
   html += `<div class="explanation"><strong>Aperçu :</strong><br>${model.explanation}</div>`;
   display.innerHTML = html;
-  if (window.renderMathInElement) renderMathInElement(display);
+  if (window.renderMathInElement) {
+  renderMathInElement(display, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$",  right: "$",  display: false}
+    ]
+  });
+}
 
   // Reset & MAJ autres vues
   solution = null; initialSolution = null;
@@ -901,9 +910,19 @@ function initialSetup(){
   liveSolve(); // premier calcul SANS redirection (on reste sur Modèles)
 }
 document.addEventListener('DOMContentLoaded', () => {
-  try { renderMathInElement(document.body); } catch(e){}
+  try {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$",  right: "$",  display: false}
+    ]
+  });
+} catch(e) {}
   initialSetup();
 });
   </script>
 </body>
 </html>
+
