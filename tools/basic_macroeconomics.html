@@ -510,6 +510,16 @@
 <script>
 'use strict';
 
+// ---- FONCTION OPEN TAB ----
+function openTab(tabName, btn) {
+  const tabs = document.querySelectorAll('.tab-content');
+  const btns = document.querySelectorAll('.tab-btn');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  btns.forEach(b => b.classList.remove('active'));
+  document.getElementById(tabName + '-tab').classList.add('active');
+  btn.classList.add('active');
+}
+
 // ---- ÉTAT GLOBAL ----
 let currentModel = 'islm';
 let modelParams = {};
