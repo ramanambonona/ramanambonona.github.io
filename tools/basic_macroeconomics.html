@@ -54,6 +54,8 @@
             font-weight: 600;
             transition: all 0.2s;
             color: #5a5a5a;
+            /* AMÉLIORATION: Arrondi seulement en haut */
+            border-radius: 4px 4px 0 0; 
         }
         
         .tab-btn.active {
@@ -70,7 +72,8 @@
             display: none;
             background: white;
             padding: 30px;
-            border-radius: 4px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 0 4px 4px 4px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
@@ -84,6 +87,8 @@
             background: #f8f8f8;
             border-left: 3px solid #3a3a3a;
             margin-bottom: 25px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
         }
         
         .model-display h3 {
@@ -97,7 +102,8 @@
             background: white;
             padding: 20px;
             margin: 15px 0;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             border: 1px solid #e0e0e0;
         }
         
@@ -113,6 +119,8 @@
             padding: 15px;
             background: #fafafa;
             border-left: 2px solid #c0c0c0;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
         }
         
         .form-group {
@@ -131,7 +139,8 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #d0d0d0;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             font-family: inherit;
             font-size: 1rem;
             background: white;
@@ -141,6 +150,9 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px;
+            overflow: hidden; /* Nécessaire pour l'arrondi des bords du tableau */
         }
         
         table.param-table th,
@@ -161,7 +173,8 @@
             width: 100%;
             padding: 8px;
             border: 1px solid #d0d0d0;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             font-family: inherit;
             font-size: 1rem;
         }
@@ -171,7 +184,8 @@
             background: #2a2a2a;
             color: white;
             border: none;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             cursor: pointer;
             font-family: inherit;
             font-size: 1.05rem;
@@ -189,7 +203,8 @@
             background: #f8f8f8;
             padding: 25px;
             margin: 20px 0;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             border: 1px solid #d0d0d0;
         }
         
@@ -205,13 +220,17 @@
             margin: 20px 0;
             padding: 15px;
             background: white;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
         }
         
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px;
+            overflow: hidden; 
         }
         
         .comparison-table th,
@@ -244,7 +263,8 @@
             margin: 20px 0;
             padding: 15px;
             background: #fafafa;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             border: 1px solid #e0e0e0;
         }
         
@@ -286,7 +306,8 @@
             background: #4a4a4a;
             color: white;
             border: none;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             cursor: pointer;
             font-family: inherit;
             font-size: 0.9rem;
@@ -304,12 +325,15 @@
             background: white;
             max-width: 100%;
             cursor: move;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
         }
         
         .legend {
             background: #f8f8f8;
             padding: 15px;
-            border-radius: 3px;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px; 
             margin-top: 15px;
         }
         
@@ -332,12 +356,19 @@
             border-left: 3px solid #4a7c9e;
             padding: 15px;
             margin: 15px 0;
+            /* AMÉLIORATION: Arrondi */
+            border-radius: 4px;
         }
         
         .multiplier-box h5 {
             color: #2a2a2a;
             margin-bottom: 10px;
             font-size: 1.1rem;
+        }
+        /* Style pour les courbes initiales */
+        .legend-line.initial {
+            border-top: 2px dotted;
+            height: 0;
         }
     </style>
 </head>
@@ -369,7 +400,6 @@
                 <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
             </div>
             
-            <!-- ONGLET MODÈLES -->
             <div id="models-tab" class="tab-content active">
                 <h3>Choix du modèle macroéconomique</h3>
                 <div class="form-group">
@@ -382,26 +412,21 @@
                 </div>
                 
                 <div class="model-display" id="model-display">
-                    <!-- Contenu dynamique -->
-                </div>
+                    </div>
             </div>
             
-            <!-- ONGLET PARAMÉTRAGE -->
             <div id="params-tab" class="tab-content">
                 <h3>Paramétrage du modèle</h3>
                 <div id="params-content">
-                    <!-- Contenu dynamique -->
-                </div>
+                    </div>
             </div>
             
-            <!-- ONGLET RÉSOLUTION -->
             <div id="solve-tab" class="tab-content">
                 <h3>Résolution du modèle</h3>
                 <button class="solve-btn" onclick="solveModel()">Résoudre le modèle</button>
                 
                 <div id="detailed-results" class="results-display" style="display:none;">
-                    <!-- Contenu dynamique détaillé -->
-                </div>
+                    </div>
                 
                 <div style="margin-top: 20px;">
                     <button class="export-btn" onclick="exportLatex()">
@@ -410,13 +435,11 @@
                 </div>
             </div>
             
-            <!-- ONGLET AFFICHAGE -->
             <div id="display-tab" class="tab-content">
                 <h3>Affichage graphique et comparaison</h3>
                 
                 <div id="sliders-container">
-                    <!-- Sliders dynamiques -->
-                </div>
+                    </div>
                 
                 <div class="canvas-container">
                     <div class="canvas-controls">
@@ -429,12 +452,10 @@
                 </div>
                 
                 <div class="legend" id="legend-display">
-                    <!-- Légende dynamique -->
-                </div>
+                    </div>
                 
                 <div id="graph-comparison" class="results-display" style="display:none;">
-                    <!-- Tableau de comparaison -->
-                </div>
+                    </div>
             </div>
         </div>
     </main>
@@ -477,6 +498,13 @@ let isDragging = false, lastX = 0, lastY = 0;
 
 const canvas = () => document.getElementById('canvas');
 const ctx = () => canvas().getContext('2d');
+
+// Fonction pour stocker les fonctions des courbes initiales
+let initialCurves = {
+    islm: { is_r: null, lm_r: null },
+    'islm-bp': { is_r: null, lm_r: null, bp_r: null },
+    megc: { Y_of_K: null }
+};
 
 // ---- DÉFINITION DES MODÈLES (inchangée, reprise du fichier) ----
 const models = {
@@ -546,8 +574,8 @@ const models = {
     equations: [
       { latex: 'Y = F(K, L) = K^\\alpha L^{1-\\alpha}', desc: 'Cobb-Douglas' },
       { latex: 'C + I = Y', desc: 'Ressources-emplois' },
-      { latex: 'w = (1-\\alpha) Y/L', desc: 'PM du travail' },
-      { latex: 'r = \\alpha Y/K', desc: 'PM du capital' },
+      { latex: 'w = (1-\\alpha) Y/L', desc: 'PM du travail', isFactorPrice: true },
+      { latex: 'r = \\alpha Y/K', desc: 'PM du capital', isFactorPrice: true },
       { latex: 'C = (1-s)Y', desc: 'Consommation' },
       { latex: 'I = sY', desc: 'Épargne = Investissement' },
     ],
@@ -628,8 +656,7 @@ function updateParamsDisplay() {
 
 function solveModel() {
   const model = models[currentModel];
-  if (!initialSolution) initialParams = JSON.parse(JSON.stringify(modelParams));
-
+  
   // synchroniser paramètres depuis inputs
   model.params.forEach(p => {
     const value = parseFloat(document.getElementById(`param-${p.id}`).value);
@@ -639,8 +666,13 @@ function solveModel() {
   if (currentModel === 'islm') solveISLM();
   else if (currentModel === 'islm-bp') solveISLMBP();
   else if (currentModel === 'megc') solveMEGC();
-
-  if (!initialSolution) initialSolution = JSON.parse(JSON.stringify(solution));
+  
+  // Stocker l'état initial lors du premier "solve"
+  if (!initialSolution) {
+      initialParams = JSON.parse(JSON.stringify(modelParams));
+      initialSolution = JSON.parse(JSON.stringify(solution));
+      storeInitialCurves(); // Stocker les fonctions des courbes initiales
+  }
 
   displayDetailedResults();
   updateLegend();
@@ -651,8 +683,8 @@ function solveModel() {
 }
 
 // ---- RÉSOLUTION ----
-function solveISLM() {
-  const { c0, c1, b, I0, G, T, M, P, k, h } = modelParams;
+function solveISLM(params = modelParams) {
+  const { c0, c1, b, I0, G, T, M, P, k, h } = params;
 
   const denom_IS = 1 - c1;
   const denom = h * (1 - c1) + k * b;
@@ -663,18 +695,24 @@ function solveISLM() {
   const C = c0 + c1 * (Y_star - T);
   const I = I0 - b * r_star;
 
-  solution = { Y: Y_star, r: r_star, C, I };
-
-  multipliers = {
-    multG: h / denom,
-    multT: -c1 * h / denom,
-    multM: b / (P * denom),
-    multG_simple: 1 / denom_IS,
-  };
+  if (params === modelParams) {
+      solution = { Y: Y_star, r: r_star, C, I };
+      multipliers = {
+          multG: h / denom,
+          multT: -c1 * h / denom,
+          multM: b / (P * denom),
+          multG_simple: 1 / denom_IS,
+      };
+  }
+  
+  // Retourner les fonctions des courbes pour le tracé
+  const is_r = (Y) => (c0 + I0 - c1*T + G - (1 - c1)*Y) / b;
+  const lm_r = (Y) => (k/h)*Y - (M/(P*h));
+  return { is_r, lm_r };
 }
 
-function solveISLMBP() {
-  const { c0, c1, b, I0, G, T, M, P, k, h, m, NX0, n, r_star } = modelParams;
+function solveISLMBP(params = modelParams) {
+  const { c0, c1, b, I0, G, T, M, P, k, h, m, NX0, n, r_star } = params;
   const denom = h * (1 - c1 + m) + k * b;
 
   const Y_eq = (h * (c0 + I0 - c1 * T + G + NX0 - b * r_star) + b * (M / P)) / denom;
@@ -685,17 +723,24 @@ function solveISLMBP() {
   const I  = I0 - b * r_eq;
   const BP = NX + n * (r_eq - r_star);
 
-  solution = { Y: Y_eq, r: r_eq, NX, C, I, BP };
-
-  multipliers = {
-    multG:  h / denom,
-    multM:  b / (P * denom),
-    multNX: h / denom,
-  };
+  if (params === modelParams) {
+      solution = { Y: Y_eq, r: r_eq, NX, C, I, BP };
+      multipliers = {
+          multG:  h / denom,
+          multM:  b / (P * denom),
+          multNX: h / denom,
+      };
+  }
+  
+  // Retourner les fonctions des courbes pour le tracé
+  const is_r = (Y) => (c0 + I0 - c1*T + G + NX0 - (1 - c1 + m)*Y) / b;
+  const lm_r = (Y) => (k/h)*Y - (M/(P*h));
+  const bp_r = (Y) => r_star + (m*Y - NX0)/n;
+  return { is_r, lm_r, bp_r };
 }
 
-function solveMEGC() {
-  const { K, L, alpha, s } = modelParams;
+function solveMEGC(params = modelParams) {
+  const { K, L, alpha, s } = params;
   const Y = Math.pow(K, alpha) * Math.pow(L, 1 - alpha);
   const w = (1 - alpha) * Y / L;
   const r = alpha * Y / K;
@@ -704,14 +749,31 @@ function solveMEGC() {
   const prodK = Y / K;
   const prodL = Y / L;
 
-  solution = { Y, w, r, C, I, K, L, prodK, prodL };
+  if (params === modelParams) {
+      solution = { Y, w, r, C, I, K, L, prodK, prodL };
+      multipliers = {
+          elastY_K: alpha,
+          elastY_L: 1 - alpha,
+          elastY_s: 0,
+      };
+  }
 
-  multipliers = {
-    elastY_K: alpha,
-    elastY_L: 1 - alpha,
-    elastY_s: 0,
-  };
+  // Retourner la fonction de production pour le tracé
+  const Y_of_K = (K_val) => Math.pow(K_val, alpha) * Math.pow(L, 1-alpha);
+  return { Y_of_K };
 }
+
+// Nouvelle fonction pour stocker les fonctions des courbes initiales
+function storeInitialCurves() {
+    if (currentModel === 'islm') {
+        initialCurves.islm = solveISLM(initialParams);
+    } else if (currentModel === 'islm-bp') {
+        initialCurves['islm-bp'] = solveISLMBP(initialParams);
+    } else if (currentModel === 'megc') {
+        initialCurves.megc = solveMEGC(initialParams);
+    }
+}
+
 
 // ---- AFFICHAGE DES RÉSULTATS (texte) ----
 function displayDetailedResults() {
@@ -729,7 +791,7 @@ function displayDetailedResults() {
     const { c0, c1, b, I0, G, T, M, P, k, h, m, NX0, n, r_star } = modelParams;
     html += `<div style="margin:10px 0;">$$\\text{IS: } Y = \\frac{1}{${(1-c1+m).toFixed(3)}}(${c0} + ${I0} - ${(c1*T).toFixed(1)} + ${G} + ${NX0} - ${b}r)$$</div>`;
     html += `<div style="margin:10px 0;">$$\\text{LM: } r = ${(k/h).toFixed(4)}Y - ${(M/(P*h)).toFixed(2)}$$</div>`;
-    html += `<div style="margin:10px 0;">$$\\text{BP: } r = ${r_star} + \\frac{${m}Y - ${NX0}}${n}$$</div>`;
+    html += `<div style="margin:10px 0;">$$\\text{BP: } r = ${r_star} + \\frac{${m}Y - ${NX0}}{${n}}$$</div>`;
   } else if (currentModel === 'megc') {
     const { K, L, alpha, s } = modelParams;
     html += `<div style="margin:10px 0;">$$Y = ${K}^{${alpha}} \\times ${L}^{${(1-alpha).toFixed(2)}}$$</div>`;
@@ -751,7 +813,7 @@ function displayDetailedResults() {
 
   // Points d’équilibre
   html += '<div class="results-section"><h5 style="color:#2a2a2a;font-size:1.1rem;margin-bottom:15px;">3. Points d\'équilibre</h5>';
-  const compare = initialSolution && (solution.Y !== initialSolution.Y || solution.r !== initialSolution.r);
+  const compare = initialSolution && (solution.Y !== initialSolution.Y || (solution.r && solution.r !== initialSolution.r));
   if (compare) {
     html += '<table class="comparison-table"><thead><tr><th>Variable</th><th>Initial</th><th>Actuel</th><th>Variation</th></tr></thead><tbody>';
     if (currentModel === 'islm' || currentModel === 'islm-bp') {
@@ -836,28 +898,40 @@ function updateSliders() {
 function updateLegend() {
   const legend = document.getElementById('legend-display');
   let items = [];
-  if (currentModel === 'islm') {
-    items = [
-      { label: 'IS', color: '#000000' },
-      { label: 'LM', color: '#444444' },
-      { label: 'Équilibre', color: '#777777' },
-    ];
-  } else if (currentModel === 'islm-bp') {
-    items = [
-      { label: 'IS', color: '#000000' },
-      { label: 'LM', color: '#444444' },
-      { label: 'BP', color: '#666666' },
-      { label: 'Équilibre', color: '#777777' },
-    ];
+  
+  if (currentModel === 'islm' || currentModel === 'islm-bp') {
+      const is_color = '#E91E63'; // Rouge/Rose pour IS
+      const lm_color = '#2196F3'; // Bleu pour LM
+      const bp_color = '#4CAF50'; // Vert pour BP
+
+      // Courbes initiales (pointillées)
+      if (initialSolution && (solution.Y !== initialSolution.Y || solution.r !== initialSolution.r)) {
+          items.push({ label: 'IS initiale', color: is_color, initial: true });
+          items.push({ label: 'LM initiale', color: lm_color, initial: true });
+          if (currentModel === 'islm-bp') items.push({ label: 'BP initiale', color: bp_color, initial: true });
+      }
+
+      // Courbes courantes (pleines)
+      items.push({ label: 'IS actuelle', color: is_color });
+      items.push({ label: 'LM actuelle', color: lm_color });
+      if (currentModel === 'islm-bp') items.push({ label: 'BP actuelle', color: bp_color });
+      
+      items.push({ label: 'Équilibre initial', color: '#707070', point: true });
+      items.push({ label: 'Nouvel Équilibre', color: '#000000', point: true });
+
   } else {
-    items = [
-      { label: 'Production Y(K|L fixe)', color: '#000000' },
-      { label: 'Point courant', color: '#666666' },
-    ];
+      items = [
+          { label: 'Production Y(K|L fixe)', color: '#000000' },
+          { label: 'Point courant (K, Y)', color: '#666666', point: true },
+      ];
   }
+  
   let html = '';
   items.forEach(it => {
-    html += `<span class="legend-item"><span class="legend-line" style="background:${it.color};"></span>${it.label}</span>`;
+      const lineStyle = it.point ? `style="background:${it.color};width:8px;height:8px;border-radius:50%;"` : `style="background:${it.color};"`;
+      const lineClass = it.initial ? 'legend-line initial' : 'legend-line';
+      
+      html += `<span class="legend-item"><span class="${lineClass}" ${lineStyle}></span>${it.label}</span>`;
   });
   legend.innerHTML = html;
 }
@@ -871,64 +945,99 @@ function clearCanvas() {
   context.restore();
 }
 
-function drawAxes(context, xMin, xMax, yMin, yMax) {
+function drawAxes(context, xMin, xMax, yMin, yMax, xLabel, yLabel) { // Ajout des labels
   // repère marge
   const m = 50;
+  const W = canvas().width;
+  const H = canvas().height;
   context.strokeStyle = '#BBBBBB';
   context.lineWidth = 1;
 
   // axes
   context.beginPath();
-  context.moveTo(m + panX, (canvas().height - m) + panY);
-  context.lineTo((canvas().width - m) + panX, (canvas().height - m) + panY);
+  context.moveTo(m + panX, (H - m) + panY);
+  context.lineTo((W - m) + panX, (H - m) + panY); // Axe X
   context.moveTo(m + panX, m + panY);
-  context.lineTo(m + panX, (canvas().height - m) + panY);
+  context.lineTo(m + panX, (H - m) + panY); // Axe Y
   context.stroke();
+
+  // Titres des axes
+  context.fillStyle = '#1a1a1a';
+  context.font = 'bold 14px sans-serif';
+  context.fillText(xLabel, W - m + panX - 10, H - m + panY + 5); // Label X
+  context.fillText(yLabel, m + panX - 5, m + panY - 15); // Label Y
 
   // graduations (4 ticks)
   const ticks = 4;
   context.fillStyle = '#666';
-  context.font = '12px serif';
+  context.font = '12px sans-serif';
   for (let i=0; i<=ticks; i++) {
-    const x = m + (i/ticks) * (canvas().width - 2*m);
-    const y = (canvas().height - m);
+    const x = m + (i/ticks) * (W - 2*m);
+    const y = (H - m);
     const vx = xMin + (i/ticks)*(xMax-xMin);
-    context.fillText(vx.toFixed(0), x-8 + panX, y+20 + panY);
+    context.fillText(vx.toFixed(0), x-8 + panX, y+20 + panY); // Graduation X
   }
   for (let j=0; j<=ticks; j++) {
-    const y = (canvas().height - m) - (j/ticks)*(canvas().height - 2*m);
+    const y = (H - m) - (j/ticks)*(H - 2*m);
     const vy = yMin + (j/ticks)*(yMax-yMin);
-    context.fillText(vy.toFixed(0), m-40 + panX, y+4 + panY);
+    context.fillText(vy.toFixed(0), m-40 + panX, y+4 + panY); // Graduation Y
   }
 }
 
-function xMap(Y, xMin, xMax) {
+function xMap(V, vMin, vMax) {
   const m = 50;
   const W = canvas().width - 2*m;
-  return (m + ((Y - xMin)/(xMax - xMin))*W);
+  return (m + ((V - vMin)/(vMax - vMin))*W);
 }
-function yMap(r, yMin, yMax) {
+function yMap(V, vMin, vMax) {
   const m = 50;
   const H = canvas().height - 2*m;
-  return ((canvas().height - m) - ((r - yMin)/(yMax - yMin))*H);
+  return ((canvas().height - m) - ((V - vMin)/(vMax - vMin))*H);
 }
 
-function drawLine(context, points, color='#000', width=2) {
+// Fonction utilitaire pour tracer une ligne
+function drawLine(context, points, color='#000', width=2, dotted=false) {
   context.strokeStyle = color;
   context.lineWidth = width;
+  if (dotted) context.setLineDash([5, 5]);
+  else context.setLineDash([]);
+  
   context.beginPath();
   points.forEach((p,i) => {
     if (i===0) context.moveTo(p[0] + panX, p[1] + panY);
     else context.lineTo(p[0] + panX, p[1] + panY);
   });
   context.stroke();
+  context.setLineDash([]); // Reset dash for next draws
 }
 
-function drawPoint(context, x, y, color='#777') {
+// Nouvelle fonction utilitaire pour tracer un point et les pointillés vers les axes
+function drawPoint(context, x, y, color='#777', isInitial=false) {
   context.fillStyle = color;
   context.beginPath();
   context.arc(x + panX, y + panY, 4, 0, 2*Math.PI);
   context.fill();
+
+  if (solution && solution.Y !== undefined) {
+      // Pointillés vers les axes
+      context.strokeStyle = isInitial ? '#AAAAAA' : '#000000';
+      context.lineWidth = 1;
+      context.setLineDash([2, 4]);
+
+      // Vers l'axe X
+      context.beginPath();
+      context.moveTo(x + panX, y + panY);
+      context.lineTo(x + panX, (canvas().height - 50) + panY);
+      context.stroke();
+
+      // Vers l'axe Y
+      context.beginPath();
+      context.moveTo(x + panX, y + panY);
+      context.lineTo(50 + panX, y + panY);
+      context.stroke();
+      
+      context.setLineDash([]); // Reset dash
+  }
 }
 
 function drawGraph() {
@@ -940,71 +1049,124 @@ function drawGraph() {
   context.save();
   context.translate((c.width/2)*(1-zoomLevel), (c.height/2)*(1-zoomLevel));
   context.scale(zoomLevel, zoomLevel);
+  
+  // Constantes de couleur pour IS-LM
+  const is_color = '#E91E63'; 
+  const lm_color = '#2196F3'; 
+  const bp_color = '#4CAF50'; 
+  const initial_point_color = '#707070';
+  const current_point_color = '#000000';
 
   if (currentModel === 'islm' || currentModel === 'islm-bp') {
-    // Axes: X = Y, Y = r
-    const Ystar = solution?.Y ?? 100;
+    // Axes: X = Y, Y = r (Taux d'intérêt)
+    
+    // Si pas encore de solution, on utilise les valeurs par défaut
+    const Ystar = solution?.Y ?? 1000;
     const rstar = solution?.r ?? 5;
+    const Yinitial = initialSolution?.Y ?? Ystar;
+    const rInitial = initialSolution?.r ?? rstar;
 
-    const xMin = Math.max(0, 0.2*Ystar);
-    const xMax = 1.8*Ystar;
-    const yMin = Math.max(0, 0.2*rstar);
-    const yMax = 1.8*rstar;
+    // Définir la plage de tracé autour de l'équilibre
+    const Yavg = (Ystar + Yinitial) / 2;
+    const rAvg = (rstar + rInitial) / 2;
+    
+    // Plage ajustée pour ne pas être trop longue (0.5x à 1.5x la valeur moyenne)
+    const xMin = Math.max(0, 0.5 * Yavg);
+    const xMax = 1.5 * Yavg;
+    const yMin = Math.max(0, 0.5 * rAvg);
+    const yMax = 1.5 * rAvg;
 
-    drawAxes(context, xMin, xMax, yMin, yMax);
+    drawAxes(context, xMin, xMax, yMin, yMax, 'Revenu (Y)', 'Taux (r)');
 
-    // IS: r = (c0 + I0 - c1 T + G - (1 - c1) Y) / b
-    const { c0, c1, b, I0, G, T, M, P, k, h } = modelParams;
-    const is_r = (Y) => (c0 + I0 - c1*T + G - (1 - c1)*Y) / b;
+    const N = 100; // Nombre de points pour tracer les lignes
+    
+    // --- Tracé des COURBES INITIALES (Pointillés) ---
+    if (initialSolution && (initialSolution.Y !== solution.Y || initialSolution.r !== solution.r)) {
+        const initialFns = currentModel === 'islm' ? solveISLM(initialParams) : solveISLMBP(initialParams);
+        
+        const ptsIS_initial = [];
+        const ptsLM_initial = [];
+        const ptsBP_initial = [];
 
-    // LM: r = (k/h) Y - (M/(P*h))
-    const lm_r = (Y) => (k/h)*Y - (M/(P*h));
+        for (let i=0;i<=N;i++){
+            const Y = xMin + (i/N)*(xMax-xMin);
+            // Vérification de la plage r pour éviter les valeurs extrêmes
+            const rIS = initialFns.is_r(Y);
+            if (rIS >= yMin && rIS <= yMax) ptsIS_initial.push([xMap(Y,xMin,xMax), yMap(rIS, yMin,yMax)]);
+
+            const rLM = initialFns.lm_r(Y);
+            if (rLM >= yMin && rLM <= yMax) ptsLM_initial.push([xMap(Y,xMin,xMax), yMap(rLM, yMin,yMax)]);
+            
+            if (currentModel === 'islm-bp') {
+                const rBP = initialFns.bp_r(Y);
+                if (rBP >= yMin && rBP <= yMax) ptsBP_initial.push([xMap(Y,xMin,xMax), yMap(rBP, yMin,yMax)]);
+            }
+        }
+        
+        drawLine(context, ptsIS_initial, is_color, 2, true);
+        drawLine(context, ptsLM_initial, lm_color, 2, true);
+        if (currentModel === 'islm-bp') drawLine(context, ptsBP_initial, bp_color, 2, true);
+
+        // Point d'équilibre initial
+        const xE_initial = xMap(initialSolution.Y, xMin, xMax);
+        const yE_initial = yMap(initialSolution.r, yMin, yMax);
+        drawPoint(context, xE_initial, yE_initial, initial_point_color, true);
+    }
+    
+    // --- Tracé des COURBES COURANTES (Pleines) ---
+    const currentFns = currentModel === 'islm' ? solveISLM(modelParams) : solveISLMBP(modelParams);
 
     const ptsIS = [];
     const ptsLM = [];
-    const N = 100;
+    const ptsBP = [];
     for (let i=0;i<=N;i++){
-      const Y = xMin + (i/N)*(xMax-xMin);
-      ptsIS.push([xMap(Y,xMin,xMax), yMap(is_r(Y), yMin,yMax)]);
-      ptsLM.push([xMap(Y,xMin,xMax), yMap(lm_r(Y), yMin,yMax)]);
-    }
-    drawLine(context, ptsIS, '#000000', 2);
-    drawLine(context, ptsLM, '#444444', 2);
-
-    if (currentModel === 'islm-bp') {
-      const { m, NX0, n, r_star } = modelParams;
-      // BP: r = r* + (mY - NX0)/n
-      const bp_r = (Y) => r_star + (m*Y - NX0)/n;
-      const ptsBP = [];
-      for (let i=0;i<=N;i++){
         const Y = xMin + (i/N)*(xMax-xMin);
-        ptsBP.push([xMap(Y,xMin,xMax), yMap(bp_r(Y), yMin,yMax)]);
-      }
-      drawLine(context, ptsBP, '#666666', 2);
-    }
+        
+        const rIS = currentFns.is_r(Y);
+        if (rIS >= yMin && rIS <= yMax) ptsIS.push([xMap(Y,xMin,xMax), yMap(rIS, yMin,yMax)]);
 
-    // Équilibre
+        const rLM = currentFns.lm_r(Y);
+        if (rLM >= yMin && rLM <= yMax) ptsLM.push([xMap(Y,xMin,xMax), yMap(rLM, yMin,yMax)]);
+
+        if (currentModel === 'islm-bp') {
+            const rBP = currentFns.bp_r(Y);
+            if (rBP >= yMin && rBP <= yMax) ptsBP.push([xMap(Y,xMin,xMax), yMap(rBP, yMin,yMax)]);
+        }
+    }
+    
+    // On dessine en s'assurant que les points sont valides (on n'a pas inclus cette vérification dans l'outil de base)
+    drawLine(context, ptsIS, is_color, 2);
+    drawLine(context, ptsLM, lm_color, 2);
+    if (currentModel === 'islm-bp') drawLine(context, ptsBP, bp_color, 2);
+
+    // Nouvel Équilibre
     if (solution) {
       const xE = xMap(solution.Y, xMin, xMax);
       const yE = yMap(solution.r, yMin, yMax);
-      drawPoint(context, xE, yE, '#777777');
+      drawPoint(context, xE, yE, current_point_color);
     }
 
   } else {
-    // MEGC : on trace la courbe Y(K|L fixe)
-    const { L, alpha } = modelParams;
+    // MEGC : Y = F(K, L)
+    
     const Kstar = modelParams.K;
-    const Ystar = solution?.Y ?? Math.pow(Kstar, alpha) * Math.pow(L, 1-alpha);
+    const Ystar = solution?.Y ?? Math.pow(Kstar, models.megc.params.find(p=>p.id==='alpha').default) * Math.pow(modelParams.L, 1-models.megc.params.find(p=>p.id==='alpha').default);
 
-    const xMin = Math.max(1, 0.2*Kstar);
-    const xMax = 1.8*Kstar;
+    const Kinitial = initialSolution?.K ?? Kstar;
+    const Yinitial = initialSolution?.Y ?? Ystar;
+
+    const Kavg = (Kstar + Kinitial) / 2;
+    const Yavg = (Ystar + Yinitial) / 2;
+
+    const xMin = Math.max(1, 0.5*Kavg);
+    const xMax = 1.5*Kavg;
     const yMin = 0;
-    const yMax = 1.8*Ystar;
+    const yMax = 1.5*Yavg;
 
-    drawAxes(context, xMin, xMax, yMin, yMax);
+    drawAxes(context, xMin, xMax, yMin, yMax, 'Capital (K)', 'Production (Y)');
 
-    const Y_of_K = (K) => Math.pow(K, alpha) * Math.pow(L, 1-alpha);
-
+    // Courbe de production actuelle
+    const Y_of_K = solveMEGC(modelParams).Y_of_K;
     const pts = [];
     const N = 150;
     for (let i=0;i<=N;i++){
@@ -1012,16 +1174,24 @@ function drawGraph() {
       pts.push([xMap(K, xMin,xMax), yMap(Y_of_K(K), yMin,yMax)]);
     }
     drawLine(context, pts, '#000000', 2);
+    
+    // Point initial
+    if (initialSolution && (initialSolution.Y !== solution.Y || initialSolution.K !== solution.K)) {
+        const xI = xMap(initialSolution.K, xMin, xMax);
+        const yI = yMap(initialSolution.Y, yMin, yMax);
+        drawPoint(context, xI, yI, initial_point_color, true);
+    }
 
+    // Point courant
     if (solution) {
-      drawPoint(context, xMap(solution.K, xMin,xMax), yMap(solution.Y, yMin,yMax), '#666666');
+      drawPoint(context, xMap(solution.K, xMin,xMax), yMap(solution.Y, yMin,yMax), current_point_color);
     }
   }
 
   context.restore();
 }
 
-// ---- ZOOM / PAN & TÉLÉCHARGEMENT ----
+// ---- ZOOM / PAN & TÉLÉCHARGEMENT (inchangé) ----
 function zoomIn(){ zoomLevel = Math.min(3, zoomLevel*1.2); drawGraph(); }
 function zoomOut(){ zoomLevel = Math.max(0.4, zoomLevel/1.2); drawGraph(); }
 function resetZoom(){ zoomLevel = 1; panX = 0; panY = 0; drawGraph(); }
@@ -1053,11 +1223,25 @@ function attachCanvasInteractions() {
   });
   c.addEventListener('wheel', (e) => {
     e.preventDefault();
-    if (e.deltaY < 0) zoomIn(); else zoomOut();
+    // Zoom/Dezoom en fonction de la position de la souris
+    const scaleFactor = 1.1;
+    const delta = e.deltaY < 0 ? scaleFactor : 1/scaleFactor;
+    
+    // Calcul de la position de la souris relative au centre du canvas
+    const rect = c.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Ajustement pour maintenir le point sous la souris
+    panX = (panX - mouseX) * delta + mouseX;
+    panY = (panY - mouseY) * delta + mouseY;
+    zoomLevel = Math.min(5, Math.max(0.2, zoomLevel * delta)); // Limiter le zoom
+
+    drawGraph();
   }, { passive: false });
 }
 
-// ---- EXPORT LATEX ----
+// ---- EXPORT LATEX (inchangé) ----
 function exportLatex(){
   const now = new Date().toISOString().slice(0,10);
   const model = models[currentModel];
@@ -1068,7 +1252,7 @@ function exportLatex(){
   // Équations
   body += '\\section*{Modèle sélectionné: ' + model.name.replaceAll('&','\\&') + '}\n';
   body += '\\subsection*{Équations}\n\\begin{align*}\n';
-  model.equations.forEach(eq => { body += eq.latex + '\\\\n'; });
+  model.equations.forEach(eq => { body += eq.latex + '\\\\\n'; }); // Correction: \\\\n -> \\\\\n
   body += '\\end{align*}\n';
 
   // Paramètres
@@ -1127,14 +1311,14 @@ ${body}
   URL.revokeObjectURL(url);
 }
 
-// ---- BOUTONS UI reliés aux fonctions ----
+// ---- BOUTONS UI reliés aux fonctions (inchangé) ----
 window.zoomIn = zoomIn;
 window.zoomOut = zoomOut;
 window.resetZoom = resetZoom;
 window.downloadCanvas = downloadCanvas;
 window.exportLatex = exportLatex;
 
-// ---- INIT ----
+// ---- INIT (inchangé) ----
 function initialSetup(){
   // petite anim (GSAP déjà chargé si présent)
   if (window.gsap) {
