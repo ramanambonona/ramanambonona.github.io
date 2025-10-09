@@ -54,8 +54,7 @@
             font-weight: 600;
             transition: all 0.2s;
             color: #5a5a5a;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px 2px 0 0; 
+            border-radius: 6px 6px 0 0; 
         }
         
         .tab-btn.active {
@@ -72,9 +71,8 @@
             display: none;
             background: white;
             padding: 30px;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 0 2px 2px 2px; 
-            box-shadow: 0 0 5px rgba(0,0,0,0.05); /* Ombre très légère */
+            border-radius: 0 8px 8px 8px; 
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
             margin-bottom: 30px;
         }
         
@@ -87,8 +85,7 @@
             background: #f8f8f8;
             border-left: 3px solid #3a3a3a;
             margin-bottom: 25px;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border-radius: 8px; 
         }
         
         .model-display h3 {
@@ -102,8 +99,7 @@
             background: white;
             padding: 20px;
             margin: 15px 0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border-radius: 8px; 
             border: 1px solid #e0e0e0;
         }
         
@@ -119,8 +115,7 @@
             padding: 15px;
             background: #fafafa;
             border-left: 2px solid #c0c0c0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border-radius: 8px; 
         }
         
         .form-group {
@@ -139,8 +134,7 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #d0d0d0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border-radius: 6px; 
             font-family: inherit;
             font-size: 1rem;
             background: white;
@@ -149,9 +143,8 @@
         table.param-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px;
+            margin-bottom: 20px;           
+            border-radius: 8px;
             overflow: hidden; 
         }
         
@@ -172,9 +165,8 @@
         table.param-table input {
             width: 100%;
             padding: 8px;
-            border: 1px solid #d0d0d0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border: 1px solid #d0d0d0;           
+            border-radius: 6px; 
             font-family: inherit;
             font-size: 1rem;
         }
@@ -183,9 +175,8 @@
             padding: 14px 24px;
             background: #2a2a2a;
             color: white;
-            border: none;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            border: none;           
+            border-radius: 6px; 
             cursor: pointer;
             font-family: inherit;
             font-size: 1.05rem;
@@ -202,9 +193,8 @@
         .results-display {
             background: #f8f8f8;
             padding: 25px;
-            margin: 20px 0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            margin: 20px 0;            
+            border-radius: 8px; 
             border: 1px solid #d0d0d0;
         }
         
@@ -219,17 +209,15 @@
         .results-section {
             margin: 20px 0;
             padding: 15px;
-            background: white;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            background: white;           
+            border-radius: 8px; 
         }
         
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px;
+            margin: 15px 0;           
+            border-radius: 8px;
             overflow: hidden; 
         }
         
@@ -262,9 +250,8 @@
         .slider-control {
             margin: 20px 0;
             padding: 15px;
-            background: #fafafa;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            background: #fafafa;           
+            border-radius: 8px; 
             border: 1px solid #e0e0e0;
         }
         
@@ -306,8 +293,8 @@
             background: #4a4a4a;
             color: white;
             border: none;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            
+            border-radius: 6px; 
             cursor: pointer;
             font-family: inherit;
             font-size: 0.9rem;
@@ -325,15 +312,15 @@
             background: white;
             max-width: 100%;
             cursor: move;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            
+            border-radius: 8px; 
         }
         
         .legend {
             background: #f8f8f8;
             padding: 15px;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px; 
+            
+            border-radius: 8px; 
             margin-top: 15px;
         }
         
@@ -356,13 +343,17 @@
             border-left: 3px solid #4a7c9e;
             padding: 15px;
             margin: 15px 0;
-            /* AMÉLIORATION: Arrondi léger */
-            border-radius: 2px;
+            
+            border-radius: 8px;
         }
-        /* Style pour les courbes initiales */
         .legend-line.initial {
             border-top: 2px dotted;
             height: 0;
+        }
+        .legend-line.point-style {
+             border-radius: 50%; 
+             width: 8px; 
+             height: 8px;
         }
     </style>
 </head>
@@ -503,7 +494,7 @@ let initialCurves = {
 // Variable pour stocker les paramètres intermédiaires pendant l'animation
 let animatingParams = null;
 
-// ---- DÉFINITION DES MODÈLES (inchangée) ----
+// ---- DÉFINITION DES MODÈLES ----
 const models = {
   islm: {
     name: 'Modèle IS-LM',
@@ -592,7 +583,7 @@ const models = {
   },
 };
 
-// ---- ONGLET / UI (Mise à jour pour stocker les paramètres initiaux lors du premier solve) ----
+// ---- ONGLET / UI  ----
 function openTab(tabName, btnEl) {
   const tabs = document.querySelectorAll('.tab-content');
   const btns = document.querySelectorAll('.tab-btn');
@@ -648,10 +639,7 @@ function updateParamsDisplay() {
     const el = document.getElementById(`param-${p.id}`);
     el.addEventListener('input', (e) => {
       modelParams[p.id] = parseFloat(e.target.value);
-      // Mettre à jour l'état si l'utilisateur modifie les paramètres après la première résolution
       if (initialSolution) {
-          // Si les paramètres initiaux sont touchés, on prend le nouvel état comme état courant pour la résolution suivante
-          // On ne fait rien d'autre ici, car l'utilisateur va cliquer sur "Résoudre"
       }
     });
   });
@@ -678,7 +666,6 @@ function solveModel() {
       storeInitialCurves(initialParams); // Stocker les fonctions des courbes initiales
   }
   
-  // S'assurer que les sliders sont à jour avec les résultats
   updateSliders(); 
 
   displayDetailedResults();
@@ -689,7 +676,7 @@ function solveModel() {
   openTab('solve', document.querySelectorAll('.tab-btn')[2]);
 }
 
-// ---- RÉSOLUTION (Ajout de l'argument params pour la réutilisation) ----
+// ---- RÉSOLUTION ----
 function solveISLM(params) {
   const { c0, c1, b, I0, G, T, M, P, k, h } = params;
 
@@ -702,7 +689,7 @@ function solveISLM(params) {
   const C = c0 + c1 * (Y_star - T);
   const I = I0 - b * r_star;
 
-  // Mise à jour de l'état global 'solution' et 'multipliers' si on utilise les paramètres actifs
+  // Mise à jour de l'état global 'solution' et 'multipliers'
   if (params === modelParams) {
       solution = { Y: Y_star, r: r_star, C, I };
       multipliers = {
@@ -784,7 +771,6 @@ function storeInitialCurves(params) {
 function updateSliders() {
   const model = models[currentModel];
   const container = document.getElementById('sliders-container');
-  // ... (HTML de la fonction updateSliders inchangé) ...
 
   let html = '<h4 style="margin-bottom:20px;color:#2a2a2a;">Ajuster les paramètres et observer les déplacements</h4>';
   model.sliders.forEach(slider => {
@@ -821,7 +807,6 @@ function updateSliders() {
       if (initialSolution) {
           animateTransition(finalParams, slider.id);
       } else {
-          // Si pas de solution initiale, on met à jour directement (cas très rare)
           modelParams[slider.id] = v;
           if (currentModel === 'islm') solveISLM(modelParams);
           else if (currentModel === 'islm-bp') solveISLMBP(modelParams);
@@ -875,6 +860,8 @@ function animateTransition(newParams, sliderId) {
             else currentSol = solveMEGC(currentParams);
             
             // Mettre à jour la solution globale pour le tracé de la courbe courante
+            // NB: On ne met pas à jour modelParams ici pour que l'état initial du prochain slide
+            // soit celui d'avant l'animation.
             solution = currentSol; 
             
             // Affichage
@@ -892,7 +879,7 @@ function animateTransition(newParams, sliderId) {
             // Mettre à jour les résultats numériques et la légende
             displayDetailedResults();
             updateLegend();
-            animatingParams = null;
+            animatingParams = null; // Fin de l'animation
         },
     });
 }
@@ -982,7 +969,7 @@ function displayDetailedResults() {
   if (window.renderMathInElement) renderMathInElement(container);
 }
 
-// ---- LÉGENDE (inchangée) ----
+// ---- LÉGENDE (Mise à jour des pastilles) ----
 function updateLegend() {
   const legend = document.getElementById('legend-display');
   let items = [];
@@ -991,9 +978,11 @@ function updateLegend() {
       const is_color = '#E91E63'; // Rouge/Rose pour IS
       const lm_color = '#2196F3'; // Bleu pour LM
       const bp_color = '#4CAF50'; // Vert pour BP
+      const initial_point_color = '#707070';
+      const current_point_color = '#000000';
 
       // Courbes initiales (pointillées)
-      if (initialSolution && (solution.Y !== initialSolution.Y || solution.r !== initialSolution.r)) {
+      if (initialSolution) { // Toujours visible désormais
           items.push({ label: 'IS initiale', color: is_color, initial: true });
           items.push({ label: 'LM initiale', color: lm_color, initial: true });
           if (currentModel === 'islm-bp') items.push({ label: 'BP initiale', color: bp_color, initial: true });
@@ -1004,27 +993,31 @@ function updateLegend() {
       items.push({ label: 'LM actuelle', color: lm_color });
       if (currentModel === 'islm-bp') items.push({ label: 'BP actuelle', color: bp_color });
       
-      items.push({ label: 'Équilibre initial', color: '#707070', point: true });
-      items.push({ label: 'Nouvel Équilibre', color: '#000000', point: true });
+      items.push({ label: 'Équilibre initial', color: initial_point_color, point: true });
+      items.push({ label: 'Nouvel Équilibre', color: current_point_color, point: true });
 
   } else {
+      const initial_point_color = '#707070';
+      const current_point_color = '#000000';
       items = [
           { label: 'Production Y(K|L fixe)', color: '#000000' },
-          { label: 'Point courant (K, Y)', color: '#666666', point: true },
+          { label: 'Point courant (K, Y)', color: current_point_color, point: true },
+          { label: 'Point initial (K, Y)', color: initial_point_color, point: true },
       ];
   }
   
   let html = '';
   items.forEach(it => {
-      const lineStyle = it.point ? `style="background:${it.color};width:8px;height:8px;border-radius:50%;"` : `style="background:${it.color};"`;
-      const lineClass = it.initial ? 'legend-line initial' : 'legend-line';
+      const isPoint = it.point;
+      const lineStyle = isPoint ? `style="background:${it.color};"` : `style="background:${it.color};"`;
+      const lineClass = isPoint ? 'legend-line point-style' : (it.initial ? 'legend-line initial' : 'legend-line');
       
       html += `<span class="legend-item"><span class="${lineClass}" ${lineStyle}></span>${it.label}</span>`;
   });
   legend.innerHTML = html;
 }
 
-// ---- DESSIN CANVAS (Mise à jour pour utiliser la fonction solve avec paramètres) ----
+// ---- DESSIN CANVAS (Mise à jour de la logique de tracé initial) ----
 function clearCanvas() {
   const c = canvas(); const context = ctx();
   context.save();
@@ -1164,7 +1157,7 @@ function drawGraph() {
 
     const N = 100; 
     
-    // --- Tracé des COURBES INITIALES (Pointillées) ---
+    // --- Tracé des COURBES INITIALES (Pointillées - Toujours visibles) ---
     if (initialSolution && initialCurves[currentModel]) {
         const initialFns = initialCurves[currentModel];
         
@@ -1220,9 +1213,10 @@ function drawGraph() {
             }
         }
         
-        drawLine(context, ptsIS, is_color, 2);
-        drawLine(context, ptsLM, lm_color, 2);
-        if (currentModel === 'islm-bp') drawLine(context, ptsBP, bp_color, 2);
+        // Epaisseur augmentée à 3 pour la courbe courante
+        drawLine(context, ptsIS, is_color, 3);
+        drawLine(context, ptsLM, lm_color, 3);
+        if (currentModel === 'islm-bp') drawLine(context, ptsBP, bp_color, 3);
 
         // Nouvel Équilibre
         const xE = xMap(solution.Y, xMin, xMax);
@@ -1232,9 +1226,8 @@ function drawGraph() {
 
   } else {
     // MEGC : Y = F(K, L) (Logique inchangée)
-    // ... (Code MEGC inchangé) ...
     const Kstar = solution?.K ?? modelParams.K;
-    const Ystar = solution?.Y ?? Math.pow(Kstar, models.megc.params.find(p=>p.id==='alpha').default) * Math.pow(modelParams.L, 1-models.megc.params.find(p=>p.id==='alpha').default);
+    const Ystar = solution?.Y ?? Math.pow(Kstar, modelParams.alpha) * Math.pow(modelParams.L, 1-modelParams.alpha);
 
     const Kinitial = initialSolution?.K ?? Kstar;
     const Yinitial = initialSolution?.Y ?? Ystar;
@@ -1257,10 +1250,18 @@ function drawGraph() {
       const K = xMin + (i/N)*(xMax-xMin);
       pts.push([xMap(K, xMin,xMax), yMap(Y_of_K(K), yMin,yMax)]);
     }
-    drawLine(context, pts, '#000000', 2);
+    drawLine(context, pts, '#000000', 3); // Courbe courante épaisseur 3
     
     // Point initial
     if (initialSolution) {
+        const Y_of_K_initial = solveMEGC(initialParams).Y_of_K;
+        const pts_initial = [];
+        for (let i=0;i<=N;i++){
+          const K = xMin + (i/N)*(xMax-xMin);
+          pts_initial.push([xMap(K, xMin,xMax), yMap(Y_of_K_initial(K), yMin,yMax)]);
+        }
+        drawLine(context, pts_initial, '#000000', 2, true); // Courbe initiale pointillée épaisseur 2
+
         const xI = xMap(initialSolution.K, xMin, xMax);
         const yI = yMap(initialSolution.Y, yMin, yMax);
         drawPoint(context, xI, yI, initial_point_color, true);
@@ -1395,23 +1396,22 @@ ${body}
   URL.revokeObjectURL(url);
 }
 
-// ---- BOUTONS UI reliés aux fonctions (inchangé) ----
+// ---- BOUTONS UI reliés aux fonctions  ----
 window.zoomIn = zoomIn;
 window.zoomOut = zoomOut;
 window.resetZoom = resetZoom;
 window.downloadCanvas = downloadCanvas;
 window.exportLatex = exportLatex;
 
-// ---- INIT (Mise à jour pour s'assurer que l'état initial est capturé) ----
+// ---- INIT ----
 function initialSetup(){
-  // petite anim (GSAP déjà chargé si présent)
   if (window.gsap) {
     gsap.from('.macro-title', {y: 10, opacity: 0, duration: .6, ease: 'power2.out'});
     gsap.from('.tab-navigation', {y: 8, opacity: 0, duration: .5, delay:.1});
   }
   updateModelDisplay();
   attachCanvasInteractions();
-  // Première résolution pour disposer d’un équilibre initial
+  
   solveModel(); 
 }
 
