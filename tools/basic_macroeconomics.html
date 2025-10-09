@@ -61,7 +61,7 @@
             font-weight: 600;
             transition: all 0.2s;
             color: #5a5a5a;
-            border-radius: 999px; /* Pill shape like in optimality */
+            border-radius: 999px;
         }
         
         .tab-btn.active {
@@ -78,7 +78,7 @@
             display: none;
             background: white;
             padding: 30px;
-            border-radius: 18px; /* Rounded like in optimality */
+            border-radius: 18px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 30px;
             border: 1px solid var(--border-color);
@@ -93,7 +93,7 @@
             background: #f8f8f8;
             border-left: 3px solid #3a3a3a;
             margin-bottom: 25px;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
         }
         
         .model-display h3 {
@@ -107,7 +107,7 @@
             background: white;
             padding: 20px;
             margin: 15px 0;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
             border: 1px solid #e0e0e0;
         }
         
@@ -123,7 +123,7 @@
             padding: 15px;
             background: #fafafa;
             border-left: 2px solid #c0c0c0;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
         }
         
         .form-group {
@@ -142,7 +142,7 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #d0d0d0;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             font-family: inherit;
             font-size: 1rem;
             background: white;
@@ -152,7 +152,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            border-radius: 8px; /* Rounded table */
+            border-radius: 8px;
             overflow: hidden;
         }
         
@@ -174,7 +174,7 @@
             width: 100%;
             padding: 8px;
             border: 1px solid #d0d0d0;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
             font-family: inherit;
             font-size: 1rem;
         }
@@ -184,7 +184,7 @@
             background: #2a2a2a;
             color: white;
             border: none;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             cursor: pointer;
             font-family: inherit;
             font-size: 1.05rem;
@@ -202,7 +202,7 @@
             background: #f8f8f8;
             padding: 25px;
             margin: 20px 0;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             border: 1px solid #d0d0d0;
         }
         
@@ -218,14 +218,14 @@
             margin: 20px 0;
             padding: 15px;
             background: white;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
         }
         
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
             overflow: hidden;
         }
         
@@ -259,7 +259,7 @@
             margin: 20px 0;
             padding: 15px;
             background: #fafafa;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             border: 1px solid #e0e0e0;
         }
         
@@ -301,7 +301,7 @@
             background: #4a4a4a;
             color: white;
             border: none;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             cursor: pointer;
             font-family: inherit;
             font-size: 0.9rem;
@@ -319,13 +319,13 @@
             background: white;
             max-width: 100%;
             cursor: move;
-            border-radius: 8px; /* Rounded canvas border */
+            border-radius: 8px;
         }
         
         .legend {
             background: #f8f8f8;
             padding: 15px;
-            border-radius: 12px; /* Rounded */
+            border-radius: 12px;
             margin-top: 15px;
         }
         
@@ -348,7 +348,7 @@
             border-left: 3px solid #4a7c9e;
             padding: 15px;
             margin: 15px 0;
-            border-radius: 8px; /* Rounded */
+            border-radius: 8px;
         }
         
         .multiplier-box h5 {
@@ -358,25 +358,68 @@
         }
         
         .policy-buttons {
+            position: fixed;
+            top: 100px;
+            left: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            background: rgba(42, 42, 42, 0.85);
+            padding: 15px;
+            border-radius: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
         .policy-buttons button {
             padding: 10px 20px;
-            background: var(--accent-color);
+            background: #3a3a3a;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.95rem;
+            transition: background 0.2s, opacity 0.2s;
         }
         
         .policy-buttons button:hover {
             background: #1a1a1a;
+            opacity: 0.9;
+        }
+
+        .display-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .controls-column {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+        
+        .graph-column {
+            flex: 2;
+            min-width: 400px;
+        }
+        
+        @media (max-width: 900px) {
+            .display-layout {
+                flex-direction: column;
+            }
+            
+            .controls-column, .graph-column {
+                max-width: 100%;
+            }
+
+            .policy-buttons {
+                position: static;
+                background: var(--accent-color);
+                box-shadow: none;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
@@ -408,7 +451,6 @@
                 <button class="tab-btn" onclick="openTab('display', this)">Affichage</button>
             </div>
             
-            <!-- ONGLET MODÈLES -->
             <div id="models-tab" class="tab-content active">
                 <h3>Choix du modèle macroéconomique</h3>
                 <div class="form-group">
@@ -420,28 +462,18 @@
                     </select>
                 </div>
                 
-                <div class="model-display" id="model-display">
-                    <!-- Contenu dynamique -->
-                </div>
+                <div class="model-display" id="model-display"></div>
             </div>
             
-            <!-- ONGLET PARAMÉTRAGE -->
             <div id="params-tab" class="tab-content">
                 <h3>Paramétrage du modèle</h3>
-                <div id="params-content">
-                    <!-- Contenu dynamique -->
-                </div>
+                <div id="params-content"></div>
             </div>
             
-            <!-- ONGLET RÉSOLUTION -->
             <div id="solve-tab" class="tab-content">
                 <h3>Résolution du modèle</h3>
                 <button class="solve-btn" onclick="solveModel()">Résoudre le modèle</button>
-                
-                <div id="detailed-results" class="results-display" style="display:none;">
-                    <!-- Contenu dynamique détaillé -->
-                </div>
-                
+                <div id="detailed-results" class="results-display" style="display:none;"></div>
                 <div style="margin-top: 20px;">
                     <button class="export-btn" onclick="exportLatex()">
                         <i class="fas fa-file-code"></i> Exporter les détails en LaTeX (.tex)
@@ -449,38 +481,32 @@
                 </div>
             </div>
             
-            <!-- ONGLET AFFICHAGE -->
             <div id="display-tab" class="tab-content">
                 <h3>Affichage graphique et comparaison</h3>
-                
-                <div class="policy-buttons">
-                    <button onclick="applyPolicy('budget_exp')">Politique budgétaire expansionniste</button>
-                    <button onclick="applyPolicy('budget_res')">Politique budgétaire restrictive</button>
-                    <button onclick="applyPolicy('monet_exp')">Politique monétaire expansionniste</button>
-                    <button onclick="applyPolicy('monet_res')">Politique monétaire restrictive</button>
-                </div>
-                
-                <div id="sliders-container">
-                    <!-- Sliders dynamiques -->
-                </div>
-                
-                <div class="canvas-container">
-                    <div class="canvas-controls">
-                        <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> Zoom +</button>
-                        <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> Zoom -</button>
-                        <button onclick="resetZoom()"><i class="fas fa-redo"></i> Réinitialiser</button>
-                        <button onclick="downloadCanvas()"><i class="fas fa-download"></i> Télécharger PNG</button>
-                        <button onclick="animateGraph()"><i class="fas fa-play"></i> Animer</button>
+                <div class="display-layout">
+                    <div class="controls-column">
+                        <div class="policy-buttons">
+                            <button onclick="applyPolicy('budget_exp')">Politique budgétaire expansionniste</button>
+                            <button onclick="applyPolicy('budget_res')">Politique budgétaire restrictive</button>
+                            <button onclick="applyPolicy('monet_exp')">Politique monétaire expansionniste</button>
+                            <button onclick="applyPolicy('monet_res')">Politique monétaire restrictive</button>
+                        </div>
+                        <div id="sliders-container"></div>
                     </div>
-                    <canvas id="canvas" width="800" height="600"></canvas>
-                </div>
-                
-                <div class="legend" id="legend-display">
-                    <!-- Légende dynamique -->
-                </div>
-                
-                <div id="graph-comparison" class="results-display" style="display:none;">
-                    <!-- Tableau de comparaison -->
+                    <div class="graph-column">
+                        <div class="canvas-container">
+                            <div class="canvas-controls">
+                                <button onclick="zoomIn()"><i class="fas fa-search-plus"></i> Zoom +</button>
+                                <button onclick="zoomOut()"><i class="fas fa-search-minus"></i> Zoom -</button>
+                                <button onclick="resetZoom()"><i class="fas fa-redo"></i> Réinitialiser</button>
+                                <button onclick="downloadCanvas()"><i class="fas fa-download"></i> Télécharger PNG</button>
+                                <button onclick="animateGraph()"><i class="fas fa-play"></i> Animer</button>
+                            </div>
+                            <canvas id="canvas" width="800" height="600"></canvas>
+                        </div>
+                        <div class="legend" id="legend-display"></div>
+                        <div id="graph-comparison" class="results-display" style="display:none;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -505,9 +531,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    
-<script>
+    <script>
 'use strict';
 
 // ---- FONCTION OPEN TAB ----
@@ -540,7 +564,7 @@ let oldSolution = null;
 const canvas = () => document.getElementById('canvas');
 const ctx = () => canvas().getContext('2d');
 
-// ---- DÉFINITION DES MODÈLES (inchangée, reprise du fichier) ----
+// ---- DÉFINITION DES MODÈLES ----
 const models = {
   islm: {
     name: 'Modèle IS-LM',
@@ -619,7 +643,7 @@ const models = {
       { id: 'K',     label: 'Stock de capital (K)', default: 100, min: 10, max: 500 },
       { id: 'L',     label: 'Offre de travail (L)', default: 100, min: 10, max: 500 },
       { id: 'alpha', label: 'Part du capital (α)', default: 0.3, min: 0.1, max: 0.9, step: 0.01 },
-      { id: 's',     label: 'Taux d\'épargne (s)', default: 0.2, min: 0, max: 1, step: 0.01 },
+      { id: 's',     label: "Taux d'épargne (s)", default: 0.2, min: 0, max: 1, step: 0.01 },
     ],
     sliders: [
       { id: 'K', label: 'Stock de capital (K)', desc: 'Augmentation du capital → Production ↑' },
@@ -727,15 +751,15 @@ function solveISLMBP() {
   const r_eq = (k * (c0 + I0 - c1 * T + G + NX0) - (1 - c1 + m) * (M / P) + h * r_star) / denom;
 
   const NX = NX0 - m * Y_eq;
-  const C  = c0 + c1 * (Y_eq - T);
-  const I  = I0 - b * r_eq;
+  const C = c0 + c1 * (Y_eq - T);
+  const I = I0 - b * r_eq;
   const BP = NX + n * (r_eq - r_star);
 
   solution = { Y: Y_eq, r: r_eq, NX, C, I, BP };
 
   multipliers = {
-    multG:  h / denom,
-    multM:  b / (P * denom),
+    multG: h / denom,
+    multM: b / (P * denom),
     multNX: h / denom,
   };
 }
@@ -783,7 +807,6 @@ function displayDetailedResults() {
   }
   html += '</div>';
 
-  // Multiplicateurs
   html += '<div class="multiplier-box"><h5>2. Multiplicateurs</h5>';
   if (currentModel === 'islm') {
     html += `<p><strong>∂Y/∂G</strong> = ${multipliers.multG.toFixed(4)} &nbsp;|&nbsp; <strong>∂Y/∂T</strong> = ${multipliers.multT.toFixed(4)} &nbsp;|&nbsp; <strong>∂Y/∂M</strong> = ${multipliers.multM.toFixed(4)}</p>`;
@@ -795,7 +818,6 @@ function displayDetailedResults() {
   }
   html += '</div>';
 
-  // Points d’équilibre
   html += '<div class="results-section"><h5 style="color:#2a2a2a;font-size:1.1rem;margin-bottom:15px;">3. Points d\'équilibre</h5>';
   const compare = initialSolution && (solution.Y !== initialSolution.Y || solution.r !== initialSolution.r);
   if (compare) {
@@ -843,7 +865,7 @@ function updateSliders() {
   const model = models[currentModel];
   const container = document.getElementById('sliders-container');
 
-  let html = '<h4 style="margin-bottom:20px;color:#2a2a2a;">Ajuster les paramètres et observer les déplacements</h4>';
+  let html = '<h4 style="margin-bottom:20px;color:#2a2a2a;">Ajuster les paramètres</h4>';
   model.sliders.forEach(slider => {
     const p = model.params.find(pp => pp.id === slider.id);
     const value = modelParams[slider.id];
@@ -860,14 +882,12 @@ function updateSliders() {
 
   container.innerHTML = html;
 
-  // listeners
   model.sliders.forEach(slider => {
     const el = document.getElementById(`slider-${slider.id}`);
     el.addEventListener('input', (e) => {
       const v = parseFloat(e.target.value);
       modelParams[slider.id] = v;
       document.getElementById(`slider-val-${slider.id}`).textContent = v;
-      // recalcul + redraw live
       solveModel();
       updateLegend();
       drawGraph();
@@ -917,12 +937,10 @@ function clearCanvas() {
 }
 
 function drawAxes(context, xMin, xMax, yMin, yMax) {
-  // repère marge
   const m = 50;
   context.strokeStyle = '#BBBBBB';
   context.lineWidth = 1;
 
-  // axes
   context.beginPath();
   context.moveTo(m + panX, (canvas().height - m) + panY);
   context.lineTo((canvas().width - m) + panX, (canvas().height - m) + panY);
@@ -930,24 +948,22 @@ function drawAxes(context, xMin, xMax, yMin, yMax) {
   context.lineTo(m + panX, (canvas().height - m) + panY);
   context.stroke();
 
-  // graduations (4 ticks)
   const ticks = 4;
   context.fillStyle = '#666';
   context.font = '12px serif';
-  for (let i=0; i<=ticks; i++) {
-    const x = m + (i/ticks) * (canvas().width - 2*m);
-    const y = (canvas().height - m);
-    const vx = xMin + (i/ticks)*(xMax-xMin);
-    context.fillText(vx.toFixed(0), x-8 + panX, y+20 + panY);
+  for (let i = 0; i <= ticks; i++) {
+    const x = m + (i / ticks) * (canvas().width - 2 * m);
+    const y = canvas().height - m;
+    const vx = xMin + (i / ticks) * (xMax - xMin);
+    context.fillText(vx.toFixed(0), x - 8 + panX, y + 20 + panY);
   }
-  for (let j=0; j<=ticks; j++) {
-    const y = (canvas().height - m) - (j/ticks)*(canvas().height - 2*m);
-    const vy = yMin + (j/ticks)*(yMax-yMin);
-    context.fillText(vy.toFixed(0), m-40 + panX, y+4 + panY);
+  for (let j = 0; j <= ticks; j++) {
+    const y = (canvas().height - m) - (j / ticks) * (canvas().height - 2 * m);
+    const vy = yMin + (j / ticks) * (yMax - yMin);
+    context.fillText(vy.toFixed(0), m - 40 + panX, y + 4 + panY);
   }
 
-  // Labels des axes
-  context.fillText('Y', (canvas().width - m + 10) + panX, (canvas().height - m + 20) + panY); // Axe X
+  context.fillText('Y', (canvas().width - m + 10) + panX, (canvas().height - m + 20) + panY);
   context.save();
   context.translate(m - 40 + panX, m + panY - 10);
   context.rotate(-Math.PI / 2);
@@ -957,80 +973,77 @@ function drawAxes(context, xMin, xMax, yMin, yMax) {
 
 function xMap(Y, xMin, xMax) {
   const m = 50;
-  const W = canvas().width - 2*m;
-  return (m + ((Y - xMin)/(xMax - xMin))*W);
-}
-function yMap(r, yMin, yMax) {
-  const m = 50;
-  const H = canvas().height - 2*m;
-  return ((canvas().height - m) - ((r - yMin)/(yMax - yMin))*H);
+  const W = canvas().width - 2 * m;
+  return (m + ((Y - xMin) / (xMax - xMin)) * W);
 }
 
-function drawLine(context, points, color='#000', width=2, dashed=false) {
+function yMap(r, yMin, yMax) {
+  const m = 50;
+  const H = canvas().height - 2 * m;
+  return ((canvas().height - m) - ((r - yMin) / (yMax - yMin)) * H);
+}
+
+function drawLine(context, points, color = '#000', width = 2, dashed = false) {
   context.strokeStyle = color;
   context.lineWidth = width;
-  if (dashed) context.setLineDash([5,5]);
+  if (dashed) context.setLineDash([5, 5]);
   context.beginPath();
-  points.forEach((p,i) => {
-    if (i===0) context.moveTo(p[0] + panX, p[1] + panY);
+  points.forEach((p, i) => {
+    if (i === 0) context.moveTo(p[0] + panX, p[1] + panY);
     else context.lineTo(p[0] + panX, p[1] + panY);
   });
   context.stroke();
   if (dashed) context.setLineDash([]);
 }
 
-function drawPoint(context, x, y, color='#777') {
+function drawPoint(context, x, y, color = '#777') {
   context.fillStyle = color;
   context.beginPath();
-  context.arc(x + panX, y + panY, 4, 0, 2*Math.PI);
+  context.arc(x + panX, y + panY, 4, 0, 2 * Math.PI);
   context.fill();
 }
 
 function drawGraph() {
-  const c = canvas(); if (!c) return;
+  const c = canvas();
+  if (!c) return;
   const context = ctx();
   clearCanvas();
 
-  // zoom/transform
   context.save();
-  context.translate((c.width/2)*(1-zoomLevel), (c.height/2)*(1-zoomLevel));
+  context.translate((c.width / 2) * (1 - zoomLevel), (c.height / 2) * (1 - zoomLevel));
   context.scale(zoomLevel, zoomLevel);
 
   if (currentModel === 'islm' || currentModel === 'islm-bp') {
-    // Axes: X = Y, Y = r
     const Ystar = solution?.Y ?? 100;
     const rstar = solution?.r ?? 5;
 
     const xMin = 0;
-    const xMax = Math.max(500, 1.5 * Ystar); // Limité pour visibilité
+    const xMax = Math.max(500, 1.5 * Ystar);
     const yMin = 0;
-    const yMax = Math.max(5, 1.5 * rstar); // Limité
+    const yMax = Math.max(5, 1.5 * rstar);
 
     drawAxes(context, xMin, xMax, yMin, yMax);
 
-    // IS: r = (c0 + I0 - c1 T + G - (1 - c1) Y) / b
     const { c0, c1, b, I0, G, T, M, P, k, h } = modelParams;
-    const is_r = (Y) => (c0 + I0 - c1*T + G - (1 - c1)*Y) / b;
-
-    // LM: r = (k/h) Y - (M/(P*h))
-    const lm_r = (Y) => (k/h)*Y - (M/(P*h));
+    const is_r = (Y) => (c0 + I0 - c1 * T + G - (1 - c1) * Y) / b;
+    const lm_r = (Y) => (k / h) * Y - (M / (P * h));
 
     const ptsIS = [];
     const ptsLM = [];
-    const N = 50; // Moins de points pour courbes plus courtes
-    for (let i=0;i<=N;i++){
-      const Y = xMin + (i/N)*(xMax-xMin);
+    const N = 50;
+    for (let i = 0; i <= N; i++) {
+      const Y = xMin + (i / N) * (xMax - xMin);
       let r_is = is_r(Y);
       let r_lm = lm_r(Y);
       if (r_is >= yMin && r_is <= yMax && Y >= xMin && Y <= xMax) {
-        ptsIS.push([xMap(Y,xMin,xMax), yMap(r_is, yMin,yMax)]);
+        ptsIS.push([xMap(Y, xMin, xMax), yMap(r_is, yMin, yMax)]);
       }
       if (r_lm >= yMin && r_lm <= yMax && Y >= xMin && Y <= xMax) {
-        ptsLM.push([xMap(Y,xMin,xMax), yMap(r_lm, yMin,yMax)]);
+        ptsLM.push([xMap(Y, xMin, xMax), yMap(r_lm, yMin, yMax)]);
       }
     }
-    if (oldPtsIS.length > 0) drawLine(context, oldPtsIS, '#cccccc', 1.5); // Ancienne IS grise
-    if (oldPtsLM.length > 0) drawLine(context, oldPtsLM, '#dddddd', 1.5); // Ancienne LM grise
+    if (oldPtsIS.length > 0) drawLine(context, oldPtsIS, '#cccccc', 1.5);
+    if (oldPtsLM.length > 0) drawLine(context, oldPtsLM, '#dddddd', 1.5);
     drawLine(context, ptsIS, '#000000', 2);
     drawLine(context, ptsLM, '#444444', 2);
     
@@ -1039,14 +1052,13 @@ function drawGraph() {
 
     if (currentModel === 'islm-bp') {
       const { m, NX0, n, r_star } = modelParams;
-      // BP: r = r* + (mY - NX0)/n
-      const bp_r = (Y) => r_star + (m*Y - NX0)/n;
+      const bp_r = (Y) => r_star + (m * Y - NX0) / n;
       const ptsBP = [];
-      for (let i=0;i<=N;i++){
-        const Y = xMin + (i/N)*(xMax-xMin);
+      for (let i = 0; i <= N; i++) {
+        const Y = xMin + (i / N) * (xMax - xMin);
         let r_bp = bp_r(Y);
         if (r_bp >= yMin && r_bp <= yMax && Y >= xMin && Y <= xMax) {
-          ptsBP.push([xMap(Y,xMin,xMax), yMap(r_bp, yMin,yMax)]);
+          ptsBP.push([xMap(Y, xMin, xMax), yMap(r_bp, yMin, yMax)]);
         }
       }
       if (oldPtsBP.length > 0) drawLine(context, oldPtsBP, '#eeeeee', 1.5);
@@ -1054,28 +1066,24 @@ function drawGraph() {
       oldPtsBP = ptsBP;
     }
 
-    // Équilibre
     if (solution) {
       const xE = xMap(solution.Y, xMin, xMax);
       const yE = yMap(solution.r, yMin, yMax);
       drawPoint(context, xE, yE, '#777777');
       
-      // Pointillés aux axes
-      drawLine(context, [[xE, yMap(0,yMin,yMax)], [xE, yE], [xMap(0,xMin,xMax), yE]], '#888888', 1, true);
+      drawLine(context, [[xE, yMap(0, yMin, yMax)], [xE, yE], [xMap(0, xMin, xMax), yE]], '#888888', 1, true);
       
       if (oldSolution) {
         const oldXE = xMap(oldSolution.Y, xMin, xMax);
         const oldYE = yMap(oldSolution.r, yMin, yMax);
         drawPoint(context, oldXE, oldYE, '#cccccc');
-        drawLine(context, [[oldXE, yMap(0,yMin,yMax)], [oldXE, oldYE], [xMap(0,xMin,xMax), oldYE]], '#dddddd', 1, true);
+        drawLine(context, [[oldXE, yMap(0, yMin, yMax)], [oldXE, oldYE], [xMap(0, xMin, xMax), oldYE]], '#dddddd', 1, true);
       }
     }
-
   } else {
-    // MEGC : on trace la courbe Y(K|L fixe)
     const { L, alpha } = modelParams;
     const Kstar = modelParams.K;
-    const Ystar = solution?.Y ?? Math.pow(Kstar, alpha) * Math.pow(L, 1-alpha);
+    const Ystar = solution?.Y ?? Math.pow(Kstar, alpha) * Math.pow(L, 1 - alpha);
 
     const xMin = 0;
     const xMax = Math.max(200, 1.5 * Kstar);
@@ -1084,18 +1092,18 @@ function drawGraph() {
 
     drawAxes(context, xMin, xMax, yMin, yMax);
 
-    const Y_of_K = (K) => Math.pow(K, alpha) * Math.pow(L, 1-alpha);
+    const Y_of_K = (K) => Math.pow(K, alpha) * Math.pow(L, 1 - alpha);
 
     const pts = [];
     const N = 50;
-    for (let i=0;i<=N;i++){
-      const K = xMin + (i/N)*(xMax-xMin);
-      pts.push([xMap(K, xMin,xMax), yMap(Y_of_K(K), yMin,yMax)]);
+    for (let i = 0; i <= N; i++) {
+      const K = xMin + (i / N) * (xMax - xMin);
+      pts.push([xMap(K, xMin, xMax), yMap(Y_of_K(K), yMin, yMax)]);
     }
     drawLine(context, pts, '#000000', 2);
 
     if (solution) {
-      drawPoint(context, xMap(solution.K, xMin,xMax), yMap(solution.Y, yMin,yMax), '#666666');
+      drawPoint(context, xMap(solution.K, xMin, xMax), yMap(solution.Y, yMin, yMax), '#666666');
     }
   }
 
@@ -1103,11 +1111,11 @@ function drawGraph() {
 }
 
 // ---- ZOOM / PAN & TÉLÉCHARGEMENT ----
-function zoomIn(){ zoomLevel = Math.min(3, zoomLevel*1.2); drawGraph(); }
-function zoomOut(){ zoomLevel = Math.max(0.4, zoomLevel/1.2); drawGraph(); }
-function resetZoom(){ zoomLevel = 1; panX = 0; panY = 0; drawGraph(); }
+function zoomIn() { zoomLevel = Math.min(3, zoomLevel * 1.2); drawGraph(); }
+function zoomOut() { zoomLevel = Math.max(0.4, zoomLevel / 1.2); drawGraph(); }
+function resetZoom() { zoomLevel = 1; panX = 0; panY = 0; drawGraph(); }
 
-function downloadCanvas(){
+function downloadCanvas() {
   const link = document.createElement('a');
   link.download = `macro_${currentModel}.png`;
   link.href = canvas().toDataURL('image/png');
@@ -1119,58 +1127,63 @@ function attachCanvasInteractions() {
   c.style.cursor = 'grab';
 
   c.addEventListener('mousedown', (e) => {
-    isDragging = true; lastX = e.offsetX; lastY = e.offsetY; c.style.cursor = 'grabbing';
+    isDragging = true;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+    c.style.cursor = 'grabbing';
   });
   window.addEventListener('mouseup', () => {
-    isDragging = false; canvas().style.cursor = 'grab';
+    isDragging = false;
+    canvas().style.cursor = 'grab';
   });
   c.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     const dx = e.offsetX - lastX;
     const dy = e.offsetY - lastY;
-    panX += dx; panY += dy;
-    lastX = e.offsetX; lastY = e.offsetY;
+    panX += dx;
+    panY += dy;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
     drawGraph();
   });
   c.addEventListener('wheel', (e) => {
     e.preventDefault();
-    if (e.deltaY < 0) zoomIn(); else zoomOut();
+    if (e.deltaY < 0) zoomIn();
+    else zoomOut();
   }, { passive: false });
 }
 
 // ---- POLITIQUES ÉCONOMIQUES AVEC ANIMATION ----
 function applyPolicy(policy) {
-  const step = 50; // Pas d'ajustement
+  const step = 50;
   let targetValue;
   switch (policy) {
     case 'budget_exp':
       targetValue = modelParams.G + step;
-      gsap.to(modelParams, {G: targetValue, duration: 1, onUpdate: updateAfterAnim});
+      gsap.to(modelParams, { G: targetValue, duration: 1, onUpdate: updateAfterAnim });
       break;
     case 'budget_res':
       targetValue = Math.max(0, modelParams.G - step);
-      gsap.to(modelParams, {G: targetValue, duration: 1, onUpdate: updateAfterAnim});
+      gsap.to(modelParams, { G: targetValue, duration: 1, onUpdate: updateAfterAnim });
       break;
     case 'monet_exp':
       targetValue = modelParams.M + step * 10;
-      gsap.to(modelParams, {M: targetValue, duration: 1, onUpdate: updateAfterAnim});
+      gsap.to(modelParams, { M: targetValue, duration: 1, onUpdate: updateAfterAnim });
       break;
     case 'monet_res':
       targetValue = Math.max(100, modelParams.M - step * 10);
-      gsap.to(modelParams, {M: targetValue, duration: 1, onUpdate: updateAfterAnim});
+      gsap.to(modelParams, { M: targetValue, duration: 1, onUpdate: updateAfterAnim });
       break;
   }
 }
 
 function animateGraph() {
-  // Exemple d'animation générique : animer G +50
   applyPolicy('budget_exp');
 }
 
 function updateAfterAnim() {
   solveModel();
   drawGraph();
-  // Mettre à jour sliders si nécessaire
   const sliders = document.querySelectorAll('input[type="range"]');
   sliders.forEach(sl => {
     const id = sl.id.replace('slider-', '');
@@ -1180,40 +1193,36 @@ function updateAfterAnim() {
 }
 
 // ---- EXPORT LATEX ----
-function exportLatex(){
-  const now = new Date().toISOString().slice(0,10);
+function exportLatex() {
+  const now = new Date().toISOString().slice(0, 10);
   const model = models[currentModel];
 
-  const num = (x, d=3) => (typeof x === 'number' ? x.toFixed(d) : x);
+  const num = (x, d = 3) => (typeof x === 'number' ? x.toFixed(d) : x);
 
   let body = '';
-  // Équations
-  body += '\\section*{Modèle sélectionné: ' + model.name.replaceAll('&','\\&') + '}\n';
+  body += '\\section*{Modèle sélectionné: ' + model.name.replaceAll('&', '\\&') + '}\n';
   body += '\\subsection*{Équations}\n\\begin{align*}\n';
-  model.equations.forEach(eq => { body += eq.latex + '\\\\n'; });
+  model.equations.forEach(eq => { body += eq.latex + '\\\\\n'; });
   body += '\\end{align*}\n';
 
-  // Paramètres
   body += '\\subsection*{Paramètres}\n\\begin{tabular}{ll}\\hline\nParamètre & Valeur\\\\\\hline\n';
   model.params.forEach(p => {
-    body += `${p.label.replaceAll('&','\\&')} & ${num(modelParams[p.id], 4)}\\\\\n`;
+    body += `${p.label.replaceAll('&', '\\&')} & ${num(modelParams[p.id], 4)}\\\\\n`;
   });
   body += '\\hline\\end{tabular}\n';
 
-  // Résultats
   body += '\\subsection*{Résultats}\n';
   if (currentModel === 'islm' || currentModel === 'islm-bp') {
-    body += `Y^{*} = ${num(solution?.Y)}\\,,\\quad r^{*} = ${num(solution?.r)}\\%\\\\n`;
-    body += `C = ${num(solution?.C)}\\,,\\quad I = ${num(solution?.I)}\\\\n`;
+    body += `Y^{*} = ${num(solution?.Y)}\\,,\\quad r^{*} = ${num(solution?.r)}\\%\\\\\n`;
+    body += `C = ${num(solution?.C)}\\,,\\quad I = ${num(solution?.I)}\\\\\n`;
     if (currentModel === 'islm-bp') {
-      body += `NX = ${num(solution?.NX)}\\,,\\quad BP = ${num(solution?.BP)}\\\\n`;
+      body += `NX = ${num(solution?.NX)}\\,,\\quad BP = ${num(solution?.BP)}\\\\\n`;
     }
   } else {
-    body += `Y = ${num(solution?.Y)}\\,,\\quad w = ${num(solution?.w)}\\,,\\quad r = ${num(solution?.r)}\\\\n`;
-    body += `C = ${num(solution?.C)}\\,,\\quad I = ${num(solution?.I)}\\\\n`;
+    body += `Y = ${num(solution?.Y)}\\,,\\quad w = ${num(solution?.w)}\\,,\\quad r = ${num(solution?.r)}\\\\\n`;
+    body += `C = ${num(solution?.C)}\\,,\\quad I = ${num(solution?.I)}\\\\\n`;
   }
 
-  // Multiplicateurs
   body += '\\subsection*{Multiplicateurs / Élasticités}\n';
   if (currentModel === 'islm') {
     body += `\\partial Y/\\partial G = ${num(multipliers.multG)}\\,,\\; \\partial Y/\\partial T = ${num(multipliers.multT)}\\,,\\; \\partial Y/\\partial M = ${num(multipliers.multM)}.\\smallskip{}\n`;
@@ -1241,10 +1250,11 @@ ${body}
 \\end{document}
 `.trim();
 
-  const blob = new Blob([tex], {type:'text/x-tex'});
+  const blob = new Blob([tex], { type: 'text/x-tex' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `macro_${currentModel}.tex`;
+  a.href = url;
+  a.download = `macro_${currentModel}.tex`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1258,20 +1268,15 @@ window.exportLatex = exportLatex;
 window.animateGraph = animateGraph;
 
 // ---- INIT ----
-function initialSetup(){
-  // petite anim (GSAP déjà chargé si présent)
+function initialSetup() {
   if (window.gsap) {
-    gsap.from('.macro-title', {y: 10, opacity: 0, duration: .6, ease: 'power2.out'});
-    gsap.from('.tab-navigation', {y: 8, opacity: 0, duration: .5, delay:.1});
+    gsap.from('.macro-title', { y: 10, opacity: 0, duration: 0.6, ease: 'power2.out' });
+    gsap.from('.tab-navigation', { y: 8, opacity: 0, duration: 0.5, delay: 0.1 });
   }
   updateModelDisplay();
   attachCanvasInteractions();
-  // Première résolution pour disposer d’un équilibre initial
   solveModel();
 }
 
 document.addEventListener('DOMContentLoaded', initialSetup);
 </script>
-
-</body>
-</html>
