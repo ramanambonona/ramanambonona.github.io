@@ -485,11 +485,8 @@
                 <h3>Affichage graphique et comparaison</h3>
                 <div class="display-layout">
                     <div class="controls-column">
-                        <div class="policy-buttons">
-                            <button onclick="applyPolicy('budget_exp')">Politique budgétaire expansionniste</button>
-                            <button onclick="applyPolicy('budget_res')">Politique budgétaire restrictive</button>
-                            <button onclick="applyPolicy('monet_exp')">Politique monétaire expansionniste</button>
-                            <button onclick="applyPolicy('monet_res')">Politique monétaire restrictive</button>
+                        <div class="policy-buttons" id="policy-buttons">
+                            <!-- Buttons will be dynamically generated based on model -->
                         </div>
                         <div id="sliders-container"></div>
                     </div>
@@ -593,6 +590,12 @@ const models = {
       { id: 'M', label: 'Offre de monnaie (M)', desc: 'Politique monétaire expansionniste → LM → bas' },
       { id: 'T', label: 'Taxes (T)', desc: 'Hausse des taxes → IS → gauche' },
     ],
+    policies: [
+      { id: 'budget_exp', label: 'Politique budgétaire expansionniste', param: 'G', change: 50 },
+      { id: 'budget_res', label: 'Politique budgétaire restrictive', param: 'G', change: -50 },
+      { id: 'monet_exp', label: 'Politique monétaire expansionniste', param: 'M', change: 500 },
+      { id: 'monet_res', label: 'Politique monétaire restrictive', param: 'M', change: -500 },
+    ]
   },
   'islm-bp': {
     name: 'Modèle IS-LM-BP',
@@ -626,6 +629,14 @@ const models = {
       { id: 'M',   label: 'Offre de monnaie (M)',   desc: 'Monétaire ↑ → LM bas → risque déficit BP' },
       { id: 'NX0', label: 'Exportations nettes (NX₀)', desc: 'Choc externe → IS & BP → droite/gauche' },
     ],
+    policies: [
+      { id: 'budget_exp', label: 'Politique budgétaire expansionniste', param: 'G', change: 50 },
+      { id: 'budget_res', label: 'Politique budgétaire restrictive', param: 'G', change: -50 },
+      { id: 'monet_exp', label: 'Politique monétaire expansionniste', param: 'M', change: 500 },
+      { id: 'monet_res', label: 'Politique monétaire restrictive', param: 'M', change: -500 },
+      { id: 'nx_exp', label: 'Choc positif sur les exportations', param: 'NX0', change: 30 },
+      { id: 'nx_res', label: 'Choc négatif sur les exportations', param: 'NX0', change: -30 },
+    ]
   },
   megc: {
     name: "MEGC - Modèle d'Équilibre Général Calculable",
@@ -647,8 +658,16 @@ const models = {
     ],
     sliders: [
       { id: 'K', label: 'Stock de capital (K)', desc: 'Augmentation du capital → Production ↑' },
+      { id: 'L', label: 'Offre de travail (L)', desc: 'Augmentation du travail → Production ↑' },
       { id: 'alpha', label: 'Part du capital (α)', desc: 'Augmentation α → Rendement capital ↑' },
     ],
+    policies: [
+      { id: 'capital_increase', label: 'Augmentation du capital', param: 'K', change: 50 },
+      { id: 'capital_decrease', label: 'Diminution du capital', param: 'K', change: -50 },
+      { id: 'labor_increase', label: 'Augmentation du travail', param: 'L', change: 50 },
+      { id: 'labor_decrease', label: 'Diminution du travail', param: 'L', change: -50 },
+      { id: 'tech_change', label: 'Changement technologique', param: 'alpha', change: 0.1 },
+    ]
   },
 };
 
@@ -682,6 +701,7 @@ function updateModelDisplay() {
   
   updateParamsContent();
   updateSliders();
+  updatePolicyButtons();
   solveModel();
   drawGraph();
 }
@@ -708,9 +728,22 @@ function updateParam(id, value) {
   drawGraph();
 }
 
+// ---- BOUTONS DE POLITIQUE ÉCONOMIQUE ----
+function updatePolicyButtons() {
+  const model = models[currentModel];
+  const container = document.getElementById('policy-buttons');
+  
+  let html = '';
+  model.policies.forEach(policy => {
+    html += `<button onclick="applyPolicy('${policy.id}')">${policy.label}</button>`;
+  });
+  
+  container.innerHTML = html;
+}
+
 // ---- RÉSOLUTION ----
 function solveModel() {
-  oldSolution = { ...solution };
+  oldSolution = solution ? { ...solution } : null;
   
   if (currentModel === 'islm') solveISLM();
   else if (currentModel === 'islm-bp') solveISLMBP();
@@ -819,7 +852,7 @@ function displayDetailedResults() {
   html += '</div>';
 
   html += '<div class="results-section"><h5 style="color:#2a2a2a;font-size:1.1rem;margin-bottom:15px;">3. Points d\'équilibre</h5>';
-  const compare = initialSolution && (solution.Y !== initialSolution.Y || solution.r !== initialSolution.r);
+  const compare = initialSolution && (solution.Y !== initialSolution.Y || (solution.r && solution.r !== initialSolution.r));
   if (compare) {
     html += '<table class="comparison-table"><thead><tr><th>Variable</th><th>Initial</th><th>Actuel</th><th>Variation</th></tr></thead><tbody>';
     if (currentModel === 'islm' || currentModel === 'islm-bp') {
@@ -909,15 +942,18 @@ function updateLegend() {
     ];
   } else if (currentModel === 'islm-bp') {
     items = [
-      { label: 'IS', color: '#000000' },
-      { label: 'LM', color: '#444444' },
-      { label: 'BP', color: '#666666' },
+      { label: 'IS (actuelle)', color: '#000000' },
+      { label: 'LM (actuelle)', color: '#444444' },
+      { label: 'BP (actuelle)', color: '#666666' },
+      { label: 'IS (précédente)', color: '#cccccc' },
+      { label: 'LM (précédente)', color: '#dddddd' },
+      { label: 'BP (précédente)', color: '#eeeeee' },
       { label: 'Équilibre', color: '#777777' },
     ];
   } else {
     items = [
-      { label: 'Production Y(K|L fixe)', color: '#000000' },
-      { label: 'Point courant', color: '#666666' },
+      { label: 'Fonction de production Y(K)', color: '#000000' },
+      { label: 'Point d\'équilibre', color: '#666666' },
     ];
   }
   let html = '';
@@ -936,7 +972,7 @@ function clearCanvas() {
   context.restore();
 }
 
-function drawAxes(context, xMin, xMax, yMin, yMax) {
+function drawAxes(context, xMin, xMax, yMin, yMax, xLabel = 'Y', yLabel = 'r (%)') {
   const m = 50;
   context.strokeStyle = '#BBBBBB';
   context.lineWidth = 1;
@@ -963,11 +999,11 @@ function drawAxes(context, xMin, xMax, yMin, yMax) {
     context.fillText(vy.toFixed(0), m - 40 + panX, y + 4 + panY);
   }
 
-  context.fillText('Y', (canvas().width - m + 10) + panX, (canvas().height - m + 20) + panY);
+  context.fillText(xLabel, (canvas().width - m + 10) + panX, (canvas().height - m + 20) + panY);
   context.save();
   context.translate(m - 40 + panX, m + panY - 10);
   context.rotate(-Math.PI / 2);
-  context.fillText('r (%)', 0, 0);
+  context.fillText(yLabel, 0, 0);
   context.restore();
 }
 
@@ -1081,6 +1117,7 @@ function drawGraph() {
       }
     }
   } else {
+    // MEGC: Graphique de la fonction de production Y = F(K, L)
     const { L, alpha } = modelParams;
     const Kstar = modelParams.K;
     const Ystar = solution?.Y ?? Math.pow(Kstar, alpha) * Math.pow(L, 1 - alpha);
@@ -1090,20 +1127,44 @@ function drawGraph() {
     const yMin = 0;
     const yMax = 1.5 * Ystar;
 
-    drawAxes(context, xMin, xMax, yMin, yMax);
+    drawAxes(context, xMin, xMax, yMin, yMax, 'K', 'Y');
 
     const Y_of_K = (K) => Math.pow(K, alpha) * Math.pow(L, 1 - alpha);
 
     const pts = [];
+    const oldPts = [];
     const N = 50;
     for (let i = 0; i <= N; i++) {
       const K = xMin + (i / N) * (xMax - xMin);
       pts.push([xMap(K, xMin, xMax), yMap(Y_of_K(K), yMin, yMax)]);
+      
+      // Ancienne courbe si elle existe
+      if (oldSolution && oldSolution.K) {
+        const oldY = Math.pow(K, alpha) * Math.pow(oldSolution.L, 1 - alpha);
+        oldPts.push([xMap(K, xMin, xMax), yMap(oldY, yMin, yMax)]);
+      }
     }
+    
+    // Dessiner l'ancienne courbe en gris si elle existe
+    if (oldPts.length > 0) {
+      drawLine(context, oldPts, '#cccccc', 1.5);
+    }
+    
     drawLine(context, pts, '#000000', 2);
 
     if (solution) {
       drawPoint(context, xMap(solution.K, xMin, xMax), yMap(solution.Y, yMin, yMax), '#666666');
+      
+      // Lignes pointillées pour le point d'équilibre
+      drawLine(context, [
+        [xMap(solution.K, xMin, xMax), yMap(0, yMin, yMax)],
+        [xMap(solution.K, xMin, xMax), yMap(solution.Y, yMin, yMax)],
+        [xMap(0, xMin, xMax), yMap(solution.Y, yMin, yMax)]
+      ], '#888888', 1, true);
+      
+      if (oldSolution) {
+        drawPoint(context, xMap(oldSolution.K, xMin, xMax), yMap(oldSolution.Y, yMin, yMax), '#cccccc');
+      }
     }
   }
 
@@ -1154,31 +1215,33 @@ function attachCanvasInteractions() {
 }
 
 // ---- POLITIQUES ÉCONOMIQUES AVEC ANIMATION ----
-function applyPolicy(policy) {
-  const step = 50;
-  let targetValue;
-  switch (policy) {
-    case 'budget_exp':
-      targetValue = modelParams.G + step;
-      gsap.to(modelParams, { G: targetValue, duration: 1, onUpdate: updateAfterAnim });
-      break;
-    case 'budget_res':
-      targetValue = Math.max(0, modelParams.G - step);
-      gsap.to(modelParams, { G: targetValue, duration: 1, onUpdate: updateAfterAnim });
-      break;
-    case 'monet_exp':
-      targetValue = modelParams.M + step * 10;
-      gsap.to(modelParams, { M: targetValue, duration: 1, onUpdate: updateAfterAnim });
-      break;
-    case 'monet_res':
-      targetValue = Math.max(100, modelParams.M - step * 10);
-      gsap.to(modelParams, { M: targetValue, duration: 1, onUpdate: updateAfterAnim });
-      break;
-  }
+function applyPolicy(policyId) {
+  const model = models[currentModel];
+  const policy = model.policies.find(p => p.id === policyId);
+  
+  if (!policy) return;
+  
+  const targetValue = modelParams[policy.param] + policy.change;
+  const min = model.params.find(p => p.id === policy.param).min;
+  const max = model.params.find(p => p.id === policy.param).max;
+  
+  // S'assurer que la valeur reste dans les limites
+  const clampedValue = Math.max(min, Math.min(max, targetValue));
+  
+  gsap.to(modelParams, { 
+    [policy.param]: clampedValue, 
+    duration: 1, 
+    onUpdate: updateAfterAnim 
+  });
 }
 
 function animateGraph() {
-  applyPolicy('budget_exp');
+  // Appliquer une animation par défaut selon le modèle
+  if (currentModel === 'islm' || currentModel === 'islm-bp') {
+    applyPolicy('budget_exp');
+  } else {
+    applyPolicy('capital_increase');
+  }
 }
 
 function updateAfterAnim() {
@@ -1187,8 +1250,10 @@ function updateAfterAnim() {
   const sliders = document.querySelectorAll('input[type="range"]');
   sliders.forEach(sl => {
     const id = sl.id.replace('slider-', '');
-    sl.value = modelParams[id];
-    document.getElementById(`slider-val-${id}`).textContent = modelParams[id];
+    if (modelParams[id] !== undefined) {
+      sl.value = modelParams[id];
+      document.getElementById(`slider-val-${id}`).textContent = modelParams[id];
+    }
   });
 }
 
@@ -1266,6 +1331,7 @@ window.resetZoom = resetZoom;
 window.downloadCanvas = downloadCanvas;
 window.exportLatex = exportLatex;
 window.animateGraph = animateGraph;
+window.applyPolicy = applyPolicy;
 
 // ---- INIT ----
 function initialSetup() {
