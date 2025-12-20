@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tools — Personal Page</title>
+    <link rel="icon" type="../image/svg+xml" sizes="any" href="/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">About</a></li>
+                    <li><a href="../research.html">Research</a></li>
+                    <li><a href="../administrative.html">Administrative work</a></li>
+                    <li><a href="../cv.html">CV</a></li>
+                    <li><a href="../teaching.html">Teaching</a></li>
+                    <li><a href="../tools.html" class="active">Tools</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="tools-intro">
+            <h2>Macroeconomics Tools</h2>
+            <p>A collection of tools to enhance learning and understanding of macroeconomic concepts.</p>
+        </section>
+
+        <section class="course-section">
+            <div class="section-header">
+                <h3>Available Macroeconomics Tools</h3>
+                <p>Explore interactive tools for understanding key macroeconomic concepts.</p>
+            </div>
+            
+            <div class="course-list">
+                <div class="course-card">
+                    <h4>Basic models in macroeconomic</h4>
+                    <p>Explore basic models using in macroeconomics : IS-LM, IS-LM-BP, Computable General Equilibrium .</p>
+                    <a href="https://ramanambonona.github.io/tools/basic_macroeconomics.html" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i>
+                        Access Elasticity Tool
+                    </a>
+                </div>
+
+                <div class="course-card">
+                    <h4>Advanced models in macroeconomics </h4>
+                    <p>Explore adavanced models using in macroeconomics : RBC, NKPC, DSGE,... .</p>
+                    <a href="https://ramanambonona.github.io/tools/macro_advanced.html" target="_blank" rel="noopener" class="syllabus-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Access Cobb-Douglas Tool
+                    </a>
+                </div>
+
+                <div class="course-card">
+                    <h4>Advanced macroeconomics AI Solver</h4>
+                    <p>AI solver for advanced macroeconomic problems.</p>
+                    <a href="https://economics-ai-solver.puter.site/macrosolver.html" target="_blank" rel="noopener" class="syllabus-link">
+                        <i class="fas fa-external-link-alt"></i>
+                        Access Income Effect Tool
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="footnote"> Ramanambonona Ambinintsoa, Ph.D</p>
+        <div class="social">
+            <a href="mailto:ambinintsoa.uat.ead2@gmail.com" aria-label="Mail">
+                <img src="https://img.icons8.com/?size=100&id=86875&format=png&color=000000" alt="Mail">
+            </a>
+            <a href="https://github.com/ramanambonona" target="_blank" rel="noopener" aria-label="GitHub">
+                <img src="https://img.icons8.com/?size=100&id=3tC9EQumUAuq&format=png&color=000000" alt="GitHub">
+            </a>
+            <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="https://img.icons8.com/?size=100&id=8808&format=png&color=000000" alt="LinkedIn">
+            </a>
+        </div>
+    </footer>
+
+    <a id="btn-haut" href="#top" aria-label="Back to top">^</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
+    <script src="../assets/js/script.js"></script>
+<!-- Fenêtre flottante pour les tools -->
+<div id="tool-modal" class="modal" aria-hidden="true">
+  <div class="modal__dialog" role="dialog" aria-modal="true" aria-label="Outil interactif">
+    <div class="modal__controls" aria-hidden="false">
+      <button type="button" id="btn-pip" class="modal__btn" title="Mini-lecteur (PiP)" aria-label="Mini-lecteur">↘</button>
+      <button type="button" id="btn-close" class="modal__btn" title="Fermer" aria-label="Fermer">✕</button>
+    </div>
+    <iframe id="tool-frame" class="modal__frame" src="" loading="lazy" allowfullscreen></iframe>
+  </div>
+</div>
+
+</body>
+</html>
