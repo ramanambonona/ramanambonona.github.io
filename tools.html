@@ -10,6 +10,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+    img { display: block; margin-left: auto; margin-right: auto; }
+
+    .syllabus-link.disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .course-card .soon {
+      margin-top: 8px;
+      font-size: .9rem;
+      color: #6c757d;
+    }
+</style>
 </head>
 <body>
 
@@ -61,13 +76,17 @@
                 </div>
 
                 <div class="course-card">
-                    <h4>Probability Tools</h4>
-                    <p>Visualize probability distributions, simulate complex random experiments, and perform risk calculations to model uncertainty.</p>
-                    <a href="#" class="syllabus-link">
-                        <i class="fas fa-external-link-alt"></i>
-                        Access tools
-                    </a>
-                </div>
+                  <h4>Probability Tools</h4>
+                  <p>Visualize probability distributions, simulate complex random experiments, and perform risk calculations to model uncertainty.</p>
+                  <a href="#"
+                     class="syllabus-link disabled"
+                     title="Coming soon"
+                     aria-disabled="true">
+                    <i class="fas fa-hourglass-half"></i>
+                    Coming soon
+                  </a>
+                  <div class="soon">Link not available yet</div>
+              </div>
 
                 <div class="course-card">
                     <h4>Econometrics Tools</h4>
@@ -102,6 +121,7 @@
 </body>
 
 </html>
+
 
 
 
