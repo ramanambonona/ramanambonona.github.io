@@ -263,10 +263,19 @@ a.surligner:focus-visible {
 .surligner--sm   { padding: 2px 8px; font-size: .95em; }
 
 .authorlink {
-    color: #f06292; 
-    background-color: #ffebee; 
-    padding: 2px 4px;
-    border-radius: 3px;
+    color: #e91e63; 
+    background-color: transparent;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid #f8bbd9; 
+    transition: all 0.2s ease;
+}
+.authorlink:hover {
+    color: #c2185b; 
+    border-color: #f06292; 
+    background-color: rgba(216, 27, 96, 0.05);
 }
 
 
@@ -835,4 +844,5 @@ body::before {
 body.menu-open {
     overflow: hidden;
 }
+
 
