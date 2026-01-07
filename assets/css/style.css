@@ -3,8 +3,8 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #fff5f7; 
-    color: #5a3a4e; 
+    background-color: #ffffff; 
+    color: #333333; 
 }
 
 
@@ -845,6 +845,7 @@ body::before {
 body.menu-open {
     overflow: hidden;
 }
+
 
 
 
