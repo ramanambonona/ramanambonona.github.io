@@ -64,22 +64,29 @@
   </style>
 </head>
 <body>
-  <!-- En-tête du site (conservé) -->
+  
+
   <header>
-    <div class="container">
-      <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
-      <nav>
-        <ul>
-          <li><a href="../index.html">About</a></li>
-          <li><a href="../research.html">Research</a></li>
-          <li><a href="../administrative.html">Administrative work</a></li>
-          <li><a href="../cv.html">CV</a></li>
-          <li><a href="../teaching.html">Teaching</a></li>
-          <li><a href="../tools.html" class="active">Tools</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+        <div class="container">
+            <h1><a href="../index.html">Ramanambonona Ambinintsoa</a></h1>
+            <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">About</a></li>
+                    <li><a href="../research.html">Research</a></li>
+                    <li><a href="../administrative.html">Administrative work</a></li>
+                    <li><a href="../cv.html">CV</a></li>
+                    <li><a href="../teaching.html">Teaching</a></li>
+                    <li><a href="../tools.html" class="active">Tools</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
   <main class="macro-container">
     <h1 class="macro-title">Modèles macroéconomiques avancés</h1>
@@ -179,6 +186,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.3/iframeResizer.min.js"></script>
   <script src="../assets/js/script.js"></script>
+  <script src="../assets/js/mobile-menu.js"></script>
 
   <script>
 'use strict';
@@ -1008,5 +1016,6 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
 </body>
 </html>
+
 
 
