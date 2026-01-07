@@ -157,27 +157,49 @@ footer {
     font-size: 0.8rem;
     color: #f06292; 
 }
+
 .social {
     display: flex;
     justify-content: center;
-    gap: 4px;
-    margin-top: 0.3rem;
-}
-.social a img {
-    width: 40px;
-    height: 40px;
-    opacity: 1;
-    transition: opacity 0.2s, transform 0.2s;
-    border-radius: 50%;
-    background-color: #ffebee; 
-    padding: 5px;
-}
-.social a img:hover {
-    opacity: 1;
-    transform: translateY(-1px);
-    background-color: #fce4ec; 
+    gap: 6px;
+    margin-top: 0.5rem;
 }
 
+.social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px; 
+    background: #fff5f7;
+    transition: all 0.2s ease;
+}
+
+.social a img {
+    width: 22px;
+    height: 22px;
+    transition: all 0.2s ease;
+    filter: invert(36%) sepia(93%) saturate(1500%) hue-rotate(320deg) brightness(90%) contrast(95%);
+}
+
+.social a:hover {
+    background: #e91e63; 
+    transform: translateY(-2px);
+}
+
+.social a:hover img {
+    filter: brightness(0) invert(1); 
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.social a:hover {
+    animation: bounce 0.5s ease;
+}
 
 .surligner {
   --g1: #ff80ab;   
@@ -813,3 +835,4 @@ body::before {
 body.menu-open {
     overflow: hidden;
 }
+
