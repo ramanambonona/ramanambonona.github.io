@@ -263,19 +263,20 @@ a.surligner:focus-visible {
 .surligner--sm   { padding: 2px 8px; font-size: .95em; }
 
 .authorlink {
-    color: #e91e63; 
-    background-color: transparent;
-    padding: 2px 6px;
-    border-radius: 4px;
+    color: #c2185b; 
+    background-color: #fce4ec; 
+    padding: 3px 8px;
+    border-radius: 5px;
     font-weight: 600;
     text-decoration: none;
-    border: 1.5px solid #f8bbd9; 
     transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(216, 27, 96, 0.1);
 }
 .authorlink:hover {
-    color: #c2185b; 
-    border-color: #f06292; 
-    background-color: rgba(216, 27, 96, 0.05);
+    background-color: #f8bbd9; 
+    color: #ad1457; 
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(216, 27, 96, 0.15);
 }
 
 
@@ -844,5 +845,6 @@ body::before {
 body.menu-open {
     overflow: hidden;
 }
+
 
 
