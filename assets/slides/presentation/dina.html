@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Le Dina Malgache : Analyse Économique de l'institution informelle</title>
+
+  <!-- Reveal -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Plotly (fallback si aucune image jointe) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+
+  <!-- Polices sobres -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --main-font: 'Lato', sans-serif;
+      --heading-font: 'Roboto Slab', serif;
+      --bg-color: #FFFFFF;
+      --main-color: #2c3e50;
+      --heading-color: #0b4a8b;
+      --accent-color: #0b7285;
+      --border-color: #e6e9ef;
+      --quote-bg: #f7f8fa;
+      --theorem-bg: #eef6ff;
+      --proof-bg: #fff6e8;
+    }
+
+    /* Page et typographies */
+    .reveal{
+      font-family: var(--main-font);
+      font-size: 30px;
+      color: var(--main-color);
+      background: var(--bg-color);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      letter-spacing: 0.005em;
+    }
+    .reveal .slides{ text-align:left; }
+
+    /* Empêche le contenu d'être tronqué : sections auto + scroll si besoin */
+    .reveal .slides section{
+      height:auto !important;
+      overflow:auto;
+      padding-bottom:.6rem;
+    }
+
+    .reveal h1,.reveal h2,.reveal h3,.reveal h4,.reveal h5{
+      font-family: var(--heading-font);
+      color: var(--heading-color);
+      margin: 18px 0;
+      text-align: left;
+    }
+    .reveal h1{
+      font-size: 2.2em;
+      text-align: center;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 18px;
+    }
+    .reveal h2{ font-size:1.6em; }
+    .reveal h3{ font-size:1.3em; color: var(--accent-color); }
+    .reveal h4{ font-size:1.1em; }
+
+    .slide-content{
+      padding: 5px 0.01%;
+      min-height: 60vh;           /* aéré, pas de 100vh rigide */
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+	
+	.slide-titre{
+      padding: 50px 10%;
+      min-height: 60vh;           /* aéré, pas de 100vh rigide */
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    p{ margin: 12px 0; line-height:1.55; }
+    ul,ol{ margin-left:1.4em; }
+    li{ margin-bottom:7px; }
+
+    blockquote{
+      background: var(--quote-bg);
+      border-left: 5px solid var(--accent-color);
+      padding: 16px 18px;
+      margin: 18px auto;
+      border-radius: 6px;
+      font-style: italic;
+      width: 92%;
+    }
+    cite{ display:block; text-align:right; margin-top:8px; color:#7f8c8d; font-size:.8em; }
+
+    .author-info{ text-align:center; margin-top: 26px; font-size:.85em; }
+    .author-info .date{ color:#7f8c8d; margin-top:6px; }
+
+    .classification{
+      background:#f8f9fa;
+      border-left:4px solid #28a745;
+      padding:10px 12px;
+      margin: 14px 0;
+      font-size:.85em;
+    }
+
+    .theorem{
+      margin: 14px 0;
+      padding: 14px 16px;
+      border: 2px solid var(--accent-color);
+      background: var(--theorem-bg);
+      border-radius: 8px;
+      font-size: .92em;
+    }
+    .theorem strong{ color: var(--heading-color); font-size: 1.05em; }
+
+    .proof{
+      margin: 14px 0;
+      padding: 14px 16px;
+      border: 1px dashed #ff9800;
+      background: var(--proof-bg);
+      border-radius: 8px;
+      font-size: .92em;
+    }
+    .proof strong{ color: #e65100; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+      gap: 16px;
+    }
+    .grid-item{
+      background: var(--quote-bg);
+      padding: 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+    .grid-item strong{ color: var(--accent-color); }
+
+    .reference{ font-size:.78em; color:#666; margin-top:10px; }
+
+    /* Figures : un graphique par slide, image si présente sinon Plotly */
+    .figure-wrap{ width:100%; display:flex; flex-direction:column; gap:.5rem; }
+    .plot-wrap{ width:100%; height: 480px; }
+    .figure-img{
+      display:none;               /* cachée tant que non chargée */
+      max-width:100%;
+      height: 480px;
+      object-fit: contain;        /* jamais rognée ni déformée */
+      border: 1px solid var(--border-color);
+      background:#fff;
+      border-radius: 6px;
+      padding:6px;
+    }
+    .fig-caption{
+      font-size: .82em; color:#555;
+    }
+
+    /* MathJax : éviter débordements */
+    .mjx-container{ max-width: 100%; overflow-x:auto; overflow-y:hidden; }
+    .math-display{ margin:.35rem 0; }
+
+    /* Progression Reveal */
+    .reveal .progress{ height:5px; background: #edf1f6; }
+    .reveal .progress span{ background: var(--accent-color); }
+
+    @media (max-width: 900px){
+      .reveal{ font-size: 26px; }
+      .plot-wrap, .figure-img{ height: 420px; }
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- TITRE -->
+    <section>
+      <h1 >Le <em>Dina</em> à Madagascar</h1>
+      <p style="text-align:center; font-size:1.05em; margin-top: 16px;">Une Analyse Économique des Normes Sociales et Approche institutionnelle</p>
+      <div class="author-info">
+        <p class="date">Septembre 2025</p>
+      </div>
+      <div class="classification">Dr. Ramanambonona Ambinintsoa</div>
+    </section>
+
+    <!-- PLAN -->
+    <section>
+      <div class="slide-content">
+        <h2>Plan de la Présentation</h2>
+        <ol>
+          <li class="fragment">Introduction et Problématique</li>
+          <li class="fragment">Revue de littérature</li>
+          <li class="fragment">Cadre Théorique : Définitions et Concepts</li>
+          <li class="fragment">Modèle économique du Dina</li>
+          <li class="fragment">Théorèmes et Preuves</li>
+          <li class="fragment">Application : Gestion Forestière</li>
+          <li class="fragment">Analyse Coût-Bénéfice & Illustrations</li>
+          <li class="fragment">Implications Normatives et Politiques</li>
+          <li class="fragment">Conclusion</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section>
+      <div class="slide-content">
+        <h2>Introduction et Problématique</h2>
+        <p class="fragment">L’analyse économique du droit et l’approche institutionnelle offrent un cadre pour évaluer 
+		l’efficacité des institutions juridiques.</p>
+        <div class="grid">
+          <div class="grid-item fragment"><strong>Question centrale :</strong> Dans quelle mesure le <em>Dina</em> peut-il être un mécanisme institutionnel efficient ?</div>
+          <div class="grid-item fragment"><strong>Hypothèse clé :</strong> Le <em>Dina</em> minimise les coûts de transaction 
+		  relativement au système formel, sous conditions.</div>
+        </div>
+        <blockquote class="fragment">
+          <p class="fragment">En l’absence de coûts de transaction, l’allocation initiale des droits n’affecte pas l’efficacité de l’allocation finale.</p>
+          <cite class="fragment">Coase (1960), <em>The Problem of Social Cost</em></cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- REVUE -->
+    <section>
+      <div class="slide-content">
+        <h2>Revue de Littérature</h2>
+        <h3 class="fragment">Analyse économique du droit & institutionnalisme</h3>
+        <ul>
+          <li class="fragment"><strong>Coase (1960) :</strong> coûts de transaction et droits de propriété.</li>
+          <li class="fragment"><strong>Posner (1973) :</strong> efficience comme critère d’évaluation.</li>
+          <li class="fragment"><strong>Williamson (1985), North (1990) :</strong> gouvernance et institutions.</li>
+        </ul>
+        <h3 class="fragment">Institutions informelles</h3>
+        <ul>
+          <li class="fragment"><strong>Ostrom (1990) :</strong> gouvernance des communs et règles endogènes.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTEXTE -->
+    <section>
+      <div class="slide-content">
+        <h3>Contexte local</h3>
+        <p class="fragment"><strong>Le <em>Dina</em> :</strong> règles coutumières négociées au niveau communautaire.</p>
+        <div class="grid" class="fragment">
+          <div class="grid-item fragment"><strong>Weber (1998) :</strong> gestion locale sécurisée des ressources naturelles à Madagascar.</div>
+          <div class="grid-item fragment"><strong>Razafindrakoto & Roubaud (2006) :</strong> pluralisme juridique & gouvernance locale.</div>
+        </div>
+        <blockquote class="fragment">
+          <p class="fragment">Les institutions informelles émergent de l’interaction sociale et régulent les comportements sans intervention directe de l’État.</p>
+          <cite class="fragment">Essai de définition</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- DÉFINITIONS / THÉORIE -->
+    <section>
+      <div class="slide-content">
+        <h2>Cadre Théorique : Définitions</h2>
+        <div class="theorem fragment ">
+          <p class="fragment"> <strong>Définition 1 (Institution informelle)</strong><br> </p>
+          <p class="fragment">  Ensemble de règles \(\,R=\{r_1,\dots,r_n\}\,\) et mécanismes d’application \(\,M=\{m_1,\dots,m_k\}\,\) émergeant de l’interaction sociale.</p>
+        </div>
+        <div class="theorem fragment">
+         <p class="fragment"> <strong>Théorème de Coase</strong><br></p>
+         <p class="fragment"> Soit \(E\) l’ensemble des agents et \(\Omega\) les allocations. Si \(CT=0\), l’allocation d’équilibre \(\omega^{\star}\in\Omega\) est Pareto-efficiente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODÈLE -->
+    <section>
+      <div class="slide-content">
+        <h2>Modèle économique du <em>Dina</em></h2>
+        <h3 class="fragment">Cadre analytique</h3>
+        <p class="fragment">Communauté de \(N\) agents homogènes, \(i\in\{1,\dots,N\}\).</p>
+        <div class="theorem fragment">
+          <div class="math-display fragment">\[
+            U_i(s_i,s_{-i},\theta)
+            = u_i(s_i,s_{-i}) - C_i(\theta) + \sum_{j\neq i} E_{ij}(s_j,\theta).
+          \]</div>
+        </div>
+        <ul>
+          <li class="fragment">\(u_i(s_i,s_{-i})\) : fonction d’utilité (ou gain/payoff) de l’agent \(i\).</li>
+		  <li class="fragment">\(s_i\) : stratégie / action de l’agent \(i\) (adhérer au régime Formel/Dina)</li>
+		  <li class="fragment">\(s_{-i}\) : profil des stratégies des autres agents (tous sauf \(i\))</li>
+		  <li class="fragment">\(\theta\in\{\theta_F,\theta_D\}\) : régime (Formel \(F\)/Dina \(D\)).</li>
+          <li class="fragment">\(C_i(\theta)\) : coûts institutionnels ; \(E_{ij}\) : externalités </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- COÛTS DÉCOMPOSÉS -->
+    <section>
+      <div class="slide-content">
+        <h3>Fonction de coût institutionnel</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">\[
+            C_i(\theta)
+            = C_i^{acc}(\theta) + C_i^{inf}(\theta) + C_i^{enf}(\theta) + C_i^{coord}(\theta).
+          \]</div>
+        </div>
+        <div class="grid	">
+          <div class="grid-item fragment"><strong>\(C_i^{acc}\)</strong> : accès au système.</div>
+          <div class="grid-item fragment"><strong>\(C_i^{inf}\)</strong> : information.</div>
+          <div class="grid-item fragment"><strong>\(C_i^{enf}\)</strong> : application.</div>
+          <div class="grid-item fragment"><strong>\(C_i^{coord}\)</strong> : coordination.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROP 1 -->
+    <section>
+      <div class="slide-content">
+        <h2>Proposition 1 : Avantage comparatif</h2>
+        <div class="theorem fragment">
+          <p class="fragment">Énoncé </p>
+          <p class="fragment"> <em> Le Dina</em> domine le système formel ssi </p>
+		  <p class="fragment">
+          \[
+          \sum_{i=1}^{N}\!\big[C_i(\theta_F)-C_i(\theta_D)\big]
+          \;>\;
+          \sum_{i=1}^{N}\!\big[u_i(\theta_F)-u_i(\theta_D)\big].
+          \]
+		  <p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREUVE DÉTAILLÉE PROP 1 -->
+    <section>
+      <div class="slide-content">
+        <h3>Preuve — Proposition 1</h3>
+        <div class="proof fragment">
+          <ol>
+            <li class="fragment" ><strong>Bien-être agrégé.</strong> \(W(\theta)=\sum_i [u_i(\theta)-C_i(\theta)] + \sum_{i\ne j}E_{ij}(\theta)\).</li>
+            <li class="fragment"><strong>Différence.</strong> \(\Delta W=W(\theta_D)-W(\theta_F)=\sum_i\Delta u_i - \sum_i\Delta C_i + \sum_{i\ne j}\Delta E_{ij}\).</li>
+            <li class="fragment"><strong>Hypothèse de comparabilité.</strong> Si \(\sum_{i\ne j}\Delta E_{ij}\approx 0\), alors \(\Delta W\approx \sum_i\Delta u_i - \sum_i\Delta C_i\).</li>
+            <li class="fragment"><strong>Conclusion.</strong> \(\Delta W>0 \iff \sum_i[C_i(\theta_F)-C_i(\theta_D)]>\sum_i[u_i(\theta_F)-u_i(\theta_D)]\). □</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- THÉORÈME EVS -->
+    <section>
+      <div class="slide-content">
+        <h2>Théorème : Équilibre évolutionnairement stable (EVS)</h2>
+		<div class="theorem fragment">
+		<p class="fragment"> Notations.</em> \(U_X^{YZ}\) ; gain du joueur qui choisit \(X\in\{D,F\}\) 
+		dans une population résidente \(Y\) (avec opposants \(Z\), cadre symétrique). 
+		En particulier,</p>
+		  <ul style="margin-top:.4rem">
+			<li class="fragment">\(U_D^{DD}\) : payoff d’un joueur D en population D ;</li>
+			<li class="fragment">\(U_F^{FD}\) : payoff d’un mutant F en population D ;</li>
+			<li class="fragment">\(U_D^{DF}\) : payoff d’un mutant D en population F ;</li>
+			<li class="fragment">\(U_F^{FF}\) : payoff d’un joueur F en population F.</li>
+		  </ul>
+			  <p class="fragment"><strong>Énoncé.</strong> Le régime <em>Dina</em> est EVS si :</p>
+			  <ol>
+				<li class="fragment">\(\;U_D^{DD}\ge U_F^{FD}\;\) (stabilité : en population D, F ne fait pas mieux) ;</li>
+				<li class="fragment">\(\;U_D^{DD}> U_F^{FD}\;\) <em>ou</em> \(\;U_D^{DF}>U_F^{FF}\;\) (résistance : stricte au bord, ou avantage de D lorsqu’on s’éloigne vers une population F).</li>
+			  </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREUVE DÉTAILLÉE EVS -->
+    <section>
+      <div class="slide-content">
+        <h3>Preuve</h3>
+        <div class="proof fragment">
+          <ol>
+            <li class="fragment"><strong>Réplication.</strong> \( \dot{\pi}=\pi(1-\pi)\,[EU_D(\pi)-EU_F(\pi)]\).</li>
+            <li class="fragment"><strong>Au bord.</strong> \(EU_D(1)=U_D^{DD}\), \(EU_F(1)=U_F^{FD}\Rightarrow \dot{\pi}\!\!\big|_{\pi\to 1^-}\le 0 \iff U_D^{DD}\ge U_F^{FD}\).</li>
+            <li class="fragment"><strong>Mutation.</strong> Pour \(\pi=1-\varepsilon\) : \(EU_D(1-\varepsilon)-EU_F(1-\varepsilon)\approx U_D^{DD}-(1-\varepsilon)U_F^{FD}-\varepsilon U_F^{FF}\).</li>
+            <li class="fragment"><strong>Résistance.</strong> La (2) assure \(\dot{\pi}<0\) pour toute petite \(\varepsilon>0\). □</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPLICATION PARAMÈTRES -->
+    <section>
+      <div class="slide-content">
+        <h2>Application : Gestion forestière</h2>
+        <h3 class="fragment" >Paramètres du modèle</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">
+		  \[
+		  \begin{aligned}
+            & \dot{R}(t)=g(R(t))-\sum_{i=1}^N h_i(t) \\
+            & C_i(\theta_F)=0.15\,w_i+25\,000 \, Ariary \\
+            & C_i(\theta_D)=0.03\,w_i+5\,000 \, Ariary  \\
+			\end{aligned}
+          \]
+		  </div>
+        </div>
+        <p class="reference fragment"><strong>Calibration :</strong> chiffre illustratif pour la <em>simulation</em>.</p>
+      </div>
+    </section>
+	
+    <section>
+      <div class="slide-content">
+        <h2>Application : Gestion forestière</h2>
+        <h3 class="fragment" >Paramètres du modèle</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">
+		  \[
+            \dot{R}(t)=g(R(t))-\sum_{i=1}^N h_i(t) 
+          \]
+		  </div>
+		  <div class="math-display fragment">
+		  \[
+            C_i(\theta_F)=0.15\,w_i+25\,000 \, Ariary 
+          \]
+		  </div>
+		  <div class="math-display fragment">
+		  \[
+            C_i(\theta_D)=0.03\,w_i+5\,000 \, Ariary  
+          \]
+		  </div>
+        </div>
+        <p class="reference fragment"><strong>Calibration :</strong> chiffre illustratif pour la <em>simulation</em>.</p>
+      </div>
+    </section>
+
+    <!-- ====== ILLUSTRATIONS : un graphique par slide, image si jointe ====== -->
+
+    <!-- Graphique 1 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 1 — Coûts de transaction</h2>
+        <div class="figure-wrap fragment">
+          <img id="img1" class="figure-img" src="figs/graph1.png" alt="Coûts de transaction (illustration)"/>
+          <div id="graph1" class="plot-wrap" aria-label="Graphique de fallback (Plotly)"></div>
+          <div class="fig-caption fragment">N* ↑ => Coûts de transaction (CF, CD)↑</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique 2 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 2 — Dynamique de réplication</h2>
+        <div class="figure-wrap fragment">
+          <img id="img2" class="figure-img" src="figs/graph2.png" alt="Dynamique de réplication (illustration)"/>
+          <div id="graph2" class="plot-wrap"></div>
+          <div class="fig-caption fragment">Dynamique.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique 3 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 3 — Efficacité relative</h2>
+        <div class="figure-wrap fragment">
+          <img id="img3" class="figure-img" src="figs/graph3.png" alt="Efficacité relative (illustration)"/>
+          <div id="graph3" class="plot-wrap"></div>
+          <div class="fig-caption fragment">Efficacité relative \((W_D-W_F)/W_F\) vs hétérogénéité.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique 4 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 4 — Frontière institutionnelle</h2>
+        <div class="figure- fragment">
+          <img id="img4" class="figure-img" src="figs/graph4.png" alt="Frontière institutionnelle (illustration)"/>
+          <div id="graph4" class="plot-wrap"></div>
+          <div class="fig-caption fragment">Frontière des possibilités (poids du formel vs bien-être).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique 5 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 5 — Stock de ressource</h2>
+        <div class="figure-wrap fragment">
+          <img id="img5" class="figure-img" src="figs/graph5.png" alt="Stock de ressource (illustration)"/>
+          <div id="graph5" class="plot-wrap"></div>
+          <div class="fig-caption fragment">Trajectoires \(R(t)\) : <em>Dina</em> vs exploitation libre.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique 6 -->
+    <section>
+      <div class="slide-content">
+        <h2>Illustration 6 — Sensibilité</h2>
+        <div class="figure-wrap fragment">
+          <img id="img6" class="figure-img" src="figs/graph6.png" alt="Surface de sensibilité (illustration)"/>
+          <div id="graph6" class="plot-wrap"></div>
+          <div class="fig-caption fragment">Surface \((\beta,\alpha)\mapsto\) avantage du <em>Dina</em>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYSE DE SENSIBILITÉ (résultat) -->
+    <section>
+      <div class="slide-content">
+        <h2>Analyse de sensibilité</h2>
+        <div class="theorem fragment">
+          <p class="fragment"> <strong>Résultat</strong><br></p>
+           <p class="fragment"> L’efficacité relative du <em>Dina</em> croît avec la taille jusqu’à \(N^{\star}\), puis décroît : </p>
+          
+		  <div class="fragment">
+		  \[
+            \frac{\partial \Delta W}{\partial N}>0 \text{ si } N < N^{\star},\quad
+          \]
+		  </div>
+		  <div class="fragment">
+		  \[
+            \frac{\partial \Delta W}{\partial N} < 0 \text{ si } N > N^{\star}.
+          \]
+		  </div>
+        </div>
+        <p class="reference fragment">Intuition : coordination plus facile dans petites communautés ; économies d’échelle du formel au-delà de \(N^{\star}\).</p>
+      </div>
+    </section>
+
+    <!-- IMPLICATIONS NORMATIVES -->
+    <section>
+      <div class="slide-content">
+        <h2>Implications normatives</h2>
+        <h3 class="fragment">Régulation optimale</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">\[
+            W^{opt}=\max_{\alpha,\beta}\; \alpha W_F+(1-\alpha)W_D-\beta\,C_{coord}.
+          \]</div>
+        </div>
+        <div class="theorem fragment">
+          <p class="fragment"><strong>Corollaire (pluralisme optimal)</strong><br> </p>
+		  <div class="fragment">
+          \[
+            \frac{\partial W_F}{\partial \alpha}-\frac{\partial W_D}{\partial \alpha}
+            \;=\;
+            \frac{\partial C_{coord}}{\partial \beta}\cdot\frac{\partial \beta}{\partial \alpha}.
+          \]
+		  </div>
+        </div>
+        <p class="reference fragment">Équilibre entre systèmes formel/informel via la minimisation des coûts de coordination.</p>
+      </div>
+    </section>
+
+    <!-- RECOMMANDATIONS -->
+    <section>
+      <div class="slide-content">
+        <h3>Recommandations politiques</h3>
+        <ul>
+          <li class="fragment"><strong>Coordination :</strong> interfaces opérationnelles entre systèmes.</li>
+          <li class="fragment"><strong>Subsidiarité :</strong> déléguer lorsque le <em>Dina</em> est efficient.</li>
+          <li class="fragment"><strong>Capacitation :</strong> former les médiateurs communautaires.</li>
+          <li class="fragment"><strong>Mesure :</strong> indicateurs d’efficacité : coûts/délais/conformité/satisfaction.</li>
+        </ul>
+        <blockquote class="fragment">
+          <p class="fragment">Le pluralisme juridique améliore l’efficacité allocative s’il est <em>coordonné</em>, <em>évaluable</em> et <em>réactif</em> aux hétérogénéités locales.</p>
+          <cite class="fragment">Synthèse</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- EXTENSIONS -->
+    <section>
+      <div class="slide-content">
+        <h2>Extensions du modèle</h2>
+        <h3 class="fragment">Hétérogénéité des agents</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">
+		  \[
+            U_i(s_i,s_{-i},\theta,\mu_i)=\mu_i\,u_i(s_i,s_{-i})-C_i(\theta)+\sum_{j\neq i}E_{ij}(s_j,\theta)			  
+          \]
+		  </div>
+		  <div class="math-display fragment">
+		  \[
+            \mu_i \sim F(\mu).
+          \]
+		  </div>
+        </div>
+        <h3 class="fragment">Apprentissage</h3>
+        <div class="theorem fragment">
+          <div class="math-display fragment">\[
+            \dot{\pi}(t)=\pi(t)\,[1-\pi(t)]\,\Delta U(\pi(t)),
+            \qquad \Delta U(\pi)=EU_D(\pi)-EU_F(\pi).
+          \]</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section>
+      <div class="slide-content">
+        <h2>Conclusion</h2>
+        <ul>
+          <li class="fragment">Le <em>Dina</em> présente un avantage comparatif significatif 
+		  en termes de coûts de transaction, particulièrement dans les communautés de petite taille, 
+						sous réserve que les normes communautaires internalisent efficacement les externalités.
+		  </li>
+          <li class="fragment"><strong>Reconnaissance institutionnelle :</strong> 
+		  Légitimer le rôle des institutions informelles efficaces.
+		  </li class="fragment">
+          <li class="fragment">Politique : coordonner les systèmes et viser un pluralisme optimal.
+		  </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RÉFÉRENCES -->
+    <section>
+      <div class="slide-content">
+        <h2>Références</h2>
+        <ul>
+          <li class="fragment">Becker, G. (1968) : <em>Crime and Punishment: An Economic Approach</em>, JPE.</li>
+          <li class="fragment">Coase, R. (1960) : <em>The Problem of Social Cost</em>, JLE.</li>
+          <li class="fragment">North, D. (1990) : <em>Institutions, Institutional Change and Economic Performance</em>.</li>
+          <li class="fragment">Williamson, O. (1985) : <em>The Economic Institutions of Capitalism</em>.</li>
+          <li class="fragment">Ostrom, E. (1990) : <em>Governing the Commons</em>.</li>
+          <li class="fragment">Polinsky & Shavell (2000) : <em>Public Enforcement of Law</em>, Handbook of Law & Econ.</li>
+          <li class="fragment">Razafindrakoto, M. & Roubaud, F. (2006) : <em>Le dina à Madagascar…</em></li>
+          <li class="fragment">Weber, J. (1998) : <em>La gestion locale sécurisée…</em></li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Reveal + MathJax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/math/math.min.js"></script>
+<script>
+  Reveal.initialize({
+    hash:true, center:false, margin:0.06,
+    controls:true, progress:true,
+    transition:'none', backgroundTransition:'none',
+    plugins:[RevealMath],
+    math:{
+      mathjax:'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js',
+      loader:{ load: ['[tex]/ams','[tex]/noerrors','[tex]/noundefined'] },
+      tex:{
+        inlineMath:[['\\(','\\)'],['$','$']],
+        displayMath:[['\\[','\\]'],['$$','$$']],
+        processEscapes:true, processEnvironments:true,
+        packages:{'[+]':['ams']}
+      },
+      chtml:{ scale:0.96, linebreaks:{ automatic:true, width:'container' } },
+      options:{ skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    }
+  });
+</script>
+
+<!-- Figures : images si présentes, sinon fallback Plotly -->
+<script>
+  const layoutBase = {
+    font:{family:'Times New Roman, serif', size:12},
+    plot_bgcolor:'white', paper_bgcolor:'rgba(0,0,0,0)',
+    margin:{l:60,r:40,t:24,b:60},
+    legend:{x:0.02,y:0.98}
+  };
+  const config = { displayModeBar:true, displaylogo:false, modeBarButtonsToRemove:['lasso2d','select2d','pan2d'] };
+
+  function once(id, fn){
+    const el = document.getElementById(id);
+    if(!el || el.dataset.done) return;
+    fn(el); el.dataset.done='1';
+  }
+
+  /* === Générateurs Plotly (fallback) ===================================== */
+
+  // 1) Coûts de transaction vs taille de communauté
+  function plot1(el){
+    const N = Array.from({length:100},(_,i)=>10+i*2);
+    const costsFormal = N.map(v => 0.8*Math.log(v) + 0.5*Math.sqrt(v));
+    const costsDina   = N.map(v => 0.3*Math.pow(v,0.3) + 2);
+    Plotly.newPlot(el,[
+      {x:N,y:costsFormal,name:'Système formel',type:'scatter',mode:'lines',line:{color:'#c0392b',width:3}},
+      {x:N,y:costsDina,  name:'Dina',           type:'scatter',mode:'lines',line:{color:'#0b7285',width:3}}
+    ],{...layoutBase, title:{text:'Coûts de transaction vs taille de communauté',font:{size:14}},
+       xaxis:{title:'Taille (N)'}, yaxis:{title:'Coûts (indice)'}},config);
+  }
+
+  // 2) Dynamique de réplication dπ/dt
+  function plot2(el){
+    const pi = Array.from({length:100},(_,i)=>i/99);
+    const dyn = pi.map(p => p*(1-p)*((0.9*(0.8+0.2*p)) - (0.6 + 0.3*(1-p))));
+    Plotly.newPlot(el,[
+      {x:pi,y:dyn,name:'dπ/dt',type:'scatter',mode:'lines',line:{color:'#8e44ad',width:3}},
+      {x:[0,1],y:[0,0],name:'Équilibre',type:'scatter',mode:'lines',line:{color:'#34495e',dash:'dash',width:2}}
+    ],{...layoutBase, title:{text:'Dynamique de réplication',font:{size:14}},
+       xaxis:{title:'Proportion (π)'}, yaxis:{title:'Taux de changement dπ/dt'}},config);
+  }
+
+  // 3) Efficacité relative (W_D - W_F)/W_F vs hétérogénéité
+  function plot3(el){
+    const h = Array.from({length:100},(_,i)=>i/99);
+    const rel = h.map(v => (0.9*(1-0.5*v) - (0.6 + 0.4*v)) / (0.6 + 0.4*v));
+    Plotly.newPlot(el,[
+      {x:h,y:rel,name:'Efficacité relative',type:'scatter',mode:'lines',line:{color:'#e67e22',width:3}},
+      {x:[0,1],y:[0,0],name:'Parité',type:'scatter',mode:'lines',line:{color:'#95a5a6',dash:'dash',width:2}}
+    ],{...layoutBase, title:{text:'Efficacité relative vs hétérogénéité',font:{size:14}},
+       xaxis:{title:'Degré d’hétérogénéité'}, yaxis:{title:'(W_D - W_F)/W_F'}},config);
+  }
+
+  // 4) Frontière des possibilités institutionnelles
+  function plot4(el){
+    const a = Array.from({length:101},(_,i)=>i/100);
+    const wF=0.8, wD=0.9*0.9;
+    const frontier = a.map(x => x*wF + (1-x)*wD - 0.1*x*(1-x));
+    Plotly.newPlot(el,[
+      {x:a,y:frontier,name:'Frontière',type:'scatter',mode:'lines',line:{color:'#27ae60',width:3},fill:'tozeroy',fillcolor:'rgba(39,174,96,0.1)'}
+    ],{...layoutBase, title:{text:'Frontière des possibilités institutionnelles',font:{size:14}},
+       xaxis:{title:'Poids du formel (α)'}, yaxis:{title:'Bien-être social'}},config);
+  }
+
+  // 5) Trajectoires de stock de ressource
+  function plot5(el){
+    const t = Array.from({length:100},(_,i)=>i/10);
+    const R_dina = t.map(v => 100*Math.exp(-0.02*v)+50);
+    const R_free = t.map(v => 150*Math.exp(-0.1*v));
+    Plotly.newPlot(el,[
+      {x:t,y:R_dina,name:'Sous Dina',type:'scatter',mode:'lines',line:{color:'#2ecc71',width:3}},
+      {x:t,y:R_free,name:'Exploitation libre',type:'scatter',mode:'lines',line:{color:'#e74c3c',width:3}},
+      {x:[0,10],y:[30,30],name:'Seuil',type:'scatter',mode:'lines',line:{color:'#34495e',dash:'dot',width:2}}
+    ],{...layoutBase, title:{text:'Évolution du stock R(t)',font:{size:14}},
+       xaxis:{title:'Temps (années)'}, yaxis:{title:'Stock'}},config);
+  }
+
+  // 6) Surface de sensibilité (β, α) -> avantage du Dina
+  function plot6(el){
+    const cost = Array.from({length:20},(_,i)=>0.1+i*0.09);
+    const eff  = Array.from({length:20},(_,j)=>0.3+j*0.06);
+    const Z = cost.map(a => eff.map(b => b*0.9 - a*0.8));
+    Plotly.newPlot(el,[{
+      x:eff, y:cost, z:Z, type:'surface',
+      colorscale:[[0,'#e74c3c'],[0.5,'#f39c12'],[1,'#27ae60']],
+      colorbar:{title:'Avantage du Dina'}
+    }],{...layoutBase, title:{text:'Surface de sensibilité',font:{size:14}},
+        scene:{ xaxis:{title:'Efficacité (β)'}, yaxis:{title:'Coûts d’accès (α)'}, zaxis:{title:'Avantage'},
+                camera:{eye:{x:1.5,y:1.5,z:1.5}} }},config);
+  }
+
+  /* === Affichage images si présentes, sinon fallback Plotly =============== */
+
+  function hookImageFallback(imgId, plotId, plotter){
+    const img = document.getElementById(imgId);
+    const plot = document.getElementById(plotId);
+    if(!img || !plot) return;
+
+    // Si l'image charge, on l'affiche et on masque le plot
+    img.addEventListener('load', ()=>{
+      img.style.display = 'block';
+      plot.style.display = 'none';
+    }, { once:true });
+
+    // Si erreur (image absente), on génère le plot
+    img.addEventListener('error', ()=>{
+      img.style.display = 'none';
+      plot.style.display = 'block';
+      once(plotId, plotter);
+    }, { once:true });
+
+    // Déclenche immédiatement (si déjà en cache ou si erreur)
+    // - Si l'image est déjà dispo (cache), naturalWidth>0 -> la montrer.
+    // - Sinon, laisse les events gérer.
+    if(img.complete){
+      if(img.naturalWidth>0){
+        img.style.display='block';
+        plot.style.display='none';
+      }else{
+        img.style.display='none';
+        plot.style.display='block';
+        once(plotId, plotter);
+      }
+    }else{
+      // Montre le plot pendant le chargement, puis l'image remplace si succès
+      plot.style.display='block';
+      // On donne une chance au plotter si l'image met du temps ET n'est jamais trouvée
+      setTimeout(()=>{ if(img.style.display!=='block'){ once(plotId, plotter); } }, 600);
+    }
+  }
+
+  function setupFigures(){
+    hookImageFallback('img1','graph1', plot1);
+    hookImageFallback('img2','graph2', plot2);
+    hookImageFallback('img3','graph3', plot3);
+    hookImageFallback('img4','graph4', plot4);
+    hookImageFallback('img5','graph5', plot5);
+    hookImageFallback('img6','graph6', plot6);
+  }
+
+  window.addEventListener('load', setupFigures);
+  Reveal.on('slidechanged', ()=> setupFigures()); // au cas d’accès direct par hash
+</script>
+</body>
+</html>
