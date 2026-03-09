@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAMA-FORECAST — Présentation Pédagogique</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+    /* ══ PALETTE FORÊT / TEAL ══ */
+    :root {
+      --forest:   #1a4d3a;
+      --teal:     #0d6b5e;
+      --mid:      #1a7a6e;
+      --amber:    #d4860a;
+      --rust:     #8b4513;
+      --text:     #1c2b20;
+      --muted:    #4a6255;
+      --light:    #f4f9f6;
+      --cream:    #faf9f5;
+      --white:    #ffffff;
+    }
+
+    html, body { margin:0; padding:0; height:100%; }
+
+    .reveal,
+    .reveal .slides {
+      font-family: 'Cormorant Garamond','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    /* Every section: flex column, no overflow */
+    .reveal .slides section {
+      text-align: left;
+      box-sizing: border-box;
+      overflow: hidden;
+      padding: 0.35em 1.05em 0.4em 1.05em !important;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100%;
+    }
+
+    /* Controls / Progress */
+    .reveal .progress { background:rgba(212,134,10,.15); color:var(--amber); height:3px; }
+    .reveal .controls { color:var(--teal); }
+    .reveal .slide-number {
+      font-family:'Cormorant Garamond',serif; font-size:0.58em;
+      color:var(--muted); background:transparent; bottom:8px; right:12px;
+    }
+
+    /* Headings */
+    .reveal h2 {
+      font-family:'IM Fell English','Palatino Linotype',serif;
+      font-size:1.12em !important; font-weight:normal; color:var(--forest);
+      border-bottom:2px solid var(--amber);
+      padding-bottom:0.15em; margin:0 0 0.36em 0;
+      line-height:1.15; flex-shrink:0;
+    }
+    .reveal h3 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:0.73em !important; font-weight:600; color:var(--teal);
+      text-transform:uppercase; letter-spacing:0.1em; margin:0 0 0.22em 0;
+    }
+
+    /* Text */
+    .reveal p { font-size:0.68em; line-height:1.45; color:var(--text); margin:0.15em 0; }
+
+    /* Lists */
+    .reveal ul { list-style:none; padding:0; margin:0; }
+    .reveal ul li {
+      font-size:0.65em; line-height:1.42;
+      padding:0.12em 0 0.12em 1.15em; position:relative; color:var(--text);
+    }
+    .reveal ul li::before {
+      content:'›'; position:absolute; left:0;
+      color:var(--amber); font-size:1.1em; line-height:1.3; font-weight:bold;
+    }
+    .reveal ul li strong { color:var(--forest); }
+
+    /* Grid */
+    .cols { display:grid; gap:0.7em; align-items:start; }
+    .cols-2     { grid-template-columns:1fr 1fr; }
+    .cols-3     { grid-template-columns:1fr 1fr 1fr; }
+    .cols-60-40 { grid-template-columns:60fr 40fr; }
+
+    /* Cards */
+    .card {
+      background:var(--light); border-left:3px solid var(--amber);
+      border-radius:2px; padding:0.38em 0.65em;
+    }
+    .card-forest {
+      background:var(--forest); color:#fff;
+      border-left:3px solid var(--amber); border-radius:2px; padding:0.38em 0.65em;
+    }
+    .card-forest p, .card-forest li { color:rgba(255,255,255,.87) !important; }
+    .card-forest li::before         { color:var(--amber) !important; }
+    .card-forest h3                 { color:var(--amber) !important; }
+    .card-teal {
+      background:var(--teal); color:#fff;
+      border-left:3px solid rgba(255,255,255,.3); border-radius:2px; padding:0.38em 0.65em;
+    }
+    .card-teal p, .card-teal li { color:rgba(255,255,255,.87) !important; }
+    .card-teal li::before       { color:var(--amber) !important; }
+    .card-teal h3               { color:rgba(255,255,255,.9) !important; }
+    .card-warn {
+      background:#fff8ec; border-left:3px solid var(--rust);
+      border-radius:2px; padding:0.38em 0.65em;
+    }
+
+    /* Steps (numbered) */
+    .steps { counter-reset:step-counter; list-style:none; padding:0; margin:0; }
+    .steps li {
+      counter-increment:step-counter;
+      padding:0.14em 0 0.14em 2em !important;
+      font-size:0.64em !important; line-height:1.38;
+    }
+    .steps li::before {
+      content:counter(step-counter); position:absolute; left:0; top:0.08em;
+      width:1.45em; height:1.45em; background:var(--teal); color:#fff !important;
+      border-radius:50%; text-align:center; line-height:1.45em;
+      font-size:0.8em; font-weight:bold;
+    }
+
+    /* URL / code */
+    .reveal a, .url {
+      color:var(--teal); font-style:italic; font-size:0.82em;
+      text-decoration:none; border-bottom:1px dotted var(--teal);
+    }
+    code {
+      font-family:'Courier New',monospace; font-size:0.74em;
+      background:#eef4f0; border:1px solid #c8ddd4;
+      padding:0.02em 0.28em; border-radius:2px; color:var(--rust);
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background:var(--forest); color:#fff; padding:0.45em 0.8em;
+      border-radius:3px; text-align:center; font-style:italic;
+      font-size:0.7em; margin:0.3em 0;
+    }
+    .highlight-teal {
+      background:var(--teal); color:#fff; padding:0.45em 0.8em;
+      border-radius:3px; font-size:0.7em; margin:0.3em 0;
+    }
+
+    /* Model tag */
+    .tag {
+      display:inline-block; font-size:0.52em; letter-spacing:0.07em;
+      padding:0.12em 0.5em; border-radius:2px; margin:0.06em 0.04em;
+      font-weight:600; vertical-align:middle; text-transform:uppercase;
+    }
+    .tag-stat  { background:#dff0e8; color:#1a4d3a; border:1px solid #aad4be; }
+    .tag-ml    { background:#fff3dc; color:#7a4a0a; border:1px solid #e8c87a; }
+    .tag-dl    { background:#e8f0ff; color:#1a3478; border:1px solid #9ab4e8; }
+    .tag-multi { background:#f0e8ff; color:#4a1a78; border:1px solid #c8a8e8; }
+
+    /* Metric boxes */
+    .metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5em; }
+    .metric-box {
+      background:var(--light); border:1px solid rgba(26,77,58,.15);
+      border-top:3px solid var(--amber);
+      border-radius:3px; padding:0.45em 0.55em; text-align:center;
+    }
+    .metric-box .val {
+      font-size:1.25em; font-weight:600; color:var(--forest); display:block; line-height:1.1;
+    }
+    .metric-box .lbl {
+      font-size:0.58em; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;
+    }
+    .metric-box .desc { font-size:0.6em; color:var(--text); margin-top:0.2em; line-height:1.3; }
+
+    /* Quality badge */
+    .q-badge {
+      display:inline-block; padding:0.15em 0.55em; border-radius:3px;
+      font-size:0.65em; font-weight:600; letter-spacing:0.05em;
+    }
+    .q-green  { background:#d4edda; color:#155724; }
+    .q-orange { background:#fff3cd; color:#856404; }
+    .q-red    { background:#f8d7da; color:#721c24; }
+
+    /* Workflow arrow step */
+    .workflow { display:grid; grid-template-columns:1fr 0.15fr 1fr 0.15fr 1fr; align-items:center; gap:0.2em; }
+    .wf-step { background:var(--light); border:1px solid rgba(26,77,58,.18); border-radius:3px; padding:0.45em 0.5em; text-align:center; }
+    .wf-step .wf-num { font-size:1.2em; font-weight:bold; color:var(--amber); display:block; }
+    .wf-step .wf-title { font-size:0.62em; font-weight:600; color:var(--forest); text-transform:uppercase; letter-spacing:0.06em; }
+    .wf-step .wf-sub { font-size:0.55em; color:var(--muted); margin-top:0.15em; }
+    .wf-arrow { text-align:center; color:var(--amber); font-size:1.2em; }
+
+    /* Footer label */
+    .slide-label {
+      font-size:0.46em; color:var(--muted); letter-spacing:0.1em;
+      text-transform:uppercase; opacity:0.52; margin-top:auto; padding-top:0.25em; flex-shrink:0;
+    }
+
+    /* Spacing helpers */
+    .mt-xs { margin-top:0.28em; }
+    .mt-sm { margin-top:0.5em; }
+
+    /* ══ TITLE SLIDE ══ */
+    .slide-title {
+      background:var(--forest) !important;
+      text-align:center !important; justify-content:center !important; position:relative;
+    }
+    .slide-title::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg,var(--amber),#f0b040,var(--amber));
+    }
+    .slide-title .title-eyebrow {
+      font-size:0.6em; letter-spacing:0.28em; text-transform:uppercase;
+      color:var(--amber); margin-bottom:0.4em; font-weight:300;
+    }
+    .slide-title h1 {
+      font-family:'IM Fell English',serif; font-size:2em !important;
+      font-weight:normal; color:#fff !important; line-height:1.15; margin:0 0 0.35em 0;
+    }
+    .slide-title h1 em { color:var(--amber); font-style:italic; }
+    .slide-title .subtitle {
+      font-size:0.78em; color:rgba(255,255,255,.72); font-style:italic; margin-bottom:0.9em;
+    }
+    .slide-title .url-box {
+      display:inline-block; background:rgba(255,255,255,.1); border:1px solid rgba(212,134,10,.6);
+      border-radius:4px; padding:0.35em 1em; font-size:0.72em;
+      color:var(--amber); letter-spacing:0.08em; margin-bottom:0.8em;
+      font-style:italic;
+    }
+    .slide-title .author-block {
+      display:inline-block; border-top:1px solid rgba(212,134,10,.4); padding-top:0.42em;
+    }
+    .slide-title .author { font-size:0.7em; color:rgba(255,255,255,.82); letter-spacing:0.06em; }
+    .slide-title .ornament { font-size:1.4em; color:var(--amber); opacity:.6; margin:0.2em 0; }
+
+    /* ══ SECTION DIVIDER ══ */
+    .slide-section {
+      background:var(--teal) !important;
+      text-align:center !important; justify-content:center !important;
+    }
+    .slide-section .section-number {
+      font-size:0.58em; letter-spacing:0.32em; text-transform:uppercase;
+      color:var(--amber); margin-bottom:0.38em;
+    }
+    .slide-section h2 {
+      font-family:'IM Fell English',serif; font-size:1.6em !important;
+      color:#fff !important; font-weight:normal; border:none !important; margin:0;
+    }
+    .slide-section .section-rule { width:52px; height:2px; background:var(--amber); margin:0.65em auto; }
+    .slide-section .section-sub { font-size:0.7em; color:rgba(255,255,255,.62); font-style:italic; }
+
+    /* ══ FINAL SLIDE ══ */
+    .slide-final {
+      background:var(--forest) !important;
+      text-align:center !important; justify-content:center !important;
+    }
+    .slide-final h2 {
+      font-family:'IM Fell English',serif; font-size:2.5em !important;
+      color:var(--amber) !important; border:none !important; font-weight:normal;
+    }
+    .slide-final p { color:rgba(255,255,255,.65) !important; font-size:0.7em; font-style:italic; }
+    .slide-final .final-rule { width:65px; height:1px; background:var(--amber); margin:0.7em auto; opacity:.5; }
+    .slide-final .url-final {
+      display:inline-block; margin-top:0.6em;
+      background:rgba(212,134,10,.15); border:1px solid rgba(212,134,10,.5);
+      border-radius:3px; padding:0.3em 0.9em; font-size:0.72em; color:var(--amber);
+      font-style:italic; letter-spacing:0.05em;
+    }
+
+    /* Fragments */
+    .reveal .fragment                 { opacity:0; transition:opacity .38s ease, transform .38s ease; }
+    .reveal .fragment.visible         { opacity:1; }
+    .reveal .fragment.fade-up         { transform:translateY(16px); }
+    .reveal .fragment.fade-up.visible { transform:translateY(0); }
+    .reveal .fragment.fade-right      { transform:translateX(-12px); }
+    .reveal .fragment.fade-right.visible { transform:translateX(0); }
+    .reveal .fragment.zoom-in         { transform:scale(0.88); }
+    .reveal .fragment.zoom-in.visible { transform:scale(1); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════ SLIDE 1 · TITRE ════════ -->
+<section class="slide-title">
+  <div class="ornament fragment fade-up" data-fragment-index="0">⚙</div>
+  <div class="title-eyebrow fragment fade-up" data-fragment-index="1">Outil de Prévision Quantitative · Formation Doctorale</div>
+  <h1 class="fragment fade-up" data-fragment-index="2"><em>RAMA-FORECAST</em><br>Prévisions Avancées</h1>
+  <p class="subtitle fragment fade-up" data-fragment-index="3">
+    Application de prévision des séries temporelles — 18 modèles statistiques, économétriques &amp; d'apprentissage automatique
+  </p>
+  <div class="url-box fragment fade-up" data-fragment-index="4">
+    🌐 rama-forecast.streamlit.app
+  </div>
+  <div class="author-block fragment fade-up" data-fragment-index="5">
+    <p class="author">Ramanambonona Ambinintsoa, Ph.D</p>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 2 · C'EST QUOI ? ════════ -->
+<section>
+  <h2>C'est quoi RAMA-FORECAST ?</h2>
+  <div class="highlight-box fragment fade-up" data-fragment-index="0" style="margin:0.3em 0 0.5em 0;">
+    Une application web gratuite qui permet de <strong>prévoir des séries temporelles</strong> sans écrire une seule ligne de code.
+  </div>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Pour qui ?</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>Doctorants</strong> en économie, finance, sciences sociales</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>Chercheurs</strong> ayant des données chronologiques</li>
+          <li class="fragment fade-up" data-fragment-index="4"><strong>Analystes</strong> souhaitant comparer plusieurs modèles</li>
+          <li class="fragment fade-up" data-fragment-index="5">Toute personne avec un fichier Excel ou CSV</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card-forest">
+        <h3>Ce que l'outil fait</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="7">Importe &amp; nettoie automatiquement vos données</li>
+          <li class="fragment fade-up" data-fragment-index="8">Analyse la tendance et la saisonnalité</li>
+          <li class="fragment fade-up" data-fragment-index="9">Lance 18 modèles de prévision différents</li>
+          <li class="fragment fade-up" data-fragment-index="10">Compare les modèles avec des métriques de qualité</li>
+          <li class="fragment fade-up" data-fragment-index="11">Exporte les résultats en Excel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Vue d'ensemble</div>
+</section>
+
+<!-- ════════ SLIDE 3 · FLUX DE TRAVAIL ════════ -->
+<section>
+  <h2>Comment utiliser l'outil ? — Flux de Travail</h2>
+  <div style="font-size:0.7em;" class="workflow fragment fade-up" data-fragment-index="0" style="margin:0.6em 0;">
+    <div class="wf-step fragment zoom-in" data-fragment-index="1">
+      <span class="wf-num">①</span>
+      <span class="wf-title">Importer</span>
+      <div class="wf-sub">Charger votre fichier<br>Excel ou CSV</div>
+    </div>
+    <div class="wf-arrow fragment fade-up" data-fragment-index="2">→</div>
+    <div class="wf-step fragment zoom-in" data-fragment-index="3">
+      <span class="wf-num">②</span>
+      <span class="wf-title">Analyser</span>
+      <div class="wf-sub">Explorer les données,<br>tendance, saisonnalité</div>
+    </div>
+    <div class="wf-arrow fragment fade-up" data-fragment-index="4">→</div>
+    <div class="wf-step fragment zoom-in" data-fragment-index="5">
+      <span class="wf-num">③</span>
+      <span class="wf-title">Prévoir</span>
+      <div class="wf-sub">Choisir un modèle,<br>lancer, comparer</div>
+    </div>
+  </div>
+  <div class="cols cols-2 mt-xs">
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card-warn">
+        <h3 style="color:var(--rust);">Pré-requis minimum</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="7" style="font-size:0.63em;">Un fichier <strong>Excel (.xlsx / .xls)</strong> ou <strong>CSV</strong></li>
+          <li class="fragment fade-up" data-fragment-index="8" style="font-size:0.63em;">Une colonne <strong>"Date"</strong> (mensuelle, trimestrielle, annuelle)</li>
+          <li class="fragment fade-up" data-fragment-index="9" style="font-size:0.63em;">Au moins <strong>12 observations</strong> pour une analyse complète</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="10">
+      <div class="card-teal">
+        <h3>Formats de données acceptés</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="11" style="font-size:0.63em;"><strong>Dates en lignes</strong> / Variables en colonnes <em>(standard)</em></li>
+          <li class="fragment fade-up" data-fragment-index="12" style="font-size:0.63em;"><strong>Dates en colonnes</strong> / Variables en lignes <em>(transposé)</em></li>
+          <li class="fragment fade-up" data-fragment-index="13" style="font-size:0.63em;">Auto-détection de l'orientation au chargement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Flux de travail</div>
+</section>
+
+<!-- ════════ SECTION A ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Module I</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Import &amp; Collecte des Données</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Charger, nettoyer et valider vos données en quelques clics</p>
+</section>
+
+<!-- SLIDE 4 · Import données -->
+<section>
+  <h2>Module I — Import &amp; Collecte des Données</h2>
+  <div class="cols cols-2">
+    <div>
+      <div style="font-size:0.8em"  class="card fragment fade-right" data-fragment-index="0">
+        <h3>Étapes d'import</h3>
+        <ol class="steps">
+          <li class="fragment fade-up" data-fragment-index="1">Cliquer sur <strong>"📥 Data"</strong> dans la barre latérale</li>
+          <li class="fragment fade-up" data-fragment-index="2">Déposer le fichier Excel ou CSV dans la zone d'upload</li>
+          <li class="fragment fade-up" data-fragment-index="3">Choisir l'orientation des données (ou laisser en auto)</li>
+          <li class="fragment fade-up" data-fragment-index="4">Ignorer des lignes / colonnes superflues si nécessaire</li>
+          <li class="fragment fade-up" data-fragment-index="5">Cliquer sur <strong>"Valider et sauvegarder"</strong></li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div  style="font-size:0.8em" class="card-forest fragment fade-right" data-fragment-index="6">
+        <h3>Ce que l'outil fait automatiquement</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="7">Détecte l'orientation (lignes / colonnes)</li>
+          <li class="fragment fade-up" data-fragment-index="8">Convertit les dates en tous formats (FR/EN, slash, tiret…)</li>
+          <li class="fragment fade-up" data-fragment-index="9">Remplace les virgules décimales par des points</li>
+          <li class="fragment fade-up" data-fragment-index="10">Convertit toutes les valeurs en numérique</li>
+          <li class="fragment fade-up" data-fragment-index="11">Affiche un résumé : période, nb variables, nb observations</li>
+        </ul>
+      </div>
+      <div class="card-warn mt-xs fragment fade-up" data-fragment-index="12">
+        <p style="font-size:0.62em;margin:0;color:var(--rust);">
+          <strong>⚠ Important :</strong> La première colonne doit être la date, ou sera renommée automatiquement <code>Date</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module I — Import des données</div>
+</section>
+
+<!-- ════════ SECTION B ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Module II</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Tableaux de Bord &amp; Analyse</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Visualiser, analyser et décomposer vos séries temporelles</p>
+</section>
+
+<!-- SLIDE 5 · Dashboard -->
+<section>
+  <h2>Module II — Tableaux de Bord &amp; Analyse</h2>
+  <p class="fragment fade-up" data-fragment-index="0" style="font-size:0.63em;color:var(--muted);font-style:italic;margin-bottom:0.4em;">
+    Accessible via <strong>"📈 Prév."</strong> dans la barre latérale — après validation des données
+  </p>
+  <div class="cols cols-2">
+    <div style="font-size:0.9em;" class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>4 Onglets Disponibles</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>Évolution</strong> — Graphiques de tendance multi-variables</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>Visualisation</strong> — 6 types de graphiques (barres, lignes, histogramme, box plot…)</li>
+          <li class="fragment fade-up" data-fragment-index="4"><strong>Analyse</strong> — Détection tendance, saisonnalité, décomposition</li>
+          <li class="fragment fade-up" data-fragment-index="5"><strong>Prévisions Avancées</strong> — 18 modèles, comparaison, export</li>
+        </ul>
+      </div>
+    </div>
+    <div style="font-size:0.9em;" class="fragment fade-right" data-fragment-index="6">
+      <div class="card-teal">
+        <h3>Onglet Analyse — Ce qu'on y trouve</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="7" style="font-size:0.63em;"><strong>Tendance</strong> : Détectée / Faible / Non détectée</li>
+          <li class="fragment fade-up" data-fragment-index="8" style="font-size:0.63em;"><strong>Saisonnalité</strong> : Forte / Modérée / Non détectée</li>
+          <li class="fragment fade-up" data-fragment-index="9" style="font-size:0.63em;"><strong>Décomposition additive</strong> en 4 composantes :</li>
+        </ul>
+        <div class="fragment fade-up" data-fragment-index="10" style="margin-top:0.3em;font-size:0.6em;display:grid;grid-template-columns:1fr 1fr;gap:0.25em;">
+          <span style="background:rgba(255,255,255,.15);padding:0.2em 0.4em;border-radius:2px;">🔵 Série originale</span>
+          <span style="background:rgba(255,255,255,.15);padding:0.2em 0.4em;border-radius:2px;">🔴 Tendance</span>
+          <span style="background:rgba(255,255,255,.15);padding:0.2em 0.4em;border-radius:2px;">🟢 Saisonnalité</span>
+          <span style="background:rgba(255,255,255,.15);padding:0.2em 0.4em;border-radius:2px;">🟠 Résidu</span>
+        </div>
+        <p class="fragment fade-up" data-fragment-index="11" style="font-size:0.6em;color:var(--amber);margin-top:0.4em;font-style:italic;">
+          💡 L'outil recommande automatiquement les modèles adaptés à votre série.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module II — Tableaux de bord</div>
+</section>
+
+<!-- ════════ SECTION C ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Module III</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Les 18 Modèles de Prévision</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Statistiques, économétriques, machine learning &amp; deep learning</p>
+</section>
+
+<!-- SLIDE 6 · Modèles — Statistiques / Économétriques -->
+<section>
+  <h2>Modèles Statistiques &amp; Économétriques</h2>
+  <p class="fragment fade-up" data-fragment-index="0" style="font-size:0.62em;color:var(--muted);font-style:italic;margin-bottom:0.4em;">
+    Adaptés aux séries économiques, financières et macroéconomiques
+  </p>
+  <div class="cols cols-2">
+    <div  style="font-size:0.9em;" class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Modèles Univariés</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2">
+            <span class="tag tag-stat">NAIVE</span> Moyenne mobile simple — référence de base
+          </li>
+          <li class="fragment fade-up" data-fragment-index="3">
+            <span class="tag tag-stat">AR(p)</span> Auto-régression sur <em>p</em> décalages
+          </li>
+          <li class="fragment fade-up" data-fragment-index="4">
+            <span class="tag tag-stat">ARIMA</span> AR + Intégration + Moyenne Mobile
+          </li>
+          <li class="fragment fade-up" data-fragment-index="5">
+            <span class="tag tag-stat">SARIMA</span> ARIMA + composante saisonnière
+          </li>
+          <li class="fragment fade-up" data-fragment-index="6">
+            <span class="tag tag-stat">GARCH</span> Modélisation de la volatilité
+          </li>
+          <li class="fragment fade-up" data-fragment-index="7">
+            <span class="tag tag-stat">Exp. Smoothing</span> Lissage exponentiel (tendance + saisonnalité)
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div style="font-size:0.9em;" class="fragment fade-right" data-fragment-index="8">
+      <div class="card">
+        <h3>Modèles Multi-variés</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="9">
+            <span class="tag tag-multi">VAR</span> Vecteur Auto-Régressif — plusieurs variables liées
+          </li>
+          <li class="fragment fade-up" data-fragment-index="10">
+            <span class="tag tag-multi">SVAR</span> VAR Structurel — avec contraintes économiques
+          </li>
+          <li class="fragment fade-up" data-fragment-index="11">
+            <span class="tag tag-multi">BVAR</span> VAR Bayésien — avec a priori informatifs
+          </li>
+          <li class="fragment fade-up" data-fragment-index="12">
+            <span class="tag tag-multi">ARDL</span> Retards distribués auto-régressifs
+          </li>
+          <li class="fragment fade-up" data-fragment-index="13">
+            <span class="tag tag-multi">MIDAS</span> Données mixtes haute/basse fréquence
+          </li>
+          <li class="fragment fade-up" data-fragment-index="14">
+            <span class="tag tag-multi">Prophet</span> Modèle additif Facebook — tendance + saisonnalité
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module III — Modèles statistiques &amp; économétriques</div>
+</section>
+
+<!-- SLIDE 7 · Modèles ML / DL -->
+<section>
+  <h2>Modèles Machine Learning &amp; Deep Learning</h2>
+  <p class="fragment fade-up" data-fragment-index="0" style="font-size:0.62em;color:var(--muted);font-style:italic;margin-bottom:0.4em;">
+    Capturent des relations non-linéaires complexes dans les données
+  </p>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Machine Learning</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2">
+            <span class="tag tag-ml">Régression Linéaire</span> Tendance linéaire simple
+          </li>
+          <li class="fragment fade-up" data-fragment-index="3">
+            <span class="tag tag-ml">Random Forest</span> Forêt aléatoire sur les lags — robuste au bruit
+          </li>
+          <li class="fragment fade-up" data-fragment-index="4">
+            <span class="tag tag-ml">XGBoost</span> Gradient Boosting — très performant en pratique
+          </li>
+          <li class="fragment fade-up" data-fragment-index="5">
+            <span class="tag tag-ml">LightGBM</span> Gradient Boosting léger — rapide et efficace
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card">
+        <h3>Réseaux de Neurones</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="7">
+            <span class="tag tag-dl">MLP</span> Perceptron Multi-couches — réseau dense classique
+          </li>
+          <li class="fragment fade-up" data-fragment-index="8">
+            <span class="tag tag-dl">LSTM</span> Long Short-Term Memory — capture les dépendances longues
+          </li>
+        </ul>
+      </div>
+      <div class="card-forest mt-xs fragment fade-up" data-fragment-index="9">
+        <h3>Conseil de choix</h3>
+        <p style="font-size:0.6em;line-height:1.42;">
+          Consultez l'onglet <em>Analyse</em> — l'outil vous recommande automatiquement les modèles les mieux adaptés à votre série selon sa tendance et sa saisonnalité.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module III — Machine learning &amp; deep learning</div>
+</section>
+
+<!-- SLIDE 8 · Guide choix modèle -->
+<section>
+  <h2>Quel Modèle Choisir ? — Guide Rapide</h2>
+  <div class="cols cols-2" style="margin-top:0.3em;">
+    <div class="fragment fade-right" data-fragment-index="0">
+      <div class="card">
+        <h3>Selon la Structure de la Série</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">
+            <strong>Tendance + Saisonnalité</strong><br>
+            <span style="font-size:0.85em;">→ <span class="tag tag-stat">SARIMA</span> <span class="tag tag-ml">Prophet</span> <span class="tag tag-dl">LSTM</span></span>
+          </li>
+          <li class="fragment fade-up" data-fragment-index="2" style="margin-top:0.3em;">
+            <strong>Tendance seule</strong><br>
+            <span style="font-size:0.85em;">→ <span class="tag tag-stat">ARIMA</span> <span class="tag tag-ml">XGBoost</span> <span class="tag tag-ml">LightGBM</span></span>
+          </li>
+          <li class="fragment fade-up" data-fragment-index="3" style="margin-top:0.3em;">
+            <strong>Saisonnalité seule</strong><br>
+            <span style="font-size:0.85em;">→ <span class="tag tag-stat">SARIMA</span> <span class="tag tag-stat">Exp. Smoothing</span> <span class="tag tag-ml">Prophet</span></span>
+          </li>
+          <li class="fragment fade-up" data-fragment-index="4" style="margin-top:0.3em;">
+            <strong>Série stationnaire</strong><br>
+            <span style="font-size:0.85em;">→ <span class="tag tag-stat">AR(p)</span> <span class="tag tag-multi">VAR</span> <span class="tag tag-stat">GARCH</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="5">
+      <div class="card-teal">
+        <h3>Selon le Nombre de Variables</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="6" style="font-size:0.65em;">
+            <strong>1 variable</strong> → ARIMA, SARIMA, Prophet, LSTM, Random Forest
+          </li>
+          <li class="fragment fade-up" data-fragment-index="7" style="font-size:0.65em;">
+            <strong>2+ variables</strong> → VAR, SVAR, BVAR, ARDL, MIDAS
+          </li>
+          <li class="fragment fade-up" data-fragment-index="8" style="font-size:0.65em;">
+            <strong>Volatilité financière</strong> → GARCH
+          </li>
+        </ul>
+      </div>
+      <div class="highlight-box mt-xs fragment fade-up" data-fragment-index="9" style="font-size:0.67em;text-align:left;padding:0.5em 0.7em;">
+        💡 <strong>Bonne pratique :</strong> Lancez plusieurs modèles et comparez leurs métriques MAPE, RMSE, MAE pour choisir le meilleur.
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module III — Guide de choix</div>
+</section>
+
+<!-- ════════ SECTION D ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Module IV</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Évaluation &amp; Comparaison</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Mesurer et comparer la précision des modèles avec des métriques scientifiques</p>
+</section>
+
+<!-- SLIDE 9 · Métriques -->
+<section>
+  <h2>Comment l'Outil Évalue la Précision des Modèles ?</h2>
+  <div class="metric-row fragment fade-up" data-fragment-index="0" style="margin:0.4em 0;">
+    <div style="font-size:0.7em;" class="metric-box fragment zoom-in" data-fragment-index="1">
+      <span class="val">MAPE</span>
+      <span class="lbl">Mean Absolute Percentage Error</span>
+      <div class="desc">Erreur moyenne en <strong>pourcentage</strong> — facile à interpréter</div>
+    </div>
+    <div style="font-size:0.7em;" class="metric-box fragment zoom-in" data-fragment-index="2">
+      <span class="val">RMSE</span>
+      <span class="lbl">Root Mean Squared Error</span>
+      <div class="desc">Pénalise fortement les <strong>grandes erreurs</strong></div>
+    </div>
+    <div style="font-size:0.7em;" class="metric-box fragment zoom-in" data-fragment-index="3">
+      <span class="val">MAE</span>
+      <span class="lbl">Mean Absolute Error</span>
+      <div class="desc">Erreur absolue moyenne — <strong>robuste aux outliers</strong></div>
+    </div>
+  </div>
+  <div class="cols cols-2 mt-xs">
+    <div style="font-size:0.7em;" class="card fragment fade-right" data-fragment-index="4">
+      <h3>Interprétation du MAPE</h3>
+      <ul>
+        <li class="fragment fade-up" data-fragment-index="5">
+          <span class="q-badge q-green">🟢 Excellent</span> &nbsp; MAPE &lt; 10% — prévision très fiable
+        </li>
+        <li class="fragment fade-up" data-fragment-index="6">
+          <span class="q-badge q-orange">🟠 Bon</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAPE entre 10% et 20%
+        </li>
+        <li class="fragment fade-up" data-fragment-index="7">
+          <span class="q-badge q-red">🔴 Mauvais</span> &nbsp; MAPE &gt; 20% — modèle peu adapté
+        </li>
+      </ul>
+    </div>
+    <div class="card-forest fragment fade-right" data-fragment-index="8">
+      <h3>Comparaison Multi-modèles</h3>
+      <p style="font-size:0.45em;line-height:1.42;">
+        Après chaque prévision lancée, l'outil ajoute le modèle à un <strong>tableau de comparaison</strong>. Vous pouvez comparer visuellement les trajectoires de prévision de plusieurs modèles sur le même graphique.
+      </p>
+      <p style="font-size:0.63em;color:var(--amber);margin-top:0.3em;font-style:italic;">
+        → Téléchargement du tableau de comparaison en CSV disponible.
+      </p>
+    </div>
+  </div>
+  <div class="slide-label">Module IV — Évaluation &amp; comparaison</div>
+</section>
+
+<!-- ════════ SECTION E ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Module V</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Export des Résultats</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Télécharger les prévisions en Excel pour vos travaux</p>
+</section>
+
+<!-- SLIDE 10 · Export -->
+<section>
+  <h2>Exporter les Prévisions — Options Disponibles</h2>
+  <div class="cols cols-2">
+    <div>
+      <div style="font-size:0.9em;" class="card fragment fade-right" data-fragment-index="0">
+        <h3>Export 1 — Toutes les Variables</h3>
+        <ol class="steps">
+          <li class="fragment fade-up" data-fragment-index="1">Choisir le <strong>modèle</strong> et la <strong>période de prévision</strong></li>
+          <li class="fragment fade-up" data-fragment-index="2">Sélectionner le <strong>format de sortie</strong> :<br>
+            <span style="font-size:0.85em;">→ Dates en lignes / Variables en colonnes</span><br>
+            <span style="font-size:0.85em;">→ Variables en lignes / Dates en colonnes</span>
+          </li>
+          <li class="fragment fade-up" data-fragment-index="3">Cliquer sur <em>"Générer Excel avec toutes les prévisions"</em></li>
+          <li class="fragment fade-up" data-fragment-index="4">Télécharger le fichier <code>.xlsx</code> généré</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.9em;" class="card-teal fragment fade-right" data-fragment-index="5">
+        <h3>Export 2 — Variables Sélectionnées</h3>
+        <ol class="steps" style="--bg:var(--amber);">
+          <li class="fragment fade-up" data-fragment-index="6">Choisir les variables à inclure dans l'export</li>
+          <li class="fragment fade-up" data-fragment-index="7">Choisir l'orientation du tableau Excel</li>
+          <li class="fragment fade-up" data-fragment-index="8">Cliquer sur <em>"Exporter les prévisions sélectionnées"</em></li>
+        </ol>
+      </div>
+      <div style="font-size:0.9em;" class="card fragment fade-up mt-xs" data-fragment-index="9">
+        <h3>Export 3 — Comparaison des Modèles</h3>
+        <p style="font-size:0.67em;line-height:1.4;">
+          Tableau CSV avec MAPE, RMSE, MAE et note de qualité pour tous les modèles testés sur une variable.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Module V — Export des résultats</div>
+</section>
+
+<!-- SLIDE 11 · Récapitulatif -->
+<section>
+  <h2>Récapitulatif — Ce que l'Outil Permet</h2>
+  <div class="cols cols-3" style="margin-top:0.4em;">
+    <div class="fragment zoom-in" data-fragment-index="0">
+      <div class="card-forest" style="text-align:center;padding:0.6em;">
+        <div style="font-size:1.6em;margin-bottom:0.2em;">📁</div>
+        <h3 style="color:var(--amber)!important;font-size:0.7em!important;">Import intelligent</h3>
+        <p style="font-size:0.62em;margin:0;line-height:1.38;">
+          Excel / CSV auto-détecté, nettoyage automatique des dates et valeurs
+        </p>
+      </div>
+    </div>
+    <div class="fragment zoom-in" data-fragment-index="1">
+      <div class="card-teal" style="text-align:center;padding:0.6em;">
+        <div style="font-size:1.6em;margin-bottom:0.2em;">📊</div>
+        <h3 style="font-size:0.7em!important;">Analyse &amp; Visualisation</h3>
+        <p style="font-size:0.62em;margin:0;line-height:1.38;">
+          6 types de graphiques, décomposition en tendance + saisonnalité + résidu
+        </p>
+      </div>
+    </div>
+    <div class="fragment zoom-in" data-fragment-index="2">
+      <div class="card-forest" style="text-align:center;padding:0.6em;">
+        <div style="font-size:1.6em;margin-bottom:0.2em;">🔮</div>
+        <h3 style="color:var(--amber)!important;font-size:0.7em!important;">18 Modèles</h3>
+        <p style="font-size:0.62em;margin:0;line-height:1.38;">
+          Du NAIVE au LSTM, en passant par SARIMA, Prophet, XGBoost, VAR…
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="cols cols-3 mt-xs">
+    <div class="fragment zoom-in" data-fragment-index="3">
+      <div class="card" style="text-align:center;padding:0.5em;">
+        <div style="font-size:1.4em;">📐</div>
+        <h3 style="font-size:0.68em!important;">Évaluation scientifique</h3>
+        <p style="font-size:0.6em;margin:0;line-height:1.3;">MAPE, RMSE, MAE — qualité automatique : Excellent / Bon / Mauvais</p>
+      </div>
+    </div>
+    <div class="fragment zoom-in" data-fragment-index="4">
+      <div class="card" style="text-align:center;padding:0.5em;">
+        <div style="font-size:1.4em;">⚖️</div>
+        <h3 style="font-size:0.68em!important;">Comparaison multi-modèles</h3>
+        <p style="font-size:0.6em;margin:0;line-height:1.3;">Tableau de bord de comparaison des performances par variable</p>
+      </div>
+    </div>
+    <div class="fragment zoom-in" data-fragment-index="5">
+      <div class="card" style="text-align:center;padding:0.5em;">
+        <div style="font-size:1.4em;">📥</div>
+        <h3 style="font-size:0.68em!important;">Export Excel &amp; CSV</h3>
+        <p style="font-size:0.6em;margin:0;line-height:1.3;">Prévisions historiques + futures pour toutes les variables</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">Récapitulatif</div>
+</section>
+
+<!-- SLIDE 12 · Accès -->
+<section>
+  <h2>Accéder à l'Outil</h2>
+  <div class="highlight-box fragment fade-up" data-fragment-index="0" style="font-size:0.9em;padding:0.7em 1.2em;margin:0.4em 0 0.6em 0;letter-spacing:0.04em;">
+    🌐 &nbsp;<strong>https://rama-forecast.streamlit.app/</strong>
+  </div>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Accès &amp; Utilisation</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>Gratuit</strong> — aucune installation requise</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>Navigateur web</strong> — Chrome, Firefox, Edge</li>
+          <li class="fragment fade-up" data-fragment-index="4">Fonctionne sur <strong>PC, Mac, tablette</strong></li>
+          <li class="fragment fade-up" data-fragment-index="5">Aucun compte requis</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card-forest">
+        <h3>Contact &amp; Auteur</h3>
+        <p style="font-size:0.68em;line-height:1.45;">
+          <strong style="color:var(--amber)">Ramanambonona Ambinintsoa, Ph.D</strong><br><br>
+          ✉ ambinintsoa.uat.ead2@gmail.com<br>
+          🔗 linkedin.com/in/ambinintsoa-ramanambonona<br>
+          💻 github.com/ramanambonona
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card-warn mt-xs fragment fade-up" data-fragment-index="7" style="font-size:0.65em;">
+    <strong>⚡ Conseil :</strong> Pour les modèles LSTM, XGBoost et LightGBM, prévoyez quelques secondes de calcul supplémentaires selon la taille de vos données.
+  </div>
+  <div class="slide-label">Accès à l'outil</div>
+</section>
+
+<!-- ════════ SLIDE FINAL ════════ -->
+<section class="slide-final">
+  <h2 class="fragment fade-up" data-fragment-index="0">MISAOTRA</h2>
+  <div class="final-rule fragment fade-up" data-fragment-index="1"></div>
+  <p class="fragment fade-up" data-fragment-index="2">Merci de votre attention</p>
+  <div class="url-final fragment fade-up" data-fragment-index="3">
+    🌐 rama-forecast.streamlit.app
+  </div>
+  <p class="fragment fade-up" data-fragment-index="4" style="color:rgba(255,255,255,.4)!important;font-size:0.58em;margin-top:1em;">
+    Ramanambonona Ambinintsoa, Ph.D<br>
+    <span style="font-size:.88em;">Formation Doctorale — Outil de Prévision des Séries Temporelles</span>
+  </p>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    width: 1100,
+    height: 680,
+    margin: 0.04,
+    minScale: 0.15,
+    maxScale: 2.0,
+    fragments: true,
+    fragmentInURL: false,
+  });
+</script>
+</body>
+</html>

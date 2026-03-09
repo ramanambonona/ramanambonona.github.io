@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Gestion des références sur Mendeley</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css" id="theme">
+  <script defer src="https://unpkg.com/feather-icons"></script>
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       DESIGN TOKENS  (couleurs / polices / ombres inchangées)
+       ══════════════════════════════════════════════════════ */
+    :root {
+      --grenat:#7a0026; --g6:#8c173a; --g3:#c27a96; --g1:#f7eef2;
+      --ink:#111; --mut:#5a6370; --bg:#fff; --card:#faf9fb;
+      --shd:0 4px 20px rgba(0,0,0,.10); --r:12px;
+    }
+    body,.reveal,.reveal section {
+      font-family:'Palatino Linotype',Palatino,serif;
+      color:var(--ink); background:#fff;
+    }
+    /* sections sans padding, sans débordement */
+    .reveal .slides section {
+      padding:0 !important; text-align:left; overflow:hidden;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       MODE CANVAS  — slides avec figures (positionnement absolu)
+       ══════════════════════════════════════════════════════ */
+    .ppt-wrap {
+      position:relative; width:1024px; height:768px; margin:0 auto;
+    }
+    .ppt-canvas {
+      position:relative; width:1024px; height:768px; overflow:hidden;
+    }
+    .ppt-text  { position:absolute; line-height:1.25; box-sizing:border-box; }
+    .ppt-figure {
+      position:absolute; box-sizing:border-box;
+      border-radius:10px; overflow:hidden;
+      background:#fff; border:1px solid #e8dde4; box-shadow:var(--shd);
+    }
+    .ppt-figure img { width:100%; height:100%; object-fit:contain; display:block; }
+    .fig-tag {
+      position:absolute; right:8px; bottom:8px;
+      padding:.15em .5em; border-radius:999px;
+      background:var(--g1); color:var(--grenat);
+      border:1px solid var(--g3); font-size:12px; z-index:2;
+    }
+
+    /* Barre d'en-tête grenat (remplace le flottant titre-section) */
+    .c-hdr {
+      position:absolute; left:0; top:0; right:0; height:52px;
+      background:var(--grenat);
+      display:flex; align-items:center; padding:0 48px; z-index:5;
+    }
+    .c-hdr-txt {
+      color:#fff; font-size:14px; font-weight:600;
+      letter-spacing:2.5px; text-transform:uppercase;
+    }
+    .c-accent {
+      position:absolute; left:0; top:52px; right:0; height:3px;
+      background:linear-gradient(90deg,var(--g3),transparent); z-index:5;
+    }
+    /* Sous-titre sous la barre */
+    .c-sub {
+      position:absolute; left:48px; top:64px; right:48px;
+      font-size:19px; font-weight:700; line-height:1.35; color:var(--ink);
+    }
+    /* Note NB positionnée absolument */
+    .c-note {
+      position:absolute; left:48px; right:48px;
+      background:#fff8f0; border:1.5px solid #e8701a;
+      border-left:4px solid #e8701a; border-radius:0 8px 8px 0;
+      padding:8px 14px; font-size:14px; color:#8a3200; line-height:1.4;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       MODE FLOW  — slides texte (flexbox, sans débordement)
+       ══════════════════════════════════════════════════════ */
+    .slide {
+      display:flex; flex-direction:column;
+      width:1024px; height:768px;
+      margin:0 auto; box-sizing:border-box; overflow:hidden;
+    }
+    .s-hdr { background:var(--grenat); padding:14px 48px; flex-shrink:0; }
+    .s-hdr-txt {
+      color:#fff; font-size:28px; font-weight:600;
+      letter-spacing:2.5px; text-transform:uppercase;
+    }
+    .s-accent {
+      height:3px; flex-shrink:0;
+      background:linear-gradient(90deg,var(--g3),transparent);
+    }
+    .s-body {
+      flex:1; padding:22px 48px 18px;
+      display:flex; flex-direction:column;
+      overflow:hidden; gap:10px;
+    }
+    .s-title {
+      font-size:1.0em; font-weight:700; color:var(--grenat);
+      line-height:1.15; flex-shrink:0; margin:0;
+    }
+    .s-rule {
+      height:2px; flex-shrink:0;
+      background:linear-gradient(90deg,var(--g3),transparent);
+      margin:2px 0 4px;
+    }
+    .s-content {
+      flex:1; overflow:hidden;
+      display:flex; flex-direction:column; gap:6px;
+    }
+
+    /* Listes plan */
+    .plan-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px; }
+    .plan-item {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 16px; border-radius:8px;
+      font-size:.7em; line-height:1.3;
+      background:var(--card); border:1px solid #ede5ea;
+      border-left:4px solid var(--g3);
+    }
+    .plan-n {
+      min-width:24px; height:24px; border-radius:50%;
+      background:var(--grenat); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.72em; font-weight:700; flex-shrink:0;
+    }
+
+    /* Listes étapes */
+    .step-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+    .step-item {
+      display:flex; align-items:flex-start; gap:12px;
+      padding:9px 14px; border-radius:8px;
+      font-size:.87em; line-height:1.38;
+      background:var(--card); border:1px solid #ede5ea;
+    }
+    .step-n {
+      min-width:26px; height:26px; width:26px;
+      border-radius:50%; background:var(--grenat); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.75em; font-weight:700; flex-shrink:0; margin-top:1px;
+    }
+    .step-dia {
+      min-width:9px; height:9px; width:9px;
+      background:var(--grenat); transform:rotate(45deg);
+      margin-top:5px; flex-shrink:0;
+    }
+
+    /* Boîte NB */
+    .nb-box {
+      background:#fff8f0; border:1.5px solid #e8701a;
+      border-left:4px solid #e8701a; border-radius:0 8px 8px 0;
+      padding:8px 14px; font-size:.78em; color:#8a3200;
+      line-height:1.4; flex-shrink:0;
+    }
+
+    /* Deux colonnes */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1; }
+    .s-card {
+      background:var(--card); border:1px solid #e8dde4;
+      border-radius:var(--r); padding:12px 14px;
+      box-shadow:0 2px 8px rgba(122,0,38,.05);
+    }
+    .s-card-t {
+      font-weight:700; color:var(--grenat); font-size:.87em;
+      margin-bottom:8px; padding-bottom:5px;
+      border-bottom:1.5px solid var(--g3);
+    }
+
+    /* Tableau de comparaison */
+    table.cmp {
+      width:100%; border-collapse:collapse; font-size:.6em;
+      border-radius:var(--r); overflow:hidden; box-shadow:var(--shd);
+    }
+    table.cmp thead th {
+      background:var(--grenat); color:#fff; text-align:center;
+      padding:9px 10px; font-weight:700;
+    }
+    table.cmp thead th:first-child { text-align:left; }
+    table.cmp tbody td {
+      padding:7px 10px; border-bottom:1px solid #f0e6ea;
+      text-align:center; vertical-align:middle;
+    }
+    table.cmp tbody td:first-child { text-align:left; font-weight:500; }
+    table.cmp tbody tr:last-child td { border-bottom:none; }
+    table.cmp tbody tr:nth-child(even) td { background:#fdf8fa; }
+    .ck { display:inline-flex;align-items:center;justify-content:center;
+          width:26px;height:26px;border-radius:6px;background:#4caf50;
+          color:#fff;font-size:14px;font-weight:700; }
+    .cx { display:inline-flex;align-items:center;justify-content:center;
+          width:26px;height:26px;border-radius:6px;background:#e53935;
+          color:#fff;font-size:14px;font-weight:700; }
+
+    a.sl { color:var(--grenat); word-break:break-all; }
+
+    /* Footer */
+    .footer { position:fixed; left:0; right:0; bottom:12px;
+               display:flex; justify-content:center; gap:.6em; z-index:20; }
+    .icn { width:34px;height:34px;border-radius:999px;background:var(--grenat);
+           display:flex;align-items:center;justify-content:center;box-shadow:var(--shd); }
+    .icn svg { color:#fff;width:18px;height:18px; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ════════════════════════════════════════════════════════
+     S1 — TITRE
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <!-- barre latérale gauche -->
+    <div style="position:absolute;left:0;top:0;width:6px;height:768px;background:var(--grenat);"></div>
+    <!-- titre principal -->
+    <div class="ppt-text fragment fade-down" data-fragment-index="0"
+         style="left:37.5px;top:133px;width:951.6px;font-size:58.7px;text-align:center;font-weight:700;color:var(--grenat);">
+      Bibliographie<br>sur MENDELEY
+    </div>
+    <!-- sous-titre -->
+    <div class="fragment fade-up" data-fragment-index="1"
+         style="position:absolute;left:0;right:0;top:318px;text-align:center;font-size:20px;color:var(--mut);letter-spacing:1px;">
+      Logiciel de gestion bibliographique
+    </div>
+    <!-- logos -->
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="2" style="left:105.8px;top:390px;width:180px;height:180px;"><img src="figures/fig1.png" alt="Desktop"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="2" style="left:460.1px;top:458.9px;width:180px;height:180px;"><img src="figures/fig2.png" alt="Web"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="2" style="left:819.3px;top:400px;width:180px;height:180px;"><img src="figures/fig3.png" alt="Mobile"/></div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S2 — PLAN
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Plan</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Plan de la présentation</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="plan-list">
+          <li class="plan-item fragment fade-left" data-fragment-index="1"><span class="plan-n">1</span>Découvrir Mendeley</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="2"><span class="plan-n">2</span>Comparaison des logiciels</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="3"><span class="plan-n">3</span>Mendeley sur Bureau (Desktop)</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="4"><span class="plan-n">4</span>Installation et ouverture de compte</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="5"><span class="plan-n">5</span>Compilation de la base des données bibliographiques</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="6"><span class="plan-n">6</span>Style de citation</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="7"><span class="plan-n">7</span>Insertion de citation dans Ms Word</li>
+          <li class="plan-item fragment fade-left" data-fragment-index="8"><span class="plan-n">8</span>Pratique</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S3 — DÉCOUVRIR MENDELEY
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Découvrir Mendeley</span></div>
+    <div class="c-accent"></div>
+    <!-- badge "Logiciel gratuit" -->
+    <div class="fragment fade-right" data-fragment-index="0"
+         style="position:absolute;left:504px;top:62px;
+                background:#e8f5e9;border:1.5px solid #4caf50;border-radius:6px;
+                padding:4px 14px;font-size:19px;font-weight:700;color:#2e7d32;">
+      Logiciel gratuit
+    </div>
+    <!-- grande accroche gauche -->
+    <div class="ppt-text fragment fade-right" data-fragment-index="1"
+         style="left:37.5px;top:75px;width:440px;font-size:28px;font-weight:700;
+                color:var(--grenat);line-height:1.25;">
+      Organiser les références<br>Établir la bibliographie<br>de manière uniforme
+    </div>
+    <!-- liste fonctions droite -->
+    <div class="fragment fade-left" data-fragment-index="1"
+         style="position:absolute;left:490px;top:105px;right:20px;
+                font-size:18px;line-height:1.7;">
+      ▸ Stocker les documents (PDF)<br>
+      ▸ Insérer les citations<br>
+      ▸ Générer la bibliographie<br>
+      ▸ Changer facilement le style de citation
+    </div>
+    <!-- captures d'écran -->
+    <div class="ppt-figure fragment fade-up" data-fragment-index="2" style="left:37.5px;top:352px;width:312px;height:200px;"><img src="figures/fig6.png" alt="Desktop"/></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="2" style="left:360.9px;top:352px;width:312px;height:200px;"><img src="figures/fig5.png" alt="Web"/></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="2" style="left:683px;top:352px;width:305px;height:185px;"><img src="figures/fig4.png" alt="Mobile"/></div>
+    <div class="fragment fade-up" data-fragment-index="2" style="position:absolute;left:130px;top:560px;font-size:16px;font-weight:600;color:var(--mut);">Desktop</div>
+    <div class="fragment fade-up" data-fragment-index="2" style="position:absolute;left:454px;top:560px;font-size:16px;font-weight:600;color:var(--mut);">Web</div>
+    <div class="fragment fade-up" data-fragment-index="2" style="position:absolute;left:790px;top:560px;font-size:16px;font-weight:600;color:var(--mut);">Mobile</div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S4 — DIFFÉRENTS LOGICIELS
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Différents logiciels de gestion bibliographique</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="0" style="left:69.2px;top:130px;width:212.3px;height:270.9px;"><img src="figures/fig7.png" alt="fig7"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="1" style="left:92.6px;top:470px;width:377.6px;height:119.5px;"><img src="figures/fig8.png" alt="fig8"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="2" style="left:347.4px;top:280px;width:364.8px;height:155.7px;"><img src="figures/fig9.png" alt="fig9"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="3" style="left:700.8px;top:440px;width:285.8px;height:177.9px;"><img src="figures/fig10.png" alt="fig10"/></div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="4" style="left:613.3px;top:110px;width:359.5px;height:156.8px;"><img src="figures/fig11.png" alt="fig11"/></div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S5 — COMPARAISON
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Comparaison</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Comparaison des logiciels bibliographiques</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <table class="cmp fragment fade-up" data-fragment-index="1">
+          <thead><tr>
+            <th style="text-align:left;width:38%;">Critère</th>
+            <th>EndNote</th><th>Mendeley</th><th>Zotero</th>
+          </tr></thead>
+          <tbody>
+            <tr class="fragment fade-up" data-fragment-index="2"><td>Mode d'acquisition</td><td>Payant</td><td>Gratuit</td><td>Gratuit</td></tr>
+            <tr class="fragment fade-up" data-fragment-index="3"><td>Windows / Mac</td><td><span class="ck">✔</span></td><td><span class="ck">✔</span></td><td><span class="ck">✔</span></td></tr>
+            <tr class="fragment fade-up" data-fragment-index="4"><td>Espace stockage disponible</td><td>5 Go</td><td>2 Go</td><td>300 Mo</td></tr>
+            <tr class="fragment fade-up" data-fragment-index="5"><td>Détection métadonnées PDF</td><td>En présence DOI</td><td>Efficace</td><td>Limité</td></tr>
+            <tr class="fragment fade-up" data-fragment-index="6"><td>Vérification orthographe</td><td><span class="ck">✔</span></td><td><span class="cx">✘</span></td><td><span class="cx">✘</span></td></tr>
+            <tr class="fragment fade-up" data-fragment-index="7"><td>Joindre images &amp; citer dans Word</td><td><span class="ck">✔</span></td><td><span class="cx">✘</span></td><td><span class="cx">✘</span></td></tr>
+            <tr class="fragment fade-up" data-fragment-index="8"><td>Ajout mots-clés &amp; catégoriser</td><td><span class="ck">✔</span></td><td><span class="cx">✘</span></td><td><span class="cx">✘</span></td></tr>
+            <tr class="fragment fade-up" data-fragment-index="9"><td>Rechercher &amp; remplacer dans les champs</td><td><span class="ck">✔</span></td><td><span class="cx">✘</span></td><td><span class="cx">✘</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S6 — MENDELEY SUR BUREAU
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="ppt-text fragment fade-down" data-fragment-index="0"
+         style="left:53.1px;top:10px;font-size:42px;font-weight:700;color:var(--grenat);">
+      Mendeley sur Bureau
+    </div>
+    <div class="ppt-text fragment fade-down" data-fragment-index="1" style="left:38.5px;top:130px;width:227px;font-size:15px;text-align:center;color:var(--mut);">Panneau gauche<br>Options de filtrage</div>
+    <div class="ppt-text fragment fade-down" data-fragment-index="1" style="left:392px;top:130px;width:206px;font-size:15px;text-align:center;color:var(--mut);">Panneau central<br>Références</div>
+    <div class="ppt-text fragment fade-down" data-fragment-index="1" style="left:726px;top:130px;width:224px;font-size:15px;text-align:center;color:var(--mut);">Panneau droit<br>Modification infos</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="2" style="left:27.8px;top:165px;width:968.5px;height:568px;">
+      <img src="figures/fig27.png" alt="Mendeley Bureau"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S7 — INSTALLATION ET OUVERTURE DE COMPTE
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Installation et ouverture de compte</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Étapes d'installation et de configuration</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-n">1</span>
+            <span style="font-size:0.8em;">Télécharger Mendeley Desktop :<br><a class="sl" style="font-size:0.7em;" href="https://www.mendeley.com/download-desktop-new/" target="_blank">https://www.mendeley.com/download-desktop-new/</a></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-n">2</span>
+            <span style="font-size:0.8em;">Créer et ouvrir un <strong>compte Mendeley</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-n">3</span>
+            <span style="font-size:0.8em;">Relier Mendeley à Ms Word : dans Mendeley, sélectionner <strong>Tools → Install Ms Word Plugin</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="4">
+            <span class="step-n">4</span>
+            <span style="font-size:0.8em;">Une fois l'installation confirmée, ouvrir <strong>Ms Word</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="5">
+            <span class="step-n">5</span>
+            <span style="font-size:0.8em;">Les outils de citation Mendeley se trouvent sous l'onglet <strong>Références</strong></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S8 — COMPILATION DE LA BASE
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Compilation de la base des données bibliographiques</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Constituer la bibliothèque Mendeley</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">Créer un <strong>dossier / bibliothèque</strong> dans Mendeley</span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-n">1</span>
+            <span style="font-size:0.8em;"><strong>Cas 1 — Articles et ouvrages en ligne :</strong><br>
+            Télécharger les PDF via les plateformes (CAIRN, JSTOR, ELSEVIER…) puis importer le fichier <code>.ris</code> dans le dossier concerné</span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-n">2</span>
+            <span style="font-size:0.8em;"><strong>Cas 2 — Documents physiques</strong> (livre, revue, rapport…) :<br>
+            (a) Saisie manuelle des références &nbsp;|&nbsp;
+            (b) Importation via les plateformes numériques</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S9 — STYLE DE CITATION
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Style de citation</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Choisir le bon style de citation</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <p class="fragment fade-up" data-fragment-index="1" style="font-size:.88em;line-height:1.4;margin:0 0 10px;">
+          Le style dépend de la <strong>revue / journal</strong> (articles à soumettre) ou de la norme institutionnelle.
+        </p>
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-dia"></span>
+            <span><strong>Vancouver :</strong> numérotation entre parenthèses — ex. <em>(1)</em></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-dia"></span>
+            <span><strong>IEEE :</strong> numérotation entre crochets — ex. <em>[1]</em></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="4">
+            <span class="step-dia"></span>
+            <span><strong>APA :</strong> auteur-année — ex. <em>(Auteur, 2026)</em></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S10 — INSERTION DE CITATION DANS MS WORD
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Insertion de citation dans Ms Word</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Workflow dans Ms Word avec Mendeley</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <div class="two-col" style="gap:18px;">
+          <div class="s-card fragment fade-up" data-fragment-index="1">
+            <div class="s-card-t">① Insérer une citation</div>
+            <ul class="step-list" style="gap:5px;">
+              <li class="step-item" style="font-size:.5em;"><span class="step-dia"></span><span>Placer le curseur à l'endroit voulu</span></li>
+              <li class="step-item" style="font-size:.5em;"><span class="step-dia"></span><span><strong>Références → Insert Citations</strong></span></li>
+            </ul>
+          </div>
+          <div class="s-card fragment fade-up" data-fragment-index="2">
+            <div class="s-card-t">② Choisir un style</div>
+            <ul class="step-list" style="gap:5px;">
+              <li class="step-item" style="font-size:.4em;"><span class="step-dia"></span><span><strong>Références → Mendeley → Styles</strong></span></li>
+            </ul>
+          </div>
+          <div class="s-card fragment fade-up" data-fragment-index="3">
+            <div class="s-card-t">③ Insérer la bibliographie</div>
+            <ul class="step-list" style="gap:5px;">
+              <li class="step-item" style="font-size:.5em;"><span class="step-dia"></span><span>Placer le curseur à la fin du document</span></li>
+              <li class="step-item" style="font-size:.5em;"><span class="step-dia"></span><span><strong>Références → Insert Bibliography</strong></span></li>
+            </ul>
+          </div>
+          <div class="s-card fragment fade-up" data-fragment-index="4">
+            <div class="s-card-t">④ Mettre à jour</div>
+            <ul class="step-list" style="gap:5px;">
+              <li class="step-item" style="font-size:.5em;"><span class="step-dia"></span><span><strong>Références → Refresh</strong></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S11 — PRATIQUES : INSTALLATION — ÉTAPE 1 (texte)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Pratiques — Installation du logiciel</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Téléchargement de Mendeley Desktop</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-n">1</span>
+            <span style="font-size:0.8em;">Taper <strong>"Mendeley"</strong> dans Google ou accéder directement :<br>
+            <a class="sl" style="font-size:0.7em;" href="https://www.mendeley.com/download-desktop-new/" target="_blank">https://www.mendeley.com/download-desktop-new/</a></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S12 — PRATIQUES : INSTALLATION — fig28
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Pratiques — Installation du logiciel</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="0" style="left:78.1px;top:64px;width:894.7px;height:690px;">
+      <img src="figures/fig28.png" alt="fig28"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S13 — PRATIQUES : INSTALLATION — fig29
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Pratiques — Installation du logiciel</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">2. Cliquer sur <strong>Download Mendeley Desktop for Windows</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:67.7px;top:108px;width:879.9px;height:630px;">
+      <img src="figures/fig29.png" alt="fig29"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S14 — PRATIQUES : INSTALLATION — fig30
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Pratiques — Installation du logiciel</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">3. Télécharger en cliquant sur <strong>Enregistrer le fichier</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:112px;width:921.6px;height:534px;">
+      <img src="figures/fig30.png" alt="fig30"/>
+    </div>
+    <div class="ppt-text fragment fade-up" data-fragment-index="2"
+         style="left:51.2px;top:660px;font-size:19px;font-weight:700;">
+      4. Après téléchargement, lancer l'installation
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S15 — PRATIQUES : CRÉATION COMPTE — fig31
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Pratiques — Création de compte</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">1. Aller dans <strong>Create Account</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:75.2px;top:110px;width:816.9px;height:530px;">
+      <img src="figures/fig31.png" alt="fig31"/>
+    </div>
+    <div class="ppt-text fragment fade-up" data-fragment-index="2"
+         style="left:51.2px;top:658px;font-size:19px;font-weight:700;">
+      2. Suivre les indications de création de compte
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S16 — PRATIQUES : CRÉATION COMPTE — fig32
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Pratiques — Création de compte</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="0" style="left:51.2px;top:62px;width:921.6px;height:536px;">
+      <img src="figures/fig32.png" alt="fig32"/>
+    </div>
+    <div class="ppt-text fragment fade-up" data-fragment-index="1"
+         style="left:51.2px;top:610px;font-size:19px;font-weight:700;line-height:1.4;">
+      3. Une fois le compte créé et le logiciel installé<br>
+      4. Procéder à l'<strong>ouverture du logiciel</strong>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S17 — OUVERTURE ET UTILISATION — fig33
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Ouverture et utilisation de Mendeley</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">1. Ouvrir le logiciel en cliquant sur l'icône Mendeley dans le Bureau</div>
+    <div class="ppt-figure fragment zoom-in" data-fragment-index="1" style="left:454.4px;top:240px;width:115.2px;height:116.3px;">
+      <img src="figures/fig33.png" alt="Icône Mendeley"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S18 — OUVERTURE ET UTILISATION — fig34
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Ouverture et utilisation de Mendeley</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">2. Saisir l'e-mail et le mot de passe, puis cliquer sur <strong>Sign in</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:256.9px;top:115px;width:576.2px;height:620px;">
+      <img src="figures/fig34.png" alt="fig34"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S19 — OUVERTURE ET UTILISATION — fig35
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Ouverture et utilisation de Mendeley</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">3. Relier Mendeley à Word — Aller dans <strong>Tools → Install MS Word Plugin</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:38.2px;top:115px;width:947.6px;height:628px;">
+      <img src="figures/fig35.png" alt="fig35"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S20 — OUVERTURE ET UTILISATION — fig36
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Ouverture et utilisation de Mendeley</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">4. Ouvrir Word et vérifier : onglet <strong>Références</strong> → un espace Mendeley doit être présent</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:118px;width:921.6px;height:622px;">
+      <img src="figures/fig36.png" alt="fig36"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S21 — CONFECTION DES DONNÉES — fig37 (saisie manuelle)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">1. Saisie manuelle — Aller dans <strong>File → Add Entry Manually</strong> puis remplir les champs</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:121.5px;top:115px;width:779.3px;height:628px;">
+      <img src="figures/fig37.png" alt="fig37"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S22 — CONFECTION DES DONNÉES — fig38 (ajouter PDF)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">1. Saisie manuelle — Si le document existe en PDF : cliquer sur <strong>Files</strong>, choisir le fichier, puis <strong>Save</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:373.8px;top:115px;width:328.5px;height:630px;">
+      <img src="figures/fig38.png" alt="fig38"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S23 — CONFECTION DES DONNÉES — fig39 (référence dans Mendeley)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">1. Saisie manuelle — La référence figure maintenant dans Mendeley</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:38.2px;top:110px;width:947.6px;height:628px;">
+      <img src="figures/fig39.png" alt="fig39"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S24 — CONFECTION DES DONNÉES — Ressources numériques
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Confection des données</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">2. Importation depuis les plateformes numériques</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div style="font-size:0.7em;" class="nb-box fragment fade-up" data-fragment-index="1">
+        <strong>NB :</strong> Pour l'importation des citations, après avoir cliqué sur <em>Citer</em> ou <em>Exporter</em>,
+        cliquer sur <strong>.RIS</strong> ou <strong>Refman</strong> ou <strong>Mendeley</strong> (selon la plateforme).
+      </div>
+      <div class="s-content fragment fade-up" data-fragment-index="2">
+        <p style="font-weight:700;font-size:.88em;margin:4px 0;color:var(--grenat);">Ressources numériques disponibles :</p>
+        <div class="two-col" style="gap:14px;flex:initial;">
+          <div class="s-card">
+            <div class="s-card-t">💳 Payantes</div>
+            <ul class="step-list" style="gap:4px;">
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>JSTOR</span></li>
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>CAIRN</span></li>
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>ScienceDirect</span></li>
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>Taylor &amp; Francis, Brill, etc.</span></li>
+            </ul>
+          </div>
+          <div class="s-card">
+            <div class="s-card-t">🆓 Gratuites</div>
+            <ul class="step-list" style="gap:4px;">
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>Persée</span></li>
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>DOAJ</span></li>
+              <li class="step-item" style="font-size:.6em;"><span class="step-dia"></span><span>Google Scholar</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S25 — CONFECTION — EXEMPLE 1 CAIRN — fig40
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="0" style="left:68.1px;top:64px;width:887.8px;height:690px;">
+      <img src="figures/fig40.png" alt="fig40"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S26 — CONFECTION — EXEMPLE 1 CAIRN — fig41
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Cliquer sur <strong>Citer</strong> ou <strong>Exporter</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:71.2px;top:110px;width:873px;height:630px;">
+      <img src="figures/fig41.png" alt="fig41"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S27 — CONFECTION — EXEMPLE 1 CAIRN — fig42
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Exporter la citation au format <strong>.RIS</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:199.9px;top:110px;width:529.1px;height:548px;">
+      <img src="figures/fig42.png" alt="fig42"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S28 — CONFECTION — EXEMPLE 1 CAIRN — fig43
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Trouver le fichier <code>.ris</code> dans les Téléchargements, puis le <strong>renommer</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:105.9px;top:110px;width:841.8px;height:278px;">
+      <img src="figures/fig43.png" alt="fig43"/>
+    </div>
+    <div class="ppt-text fragment fade-up" data-fragment-index="2"
+         style="left:51.2px;top:404px;font-size:18px;line-height:1.4;">
+      Dans cet exemple, renommer le fichier en : <strong>Deffains_Rouillon_2018.ris</strong>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S29 — CONFECTION — EXEMPLE 1 CAIRN — fig44
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Importer le fichier renommé <strong>depuis Mendeley</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:71.2px;top:110px;width:886.9px;height:628px;">
+      <img src="figures/fig44.png" alt="fig44"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S30 — CONFECTION — EXEMPLE 1 CAIRN — fig45
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">La citation est importée directement sur Mendeley</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:110px;width:921.6px;height:628px;">
+      <img src="figures/fig45.png" alt="fig45"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S31 — CONFECTION — EXEMPLE 1 CAIRN — fig46
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Pour ajouter le PDF associé : cliquer sur la référence → <strong>Files</strong> → choisir le PDF</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:67.7px;top:118px;width:873px;height:620px;">
+      <img src="figures/fig46.png" alt="fig46"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S32 — CONFECTION — EXEMPLE 1 CAIRN — fig47
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 1 : CAIRN</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Pour vérifier que le PDF est attaché, cliquer sur <strong>Recently Added</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:81.6px;top:118px;width:891.2px;height:622px;">
+      <img src="figures/fig47.png" alt="fig47"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S33 — CONFECTION — EXEMPLE 2 GOOGLE SCHOLAR — fig48
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 2 : Google Scholar</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Taper les mots-clés dans le moteur de recherche <strong>Google Scholar</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:118px;width:908.6px;height:608px;">
+      <img src="figures/fig48.png" alt="fig48"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S34 — CONFECTION — EXEMPLE 2 GOOGLE SCHOLAR — fig49
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 2 : Google Scholar</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Cliquer sur le <strong>bouton en forme de guillemets</strong> en bas de l'article</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:118px;width:908.6px;height:608px;">
+      <img src="figures/fig49.png" alt="fig49"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S35 — CONFECTION — EXEMPLE 2 GOOGLE SCHOLAR — fig50
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 2 : Google Scholar</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Puis cliquer sur <strong>Refman</strong></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:64.2px;top:118px;width:857.4px;height:620px;">
+      <img src="figures/fig50.png" alt="fig50"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S36 — CONFECTION — EXEMPLE 2 GOOGLE SCHOLAR (texte)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Confection des données — Exemple 2 : Google Scholar</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Importer dans Mendeley</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">Ensuite, importer depuis Mendeley <em>(même processus que précédemment)</em></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">La référence est maintenant importée dans Mendeley</span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">Pour ajouter le PDF (si disponible) : suivre le même processus décrit précédemment</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S37 — CONFECTION — EXEMPLE 2 GOOGLE SCHOLAR — fig51
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Confection des données — Exemple 2 : Google Scholar</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">La référence est maintenant importée</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:51.2px;top:110px;width:921.6px;height:634px;">
+      <img src="figures/fig51.png" alt="fig51"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S38 — CITATION DANS MS WORD (instructions texte)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Insérer une citation dans Word</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-n">1</span>
+            <span style="font-size:0.8em;">Dans le document Word, placer le <strong>curseur</strong> à l'endroit d'insertion de la référence</span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-n">2</span>
+            <span style="font-size:0.8em;">Aller dans l'onglet <strong>Références → Insert Citation</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-n">3</span>
+            <span style="font-size:0.8em;">Taper les mots-clés pour trouver la référence — ex. <strong>Deffains_Rouillon_2018</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="4">
+            <span class="step-n">4</span>
+            <span style="font-size:0.8em;">Cliquer sur <strong>OK</strong> — ou sur <strong>Go to Mendeley</strong> pour sélectionner directement</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S39 — CITATION DANS MS WORD — fig52
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="0" style="left:72px;top:64px;width:900.8px;height:688px;">
+      <img src="figures/fig52.png" alt="fig52"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S40 — CITATION DANS MS WORD — fig53 (Go to Mendeley)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">
+      Option <strong>Go to Mendeley</strong> : cliquer sur la référence, puis sur le bouton en forme de guillemets
+    </div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:34.7px;top:118px;width:938.1px;height:628px;">
+      <img src="figures/fig53.png" alt="fig53"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S41 — CITATION DANS MS WORD — fig54
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">La citation s'affiche dans Word</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:90.3px;top:110px;width:838.3px;height:630px;">
+      <img src="figures/fig54.png" alt="fig54"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S42 — CITATION DANS MS WORD — fig55 (choix style)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">
+      Choix du style de citation (auteur-date, note de bas de page…) : <strong>Références → Styles</strong>
+    </div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:67.7px;top:118px;width:905.1px;height:622px;">
+      <img src="figures/fig55.png" alt="fig55"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S43 — CITATION DANS MS WORD — fig56 (More styles)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">
+      Style absent de la liste ? Cliquer sur <strong>More styles → Get more styles</strong> pour installer
+    </div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:67.7px;top:118px;width:905.1px;height:622px;">
+      <img src="figures/fig56.png" alt="fig56"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S44 — CITATION DANS MS WORD — fig57
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">Choisir et installer le style de citation souhaité</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:144.1px;top:118px;width:735.9px;height:622px;">
+      <img src="figures/fig57.png" alt="fig57"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S45 — CITATION DANS MS WORD — fig58 (Use this style)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Citation dans Ms Word</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">
+      Une fois installé : <strong>Références → Styles → More styles</strong> → choisir → <strong>Use this style</strong>
+    </div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:85px;top:118px;width:887.8px;height:622px;">
+      <img src="figures/fig58.png" alt="fig58"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S46 — CITATION DANS MS WORD — CONCLUSION (texte)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Citation dans Ms Word — Bilan</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Avantage clé de Mendeley</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <div class="s-card fragment fade-up" data-fragment-index="1" style="border-left:4px solid var(--grenat);">
+          <p style="font-size:.8em;line-height:1.55;margin:0;">
+            Une fois les références saisies et gérées automatiquement via Mendeley, il suffit de
+            <strong>choisir le style de citation approprié</strong> et toutes les références
+            (ainsi que la bibliographie) seront <strong>converties automatiquement</strong>
+            selon la norme demandée — par exemple : normes des revues nationales ou
+            internationales où vous souhaitez soumettre votre article.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S47 — GÉNÉRER LA BIBLIOGRAPHIE — fig59
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Générer la bibliographie</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">
+      Placer le curseur à l'endroit voulu → <strong>Références → Insert Bibliography</strong>
+    </div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:161.4px;top:118px;width:772.3px;height:622px;">
+      <img src="figures/fig59.png" alt="fig59"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S48 — GÉNÉRER LA BIBLIOGRAPHIE — fig60
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Générer la bibliographie</span></div>
+    <div class="c-accent"></div>
+    <div class="c-sub fragment fade-right" data-fragment-index="0">La bibliographie s'affiche automatiquement</div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="1" style="left:74.6px;top:110px;width:857.4px;height:550px;">
+      <img src="figures/fig60.png" alt="fig60"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S49 — GÉNÉRER LA BIBLIOGRAPHIE — MISE À JOUR (texte)
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide">
+    <div class="s-hdr"><span class="s-hdr-txt">Générer la bibliographie</span></div>
+    <div class="s-accent"></div>
+    <div class="s-body">
+      <div class="s-title fragment fade-down" data-fragment-index="0">Mettre à jour la bibliographie</div>
+      <div class="s-rule fragment fade-right" data-fragment-index="0"></div>
+      <div class="s-content">
+        <ul class="step-list">
+          <li class="step-item fragment fade-up" data-fragment-index="1">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">En cours de rédaction, lors d'un <strong>ajout ou d'une suppression</strong> de références…</span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="2">
+            <span class="step-n">→</span>
+            <span style="font-size:0.8em;">Dans Word, aller dans <strong>Références → Refresh</strong></span>
+          </li>
+          <li class="step-item fragment fade-up" data-fragment-index="3">
+            <span class="step-dia"></span>
+            <span style="font-size:0.8em;">Toutes les références figurant dans la bibliographie seront <strong>mises à jour automatiquement</strong></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     S50 — GÉNÉRER LA BIBLIOGRAPHIE — fig61
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <div class="c-hdr"><span class="c-hdr-txt">Générer la bibliographie</span></div>
+    <div class="c-accent"></div>
+    <div class="ppt-figure fragment fade-up" data-fragment-index="0" style="left:97.2px;top:64px;width:817.5px;height:688px;">
+      <div class="fig-tag">fig61</div>
+      <img src="figures/fig61.png" alt="fig61"/>
+    </div>
+  </div></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     Fin
+     ════════════════════════════════════════════════════════ -->
+<section>
+  <div class="ppt-wrap"><div class="ppt-canvas">
+    <!-- barre latérale gauche -->
+    <div style="position:absolute;left:0;top:0;width:6px;height:768px;background:var(--grenat);"></div>
+    <!-- titre principal -->
+    <div class="ppt-text fragment fade-down" data-fragment-index="0"
+         style="left:37.5px;top:133px;width:951.6px;font-size:58.7px;text-align:center;font-weight:700;color:var(--grenat);">
+      Vita<br>tompoko
+    </div>
+    <!-- sous-titre -->
+    <div class="fragment fade-up" data-fragment-index="1"
+         style="position:absolute;left:0;right:0;top:318px;text-align:center;font-size:20px;color:var(--mut);letter-spacing:1px;">
+      Dr. Ramanambonona Ambinintsoa <br>
+	  <br>
+	  - 06 mars 2026 - 
+    </div>
+</section>
+
+</div></div><!-- /slides /reveal -->
+
+<!-- Reveal init -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    backgroundTransition: 'fade',
+    width: 1024,
+    height: 768,
+    margin: 0.05,
+    center: false,       /* ← important : évite la dispersion verticale */
+    minScale: 0.2,
+    maxScale: 2.0,
+	pdfSeparateFragments: true,
+    plugins: []
+  });
+  window.addEventListener('load', () => feather.replace());
+</script>
+
+<!-- Footer -->
+<div class="footer">
+  <a class="icn" href="#" target="_blank" rel="noopener" title="GitHub"><i data-feather="github"></i></a>
+  <a class="icn" href="#" target="_blank" rel="noopener" title="LinkedIn"><i data-feather="linkedin"></i></a>
+</div>
+</body>
+</html>

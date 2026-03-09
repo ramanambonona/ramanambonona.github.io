@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recherche Documentaire &amp; Plateformes Numériques</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+    :root {
+      --navy:      #1a2744;
+      --deep-blue: #1e3a6e;
+      --mid-blue:  #2c5282;
+      --accent:    #c8a84b;
+      --rust:      #8b3a3a;
+      --text:      #1a1a2e;
+      --muted:     #4a5568;
+      --light-bg:  #f7f6f2;
+      --white:     #ffffff;
+    }
+
+    html, body { margin:0; padding:0; height:100%; }
+
+    .reveal,
+    .reveal .slides {
+      font-family: 'Cormorant Garamond','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    /* Every section: flex column, no overflow */
+    .reveal .slides section {
+      text-align: left;
+      box-sizing: border-box;
+      overflow: hidden;
+      padding: 0.35em 1em 0.4em 1em !important;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100%;
+    }
+
+    /* Progress / controls */
+    .reveal .progress { background:rgba(200,168,75,.15); color:var(--accent); height:3px; }
+    .reveal .controls { color:var(--mid-blue); }
+    .reveal .slide-number {
+      font-family:'Cormorant Garamond',serif; font-size:0.58em;
+      color:var(--muted); background:transparent; bottom:8px; right:12px;
+    }
+
+    /* Headings */
+    .reveal h1 { font-family:'IM Fell English',serif; font-weight:normal; }
+    .reveal h2 {
+      font-family:'IM Fell English','Palatino Linotype',serif;
+      font-size: 1.1em !important;
+      font-weight: normal; color:var(--navy);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.15em; margin: 0 0 0.35em 0;
+      line-height: 1.15; flex-shrink: 0;
+    }
+    .reveal h3 {
+      font-family:'Cormorant Garamond',serif;
+      font-size: 0.72em !important; font-weight:600;
+      color:var(--mid-blue); text-transform:uppercase;
+      letter-spacing:0.1em; margin:0 0 0.2em 0;
+    }
+
+    /* Paragraphs */
+    .reveal p {
+      font-size:0.68em; line-height:1.45; color:var(--text); margin:0.15em 0;
+    }
+
+    /* Lists */
+    .reveal ul { list-style:none; padding:0; margin:0; }
+    .reveal ul li {
+      font-size:0.65em; line-height:1.4;
+      padding:0.12em 0 0.12em 1.15em; position:relative; color:var(--text);
+    }
+    .reveal ul li::before {
+      content:'›'; position:absolute; left:0;
+      color:var(--accent); font-size:1.1em; line-height:1.3; font-weight:bold;
+    }
+    .reveal ul li strong { color:var(--navy); }
+
+    /* Grid */
+    .cols { display:grid; gap:0.7em; align-items:start; }
+    .cols-2     { grid-template-columns:1fr 1fr; }
+    .cols-60-40 { grid-template-columns:60fr 40fr; }
+
+    /* Cards */
+    .card {
+      background:var(--light-bg); border-left:3px solid var(--accent);
+      border-radius:2px; padding:0.38em 0.65em;
+    }
+    .card-navy {
+      background:var(--navy); color:#fff;
+      border-left:3px solid var(--accent); border-radius:2px; padding:0.38em 0.65em;
+    }
+    .card-navy p, .card-navy li { color:rgba(255,255,255,.87) !important; }
+    .card-navy li::before      { color:var(--accent) !important; }
+    .card-navy h3              { color:var(--accent) !important; }
+    .card-warn {
+      background:#fff8e7; border-left:3px solid var(--rust);
+      border-radius:2px; padding:0.38em 0.65em;
+    }
+
+    /* Plan table */
+    .plan-table { width:100%; border-collapse:collapse; font-size:0.63em; }
+    .plan-table tr { border-bottom:1px solid rgba(0,0,0,.07); }
+    .plan-table td:first-child {
+      font-weight:600; color:var(--mid-blue); padding:0.3em 0.5em 0.3em 0;
+      white-space:nowrap; width:30%; letter-spacing:0.04em;
+      text-transform:uppercase; font-size:0.88em;
+    }
+    .plan-table td:last-child { color:var(--text); padding:0.3em 0; line-height:1.3; }
+
+    /* Steps */
+    .steps { counter-reset:step-counter; list-style:none; padding:0; margin:0; }
+    .steps li {
+      counter-increment:step-counter;
+      padding:0.14em 0 0.14em 2em !important;
+      font-size:0.64em !important; line-height:1.38;
+    }
+    .steps li::before {
+      content:counter(step-counter); position:absolute; left:0; top:0.08em;
+      width:1.45em; height:1.45em; background:var(--mid-blue); color:#fff !important;
+      border-radius:50%; text-align:center; line-height:1.45em;
+      font-size:0.8em; font-weight:bold;
+    }
+
+    /* URL / code */
+    .reveal a, .url {
+      color:var(--mid-blue); font-style:italic; font-size:0.82em;
+      text-decoration:none; border-bottom:1px dotted var(--mid-blue);
+    }
+    code {
+      font-family:'Courier New',monospace; font-size:0.74em;
+      background:#f0f0f0; border:1px solid #ddd;
+      padding:0.02em 0.28em; border-radius:2px; color:var(--rust);
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background:var(--navy); color:#fff; padding:0.45em 0.8em;
+      border-radius:3px; text-align:center; font-style:italic;
+      font-size:0.7em; margin:0.3em 0;
+    }
+
+    /* Bonus grid */
+    .bonus-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.26em 0.8em; }
+    .bonus-item {
+      font-size:0.61em; padding:0.25em 0.48em;
+      background:var(--light-bg); border-left:2px solid var(--accent);
+      border-radius:1px; line-height:1.3;
+    }
+    .bonus-item strong { color:var(--mid-blue); display:block; }
+
+    /* Footer label */
+    .slide-label {
+      font-size:0.46em; color:var(--muted); letter-spacing:0.1em;
+      text-transform:uppercase; opacity:0.52; margin-top:auto; padding-top:0.25em;
+      flex-shrink:0;
+    }
+
+    /* Spacing helpers */
+    .mt-xs { margin-top:0.28em; }
+
+    /* ── TITLE SLIDE ── */
+    .slide-title {
+      background:var(--navy) !important;
+      text-align:center !important; justify-content:center !important; position:relative;
+    }
+    .slide-title::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg,var(--accent),#e8c97b,var(--accent));
+    }
+    .slide-title .title-eyebrow {
+      font-size:0.6em; letter-spacing:0.28em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:0.45em; font-weight:300;
+    }
+    .slide-title h1 {
+      font-size:1.75em !important; font-weight:normal; color:#fff !important;
+      line-height:1.2; margin:0 0 0.38em 0; text-shadow:none;
+    }
+    .slide-title h1 em { color:var(--accent); font-style:italic; }
+    .slide-title .subtitle {
+      font-size:0.78em; color:rgba(255,255,255,.72); font-style:italic; margin-bottom:0.9em;
+    }
+    .slide-title .author-block {
+      display:inline-block; border-top:1px solid rgba(200,168,75,.5); padding-top:0.45em;
+    }
+    .slide-title .author { font-size:0.72em; color:rgba(255,255,255,.85); letter-spacing:0.06em; }
+    .slide-title .ornament { font-size:1.45em; color:var(--accent); opacity:.6; margin:0.2em 0; }
+
+    /* ── SECTION DIVIDER ── */
+    .slide-section {
+      background:var(--navy) !important;
+      text-align:center !important; justify-content:center !important;
+    }
+    .slide-section .section-number {
+      font-size:0.58em; letter-spacing:0.32em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:0.38em;
+    }
+    .slide-section h2 {
+      font-family:'IM Fell English',serif; font-size:1.55em !important;
+      color:#fff !important; font-weight:normal; border:none !important; margin:0;
+    }
+    .slide-section .section-rule {
+      width:52px; height:2px; background:var(--accent); margin:0.65em auto;
+    }
+    .slide-section .section-sub { font-size:0.7em; color:rgba(255,255,255,.6); font-style:italic; }
+
+    /* ── FINAL SLIDE ── */
+    .slide-final {
+      background:var(--navy) !important;
+      text-align:center !important; justify-content:center !important;
+    }
+    .slide-final h2 {
+      font-family:'IM Fell English',serif; font-size:2.5em !important;
+      color:var(--accent) !important; border:none !important; font-weight:normal;
+    }
+    .slide-final p { color:rgba(255,255,255,.65) !important; font-size:0.7em; font-style:italic; }
+    .slide-final .final-rule { width:65px; height:1px; background:var(--accent); margin:0.7em auto; opacity:.5; }
+
+    /* Fragment animations */
+    .reveal .fragment                  { opacity:0; transition:opacity .38s ease, transform .38s ease; }
+    .reveal .fragment.visible          { opacity:1; }
+    .reveal .fragment.fade-up          { transform:translateY(16px); }
+    .reveal .fragment.fade-up.visible  { transform:translateY(0); }
+    .reveal .fragment.fade-right       { transform:translateX(-12px); }
+    .reveal .fragment.fade-right.visible { transform:translateX(0); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════ SLIDE 1 · TITRE ════════ -->
+<section class="slide-title">
+  <div class="ornament fragment fade-up" data-fragment-index="0">❧</div>
+  <div class="title-eyebrow fragment fade-up" data-fragment-index="1">Formation Doctorale · Méthodologie de Recherche</div>
+  <h1 class="fragment fade-up" data-fragment-index="2">Outils &amp; Astuces pour<br><em>Faciliter la Recherche</em></h1>
+  <p class="subtitle fragment fade-up" data-fragment-index="3">Plateformes numériques, accès à l'information &amp; outils de productivité scientifique</p>
+  <div class="author-block fragment fade-up" data-fragment-index="4">
+    <p class="author"> Dr. Ambinintsoa Ramanambonona</p>
+  </div>
+</section>
+
+<!-- ════════ SLIDE 2 · PLAN ════════ -->
+<section>
+  <h2>Plan de la Présentation</h2>
+  <p style="font-style:italic;font-size:0.6em;color:var(--muted);margin-bottom:0.4em;" class="fragment fade-up" data-fragment-index="0">
+    Cette présentation aide à rendre facile la recherche documentaire pour les chercheurs et doctorants.
+  </p>
+  <table class="plan-table">
+    <tr class="fragment fade-up" data-fragment-index="1">
+      <td>I. Plateformes numériques</td>
+      <td>Panorama des ressources documentaires (accès payant &amp; open access)</td>
+    </tr>
+    <tr class="fragment fade-up" data-fragment-index="2">
+      <td>II. Alternatives</td>
+      <td>Accéder aux publications payantes — ressources gratuites et contournements</td>
+    </tr>
+    <tr class="fragment fade-up" data-fragment-index="3">
+      <td>III. Astuces</td>
+      <td>Stratégies pour cibler, évaluer et gérer la littérature scientifique</td>
+    </tr>
+    <tr class="fragment fade-up" data-fragment-index="4">
+      <td>IV. Traduction</td>
+      <td>DeepL et astuces avancées pour lever la barrière linguistique</td>
+    </tr>
+    <tr class="fragment fade-up" data-fragment-index="5">
+      <td>V. Outils</td>
+      <td>MathPix Snip, Pandoc, Scholarcy — conversion &amp; analyse</td>
+    </tr>
+    <tr class="fragment fade-up" data-fragment-index="6">
+      <td>VI. Bonus IA</td>
+      <td>Sélection d'outils d'intelligence artificielle pour la recherche</td>
+    </tr>
+  </table>
+  <div class="slide-label">Plan général</div>
+</section>
+
+<!-- ════════ SECTION I ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Partie I</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Plateformes Numériques</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Panorama des ressources documentaires scientifiques</p>
+</section>
+
+<!-- SLIDE 3 · Accès payants -->
+<section>
+  <h2>Plateformes à Accès Payant</h2>
+  <p style="font-size:0.6em;color:var(--muted);font-style:italic;margin-bottom:0.35em;" class="fragment fade-up" data-fragment-index="0">
+    Grandes bases de données éditeurs — accès institutionnel requis
+  </p>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Éditeurs Commerciaux</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>ScienceDirect</strong> — Elsevier</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>Taylor &amp; Francis</strong> Online</li>
+          <li class="fragment fade-up" data-fragment-index="4"><strong>Springer</strong> Link</li>
+          <li class="fragment fade-up" data-fragment-index="5"><strong>Brill</strong> Online Journals</li>
+          <li class="fragment fade-up" data-fragment-index="6"><strong>De Gruyter</strong> (DEGRUYTER)</li>
+          <li class="fragment fade-up" data-fragment-index="7"><strong>Cairn</strong> — Sciences humaines FR</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="8">
+      <div class="card-navy">
+        <h3>Cas Particulier</h3>
+        <p style="font-size:0.68em;line-height:1.42;">
+          <strong style="color:var(--accent)">JSTOR</strong> propose un accès
+          <em>gratuit pour les institutions des pays d'Afrique subsaharienne</em>
+          dans le cadre de son programme d'accès mondial.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">I — Plateformes numériques</div>
+</section>
+
+<!-- SLIDE 4 · Open Access -->
+<section>
+  <h2>Plateformes Open Access</h2>
+  <p style="font-size:0.6em;color:var(--muted);font-style:italic;margin-bottom:0.35em;" class="fragment fade-up" data-fragment-index="0">
+    Ressources librement accessibles — privilégiées en contexte de ressources limitées
+  </p>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="1">
+      <div class="card">
+        <h3>Sciences Générales &amp; SHS</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>Google Scholar</strong> — moteur multidisciplinaire</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>ResearchGate</strong> — réseau chercheurs</li>
+          <li class="fragment fade-up" data-fragment-index="4"><strong>Persée</strong> — revues francophones patrimoniales</li>
+          <li class="fragment fade-up" data-fragment-index="5"><strong>DOAJ</strong> — répertoire open access</li>
+          <li class="fragment fade-up" data-fragment-index="6"><strong>HAL-Archives Ouvertes</strong> — dépôt institutionnel FR</li>
+          <li class="fragment fade-up" data-fragment-index="7"><strong>OpenEditions</strong> — SHS francophones</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="8">
+      <div class="card">
+        <h3>Économie &amp; Sciences Sociales</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="9"><strong>NBER</strong> — National Bureau of Economic Research</li>
+          <li class="fragment fade-up" data-fragment-index="10"><strong>MRPA</strong> — Munich Personal RePEc Archive</li>
+          <li class="fragment fade-up" data-fragment-index="11"><strong>REPEC</strong> — Research Papers in Economics</li>
+          <li class="fragment fade-up" data-fragment-index="12"><strong>SSRN</strong> — Social Science Research Network</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">I — Plateformes numériques</div>
+</section>
+
+<!-- ════════ SECTION II ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Partie II</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Alternatives d'Accès</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Vers la gratuité de l'accès à l'information scientifique</p>
+</section>
+
+<!-- SLIDE 5 · Alternatives -->
+<section>
+  <h2>Accéder aux Publications Payantes</h2>
+  <div class="cols cols-2">
+    <div>
+      <h3 class="fragment fade-up" data-fragment-index="0">Articles scientifiques</h3>
+      <div class="card-warn fragment fade-up" data-fragment-index="1">
+        <p style="font-size:0.62em;color:var(--rust);font-weight:600;margin:0 0 0.18em 0;">⚠ Note légale</p>
+        <p style="font-size:0.61em;margin:0;">Sci-Hub est banni dans plusieurs pays et fait l'objet de litiges. Articles post-févr. 2022 peuvent manquer.</p>
+      </div>
+      <ol class="steps mt-xs">
+        <li class="fragment fade-up" data-fragment-index="2">Obtenir le <strong>DOI</strong> (Digital Object Identifier)</li>
+        <li class="fragment fade-up" data-fragment-index="3">Aller sur <span class="url">sci-hub.wf</span> (ou .st / .se / .ee)</li>
+        <li class="fragment fade-up" data-fragment-index="4">Coller le DOI dans la barre de recherche</li>
+      </ol>
+    </div>
+    <div>
+      <h3 class="fragment fade-up" data-fragment-index="5">Livres &amp; Monographies</h3>
+      <div class="card fragment fade-up" data-fragment-index="6">
+        <ul>
+          <li><strong>Library Genesis</strong> — <span class="url">libgen.is</span></li>
+          <li class="mt-xs"><strong>Z-Library</strong> — <span class="url">zlibrary-asia.se</span><br>
+            <em style="font-size:0.85em;">Nombreuses ressources en français</em></li>
+        </ul>
+      </div>
+      <div class="highlight-box mt-xs fragment fade-up" data-fragment-index="7">
+        Vérifiez toujours si une version <strong>open access légale</strong> existe en premier.
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">II — Alternatives d'accès</div>
+</section>
+
+<!-- ════════ SECTION III ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Partie III</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Astuces de Recherche</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Stratégies pour une recherche documentaire efficace</p>
+</section>
+
+<!-- SLIDE 6 · Paradoxe -->
+<section>
+  <h2>Le Paradoxe de la Surcharge Informationnelle</h2>
+  <div class="highlight-box fragment fade-up" data-fragment-index="0" style="font-size:0.8em;padding:0.65em 1em;margin:0.45em 0;">
+    Taper <em>"crime and punishment"</em> sur Google génère<br>
+    <strong style="font-size:1.35em;color:var(--accent);">199 000 000</strong> résultats en 0,77 seconde
+  </div>
+  <div class="card fragment fade-up" data-fragment-index="1" style="text-align:center;margin:0.35em 0;">
+    <p style="font-size:0.74em;font-style:italic;color:var(--mid-blue);margin:0;">
+      <em>"Fohy ny fotoana noho izany mila fetsifetsy"</em>
+    </p>
+    <p style="font-size:0.62em;color:var(--muted);margin:0.12em 0 0 0;">"Le temps étant limité, il faut donc être astucieux."</p>
+  </div>
+  <p class="fragment fade-up" data-fragment-index="2" style="font-size:0.67em;margin-top:0.4em;">
+    La quantité ne garantit pas la <strong>qualité scientifique</strong>. Maîtriser les outils de ciblage est une compétence fondamentale du chercheur.
+  </p>
+  <div class="slide-label">III — Astuces de recherche</div>
+</section>
+
+<!-- SLIDE 7 · Ciblage -->
+<section>
+  <h2>Stratégies de Ciblage Bibliographique</h2>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="0">
+      <div class="card">
+        <h3>Identification des Sources</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">Répertorier les <strong>plateformes spécialisées</strong> dans votre domaine</li>
+          <li class="fragment fade-up" data-fragment-index="2">Naviguer dans les <strong>revues scientifiques</strong> correspondantes (ex. <em>Environmental Economics Journal</em>)</li>
+          <li class="fragment fade-up" data-fragment-index="3">Vérifier l'<strong>Impact Factor</strong> via le <em>Journal Citation Reports</em> (JCR)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="4">
+      <div class="card">
+        <h3>Sélection &amp; Priorisation</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="5">Cibler les <strong>articles les plus cités</strong> et téléchargés</li>
+          <li class="fragment fade-up" data-fragment-index="6">Consulter les publications <strong>récentes</strong> pour les tendances novatrices</li>
+          <li class="fragment fade-up" data-fragment-index="7">Distinguer les <strong>articles fondateurs</strong> des articles secondaires</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-warn mt-xs fragment fade-up" data-fragment-index="8" style="font-size:0.63em;">
+    <strong>Impact Factor :</strong> rapport entre citations d'une revue sur une année et articles publiés les deux années précédentes — calculé par le <em>JCR</em>.
+  </div>
+  <div class="slide-label">III — Astuces de recherche</div>
+</section>
+
+<!-- SLIDE 8 · Gestion -->
+<section>
+  <h2>Gestion &amp; Analyse de la Littérature</h2>
+  <div class="cols cols-2">
+    <div>
+      <div style = "font-size:0.8em" class="card fragment fade-right" data-fragment-index="0">
+        <h3>Collecte &amp; Organisation</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">Télécharger et archiver les documents pertinents</li>
+          <li class="fragment fade-up" data-fragment-index="2">Utiliser <strong>Zotero</strong> ou <strong>Mendeley</strong> pour la gestion des références</li>
+          <li class="fragment fade-up" data-fragment-index="3">Établir une <strong>fiche de lecture</strong> structurée pour chaque source</li>
+        </ul>
+      </div>
+      <div style = "font-size:0.8em" class="card mt-xs fragment fade-right" data-fragment-index="4">
+        <h3>Analyse Critique</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="5">Extraire les <strong>approches théoriques &amp; empiriques</strong></li>
+          <li class="fragment fade-up" data-fragment-index="6">Analyser les <strong>hypothèses</strong> et résultats</li>
+          <li class="fragment fade-up" data-fragment-index="7">Identifier les <strong>limites et lacunes</strong> de la littérature</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="8">
+      <div class="card-navy">
+        <h3>Outil Recommandé — Scholarcy</h3>
+        <p style="font-size:0.68em;line-height:1.42;">
+          IA de synthèse d'articles. Génère une fiche de lecture en <em>DOCX ou PPT</em>, extrait mots-clés, points forts et analyse comparative. Exporte en <code>.ris</code> (Zotero) ou <code>.bib</code> (BibTeX).
+        </p>
+        <p style="font-size:0.62em;margin-top:0.35em;">
+          <span class="url" style="color:rgba(200,168,75,.9)">scholarcy.com</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">III — Astuces de recherche</div>
+</section>
+
+<!-- SLIDE 9 · JEL -->
+<section>
+  <h2>Classification JEL — Journal of Economic Literature</h2>
+  <div class="cols cols-60-40">
+    <div>
+      <p class="fragment fade-up" data-fragment-index="0" style="font-size:0.67em;line-height:1.45;">
+        Méthode standard de catégorisation de la littérature en économie développée par l'<em>American Economic Association</em> depuis 1969. Utilisée pour classer articles, dissertations, livres et documents de travail dans <strong>EconLit</strong> et de nombreuses autres applications.
+      </p>
+      <div class="card fragment fade-up" data-fragment-index="1" style="margin-top:0.35em;">
+        <h3>Exemples de Codes JEL</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="2"><strong>D</strong> — Microéconomie</li>
+          <li class="fragment fade-up" data-fragment-index="3"><strong>E</strong> — Macroéconomie &amp; Économie Monétaire</li>
+          <li class="fragment fade-up" data-fragment-index="4"><strong>H</strong> — Économie Publique &amp; Finances Publiques</li>
+          <li class="fragment fade-up" data-fragment-index="5"><strong>Q</strong> — Économie Agricole &amp; Ressources Naturelles</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card-navy">
+        <h3>Pourquoi l'utiliser ?</h3>
+        <p style="font-size:0.68em;line-height:1.42;">
+          Tout article soumis à une revue d'économie requiert des codes JEL. Maîtriser cette classification facilite la <em>revue de littérature</em> et le ciblage des recherches pertinentes.
+        </p>
+        <p style="font-size:0.6em;margin-top:0.4em;">
+          <span class="url" style="color:rgba(200,168,75,.9)">aeaweb.org/econlit/jelCodes.php</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">III — Classification JEL</div>
+</section>
+
+<!-- ════════ SECTION IV ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Partie IV</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Traduction Scientifique</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Déverrouiller la barrière linguistique</p>
+</section>
+
+<!-- SLIDE 10 · Problème traduction -->
+<section>
+  <h2>La Barrière de la Langue Anglaise</h2>
+  <div class="highlight-box fragment fade-up" data-fragment-index="0" style="margin:0.38em 0;">
+    La majorité des publications scientifiques de référence sont rédigées en anglais.
+  </div>
+  <div class="cols cols-2 mt-xs">
+    <div class="card fragment fade-right" data-fragment-index="1">
+      <h3>Le Constat</h3>
+      <p style="font-size:0.67em;line-height:1.42;">
+        Les articles anglophones concentrent les <strong>idées, modèles et méthodologies</strong> les plus avancés — particulièrement en économie et sciences exactes.
+      </p>
+    </div>
+    <div class="card-navy fragment fade-right" data-fragment-index="2">
+      <h3>La Solution</h3>
+      <p style="font-size:0.67em;line-height:1.42;">
+        Des outils de traduction neurale permettent de traduire des documents complexes — <em>y compris avec des équations mathématiques</em> — avec une précision remarquable.
+      </p>
+    </div>
+  </div>
+  <div class="slide-label">IV — Traduction scientifique</div>
+</section>
+
+<!-- SLIDE 11 · DeepL -->
+<section>
+  <h2>DeepL Translate — Traduction Documentaire</h2>
+  <div class="cols cols-2">
+    <div>
+      <div class="card-warn fragment fade-up" data-fragment-index="0" style="margin-bottom:0.38em;">
+        <strong style="font-size:0.68em;color:var(--rust);">⚠ À éviter : Google Translate</strong>
+        <p style="font-size:0.6em;margin:0.15em 0 0 0;">Qualité insuffisante pour les textes scientifiques complexes.</p>
+      </div>
+      <div class="card fragment fade-up" data-fragment-index="1">
+        <h3>Procédure DeepL</h3>
+        <ol class="steps">
+          <li class="fragment fade-up" data-fragment-index="2">Convertir l'article PDF en <strong>DOCX</strong> (voir MathPix)</li>
+          <li class="fragment fade-up" data-fragment-index="3">Aller sur <span class="url">deepl.com/translator</span></li>
+          <li class="fragment fade-up" data-fragment-index="4">Cliquer sur <em>"Traduire des fichiers"</em></li>
+          <li class="fragment fade-up" data-fragment-index="5">Charger le fichier DOCX</li>
+          <li class="fragment fade-up" data-fragment-index="6">Télécharger la version française traduite</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-navy fragment fade-right" data-fragment-index="7">
+      <h3>Problème Rencontré</h3>
+      <p style="font-size:0.68em;line-height:1.42;margin-bottom:0.45em;">
+        Le fichier traduit peut être <strong>verrouillé en modification</strong> (protection de contenu), le rendant inutilisable pour l'édition.
+      </p>
+      <p style="font-size:0.65em;color:var(--accent);font-style:italic;">
+        → Diapositive suivante : la solution !
+      </p>
+    </div>
+  </div>
+  <div class="slide-label">IV — Traduction scientifique</div>
+</section>
+
+<!-- SLIDE 12 · Astuce XML -->
+<section>
+  <h2>Astuce Avancée — Déverrouillage DOCX via XML</h2>
+  <div class="cols cols-2">
+    <ol class="steps fragment fade-right" data-fragment-index="0">
+      <li class="fragment fade-up" data-fragment-index="1">Ouvrir le DOCX traduit dans Word</li>
+      <li class="fragment fade-up" data-fragment-index="2">Enregistrer sous format <code>*.xml</code></li>
+      <li class="fragment fade-up" data-fragment-index="3">Ouvrir le <code>.xml</code> avec <strong>Notepad++</strong></li>
+      <li class="fragment fade-up" data-fragment-index="4"><code>Ctrl + F</code> → chercher <code>enforcement="1"</code></li>
+      <li class="fragment fade-up" data-fragment-index="5">Remplacer <code>1</code> par <code>0</code> et enregistrer</li>
+      <li class="fragment fade-up" data-fragment-index="6">Rouvrir avec <strong>Word</strong> → re-enregistrer en <code>.docx</code></li>
+      <li class="fragment fade-up" data-fragment-index="7">Le fichier est maintenant entièrement éditable ✓</li>
+    </ol>
+    <div>
+      <div class="card fragment fade-right" data-fragment-index="8" style="text-align:center;">
+        <p style="font-size:0.76em;font-style:italic;color:var(--mid-blue);margin:0;">
+          <em>"VITA NY CHOCOLAT !!!"</em>
+        </p>
+      </div>
+      <div class="card-warn mt-xs fragment fade-up" data-fragment-index="9">
+        <p style="font-size:0.61em;margin:0;">
+          <strong>Prérequis :</strong> <strong>Notepad++</strong> installé — gratuit sur notepad-plus-plus.org
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">IV — Traduction · Astuce avancée</div>
+</section>
+
+<!-- ════════ SECTION V ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Partie V</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Outils de Productivité</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">MathPix Snip · Pandoc · Scholarcy</p>
+</section>
+
+<!-- SLIDE 13 · MathPix -->
+<section>
+  <h2>MathPix Snip — Capture d'Équations Mathématiques</h2>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="0">
+      <div class="card">
+        <h3>Fonctionnalités</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">Capture d'<strong>équations mathématiques</strong> → LaTeX / MathML</li>
+          <li class="fragment fade-up" data-fragment-index="2">Économise le temps de saisie des <strong>équations complexes</strong></li>
+          <li class="fragment fade-up" data-fragment-index="3">Capture les équations <strong>manuscrites ou dactylographiées</strong></li>
+          <li class="fragment fade-up" data-fragment-index="4">Compatible <strong>Windows, macOS, Linux, iOS, Android</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="5">
+      <div class="card-navy">
+        <h3>Version Web — Snip Online</h3>
+        <p style="font-size:0.67em;line-height:1.4;margin-bottom:0.35em;">
+          Conversion <strong>PDF → DOCX, LaTeX, Overleaf, Markdown</strong> en préservant mise en forme et équations.
+        </p>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="6" style="font-size:0.63em;">S'inscrire sur <span class="url" style="color:rgba(200,168,75,.9)">snip.mathpix.com</span></li>
+          <li class="fragment fade-up" data-fragment-index="7" style="font-size:0.63em;">PDF → <em>"Upload PDF"</em> → saisir plage de pages (ex. 1–5)</li>
+          <li class="fragment fade-up" data-fragment-index="8" style="font-size:0.63em;"><em>"Export File"</em> → choisir le format souhaité</li>
+        </ul>
+        <p class="fragment fade-up" data-fragment-index="9" style="font-size:0.6em;color:rgba(255,255,255,.48);margin-top:0.35em;font-style:italic;">⚠ Pages limitées en version gratuite</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">V — Outils · MathPix Snip</div>
+</section>
+
+<!-- SLIDE 14 · Pandoc -->
+<section>
+  <h2>Pandoc — Convertisseur Universel de Documents</h2>
+  <div class="cols cols-2">
+    <div>
+      <div class="card fragment fade-right" data-fragment-index="0">
+        <h3>Présentation</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">Outil de <strong>conversion universelle</strong> entre formats documentaires</li>
+          <li class="fragment fade-up" data-fragment-index="2">Gratuit et open source</li>
+          <li class="fragment fade-up" data-fragment-index="3">Requiert une connaissance basique de la <strong>ligne de commande</strong></li>
+          <li class="fragment fade-up" data-fragment-index="4">Téléchargement : <span class="url">pandoc.org/installing.html</span></li>
+        </ul>
+      </div>
+      <div class="card-warn mt-xs fragment fade-up" data-fragment-index="5" style="font-size:0.63em;">
+        Configurer la <strong>variable d'environnement</strong> pour que CMD reconnaisse la commande <code>pandoc</code>.
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="6">
+      <div class="card-navy">
+        <h3>Exemple d'utilisation</h3>
+        <p style="font-size:0.67em;margin-bottom:0.38em;">Convertir un fichier LaTeX (avec équations) en DOCX :</p>
+        <div class="fragment fade-up" data-fragment-index="7" style="background:#0d1b2e;padding:0.45em 0.65em;border-radius:3px;font-family:monospace;font-size:0.65em;color:#a8d8a8;">
+          pandoc –s math.tex –o exemple.docx
+        </div>
+        <p class="fragment fade-up" data-fragment-index="8" style="font-size:0.61em;color:rgba(255,255,255,.58);margin-top:0.38em;">
+          Documentation : <span class="url" style="color:rgba(200,168,75,.9)">pandoc.org/demos.html</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">V — Outils · Pandoc</div>
+</section>
+
+<!-- SLIDE 15 · Scholarcy -->
+<section>
+  <h2>Scholarcy — IA de Synthèse d'Articles</h2>
+  <div class="cols cols-2">
+    <div class="fragment fade-right" data-fragment-index="0">
+      <div class="card">
+        <h3>Fonctionnalités</h3>
+        <ul>
+          <li class="fragment fade-up" data-fragment-index="1">Résumé automatique par <strong>intelligence artificielle</strong></li>
+          <li class="fragment fade-up" data-fragment-index="2">Génération d'une <strong>fiche de lecture</strong> exportable DOCX / PPT</li>
+          <li class="fragment fade-up" data-fragment-index="3">Extraction des <strong>mots-clés</strong>, points forts et analyse comparative</li>
+          <li class="fragment fade-up" data-fragment-index="4">Export en <code>.ris</code> (Zotero) ou <code>.bib</code> (BibTeX)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fragment fade-right" data-fragment-index="5">
+      <div class="card-navy">
+        <h3>Procédure</h3>
+        <ol class="steps">
+          <li class="fragment fade-up" data-fragment-index="6">Aller sur <span class="url" style="color:rgba(200,168,75,.9)">scholarcy.com</span></li>
+          <li class="fragment fade-up" data-fragment-index="7">Cliquer sur <em>"Try It Now"</em></li>
+          <li class="fragment fade-up" data-fragment-index="8">Charger le fichier PDF de l'article</li>
+          <li class="fragment fade-up" data-fragment-index="9">L'IA analyse et génère la fiche structurée</li>
+          <li class="fragment fade-up" data-fragment-index="10">Exporter les données vers Zotero ou Mendeley</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="slide-label">V — Outils · Scholarcy</div>
+</section>
+
+<!-- ════════ SECTION VI ════════ -->
+<section class="slide-section">
+  <div class="section-number fragment fade-up" data-fragment-index="0">Bonus</div>
+  <h2 class="fragment fade-up" data-fragment-index="1">Outils IA pour Doctorants</h2>
+  <div class="section-rule fragment fade-up" data-fragment-index="2"></div>
+  <p class="section-sub fragment fade-up" data-fragment-index="3">Sélection d'outils d'intelligence artificielle au service de la recherche</p>
+</section>
+
+<!-- SLIDE 16 · Bonus -->
+<section>
+  <h2>Sélection d'Outils Recommandés</h2>
+  <div class="bonus-grid">
+    <div class="bonus-item fragment fade-up" data-fragment-index="0"><strong>Turnitin</strong>Détection du plagiat dans les manuscrits et thèses</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="1"><strong>Grammarly</strong>Correction grammaticale avancée en anglais</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="2"><strong>Elicit</strong>Recherche d'articles pertinents pour la revue de littérature</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="3"><strong>ResearchGate</strong>Demander aux auteurs l'accès direct à leurs articles</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="4"><strong>Dropbox</strong>Sauvegarde cloud — éviter la perte de manuscrit</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="5"><strong>Podomoro</strong>Gestion du temps — technique des blocs de 25–30 min</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="6"><strong>Quillbot / Wordtune</strong>Réécriture et paraphrase pour éviter le plagiat</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="7"><strong>Explain Paper / ChatPDF</strong>Analyse interactive d'articles en PDF par IA</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="8"><strong>ZeroGPT</strong>Vérifier la détectabilité de contenus générés par IA</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="9"><strong>Overleaf</strong>Rédaction LaTeX en ligne — sauvegarde cloud universelle</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="10"><strong>Kaggle</strong>Bases de données pour l'analyse empirique</div>
+    <div class="bonus-item fragment fade-up" data-fragment-index="11"><strong>GitHub</strong>Scripts, dépôts de code et ressources scientifiques open source</div>
+  </div>
+  <div class="slide-label">VI — Outils IA &amp; productivité</div>
+</section>
+
+<!-- ════════ SLIDE FINAL ════════ -->
+<section class="slide-final">
+  <h2 class="fragment fade-up" data-fragment-index="0">MISAOTRA</h2>
+  <div class="final-rule fragment fade-up" data-fragment-index="1"></div>
+  <p class="fragment fade-up" data-fragment-index="2">Merci de votre attention</p>
+  <p class="fragment fade-up" data-fragment-index="3" style="color:rgba(255,255,255,.4);font-size:0.62em;margin-top:0.9em;">
+    Dr. Ambinintsoa Ramanambonona<br>
+    <span style="font-size:.88em;">Formation Doctorale — Recherche Documentaire &amp; Outils Numériques</span>
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    width: 1100,
+    height: 680,
+    margin: 0.04,
+    minScale: 0.15,
+    maxScale: 2.0,
+    fragments: true,
+    fragmentInURL: false,
+  });
+</script>
+</body>
+</html>
