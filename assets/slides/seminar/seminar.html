@@ -339,6 +339,37 @@
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* ---- styles pour les mini-doubles liens, aucun changement de couleur ni de fond ---- */
+    .double-links {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Palatino Linotype', 'Palatino', serif;
+      font-size: 12.5px;
+      border-top: 1px dashed rgba(80,50,20,0.1);
+      padding-top: 10px;
+    }
+    .link-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-style: italic;
+      color: inherit; 
+      text-decoration: none;
+      background: transparent;
+      transition: opacity 0.2s;
+    }
+    .link-item span { 
+      color: var(--text-secondary); 
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .link-item:hover { opacity: 0.75; }
+    .link-slide { /* garde la même couleur que le texte par défaut */ }
+    .link-tool { /* idem */ }
   </style>
 </head>
 <body>
@@ -367,19 +398,27 @@
 
     <div class="cards-grid">
 
-      <a href="gestion_reference.html" class="card card-1" target="_blank" rel="noopener">
+      <!-- Carte 1 – Mendeley -->
+      <div class="card card-1">  <!-- supprimé href, on gère via les liens internes -->
         <div class="card-icon">📚</div>
         <div class="card-body">
           <div class="card-title">Gestion bibliographique</div>
-          <div class="card-desc">Maîtrisez Mendeley pour organiser, citer et partager vos références académiques.</div>
+          <div class="card-desc">Utilisation de Mendeley pour organiser, citer et partager vos références académiques.</div>
         </div>
         <div class="card-footer">
           <span class="card-badge">Mendeley</span>
           <span class="arrow-btn">→</span>
         </div>
-      </a>
+        <!-- double lien outil + slides -->
+        <div class="double-links">
+          <a href="https://www.mendeley.com/" class="link-item link-tool" target="_blank" rel="noopener">🔧 outil</a>
+          <span style="color: var(--text-muted); font-size: 11px;">|</span>
+          <a href="https://ramanambonona.github.io/assets/slides/seminar/gestion_reference.html" class="link-item link-slide" target="_blank" rel="noopener">📽️ slides</a>
+        </div>
+      </div>
 
-      <a href="https://ramanambonona.github.io/teaching.html/assests/slides/seminar/recherche_documentaire.html" class="card card-2" target="_blank" rel="noopener">
+      <!-- Carte 2 – Recherche documentaire -->
+      <div class="card card-2">
         <div class="card-icon">🔍</div>
         <div class="card-body">
           <div class="card-title">Recherche documentaire</div>
@@ -389,9 +428,15 @@
           <span class="card-badge">Méthodologie</span>
           <span class="arrow-btn">→</span>
         </div>
-      </a>
+        <div class="double-links">
+          <a href="#" class="link-item link-tool" target="_blank" rel="noopener">🔧 outil</a>
+          <span style="color: var(--text-muted); font-size: 11px;">|</span>
+          <a href="https://ramanambonona.github.io/assets/slides/seminar/recherche_documentaire.html" class="link-item link-slide" target="_blank" rel="noopener">📽️ slides</a>
+        </div>
+      </div>
 
-      <a href="https://ramanambonona.github.io/teaching.html/assests/slides/seminar/rama_forecast_presentation.html" class="card card-3" target="_blank" rel="noopener">
+      <!-- Carte 3 – Outils de prévision -->
+      <div class="card card-3">
         <div class="card-icon">📈</div>
         <div class="card-body">
           <div class="card-title">Outils de prévision avancée</div>
@@ -401,9 +446,15 @@
           <span class="card-badge">Forecasting</span>
           <span class="arrow-btn">→</span>
         </div>
-      </a>
+        <div class="double-links">
+          <a href="https://rama-forecast.streamlit.app/" class="link-item link-tool" target="_blank" rel="noopener">🔧 outil</a>
+          <span style="color: var(--text-muted); font-size: 11px;">|</span>
+          <a href="https://ramanambonona.github.io/assets/slides/seminar/rama_forecast_presentation.html" class="link-item link-slide" target="_blank" rel="noopener">📽️ slides</a>
+        </div>
+      </div>
 
-      <a href="https://ramanambonona.github.io/teaching.html/assests/slides/seminar/economics_ai_solver_presentation.html" class="card card-4" target="_blank" rel="noopener">
+      <!-- Carte 4 – Economics AI Solver -->
+      <div class="card card-4">
         <div class="card-icon">🤖</div>
         <div class="card-body">
           <div class="card-title">Economics AI Solver</div>
@@ -413,7 +464,12 @@
           <span class="card-badge">AI · IA</span>
           <span class="arrow-btn">→</span>
         </div>
-      </a>
+        <div class="double-links">
+          <a href="https://economics-ai-solver.puter.site/" class="link-item link-tool" target="_blank" rel="noopener">🔧 outil</a>
+          <span style="color: var(--text-muted); font-size: 11px;">|</span>
+          <a href="https://ramanambonona.github.io/assets/slides/seminar/economics_ai_solver_presentation.html" class="link-item link-slide" target="_blank" rel="noopener">📽️ slides</a>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -428,4 +484,3 @@
 
 </body>
 </html>
-
