@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Présentation unité monétaire — style slides.gmw</title>
+
+<!-- Reveal.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<!-- MathJax 3 -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']], tags: 'ams' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+  startup: { typeset: false }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+<style>
+:root {
+  --grenat:    #132238;
+  --grenat-l:  #21405f;
+  --grenat-ll: #eaf0f7;
+  --moutarde:  #D4AF37;
+  --moutarde-l:#f3e3a7;
+  --moutarde-d:#b9962c;
+  --bleu:      #00B4D8;
+  --noir:      #132238;
+  --gris:      #556579;
+  --gris-l:    #8da0b7;
+  --gris-ll:   #e6edf5;
+  --blanc:     #ffffff;
+  --fond:      #eef3f8;
+  --fond-s:    #f7f9fc;
+  --ombre:     0 18px 48px rgba(12,30,58,.08);
+}
+
+html, body { margin:0; padding:0; background:var(--fond); }
+.reveal {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: var(--fond);
+}
+.reveal .slides { text-align: left; }
+.reveal .slides section {
+  width: 1280px;
+  height: 720px;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  font-size: 1.16em;
+}
+
+.slide-frame-shell {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  background: var(--fond-s);
+  overflow: hidden;
+  box-shadow: var(--ombre);
+}
+
+.gmw-standard .slide-frame-shell::before,
+.gmw-standard .slide-frame-shell::after,
+.gmw-cover .slide-frame-shell::before,
+.gmw-cover .slide-frame-shell::after,
+.gmw-thanks .slide-frame-shell::before,
+.gmw-thanks .slide-frame-shell::after,
+.gmw-divider .slide-frame-shell::before,
+.gmw-divider .slide-frame-shell::after { content:''; position:absolute; pointer-events:none; }
+
+.gmw-standard .slide-frame-shell::before {
+  top:0; right:0; width:39%; height:100%;
+  background: linear-gradient(180deg, rgba(0,180,216,.10), rgba(0,180,216,.02));
+  clip-path: polygon(38% 0, 100% 0, 100% 100%, 0 100%);
+}
+.gmw-standard .slide-frame-shell::after {
+  top:0; left:0; right:0; bottom:0;
+  background:
+    radial-gradient(circle at 93% 10%, rgba(212,175,55,.20) 0 3px, transparent 4px),
+    linear-gradient(transparent 84px, rgba(0,180,216,.28) 84px, rgba(0,180,216,.28) 85px, transparent 85px),
+    linear-gradient(90deg, transparent calc(100% - 114px), rgba(0,180,216,.28) calc(100% - 114px), rgba(0,180,216,.28) calc(100% - 113px), transparent calc(100% - 113px));
+}
+
+.gmw-cover .slide-frame-shell,
+.gmw-thanks .slide-frame-shell {
+  background:
+    linear-gradient(120deg, #f7f9fc 0%, #f7f9fc 56%, rgba(0,180,216,.06) 56%, rgba(0,180,216,.14) 100%);
+}
+.gmw-cover .slide-frame-shell::before,
+.gmw-thanks .slide-frame-shell::before {
+  top:0; right:0; width:34%; height:100%;
+  background: linear-gradient(180deg, rgba(0,180,216,.18), rgba(0,180,216,.06));
+  clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
+  opacity:.9;
+}
+.gmw-cover .slide-frame-shell::after,
+.gmw-thanks .slide-frame-shell::after {
+  right:62px; bottom:72px; width:310px; height:310px;
+  background:
+    radial-gradient(circle, transparent 57%, rgba(212,175,55,.9) 58%, rgba(212,175,55,.9) 59%, transparent 60%),
+    radial-gradient(circle, transparent 37%, rgba(0,180,216,.55) 38%, rgba(0,180,216,.55) 39%, transparent 40%),
+    linear-gradient(0deg, transparent calc(50% - 1px), rgba(212,175,55,.55) calc(50% - 1px), rgba(212,175,55,.55) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(90deg, transparent calc(50% - 1px), rgba(212,175,55,.55) calc(50% - 1px), rgba(212,175,55,.55) calc(50% + 1px), transparent calc(50% + 1px));
+  border-radius: 50%;
+  opacity:.72;
+}
+
+.gmw-divider .slide-frame-shell {
+  background: linear-gradient(135deg, #102033 0%, #132238 55%, #18314c 100%);
+}
+.gmw-divider .slide-frame-shell::before {
+  top:86px; right:0; width:180px; height:1px; background: rgba(0,180,216,.55);
+}
+.gmw-divider .slide-frame-shell::after {
+  top:0; right:72px; width:1px; height:108px; background: rgba(0,180,216,.42);
+}
+
+.slide-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 46px 60px 36px 60px;
+  box-sizing: border-box;
+}
+.slide-inner.centered { justify-content: center; align-items: center; text-align: center; }
+.slide-inner.two-col { flex-direction: row; gap: 40px; align-items: flex-start; }
+.col { flex: 1; }
+.col-40 { flex: 0 0 40%; }
+.col-60 { flex: 0 0 57%; }
+
+.gmw-cover .slide-inner {
+  width: 68%;
+  justify-content: center !important;
+  align-items: flex-start;
+  text-align: left;
+  padding: 74px 64px 60px 64px;
+}
+.gmw-thanks .slide-inner {
+  width: 68%;
+  justify-content: center !important;
+  align-items: flex-start;
+  text-align: left;
+  padding: 92px 64px 60px 64px;
+}
+.gmw-divider .slide-inner {
+  justify-content:center;
+  padding: 82px 64px;
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-transform: none;
+  color: var(--noir);
+  margin: 0 0 .35em 0;
+}
+.reveal h1 { font-size: 2.36em; }
+.reveal h2 { font-size: 1.72em; }
+.reveal h3 { font-size: 1.20em; color: var(--grenat-l); }
+.reveal p, .reveal li {
+  font-size: .92em;
+  line-height: 1.62;
+  color: var(--noir);
+}
+.reveal strong { color: var(--grenat); font-weight: 700; }
+.reveal em { color: var(--bleu); font-style: normal; font-weight: 600; }
+.reveal .fragment { transition: opacity .24s ease; }
+
+.gmw-cover h1, .gmw-thanks h1 {
+  color: var(--noir) !important;
+  font-size: 2.48em !important;
+  max-width: 760px;
+}
+.gmw-divider h2 { color: #ffffff !important; font-size: 2.08em; max-width: 760px; }
+.gmw-divider p { color: rgba(255,255,255,.84) !important; }
+.section-num {
+  color: rgba(255,255,255,.22);
+  font-size: 4.5em;
+  font-weight: 800;
+  position: absolute;
+  top: 38px;
+  right: 62px;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+.section-line { width: 56px; height: 4px; background: var(--moutarde); margin: .7em 0 1.1em 0; font-size: 1.5em; }
+.title-bar { width: 44px; height: 4px; background: var(--bleu); margin: 6px 0 16px 0; border-radius: 999px; }
+
+.cover-sub {
+  color: var(--gris) !important;
+  font-size: 1.3em !important;
+  margin-top: .35em;
+  max-width: 720px;
+}
+.cover-author {
+  color: var(--moutarde-d) !important;
+  font-size: .96em !important;
+  margin-top: 1.2em !important;
+  font-weight: 700 !important;
+}
+.cover-date {
+  color: var(--gris-l) !important;
+  font-size: .88em !important;
+  margin-top: .35em !important;
+}
+.cover-divider {
+  width: 76px; height: 6px; border-radius:999px;
+  background: linear-gradient(90deg, var(--moutarde), var(--bleu));
+  margin: 1.15em 0;
+}
+.cover-logo {
+  width: 58px; height: 58px; border-radius: 14px;
+  background: rgba(255,255,255,.08);
+  border: 2px solid var(--moutarde);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 1.58em; font-weight: 800; margin-bottom: 1.25em;
+  color: var(--moutarde);
+}
+.audience-badges { display:flex; gap:10px; margin-top:1.4em; flex-wrap:wrap; }
+.badge {
+  padding: 7px 14px; border-radius: 999px; font-size: .72em; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; border:1px solid #d7e2ee; background:#fff; color:var(--gris);
+}
+.badge-pub { color: var(--bleu); border-color: rgba(0,180,216,.35); background: rgba(0,180,216,.08); }
+.badge-dec { color: var(--moutarde-d); border-color: rgba(212,175,55,.35); background: rgba(212,175,55,.10); }
+.badge-acad { color: var(--grenat); border-color: rgba(19,34,56,.22); background: rgba(19,34,56,.05); }
+
+.audience-tag {
+  display: inline-block; padding: 5px 11px; border-radius: 999px;
+  font-size: .68em; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .85em;
+}
+.aud-tous { background: rgba(0,180,216,.08); color: var(--bleu); border: 1px solid rgba(0,180,216,.28); }
+.aud-dec  { background: rgba(212,175,55,.12); color: var(--moutarde-d); border: 1px solid rgba(212,175,55,.30); }
+.aud-acad { background: rgba(19,34,56,.06); color: var(--grenat); border: 1px solid rgba(19,34,56,.18); }
+
+.keybox {
+  border-left: 4px solid var(--bleu);
+  background: rgba(255,255,255,.82);
+  padding: 10px 14px;
+  margin: .7em 0;
+  border-radius: 0 10px 10px 0;
+  font-size: 1.3em;
+  line-height: 1.58;
+  box-shadow: 0 8px 24px rgba(12,30,58,.04);
+}
+.keybox.gold {
+  border-left-color: var(--moutarde-d);
+  background: linear-gradient(135deg, rgba(212,175,55,.08), rgba(255,255,255,.92));
+}
+.keybox strong { color: var(--grenat); }
+.keybox.gold strong { color: var(--moutarde-d); }
+
+.propbox {
+  border: 1px solid #d7e2ee;
+  border-top: 4px solid var(--bleu);
+  background: rgba(255,255,255,.94);
+  padding: 14px 18px;
+  margin: .6em 0;
+  border-radius: 0 0 10px 10px;
+  font-size: .80em;
+  box-shadow: 0 8px 24px rgba(12,30,58,.04);
+}
+.propbox .prop-label {
+  font-size: .80em; font-weight: 800; letter-spacing: .10em;
+  text-transform: uppercase; color: var(--bleu); margin-bottom: 7px;
+}
+
+.quote-box {
+  border-left: 4px solid var(--moutarde-d);
+  padding: 12px 16px;
+  margin: .8em 0;
+  background: rgba(255,255,255,.7);
+  color: var(--gris);
+  font-size: .8em;
+  line-height: 1.6;
+}
+
+.reveal ul { list-style: none; padding: 0; margin: .45em 0; }
+.reveal ul li { padding-left: 1.45em; position: relative; margin-bottom: .52em; }
+.reveal ul li::before {
+  content: '▸';
+  position: absolute; left: 0; color: var(--bleu); font-size: .88em; font-weight: 800;
+}
+.reveal ul li.cross::before { content: '✗'; color: #b34040; }
+.reveal ul li.check::before { content: '✔'; color: #24895a; }
+.reveal ul li.neutral::before { content: '→'; color: var(--moutarde-d); }
+
+.reveal table { width:100%; border-collapse:collapse; font-size:.82em; margin-top:.6em; }
+.reveal table th {
+  background: var(--grenat); color: var(--blanc);
+  padding: 8px 11px; text-align:left; font-weight:700;
+}
+.reveal table td { padding: 7px 11px; border-bottom: 1px solid #e3ebf4; }
+.reveal table tr:nth-child(even) td { background: #f9fbfd; }
+.reveal table tr.highlight td { background: rgba(0,180,216,.08); color: var(--grenat); font-weight:700; }
+.reveal table tr.highlight2 td { background: rgba(212,175,55,.14); color: #735812; font-weight:700; }
+
+.steps { display:flex; gap:0; margin:.9em 0; }
+.step {
+  flex:1; text-align:center; padding:12px 8px;
+  border-top: 3px solid #d7e2ee; font-size: .72em; position:relative;
+}
+.step.active { border-top-color: var(--bleu); }
+.step-n {
+  display:inline-flex; width:26px; height:26px; border-radius:50%; align-items:center; justify-content:center;
+  background:#eaf0f7; color:var(--grenat); font-weight:800; font-size:.82em; margin-bottom:6px;
+}
+.step.active .step-n { background: var(--bleu); color:#fff; }
+
+.chart-wrap {
+  position: relative; width:100%; background:#fff; border:1px solid #d7e2ee; border-radius: 12px; overflow:hidden;
+  box-shadow: 0 10px 24px rgba(12,30,58,.04);
+}
+.chart-wrap canvas { display:block; width:100% !important; }
+.chart-legend {
+  display:flex; flex-wrap:wrap; gap:8px 16px; font-size:.66em; padding:8px 12px;
+  background:#f8fbfe; border-top:1px solid #e3ebf4;
+}
+.legend-item { display:flex; align-items:center; gap:6px; color:var(--gris); }
+.legend-line { width:22px; height:2px; }
+.btn-row { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.chart-btn {
+  padding: 6px 14px; border:1.4px solid var(--bleu); background:#fff; color:var(--bleu); border-radius:999px;
+  cursor:pointer; font-size:.76em; font-family:'Montserrat', Arial, sans-serif; font-weight:700; transition:all .2s ease;
+}
+.chart-btn:hover, .chart-btn.active { background: var(--bleu); color:#fff; }
+
+.scenario-pill {
+  display:inline-block; padding: 5px 12px; border-radius:999px; font-size:.74em; font-weight:700;
+}
+.pill-neutral { background:#edf2f7; color:var(--gris); }
+.pill-good { background:#e8f7f0; color:#1c7f56; }
+.pill-bad { background:#fdeeee; color:#9b3333; }
+
+.footnote {
+  font-size:.62em; color:var(--gris-l); border-top:1px solid #e3ebf4; padding-top:7px; margin-top:auto;
+}
+.hi { background: rgba(212,175,55,.20); padding:0 4px; border-radius: 4px; }
+.hi-red { background: rgba(0,180,216,.12); padding:0 4px; border-radius: 4px; color: var(--grenat); }
+
+.slide-num {
+  position:absolute; bottom:16px; right:20px;
+  font-size:.70em; color:#546579; background: rgba(255,255,255,.85); border:1px solid #d7e2ee;
+  border-radius:999px; padding:.18rem .5rem; font-family:'Montserrat', Arial, sans-serif;
+}
+.deck-meta {
+  position:absolute; top:22px; right:26px; z-index:3; display:flex; align-items:center; gap:10px;
+  font-size:.60em; color:#6e8097; letter-spacing:.10em; text-transform:uppercase; font-weight:700;
+}
+.deck-meta::before {
+  content:''; width:48px; height:2px; background: var(--bleu); display:block;
+}
+.deck-meta .meta-dot { width:6px; height:6px; border-radius:50%; background: var(--moutarde); display:inline-block; }
+
+.reveal .progress { background: rgba(0,180,216,.15); }
+.reveal .progress span { background: var(--bleu); }
+.reveal .controls { color: var(--bleu); }
+.reveal .slide-number {
+  color:#546579; background:rgba(255,255,255,.82); border:1px solid #D7E2EE; border-radius:999px; padding:.18rem .45rem; font-family:'Montserrat', Arial, sans-serif;
+}
+
+.reveal .math, .reveal mjx-container { color: inherit; }
+
+
+.deck-social {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.deck-social a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(255,255,255,.88);
+  border: 1px solid #d7e2ee;
+  color: var(--grenat);
+  box-shadow: 0 6px 18px rgba(12,30,58,.08);
+  transition: all .2s ease;
+}
+
+.deck-social a:hover {
+  transform: translateY(-2px);
+  color: var(--bleu);
+  border-color: rgba(0,180,216,.35);
+  background: #ffffff;
+}
+
+.deck-social i {
+  font-size: 0.92rem;
+}
+
+.pdf-download-wrap {
+  margin-top: 18px;
+}
+
+.pdf-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(90deg, var(--grenat), var(--grenat-l));
+  color: #ffffff;
+  border: 1px solid rgba(19,34,56,.15);
+  box-shadow: 0 10px 22px rgba(12,30,58,.10);
+  transition: all .2s ease;
+}
+
+.pdf-download-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, var(--bleu), var(--grenat));
+  color: #ffffff;
+}
+
+.pdf-download-btn i {
+  font-size: 0.95em;
+}
+
+.pdf-download-btn.light {
+  background: #ffffff;
+  color: var(--grenat);
+  border: 1px solid #d7e2ee;
+}
+
+.pdf-download-btn.light:hover {
+  background: var(--grenat);
+  color: #ffffff;
+}
+
+</style>
+
+</head>
+
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ══════════════════════════════════════════════
+     COUVERTURE
+     ══════════════════════════════════════════════ -->
+<section class="section-inner">
+<div class="slide-inner" style="justify-content:center; padding:48px 64px;">
+  <h1>La neutralité nominale du changement d'unité monétaire</h1>
+  <p class="cover-sub">Coûts fiduciaires, seigneuriage et fonction-objectif stylisée<br>de la Banky Foiben'i Madagasikara</p>
+  <div class="cover-divider"></div>
+  <p class="cover-author">Dr Ramanambonona Ambinintsoa</p>
+  <p class="cover-date">Département Économie  Ankatso &· ENS Antananarivo · Mars 2026</p>
+  <div class="pdf-download-wrap" style="margin-top:22px;">
+  <a class="pdf-download-btn light"
+     href="note.pdf"
+     download="article_reforme_monetaire.pdf"
+     target="_blank"
+     rel="noopener noreferrer">
+    <i class="fa-solid fa-file-pdf"></i>
+    <span>Télécharger l’article (PDF)</span>
+  </a>
+  </div>
+  <div class="audience-badges">
+    <span class="badge badge-pub">Grand public</span>
+    <span class="badge badge-dec">Décideurs</span>
+    <span class="badge badge-acad">Académiques</span>
+  </div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     PLAN
+     ══════════════════════════════════════════════ -->
+<section>
+<div class="slide-inner">
+  <h2>Plan de la présentation</h2>
+  <div class="title-bar fragment"></div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 32px; margin-top:0.4em;">
+    <div class="keybox fragment" style="margin:0;">
+      <strong>I. La question</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Qu'est-ce qu'une redénomination ? Que peut-on raisonnablement en attendre ?</span>
+    </div>
+    <div class="keybox fragment" style="margin:0;">
+      <strong>II. La démonstration</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Neutralité nominale formelle — équation quantitative — demande réelle</span>
+    </div>
+    <div class="keybox fragment" style="margin:0;">
+      <strong>III. Baumol-Tobin</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Coûts de transaction — réforme des coupures — effet racine carrée</span>
+    </div>
+    <div class="keybox fragment" style="margin:0;">
+      <strong>IV. Cagan & seigneuriage</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Courbe de Laffer — deux branches — invariance du seigneuriage réel</span>
+    </div>
+    <div class="keybox fragment" style="margin:0;">
+      <strong>V. Fonction-objectif BFM</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Arbitrages inflation / transaction / coûts fiduciaires / transition</span>
+    </div>
+    <div class="keybox fragment" style="margin:0;">
+      <strong>VI. Simulations & implications</strong><br>
+      <span style="font-size:0.8em;color:var(--gris);">Scénarios calibrés — optimum de réforme — Madagascar</span>
+    </div>
+  </div>
+  <div class="slide-num">2</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION I — LA QUESTION
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">I</span>
+  <h2 style="font-size: 2.5em">La question posée</h2>
+  <div class="section-line"></div>
+  <p class="fragment" style="font-size: 2.5em">Enlever des zéros, est-ce réformer l'économie ?</p>
+</div>
+</section>
+
+
+<!-- L'intuition populaire -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-tous">Tout public</span>
+  <h2 style="font-size: 2.5em">Une intuition séduisante… mais trompeuse</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div>
+      <p style="font-size:1.5em; color:var(--gris); margin-bottom:0.5em;"><strong>L'hypothèse examinée</strong></p>
+      <div style="background:var(--grenat); color:white; border-radius:8px; padding:16px 20px; text-align:center; font-size:0.8em; margin-bottom:12px;" class="fragment">
+        <span style="font-size:2.0em; font-weight:700;">20 000 Ar</span><br>
+        <span style="color:var(--moutarde); font-size:1.4em; margin:4px 0; display:block;">↓</span>
+        <span style="font-size:2.0em; font-weight:700; color:var(--moutarde);">200 nouvelles unités</span><br>
+        <span style="opacity:0.7; font-size:2.0em; margin-top:4px; display:block;">Division par $k = 100$</span>
+      </div>
+
+      <div class="keybox gold fragment" style="font-size:2.0em;">
+        <strong>L'intuition courante :</strong> des montants plus petits = monnaie plus maniable = gains réels pour l'économie.
+      </div>
+    </div>
+
+    <div>
+      <p style="font-size:1.5em; color:var(--gris); margin-bottom:0.5em;"  class="fragment"><strong>Cette étude essayer de vérifier que</strong></p>
+      <ul style="margin-top:0.2em; font-size:1.5em">
+        <li class="cross fragment" style="margin-bottom:0.7em;">La redénomination <strong>seule</strong> ne crée aucun pouvoir d'achat</li>
+        <li class="cross fragment" style="margin-bottom:0.7em;">Elle n'abaisse pas l'inflation mécaniquement</li>
+        <li class="cross fragment" style="margin-bottom:0.7em;">Elle n'améliore pas le seigneuriage réel</li>
+        <li class="check fragment" style="margin-bottom:0.7em;">Une <strong>réforme des coupures</strong> associée peut réduire les coûts de transaction</li>
+        <li class="neutral fragment">Mais les gains sont <strong>atténués</strong> et non garantis</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">4</div>
+</div>
+</section>
+
+
+<!-- Leçons historiques -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-tous">Tout public</span>
+  <h2 style="font-size: 2.5em">Trois leçons de l'histoire monétaire</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:0.2em; font-size:1.7em;">
+    <div class="fragment" style="border-top:4px solid var(--moutarde-d); padding:14px 14px 10px; background:var(--fond-s); border-radius:0 0 6px 6px;">
+      <p style="font-size:0.75em; font-weight:700; color:var(--moutarde-d); margin-bottom:4px; text-transform:uppercase;">Turquie · 2005</p>
+      <p style="font-size:0.7em; line-height:1.55; color:var(--gris);">Division par <strong>1 million</strong> après deux décennies d'inflation. Affichage clarifié ✔. Mais la stabilisation avait été réalisée <em>avant</em> la réforme, par des politiques monétaire et budgétaire.</p>
+    </div>
+    <div class="fragment" style="border-top:4px solid var(--grenat); padding:14px 14px 10px; background:var(--fond-s); border-radius:0 0 6px 6px;">
+      <p style="font-size:0.75em; font-weight:700; color:var(--grenat); margin-bottom:4px; text-transform:uppercase;">Ghana · 2007</p>
+      <p style="font-size:0.7em; line-height:1.55; color:var(--gris);">Suppression de <strong>4 zéros</strong>. Obuobi et al. (2020) montrent que les effets réels mesurables tiennent aux réformes structurelles <em>concomitantes</em>, non à la conversion nominale.</p>
+    </div>
+    <div class="fragment" style="border-top:4px solid #336699; padding:14px 14px 10px; background:var(--fond-s); border-radius:0 0 6px 6px;">
+      <p style="font-size:0.75em; font-weight:700; color:#336699; margin-bottom:4px; text-transform:uppercase;">Brésil · 1994</p>
+      <p style="font-size:0.7em; line-height:1.55; color:var(--gris);">Le Plan Real n'était <strong>pas</strong> une simple redénomination. C'était un programme complet : politique de change, discipline budgétaire, réforme de la demande de monnaie.</p>
+    </div>
+  </div>
+
+  <div class="keybox fragment" style="margin-top:14px;">
+    <strong>Leçon commune :</strong> quand une réforme nominale a réussi, la cause réelle du succès se trouve dans les politiques macroéconomiques sous-jacentes, pas dans le changement d'unité.
+  </div>
+  <div class="slide-num">5</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION II — NEUTRALITÉ FORMELLE
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">II</span>
+  <h2 style="font-size: 2.5em">Démonstration </h2>
+  <div class="section-line"></div>
+  <p class="fragment" style="font-size: 2.5em">Neutralité nominale, équation quantitative, demande de monnaie</p>
+</div>
+</section>
+
+
+<!-- La transformation d'échelle -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size: 2.5em">La redénomination comme transformation d'échelle</h2>
+  <div class="title-bar"></div>
+
+  <div class="fragment" style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:28px; align-items:start; font-size: 1.8em">
+    <div>
+      <p class="fragment" style="font-size:0.7em; margin-bottom:0.6em;">Pour tout facteur $k > 0$, la nouvelle unité satisfait $1\,\text{n.u.} = k\,\text{a.u.}$, de sorte que toute grandeur nominale $X$ devient :</p>
+      <div class="fragment" style="text-align:center; padding:4px 4px; background:var(--fond-s); border-radius:6px; margin-bottom:12px; font-size:0.7em">
+        $$X' = \frac{X}{k}$$
+      </div>
+      <p  class="fragment" style="font-size:0.7em;">Appliqué <em>simultanément</em> à toutes les grandeurs :</p>
+      <div class="fragment" style="text-align:center; padding:10px; background:var(--fond-s); border-radius:6px; font-size:0.7em">
+        $$M' = \frac{M}{k},\quad P' = \frac{P}{k},\quad W' = \frac{W}{k},\quad B' = \frac{B}{k}$$
+      </div> 
+    </div>
+	
+   <div class="propbox fragment" style="margin-top:14px;">
+        <div class="prop-label">Proposition 1 — Neutralité</div>
+        Une redénomination pure n'altère aucune grandeur réelle. En particulier :
+        $$\frac{M'}{P'} = \frac{M}{P}, \quad \frac{W'}{P'} = \frac{W}{P}, \quad \frac{B'}{P'} = \frac{B}{P}$$
+        <span class="fragment" style="font-size:0.7em;color:var(--gris);"><strong>Preuve :</strong> $\displaystyle\frac{M'}{P'} = \frac{M/k}{P/k} = \frac{M}{P}$. Même raisonnement pour $W$ et $B$. $\square$</span>
+      </div>
+  </div>
+  <div class="slide-num">7</div>
+</div>
+</section>
+
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size: 2.5em">La redénomination comme transformation d'échelle</h2>
+  <div class="title-bar"></div>
+
+  <div style="gap:28px;">
+    <div>
+      <p style="font-size:0.78em; color:var(--gris); margin-bottom:6px; font-weight:600;">Visualisation dynamique</p>
+      <div class="chart-wrap">
+        <canvas id="c-neutral" height="200"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat);"></div>
+            <span>Grandeur nominale $1/k$</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--moutarde-d); border-top: 2px dashed var(--moutarde-d); height:0;"></div>
+            <span>Rapport réel (invariant = 1)</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="chart-btn" onclick="setK(1)">$k=1$</button>
+        <button class="chart-btn" onclick="setK(10)">$k=10$</button>
+        <button class="chart-btn active" onclick="setK(100)">$k=100$</button>
+        <button class="chart-btn" onclick="setK(1000)">$k=1000$</button>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">7</div>
+</div>
+</section>
+
+
+<!-- Équation quantitative -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size: 2.5em">Cohérence avec l'équation quantitative</h2>
+  <div class="title-bar"></div>
+
+  <div class="fragment" style="display:grid; grid-template-columns:1fr 1fr; gap:28px; font-size: 0.70em">
+    <div>
+      <p class="fragment" style="font-size:1.5em;">L'équilibre monétaire nominal s'écrit :</p>
+      <div class="fragment" style="text-align:center; padding:12px; background:var(--fond-s); border-radius:6px; margin:10px 0; font-size:1.5em;">
+        $$MV = PY$$
+      </div>
+      <p class="fragment" style="font-size:1.5em;">Après redénomination par $k$ :</p>
+      <div class="fragment" style="text-align:center; padding:10px; background:var(--fond-s); border-radius:6px; margin:8px 0; font-size:1.5em;">
+        $$M'V = \frac{M}{k}V \quad \text{et} \quad P'Y = \frac{P}{k}Y$$
+      </div>
+      <div class="fragment" style="text-align:center; padding:10px; background:var(--grenat-ll); border-radius:6px; margin:8px 0; border-left:3px solid var(--grenat); font-size:1.5em;">
+        $$M'V = P'Y \quad \checkmark$$
+      </div>
+      <p class="fragment" style="font-size:1.5em; color:var(--gris);">L'équilibre est conservé. Ni $V$ (vitesse de circulation), ni $Y$ (revenu réel) ne sont modifiés par $k$.</p>
+    </div>
+
+    <div>
+      <p  class="fragment" style="font-size:1.5em; margin-bottom:8px;">De même, si la demande réelle de monnaie s'écrit $L(Y,i)$ :</p>
+      <div  class="fragment" style="text-align:center; padding:10px; background:var(--fond-s); border-radius:6px; margin:8px 0; font-size:1.5em;">
+        $$\frac{M'^d}{P'} = \frac{M^d/k}{P/k} = \frac{M^d}{P} = L(Y,i)$$
+      </div>
+      <p class="fragment" style="font-size:1.5em; color:var(--gris); margin-top:8px;">La demande d'encaisses <em>réelles</em> est identique avant et après la réforme nominale.</p>
+
+      <div class="keybox gold fragment" style="margin-top:14px;">
+        <strong>Ce que cela signifie concrètement :</strong><br>
+        <span class="fragment" style="font-size:0.93em;">Si le prix du riz est $2\,000$ Ar aujourd'hui et $20$ nouvelles unités demain, le riz n'est ni plus cher ni moins cher. Le pouvoir d'achat d'un salaire de $2\,000\,000$ Ar (= $20\,000$ n.u.) est rigoureusement identique.</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">8</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION III — BAUMOL-TOBIN
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">III</span>
+  <h2 style="font-size: 2.5em">Le modèle de Baumol-Tobin</h2>
+  <div class="section-line"></div>
+  <p class="fragment" style="font-size: 2.5em">Quand et comment une réforme des coupures peut réduire les coûts réels</p>
+</div>
+</section>
+
+
+<!-- Baumol-Tobin : arbitrage -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size: 2.5em">L'arbitrage de gestion des encaisses</h2>
+  <div class="title-bar"></div>
+
+  <div class="fragment" style="display:grid; grid-template-columns:1.05fr 0.95fr; gap:26px; align-items:start; font-size: 0.85em">
+    <div>
+      <p class="fragment" style="font-size:1.3em;">Soit $X$ la dépense nominale, $B$ le coût fixe d'un retrait, $N$ le nombre de retraits. Le coût total est :</p>
+      <div class="fragment" style="text-align:center; padding:10px; background:var(--fond-s); border-radius:6px; margin:8px 0; font-size:1.3em;">
+        $TC(N) = \underbrace{BN}_{\text{coûts fixes}} + \underbrace{i\,\frac{X}{2N}}_{\text{coût d'opportunité}}$
+      </div>
+      <p class="fragment" style="font-size:1.3em;">Minimisation par rapport à $N$ :</p>
+      <div class="fragment" style="text-align:center; padding:8px; background:var(--fond-s); border-radius:6px; margin:6px 0; font-size:1.3em;">
+        $\partial TC/\partial N = 0 \;\Rightarrow\; N^\star = \sqrt{iX/(2B)}$
+      </div>
+      <p class="fragment" style="font-size:1.3em;">On en déduit les grandeurs réelles optimales :</p>
+      <div class="fragment" style="text-align:center; padding:10px; background:var(--grenat-ll); border-radius:6px; border-left:3px solid var(--grenat); margin:8px 0; font-size:1.3em;">
+        $m^\star = \sqrt{\frac{bY}{2i}}, \qquad tc^\star = \sqrt{2ibY}$
+      </div>
+      <p class="fragment" style="font-size:1.3em; color:var(--gris);">où $b = B/P$ est le coût réel unitaire de transaction.</p>
+    </div>
+
+    <div>
+      <div class="propbox fragment">
+        <div class="prop-label" style="font-size:1.5em;">Proposition 2 — Invariance BT</div>
+        Sous redénomination pure ($X' = X/k$, $B' = B/k$, $P' = P/k$) :
+        $$\frac{M'^\star}{P'} = \frac{M^\star}{P} = m^\star$$
+        <span style="font-size:1.5em; color:var(--gris);">
+          Preuve : $M'^\star = \sqrt{\tfrac{(B/k)(X/k)}{2i}} = \tfrac{1}{k}\sqrt{\tfrac{BX}{2i}} = \tfrac{M^\star}{k}$, puis $M'^\star/P' = M^\star/P$. $\square$
+        </span>
+      </div>
+
+      <div class="keybox fragment" style="margin-top:12px;">
+        <strong>La clé réelle :</strong> ce n'est pas $k$ qui importe, mais le coût réel $b(q)$. Si la réforme améliore effectivement la qualité $q$ des coupures :
+        $$b(q) = b_0(1 - \eta q), \quad q \in [0,1]$$
+        alors $m^\star$ et $tc^\star$ diminuent — mais en racine carrée de $b(q)$.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">10</div>
+</div>
+</section>
+
+
+<!-- Baumol-Tobin : effet racine carrée -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 class="fragment">L'effet racine carrée : gains atténués</h2>
+  <div class="title-bar"></div>
+
+  <div class="fragment" style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
+    <div>
+      <p class="fragment" style="font-size:1.2em; margin-bottom:8px;">Puisque $m^\star(q) = \sqrt{b_0(1-\eta q)\cdot Y/(2i)}$, la sensibilité de l'encaisse au coût est :</p>
+      <div class="fragment" style="text-align:center; padding:8px; background:var(--fond-s); border-radius:6px; margin:8px 0;">
+        $$\frac{\partial m^\star}{\partial b} = \frac{1}{2}\sqrt{\frac{Y}{2ib}} > 0$$
+      </div>
+      <p class="fragment" style="font-size:1.2em; color:var(--gris); margin-bottom:10px;">La transmission est toujours inférieure à la baisse initiale de $b$.</p>
+
+      <table class="fragment" style="font-size:0.76em;">
+        <tr class="fragment"><th>Réforme $q$</th><th>Baisse de $b$</th><th>Baisse de $m^\star$</th></tr>
+        <tr class="fragment"><td>$q = 0.10$</td><td>−5 %</td><td class="highlight">−2.5 %</td></tr>
+        <tr class="fragment"><td>$q = 0.30$</td><td>−15 %</td><td class="highlight">−7.8 %</td></tr>
+        <tr class="fragment"><td>$q = 0.60$</td><td>−30 %</td><td class="highlight">−16.3 %</td></tr>
+        <tr class="fragment"><td>$q = 1.00$</td><td>−50 %</td><td class="highlight">−29.3 %</td></tr>
+      </table>
+      <p class="fragment" style="font-size:1.2em; color:var(--gris); margin-top:6px;">(avec $\eta = 0.5$)</p>
+    </div>
+
+    <div>
+      <p class="fragment" style="font-size:0.78em; color:var(--gris); margin-bottom:6px; font-weight:600;">Graphique interactif</p>
+      <div class="chart-wrap fragment">
+        <canvas id="c-bt" height="220"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat); height:2px;"></div>
+            <span>Coût $b(q)/b_0$ (linéaire)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--moutarde-d); height:2px; border-top:2px dashed var(--moutarde-d);"></div>
+            <span>Encaisse $m^\star(q)/m^\star(0)$ (concave)</span>
+          </div>
+        </div>
+      </div>
+      <div class="keybox gold fragment" style="font-size:0.80em; margin-top:8px;">
+        La zone grisée = <strong>écart entre réduction du coût unitaire et réduction des encaisses</strong>. Une réforme intense comprime moins les encaisses qu'on ne l'espère.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">11</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION IV — CAGAN & SEIGNEURIAGE
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">IV</span>
+  <h2 style="font-size:2.5em">Cagan et le seigneuriage</h2>
+  <div class="section-line"></div>
+  <p style="font-size:2.5em" class="fragment">La courbe de Laffer du seigneuriage et ses deux branches</p>
+</div>
+</section>
+
+
+<!-- Cagan -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size:2.5em">La courbe de Laffer du seigneuriage</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start;">
+    <div>
+      <p class="fragment" style="font-size:1.2em; margin-bottom:6px;">Demande réelle de monnaie (Cagan) :</p>
+      <div class="fragment" style="text-align:center; padding:8px; background:var(--fond-s); border-radius:6px; margin:6px 0; font-size:1.2em">
+        $m(\pi) = A\,e^{-\alpha\pi}, \quad \alpha > 0$
+      </div>
+      <p class="fragment" style="font-size:1.2em; margin-bottom:6px;">Seigneuriage réel :</p>
+      <div class="fragment" style="text-align:center; padding:8px; background:var(--fond-s); border-radius:6px; margin:6px 0; font-size:1.2em">
+        $s(\pi) = \pi\cdot m(\pi) = A\pi\,e^{-\alpha\pi}$
+      </div>
+      <p class="fragment" style="font-size:1.2em; margin-bottom:4px;">Maximisation : $s'(\pi) = Ae^{-\alpha\pi}(1-\alpha\pi) = 0$</p>
+      <div class="fragment" style="text-align:center; padding:8px; background:var(--grenat-ll); border-radius:6px; border-left:3px solid var(--grenat); margin:6px 0; font-size:1.2em">
+        $\pi_s^\star = \frac{1}{\alpha}, \qquad s(\pi_s^\star) = \frac{A}{\alpha e}$
+      </div>
+
+      <div class="propbox fragment" style="font-size:1.2em; margin-top:10px;">
+        <div class="prop-label">Proposition 3 — Invariance du seigneuriage</div>
+        Une redénomination pure laisse $s(\pi) = A\pi e^{-\alpha\pi}$ rigoureusement inchangée : ni $\pi$, ni les encaisses réelles $m(\pi)$ ne sont modifiés par $k$.
+      </div>
+    </div>
+
+    <div class="fragment">
+      <p style="font-size:0.78em; color:var(--gris); margin-bottom:5px; font-weight:600;">Courbe de Laffer interactive</p>
+      <div class="chart-wrap">
+        <canvas id="c-cagan" height="220"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat);"></div><span>$\alpha=3$</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat); border-top:2px dashed;"></div><span>$\alpha=5$ (central)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat); border-top:2px dotted;"></div><span>$\alpha=7$</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="chart-btn active" id="btn-cagan-all" onclick="caganShow('all')">Toutes</button>
+        <button class="chart-btn" id="btn-cagan-3" onclick="caganShow(3)">$\alpha=3$</button>
+        <button class="chart-btn" id="btn-cagan-5" onclick="caganShow(5)">$\alpha=5$</button>
+        <button class="chart-btn" id="btn-cagan-7" onclick="caganShow(7)">$\alpha=7$</button>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">13</div>
+</div>
+</section>
+
+
+<!-- Deux branches -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 style="font-size:2.5em">Les deux branches : stabilité vs tentation fiscale</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; font:1.8em">
+    <div class="fragment" style="border-top:4px solid #1a7a3a; padding:14px; background:#f0f9f3; border-radius:0 0 8px 8px;">
+      <p class="fragment" style="font-weight:700; color:#1a7a3a; font-size:1.2em; margin-bottom:8px;">✔ Branche montante — $\pi < \pi_s^\star$</p>
+      <ul>
+        <li class="fragment">Le seigneuriage <strong>augmente</strong> avec l'inflation</li>
+        <li class="fragment">Stabilité des prix et financement monétaire sont <em>compatibles</em></li>
+        <li class="fragment">Zone où se situe la cible BFM ($\pi^T = 5\,\%$)</li>
+        <li class="fragment">Pour $\alpha=5$ : $\pi_s^\star = 20\,\%$ — marge confortable</li>
+      </ul>
+    </div>
+
+    <div class="fragment" style="border-top:4px solid #8b1a1a; padding:14px; background:#fce8e8; border-radius:0 0 8px 8px;">
+      <p style="font-weight:700; color:#8b1a1a; font-size:1.2em; margin-bottom:8px;">✗ Branche descendante — $\pi > \pi_s^\star$</p>
+      <ul>
+        <li class="fragment">Le seigneuriage <strong>diminue</strong> malgré la hausse de $\pi$</li>
+        <li class="fragment">La demande de monnaie se contracte plus vite que $\pi$ ne monte</li>
+        <li class="fragment"><strong>Zone de tentation fiscale</strong> auto-destructrice</li>
+        <li class="fragment">Dynamique classique des hyperinflations (Zimbabwe, Bolivie…)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="keybox fragment" style="margin-top:14px;">
+    <strong>Implication pour une réforme monétaire :</strong> changer les chiffres sur les billets ne déplace pas la courbe de Laffer. Le seigneuriage réel ne s'améliore que si l'inflation effective ou la confiance dans la monnaie ($A$) changent réellement.
+  </div>
+
+  <div class="fragment" style="display:flex; gap:20px; margin-top:10px; font-size:1.5em;">
+    <div style="flex:1; text-align:center; padding:8px; background:var(--fond-s); border-radius:6px;">
+      <strong>$\pi^T = 5\,\%$</strong><br><span style="color:var(--gris);">Cible BFM</span>
+    </div>
+    <div style="flex:1; text-align:center; padding:8px; background:var(--fond-s); border-radius:6px;">
+      <strong>$\pi_s^\star = 20\,\%$</strong><br><span style="color:var(--gris);">Sommet pour $\alpha=5$</span>
+    </div>
+    <div style="flex:1; text-align:center; padding:8px; background:var(--grenat-ll); border-radius:6px;">
+      <strong>$\pi^T \ll \pi_s^\star$</strong><br><span style="color:var(--gris);">Compatibilité</span>
+    </div>
+  </div>
+  <div class="slide-num">14</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION V — FONCTION-OBJECTIF BFM
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">V</span>
+  <h2 style="font-size:2.5em">La fonction-objectif stylisée de la BFM</h2>
+  <div class="section-line"></div>
+  <p class="fragment" style="font-size:2.5em">Articuler stabilité des prix, coûts transactionnels et coûts fiduciaires</p>
+</div>
+</section>
+
+
+<!-- La fonction de perte -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size:2.0em">Les quatre composantes de l'arbitrage</h2>
+  <div class="title-bar"></div>
+
+  <div class="fragment" style="background:var(--fond-s); border-radius:8px; padding:14px 18px; text-align:center; margin-bottom:12px; font-size:1.2em;">
+  $\mathcal{L}(\pi,q) = \underbrace{\lambda_\pi(\pi-\pi^T)^2}_{\text{①}} + \underbrace{\lambda_T\sqrt{2iYb(q)}}_{\text{②}} + \underbrace{\lambda_F F(q)}_{\text{③}} - \underbrace{\lambda_S A\pi e^{-\alpha\pi}}_{\text{④}} + \underbrace{\kappa q^2}_{\text{⑤}}$
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; font-size:1.4em;">
+    <div class="keybox fragment" style="margin:0; font-size:0.81em;">
+      <strong>① Discipline anti-inflationniste</strong><br>
+      Pénalise l'écart de $\pi$ à la cible $\pi^T$. Fort coefficient $\lambda_\pi$ → la stabilité des prix domine.
+    </div>
+    <div class="keybox fragment" style="margin:0; font-size:0.81em;">
+      <strong>② Coûts de transaction</strong><br>
+      $tc^\star(q)$ — décroissant avec $q$. Canal par lequel la réforme des coupures améliore $\mathcal{L}$.
+    </div>
+    <div class="keybox gold fragment" style="margin:0; font-size:0.81em;">
+      <strong>③ Coûts fiduciaires résiduels</strong><br>
+      Fabrication, stockage, remplacement, contrefaçon. Décroissants avec la qualité de la réforme.
+    </div>
+    <div class="keybox gold fragment" style="margin:0; font-size:0.81em;">
+      <strong>④ Seigneuriage (allègement)</strong><br>
+      Signe <em>négatif</em> : le seigneuriage réduit la perte. Tension interne : dépasser $\pi_s^\star$ inverserait l'effet.
+    </div>
+    <div class="keybox fragment" style="margin:0; font-size:0.81em; grid-column: span 2;">
+      <strong>⑤ Coûts de transition $\kappa q^2$</strong><br>
+      Adaptation informatique, refonte des formulaires, campagnes de communication. Convexes en $q$ : une réforme trop ambitieuse peut devenir plus coûteuse que les gains qu'elle procure.
+    </div>
+  </div>
+
+  <p class="fragment" style="font-size:1.0em; color:var(--gris); margin-top:8px;">
+    <strong>Observation clé :</strong> le facteur $k$ n'apparaît nulle part dans $\mathcal{L}(\pi, q)$. La redénomination pure ne déplace pas la perte sociale.
+  </p>
+  <div class="slide-num">16</div>
+</div>
+</section>
+
+
+<!-- Conditions d'optimalité -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 style="font-size:2.5em">Conditions du premier ordre</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px;">
+    <div class="fragment">
+      <p style="font-size:1.5em; margin-bottom:6px;"><strong>Sur l'inflation $\pi$</strong></p>
+      <div style="padding:10px; background:var(--fond-s); border-radius:6px; text-align:center; font-size:1.5em;">
+        $\frac{\partial\mathcal{L}}{\partial\pi} = 2\lambda_\pi(\pi-\pi^T) - \lambda_S Ae^{-\alpha\pi}(1-\alpha\pi) = 0$
+      </div>
+      <p style="font-size:1.2em; color:var(--gris); margin-top:8px; line-height:1.55;">
+        Coût marginal de la déviation = gain marginal en seigneuriage.<br>
+        Sur la branche montante ($\pi < \pi_s^\star$) : le terme seigneuriage est positif → $\pi^\star > \pi^T$ (légèrement).
+      </p>
+    </div>
+
+    <div class="fragment">
+      <p style="font-size:1.5em; margin-bottom:6px;"><strong>Sur la réforme $q$</strong></p>
+      <div style="padding:10px; background:var(--fond-s); border-radius:6px; text-align:center; font-size:1.5em;">
+        $\frac{\partial\mathcal{L}}{\partial q} = -\frac{\lambda_T\eta\sqrt{2iYb_0}}{2\sqrt{1-\eta q}} + \lambda_F F'(q) + 2\kappa q = 0$
+      </div>
+      <p style="font-size:1.2em; color:var(--gris); margin-top:8px; line-height:1.55;">
+        Bénéfice marginal (décroissant, concave) = coût marginal de transition (croissant). Existence d'un optimum intérieur $q^\star \in (0,1)$ garantie sous conditions standard.
+      </p>
+    </div>
+  </div>
+
+  <div class="keybox fragment" style="margin-top:14px; font-size:1.2em;">
+    <strong>Implication directe pour les décideurs :</strong> il existe une intensité de réforme $q^\star$ ni trop faible (gains inexploités) ni trop forte (coûts de transition excessifs). La trouver requiert une étude empirique sur les coûts réels de Madagascar.
+  </div>
+  <div class="slide-num">17</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION VI — SIMULATIONS
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">VI</span>
+  <h2 style="font-size:2.5em">Calibration et simulations</h2>
+  <div class="section-line"></div>
+  <p  class="fragment" style="font-size:2.5em">Ordres de grandeur, scénarios comparés, optimum de réforme</p>
+</div>
+</section>
+
+
+<!-- Paramètres -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 style="font-size:2.0em">Paramètres de calibration</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; font-size:1.5em;">
+    <div class="fragment">
+      <table>
+        <tr class="fragment"><th>Paramètre</th><th>Sens économique</th><th>Valeur</th></tr>
+        <tr class="fragment"><td>$k$</td><td>Facteur de redénomination</td><td><strong>100</strong></td></tr>
+        <tr class="fragment"><td>$Y$</td><td>Flux réel de transactions</td><td>1 000</td></tr>
+        <tr class="fragment"><td>$i$</td><td>Taux d'intérêt d'opportunité</td><td>8 %</td></tr>
+        <tr class="fragment"><td>$b_0$</td><td>Coût réel initial de transaction</td><td>1,2</td></tr>
+        <tr class="fragment"><td>$\eta$</td><td>Efficacité max. de la réforme</td><td>0,5</td></tr>
+        <tr class="fragment"><td>$\alpha$</td><td>Semi-élasticité de $m(\pi)$</td><td>5</td></tr>
+        <tr class="fragment"><td>$\pi^T$</td><td>Cible stylisée d'inflation</td><td>5 %</td></tr>
+      </table>
+    </div>
+
+    <div class="fragment">
+      <p class="fragment" style="font-size:0.83em; margin-bottom:8px;"><strong>Valeurs de référence ($q=0$) :</strong></p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="fragment" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--fond-s); border-radius:6px;">
+          <span  style="font-size:1.1em; font-weight:700; color:var(--grenat);">86,60</span>
+          <span style="font-size:0.82em; color:var(--gris);">$m^\star(0) = \sqrt{b_0 Y/(2i)}$ — encaisse réelle optimale</span>
+        </div>
+        <div class="fragment" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--fond-s); border-radius:6px;">
+          <span style="font-size:1.1em; font-weight:700; color:var(--grenat);">13,86</span>
+          <span style="font-size:0.82em; color:var(--gris);">$tc^\star(0) = \sqrt{2iYb_0}$ — coût minimal de transaction</span>
+        </div>
+        <div class="fragment" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--fond-s); border-radius:6px;">
+          <span style="font-size:1.1em; font-weight:700; color:var(--grenat);">20 %</span>
+          <span style="font-size:0.82em; color:var(--gris);">$\pi_s^\star = 1/\alpha$ — inflation max. seigneuriage</span>
+        </div>
+      </div>
+      <div class="keybox gold fragment" style="margin-top:10px; font-size:0.80em;">
+        La cible BFM ($\pi^T = 5\,\%$) est très en dessous de $\pi_s^\star = 20\,\%$ : position confortable sur la branche montante.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">19</div>
+</div>
+</section>
+
+
+<!-- Tableau scénarios -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 style="font-size:2.0em">Quatre scénarios comparés</h2>
+  <div class="title-bar"></div>
+
+  <table style="margin-bottom:12px; font-size:1.5em;">
+    <tr class="fragment">
+      <th>Scénario</th><th>$k$</th><th>$q$</th><th>$m^\star$</th><th>$tc^\star$</th><th>$\pi^\star$</th><th>$\mathcal{L}^\star$</th>
+    </tr>
+    <tr class="fragment">
+      <td>Situation de départ</td><td>1</td><td>0,0</td>
+      <td>86,60</td><td>13,86</td><td>0,0896</td><td>0,752</td>
+    </tr>
+    <tr class="highlight fragment">
+      <td><span class="scenario-pill pill-neutral">Redénomination pure</span></td>
+      <td>100</td><td>0,0</td>
+      <td><strong>86,60 ≡</strong></td><td><strong>13,86 ≡</strong></td><td><strong>0,0896 ≡</strong></td><td><strong>0,752 ≡</strong></td>
+    </tr>
+    <tr class="highlight2 fragment">
+      <td><span class="scenario-pill pill-good">+ Réforme modérée</span></td>
+      <td>100</td><td>0,3</td>
+      <td>79,84</td><td>12,77</td><td>0,0896</td><td><strong>0,148</strong></td>
+    </tr>
+    <tr class="fragment">
+      <td><span class="scenario-pill pill-bad">+ Réforme intense</span></td>
+      <td>100</td><td>0,6</td>
+      <td>72,46</td><td>11,59</td><td>0,0896</td><td><strong>0,924</strong></td>
+    </tr>
+  </table>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:2px; font-size:1.4em;">
+    <div class="keybox fragment" style="margin:0; font-size:0.79em; border-left-color:var(--gris-l); background:var(--gris-ll);">
+      <strong>Redénomination pure :</strong> toutes les colonnes sont identiques à la situation de départ. Résultat exact, pas une approximation.
+    </div>
+    <div class="keybox gold fragment" style="margin:0; font-size:0.79em;">
+      <strong>Réforme modérée ($q=0.3$) :</strong> $\mathcal{L}$ chute de 0,752 à 0,148 (−80 %). Les gains fiduciaires et transactionnels dominent les coûts de transition.
+    </div>
+    <div class="keybox fragment" style="margin:0; font-size:0.79em; border-left-color:#8b1a1a; background:#fce8e8;">
+      <strong>Réforme intense ($q=0.6$) :</strong> $\mathcal{L}$ remonte à 0,924, au-dessus du départ. $\kappa q^2$ domine. Réformer trop vite nuit.
+    </div>
+  </div>
+  <div class="slide-num">20</div>
+</div>
+</section>
+
+
+<!-- Graphique BFM -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-acad">Académique</span>
+  <h2 8>Fonction de perte stylisée : l'optimum de réforme</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:22px; align-items:start;">
+    <div>
+      <p style="font-size:0.78em; color:var(--gris); margin-bottom:5px; font-weight:600;">$\mathcal{L}(\pi^\star, q)$ en fonction de $q$</p>
+      <div class="chart-wrap">
+        <canvas id="c-bfm" height="250"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--grenat);"></div><span>Perte totale</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line" style="background:var(--moutarde-d); border-top:2px dashed;"></div><span>Sans coût de transition</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="fragment" style="font-size:1.3em; margin-bottom:8px;"><strong>Lecture des résultats</strong></p>
+      <ul style="margin-bottom:10px;">
+        <li class="fragment" style="margin-bottom:0.6em; font-size:0.9em;">L'étoile $q^\star \approx 0.28$ marque l'optimum de second rang</li>
+        <li class="fragment" style="margin-bottom:0.6em; font-size:0.9em;">En dessous : gains réels sous-exploités</li>
+        <li class="fragment" style="margin-bottom:0.6em; font-size:0.9em;">Au-delà : les coûts de transition $\kappa q^2$ dominent</li>
+        <li class="fragment" style="margin-bottom:0.6em; font-size:0.9em;">La zone grisée est le <em>surcoût de transition</em></li>
+      </ul>
+
+      <div class="propbox fragment" style="font-size:1.0em;">
+        <div class="prop-label">Arbitrage central</div>
+        La redénomination pure ne déplace pas la courbe. Seule une réforme effective de la qualité $q$ des coupures le fait — mais dans les limites qu'impose la convexité des coûts de transition.
+      </div>
+
+      <div class="keybox gold fragment" style="margin-top:10px; font-size:1.0em;">
+        <strong>Pour Madagascar :</strong> il faut mesurer $b_0$, $\eta$ et $\kappa$ empiriquement pour localiser $q^\star$ sur les données réelles.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">21</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION VII — IMPLICATIONS MADAGASCAR
+     ══════════════════════════════════════════════ -->
+<section class="slide-inner">
+<div class="slide-inner" style="justify-content:center;">
+  <span class="section-num">VII</span>
+  <h2 style="font-size:2.5em;" >Implications pour Madagascar</h2>
+  <div class="section-line"></div>
+  <p class="fragment" style="font-size:2.5em;">Ce que la réforme ne peut pas faire · Ce qu'elle peut légitimement viser · La vraie question</p>
+</div>
+</section>
+
+
+<!-- Ce que ça ne peut pas faire -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-tous">Tout public</span>
+  <h2 style="font-size:2.0em;" >Ce qu'une redénomination ne peut pas accomplir</h2>
+  <div class="title-bar"></div>
+
+  <p class="fragment" style="font-size:1.3em; color:var(--gris); margin-bottom:10px;">Il serait inexact — et dangereux pour la crédibilité institutionnelle — d'attribuer ces effets à un simple changement d'unité :</p>
+
+  <div class="fragment" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:1.2em">
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #8b1a1a; border-radius:0 0 6px 6px; background:#fce8e8;">
+      <p style="font-weight:700; color:#8b1a1a; font-size:0.84em; margin-bottom:6px;">✗ Créer du pouvoir d'achat</p>
+      <p style="font-size:0.80em; color:var(--gris);">Les encaisses réelles sont invariantes sous toute transformation d'échelle (Prop. 1). Un ariary divisé par 100 achète exactement ce qu'achète un centième du même ariary.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #8b1a1a; border-radius:0 0 6px 6px; background:#fce8e8;">
+      <p style="font-weight:700; color:#8b1a1a; font-size:0.84em; margin-bottom:6px;">✗ Réduire l'inflation automatiquement</p>
+      <p style="font-size:0.80em; color:var(--gris);">L'inflation est un phénomène réel, déterminé par la politique monétaire et les anticipations. La nouvelle dénomination ne modifie pas ces déterminants.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #8b1a1a; border-radius:0 0 6px 6px; background:#fce8e8;">
+      <p style="font-weight:700; color:#8b1a1a; font-size:0.84em; margin-bottom:6px;">✗ Augmenter le seigneuriage réel</p>
+      <p style="font-size:0.80em; color:var(--gris);">$s(\pi)$ est une fonction des grandeurs réelles. Une redénomination pure ne modifie ni $\pi$ ni $m(\pi)$, donc $s(\pi)$ est inchangé.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #8b1a1a; border-radius:0 0 6px 6px; background:#fce8e8;">
+      <p style="font-weight:700; color:#8b1a1a; font-size:0.84em; margin-bottom:6px;">✗ Alléger les dettes réelles</p>
+      <p style="font-size:0.80em; color:var(--gris);">$B' / P' = B / P$ — la valeur réelle des engagements financiers est invariante. Les créanciers ne sont ni lésés ni avantagés.</p>
+    </div>
+  </div>
+  <div class="slide-num">23</div>
+</div>
+</section>
+
+
+<!-- Ce qu'elle peut viser -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 style="font-size:2.0em;">Ce qu'une réforme bien conçue peut viser</h2>
+  <div class="title-bar"></div>
+
+  <p class="fragment" style="font-size:1.3em; color:var(--gris); margin-bottom:10px;">Ces objectifs sont accessibles, à condition que la réforme soit <em>coordonnée</em> et <em>accompagnée</em> :</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:1.35em;">
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #1a7a3a; border-radius:0 0 6px 6px; background:#f0f9f3;">
+      <p style="font-weight:700; color:#1a7a3a; font-size:0.84em; margin-bottom:6px;">✔ Lisibilité nominale</p>
+      <p style="font-size:0.80em; color:var(--gris);">Des montants de huit ou neuf chiffres alourdissent les transactions verbales, les menus, les formulaires. La clarté d'affichage a une valeur pratique réelle.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #ddd; border-top:3px solid #1a7a3a; border-radius:0 0 6px 6px; background:#f0f9f3;">
+      <p style="font-weight:700; color:#1a7a3a; font-size:0.84em; margin-bottom:6px;">✔ Coûts de transaction si $b(q) \downarrow$</p>
+      <p style="font-size:0.80em; color:var(--gris);">Si la gamme des coupures est mieux adaptée aux transactions courantes, les opérations de change de monnaie diminuent, réduisant $b$ et donc $tc^\star$.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #1a7a3a; border-radius:6px; background:#f0f9f3;">
+      <p style="font-weight:700; color:#1a7a3a; font-size:0.84em; margin-bottom:6px;">✔ Coûts fiduciaires si $F(q) \downarrow$</p>
+      <p style="font-size:0.80em; color:var(--gris);">Fabrication, comptage, stockage, remplacement des billets usagés peuvent être rationalisés par une nouvelle gamme de valeurs faciales mieux dimensionnée.</p>
+    </div>
+    <div class="fragment" style="padding:14px; border:1.5px solid #1a7a3a; border-radius:6px; background:#f0f9f3;">
+      <p style="font-weight:700; color:#1a7a3a; font-size:0.84em; margin-bottom:6px;">✔ Crédibilité nominale (sous condition)</p>
+      <p style="font-size:0.80em; color:var(--gris);">La réforme peut signaler un nouveau régime — mais uniquement si elle s'appuie sur un ancrage institutionnel et budgétaire solide. Sans cet ancrage, le signal est vide.</p>
+    </div>
+  </div>
+  <div class="slide-num">24</div>
+</div>
+</section>
+
+
+<!-- La vraie question -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-dec">Décideurs</span>
+  <h2 style="font-size:2.0em;">La vraie question à poser</h2>
+  <div class="title-bar"></div>
+
+  <div class="quote-box fragment" style="font-size:1.5em; margin-bottom:14px; border-left-color:var(--grenat);">
+    <span style="font-style:normal; font-weight:700; color:var(--grenat);">Pas :</span> «&nbsp;Faut-il enlever des zéros&nbsp;?&nbsp;»
+  </div>
+
+  <div class="quote-box fragment" style="font-size:1.2em; border-left-color:var(--moutarde-d);">
+    <span style="font-style:normal; font-weight:700; color:var(--moutarde-d);">Mais :</span> Une réforme <em>coordonnée</em> de l'unité de compte, des coupures fiduciaires et de l'organisation des paiements améliore-t-elle suffisamment l'efficience monétaire pour justifier ses coûts de transition&nbsp;— monétaires, institutionnels et logistiques&nbsp;?
+  </div>
+
+  <p class="fragment" style="font-size:1.5em; margin-top:12px; margin-bottom:8px;"><strong>Une réponse sérieuse exige de mesurer :</strong></p>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+    <div class="fragment" style="padding:8px 10px; background:var(--fond-s); border-radius:6px; font-size:1.2em; text-align:center;">
+      Structure effective des transactions en espèces par tranche de montant
+    </div>
+    <div class="fragment" style="padding:8px 10px; background:var(--fond-s); border-radius:6px; font-size:1.2em; text-align:center;">
+      Coût unitaire de fabrication et de remplacement de chaque coupure
+    </div>
+    <div class="fragment" style="padding:8px 10px; background:var(--fond-s); border-radius:6px; font-size:1.2em; text-align:center;">
+      Coût d'adaptation des systèmes comptables, bancaires, informatiques
+    </div>
+    <div class="fragment" style="padding:8px 10px; background:var(--fond-s); border-radius:6px; font-size:1.2em; text-align:center;">
+      Fréquence d'usage effective de chaque valeur faciale existante
+    </div>
+    <div class="fragment" style="padding:8px 10px; background:var(--fond-s); border-radius:6px; font-size:1.2em; text-align:center;">
+      Part et nature des paiements scripturaux et électroniques
+    </div>
+    <div class="fragment" style="padding:8px 10px; background:var(--grenat-ll); border-radius:6px; font-size:1.2em; text-align:center; color:var(--grenat);">
+      Effet de signal crédible sur les anticipations d'inflation
+    </div>
+  </div>
+  <div class="slide-num">25</div>
+</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     CONCLUSION
+     ══════════════════════════════════════════════ -->
+<section>
+<div class="slide-inner">
+  <span class="audience-tag aud-tous">Tout public</span>
+  <h2 style="font-size:2.5em;">Conclusion</h2>
+  <div class="title-bar"></div>
+
+  <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-top:4px; font-size:1.35em;">
+    <div class="fragment" style="display:flex; gap:14px; align-items:flex-start; padding:12px 14px; background:var(--gris-ll); border-radius:6px;">
+      <span style="font-size:1.4em; color:var(--grenat); flex-shrink:0;">①</span>
+      <div>
+        <p style="font-size:0.84em; margin:0;"><strong>La redénomination pure est neutre.</strong> Diviser toutes les grandeurs nominales par $k$ est une transformation d'échelle qui laisse inchangés les rapports réels, les encaisses optimales, le seigneuriage et la perte sociale de la BFM.</p>
+      </div>
+    </div>
+    <div class="fragment" style="display:flex; gap:14px; align-items:flex-start; padding:12px 14px; background:var(--moutarde-l); border-radius:6px; opacity:0.95;">
+      <span style="font-size:1.4em; color:var(--moutarde-d); flex-shrink:0;">②</span>
+      <div>
+        <p style="font-size:0.84em; margin:0;"><strong>Les gains réels découlent de la qualité de la réforme, pas de $k$.</strong> Une amélioration du coût réel $b(q)$ réduit les encaisses et les coûts de transaction — mais en racine carrée, donc moins qu'on ne l'espère.</p>
+      </div>
+    </div>
+    <div class="fragment" style="display:flex; gap:14px; align-items:flex-start; padding:12px 14px; background:var(--grenat-ll); border-radius:6px;">
+      <span style="font-size:1.4em; color:var(--grenat); flex-shrink:0;">③</span>
+      <div>
+        <p style="font-size:0.84em; margin:0;"><strong>L'optimum n'est pas toujours plus ambitieux.</strong> Les coûts de transition $\kappa q^2$ sont convexes : au-delà de $q^\star$, ils dominent les bénéfices. Réformer trop vite ou trop fort détériore le bilan net.</p>
+      </div>
+    </div>
+    <div class="fragment" style="display:flex; gap:14px; align-items:flex-start; padding:12px 14px; background:var(--fond-s); border-radius:6px; border:1px solid var(--moutarde);">
+      <span style="font-size:1.4em; color:var(--moutarde-d); flex-shrink:0;">④</span>
+      <div>
+        <p style="font-size:0.84em; margin:0;"><strong>La réforme n'est utile que si elle s'attaque aux mécanismes réels.</strong> Changer l'échelle nominale n'est pas réformer l'économie. La réforme devient intéressante quand elle modernise effectivement la structure fiduciaire et la gestion des paiements.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">26</div>
+</div>
+</section>
+
+
+<!-- Diapositive finale -->
+<section class="cover-slide">
+<div class="slide-inner" style="justify-content:center; align-items:center; text-align:center;">
+  <h1 style="font-size:2.5em;">Merci pour votre attention</h1>
+  <p class="cover-sub">Questions — Discussion</p>
+  <div class="cover-divider" style="margin:1.2em auto;"></div>
+  <p class="cover-author">Dr Ramanambonona Ambinintsoa</p>
+  <p class="cover-date">Département Économie Ankatso·&  ENS Antananarivo</p>
+  <div class="pdf-download-wrap" style="margin-top:22px;">
+  <a class="pdf-download-btn light"
+     href="note.pdf"
+     download="article_reforme_monetaire.pdf"
+     target="_blank"
+     rel="noopener noreferrer">
+    <i class="fa-solid fa-file-pdf"></i>
+    <span>Télécharger l’article (PDF)</span>
+  </a>
+  </div>
+</div>
+</section>
+
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+
+<!-- Reveal.js scripts -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+
+<script>
+// ================================================================
+//  REVEAL INIT
+// ================================================================
+
+function buildGmwShells() {
+  const sections = document.querySelectorAll('.reveal .slides > section');
+  sections.forEach((section, idx) => {
+    if (!section.querySelector(':scope > .slide-frame-shell')) {
+      const shell = document.createElement('div');
+      shell.className = 'slide-frame-shell';
+      while (section.firstChild) shell.appendChild(section.firstChild);
+      section.appendChild(shell);
+    }
+    const shell = section.querySelector(':scope > .slide-frame-shell');
+    const isDivider = !!shell.querySelector('.section-num');
+    const isThanks = section.classList.contains('cover-slide');
+    section.classList.remove('gmw-standard', 'gmw-cover', 'gmw-divider', 'gmw-thanks');
+    if (idx === 0) {
+      section.classList.add('gmw-cover');
+    } else if (isThanks) {
+      section.classList.add('gmw-thanks');
+    } else if (isDivider) {
+      section.classList.add('gmw-divider');
+    } else {
+      section.classList.add('gmw-standard');
+    }
+
+    if (
+  section.classList.contains('gmw-standard') ||
+  section.classList.contains('gmw-cover') ||
+  section.classList.contains('gmw-thanks')
+) {
+	  if (!shell.querySelector(':scope > .deck-social')) {
+		const social = document.createElement('div');
+		social.className = 'deck-social';
+		social.innerHTML = `
+		  <a href="https://www.linkedin.com/in/ambinintsoa-ramanambonona/"
+			 target="_blank"
+			 rel="noopener noreferrer"
+			 aria-label="LinkedIn">
+			<i class="fa-brands fa-linkedin-in"></i>
+		  </a>
+
+		  <a href="https://ramanambonona.github.io/"
+			 target="_blank"
+			 rel="noopener noreferrer"
+			 aria-label="GitHub">
+			<i class="fa-brands fa-github"></i>
+		  </a>
+		`;
+		shell.appendChild(social);
+	  }
+
+	  if (!shell.querySelector(':scope > .deck-meta')) {
+		const meta = document.createElement('div');
+		meta.className = 'deck-meta';
+		meta.innerHTML = '<span>Réforme monétaire</span><span class="meta-dot"></span><span>Madagascar</span>';
+		shell.appendChild(meta);
+	  }
+}
+  });
+}
+
+buildGmwShells();
+
+Reveal.initialize({
+  hash: true,
+  controls: true,
+  progress: true,
+  center: true,
+  transition: 'fade',
+  transitionSpeed: 'fast',
+  width: 1280,
+  height: 720,
+  margin: 0.02,
+  minScale: 0.2,
+  maxScale: 2.0,
+  plugins: [ RevealNotes ],
+});
+
+
+// ================================================================
+//  UTILITAIRES CANVAS
+// ================================================================
+const G = {
+  grenat:    '#132238',
+  grenat_l:  '#35506C',
+  moutarde:  '#D4AF37',
+  moutarde_d:'#B9962C',
+  gris:      '#7F90A5',
+  gris_l:    '#D7E2EE',
+  fond:      '#F7F9FC',
+  blanc:     '#ffffff',
+};
+
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const w = canvas.parentElement.clientWidth || 400;
+  const h = parseInt(canvas.getAttribute('height') || 220);
+  canvas.width  = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width  = w + 'px';
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx._w = w; ctx._h = h;
+  return ctx;
+}
+
+function drawAxes(ctx, left, top, right, bottom, xMin, xMax, yMin, yMax,
+                  xLabel, yLabel, nTickX=5, nTickY=5) {
+  const w = ctx._w, h = ctx._h;
+  ctx.save();
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(left, top); ctx.lineTo(left, bottom);
+  ctx.moveTo(left, bottom); ctx.lineTo(right, bottom);
+  ctx.stroke();
+
+  ctx.fillStyle = '#555'; ctx.font = '9px serif'; ctx.textAlign = 'center';
+  for (let i=0; i<=nTickX; i++) {
+    const v = xMin + (xMax-xMin)*i/nTickX;
+    const px = left + (v-xMin)/(xMax-xMin)*(right-left);
+    ctx.beginPath(); ctx.moveTo(px, bottom); ctx.lineTo(px, bottom+4); ctx.stroke();
+    ctx.fillText(v.toFixed(v<1&&v!==0?2:0), px, bottom+12);
+    // grid
+    ctx.save(); ctx.strokeStyle='#ddd'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(px, bottom); ctx.lineTo(px, top); ctx.stroke();
+    ctx.restore();
+  }
+  ctx.textAlign = 'right';
+  for (let i=0; i<=nTickY; i++) {
+    const v = yMin + (yMax-yMin)*i/nTickY;
+    const py = bottom - (v-yMin)/(yMax-yMin)*(bottom-top);
+    ctx.beginPath(); ctx.moveTo(left-4, py); ctx.lineTo(left, py); ctx.stroke();
+    ctx.fillText(v.toFixed(v<1&&v!==0?1:0), left-6, py+3);
+    ctx.save(); ctx.strokeStyle='#ddd'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(left, py); ctx.lineTo(right, py); ctx.stroke();
+    ctx.restore();
+  }
+  // Labels
+  ctx.fillStyle = '#333'; ctx.font = 'italic 10px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(xLabel, (left+right)/2, bottom+26);
+  ctx.save(); ctx.translate(12, (top+bottom)/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText(yLabel, 0, 0); ctx.restore();
+  ctx.restore();
+}
+
+function toCanvas(x, y, xMin, xMax, yMin, yMax, left, top, right, bottom) {
+  return {
+    px: left + (x-xMin)/(xMax-xMin)*(right-left),
+    py: bottom - (y-yMin)/(yMax-yMin)*(bottom-top)
+  };
+}
+
+function drawCurve(ctx, pts, color, width=1.8, dash=[]) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  pts.forEach((p,i) => i===0 ? ctx.moveTo(p.px,p.py) : ctx.lineTo(p.px,p.py));
+  ctx.stroke();
+  ctx.restore();
+}
+
+function fillBetween(ctx, pts1, pts2, color) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  pts1.forEach((p,i) => i===0 ? ctx.moveTo(p.px,p.py) : ctx.lineTo(p.px,p.py));
+  [...pts2].reverse().forEach(p => ctx.lineTo(p.px,p.py));
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+
+// ================================================================
+//  CHART 1 — Neutralité
+// ================================================================
+let _kCurrent = 1;
+function setK(k) {
+  _kCurrent = k;
+  document.querySelectorAll('.chart-btn').forEach(b => {
+    if (b.textContent.trim() === `$k=${k}$` || b.getAttribute('onclick') === `setK(${k})`)
+      b.classList.add('active');
+    else if (b.getAttribute('onclick') && b.getAttribute('onclick').startsWith('setK'))
+      b.classList.remove('active');
+  });
+  drawNeutral(k);
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+function drawNeutral(k) {
+  const ctx = setupCanvas('c-neutral');
+  if (!ctx) return;
+  const {_w:w, _h:h} = ctx;
+  const L=52, T=14, R=w-18, B=h-30;
+  const xMax=200, xMin=1, yMin=0, yMax=1.12;
+  ctx.clearRect(0,0,w,h);
+
+  // Fill between
+  const ks = Array.from({length:300}, (_,i) => 1 + i*199/299);
+  const ptsNom = ks.map(kk => toCanvas(kk, 1/kk, xMin,xMax,yMin,yMax, L,T,R,B));
+  const ptsReal= ks.map(kk => toCanvas(kk, 1.0, xMin,xMax,yMin,yMax, L,T,R,B));
+  fillBetween(ctx, ptsReal, ptsNom, 'rgba(19,34,56,0.08)');
+
+  drawAxes(ctx, L,T,R,B, xMin,xMax, yMin,yMax, 'Facteur k', 'Indice', 5, 4);
+
+  drawCurve(ctx, ptsReal, G.grenat, 1.6, [5,4]);
+  drawCurve(ctx, ptsNom,  G.grenat, 2.0);
+
+  // Marker at k
+  const px = L + (k-xMin)/(xMax-xMin)*(R-L);
+  ctx.save();
+  ctx.strokeStyle = G.moutarde_d; ctx.lineWidth = 1.2; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(px,T); ctx.lineTo(px,B); ctx.stroke();
+  const valNom = 1/k;
+  const py = B - (valNom-yMin)/(yMax-yMin)*(B-T);
+  ctx.fillStyle = G.grenat; ctx.beginPath(); ctx.arc(px,py,4,0,2*Math.PI); ctx.fill();
+  ctx.fillStyle = G.blanc; ctx.beginPath(); ctx.arc(px,py,2,0,2*Math.PI); ctx.fill();
+  // Real dot
+  const pyR = B - (1-yMin)/(yMax-yMin)*(B-T);
+  ctx.fillStyle = G.moutarde_d; ctx.beginPath(); ctx.arc(px,pyR,4,0,2*Math.PI); ctx.fill();
+  // Label
+  ctx.fillStyle = '#333'; ctx.font = 'bold 9px serif'; ctx.textAlign = 'center';
+  ctx.fillText('k='+k, px, T-2);
+  ctx.fillStyle = G.grenat;
+  ctx.textAlign = 'left';
+  ctx.font = '9px serif';
+  ctx.fillText('Nominal: '+(valNom<0.01?valNom.toExponential(1):(1/k).toFixed(4)), px+6, py);
+  ctx.fillStyle = G.moutarde_d;
+  ctx.fillText('Réel: 1.00', px+6, pyR-5);
+  ctx.restore();
+}
+
+
+// ================================================================
+//  CHART 2 — Baumol-Tobin
+// ================================================================
+function drawBT() {
+  const ctx = setupCanvas('c-bt');
+  if (!ctx) return;
+  const {_w:w, _h:h} = ctx;
+  const L=52, T=14, R=w-14, B=h-30;
+  const xMin=0, xMax=1, yMin=0.46, yMax=1.06;
+  ctx.clearRect(0,0,w,h);
+  const eta=0.5;
+  const qs = Array.from({length:200}, (_,i)=>i/199);
+  const ptsB = qs.map(q => toCanvas(q, 1-eta*q, xMin,xMax,yMin,yMax, L,T,R,B));
+  const ptsM = qs.map(q => toCanvas(q, Math.sqrt(1-eta*q), xMin,xMax,yMin,yMax, L,T,R,B));
+
+  drawAxes(ctx, L,T,R,B, xMin,xMax, yMin,yMax, 'Intensité q', 'Niveau norm.', 5, 4);
+  fillBetween(ctx, ptsB, ptsM, 'rgba(19,34,56,0.09)');
+  drawCurve(ctx, ptsB, G.grenat, 2.0);
+  drawCurve(ctx, ptsM, G.moutarde_d, 2.0, [6,4]);
+
+  // Marker q=0.3, q=0.6
+  [0.3, 0.6].forEach(qv => {
+    const b_val = 1-eta*qv, m_val=Math.sqrt(1-eta*qv);
+    const pb = toCanvas(qv,b_val,xMin,xMax,yMin,yMax,L,T,R,B);
+    const pm = toCanvas(qv,m_val,xMin,xMax,yMin,yMax,L,T,R,B);
+    ctx.save();
+    ctx.strokeStyle='#bbb'; ctx.lineWidth=0.8; ctx.setLineDash([2,2]);
+    ctx.beginPath(); ctx.moveTo(pb.px,B); ctx.lineTo(pb.px,T); ctx.stroke();
+    ctx.fillStyle=G.grenat; ctx.beginPath(); ctx.arc(pb.px,pb.py,3.5,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle=G.moutarde_d; ctx.beginPath(); ctx.arc(pm.px,pm.py,3.5,0,2*Math.PI); ctx.fill();
+    ctx.restore();
+  });
+
+  // Legend text
+  ctx.save(); ctx.fillStyle=G.grenat; ctx.font='italic 9px serif';
+  ctx.fillText('b(q)/b₀ linéaire', L+8, T+10);
+  ctx.fillStyle=G.moutarde_d;
+  ctx.fillText('m*(q) concave ↗ amortissement', L+8, T+22);
+  ctx.restore();
+}
+
+
+// ================================================================
+//  CHART 3 — Cagan
+// ================================================================
+let _caganMode = 'all';
+function caganShow(mode) {
+  _caganMode = mode;
+  ['all','3','5','7'].forEach(m => {
+    const b = document.getElementById('btn-cagan-'+(m==='all'?'all':m));
+    if (b) b.classList.toggle('active', m.toString() === mode.toString());
+  });
+  drawCagan();
+}
+
+function drawCagan() {
+  const ctx = setupCanvas('c-cagan');
+  if (!ctx) return;
+  const {_w:w, _h:h} = ctx;
+  const L=54, T=14, R=w-14, B=h-30;
+  const xMin=0, xMax=0.65, yMin=0, yMax=15;
+  ctx.clearRect(0,0,w,h);
+  const A=150;
+  const pis = Array.from({length:400}, (_,i)=>i*xMax/399);
+
+  const alphas = [3,5,7];
+  const styles = [[],  [6,4], [2,3]];
+  const colors = [G.grenat, G.grenat, G.grenat];
+
+  // For alpha=5 (central), shade the two branches
+  if (_caganMode==='all' || _caganMode===5) {
+    const a5=5, piStar=1/a5;
+    const ptsMount = pis.filter(p=>p<=piStar+0.005).map(p=>toCanvas(p, p*A*Math.exp(-a5*p), xMin,xMax,0,yMax, L,T,R,B));
+    const ptsDesc  = pis.filter(p=>p>=piStar-0.005).map(p=>toCanvas(p, p*A*Math.exp(-a5*p), xMin,xMax,0,yMax, L,T,R,B));
+    const base_pts = pis.filter(p=>p<=piStar+0.005).map(p=>toCanvas(p,0,xMin,xMax,0,yMax,L,T,R,B));
+    const base_d   = pis.filter(p=>p>=piStar-0.005).map(p=>toCanvas(p,0,xMin,xMax,0,yMax,L,T,R,B));
+    fillBetween(ctx, ptsMount, base_pts, 'rgba(19,34,56,0.08)');
+    fillBetween(ctx, ptsDesc,  base_d,   'rgba(19,34,56,0.14)');
+  }
+
+  drawAxes(ctx, L,T,R,B, xMin,xMax, yMin,yMax, 'Inflation π', 's(π)', 5, 4);
+
+  alphas.forEach((a,idx) => {
+    if (_caganMode !== 'all' && _caganMode !== a) return;
+    const pts = pis.map(p => toCanvas(p, p*A*Math.exp(-a*p), xMin,xMax,yMin,yMax, L,T,R,B));
+    drawCurve(ctx, pts, colors[idx], _caganMode==='all'?1.8:2.2, styles[idx]);
+    // Sommet
+    const pStar=1/a, sStar=pStar*A*Math.exp(-a*pStar);
+    const peak = toCanvas(pStar,sStar,xMin,xMax,yMin,yMax,L,T,R,B);
+    ctx.save();
+    ctx.fillStyle=G.grenat; ctx.beginPath(); ctx.arc(peak.px,peak.py,4,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle=G.blanc;  ctx.beginPath(); ctx.arc(peak.px,peak.py,2,0,2*Math.PI); ctx.fill();
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=0.7; ctx.setLineDash([2,2]);
+    ctx.beginPath(); ctx.moveTo(peak.px,peak.py); ctx.lineTo(peak.px,B); ctx.stroke();
+    ctx.fillStyle='#333'; ctx.font='9px serif'; ctx.textAlign='center';
+    ctx.fillText('π*='+pStar.toFixed(2), peak.px, peak.py-7);
+    ctx.restore();
+  });
+
+  // π target line
+  const pT=0.05;
+  const pxT = L+(pT-xMin)/(xMax-xMin)*(R-L);
+  ctx.save(); ctx.strokeStyle=G.moutarde_d; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(pxT,T); ctx.lineTo(pxT,B); ctx.stroke();
+  ctx.fillStyle=G.moutarde_d; ctx.font='bold 8px serif'; ctx.textAlign='left';
+  ctx.fillText('π^T=5%', pxT+3, T+12);
+  ctx.restore();
+
+  // labels branches
+  if (_caganMode==='all' || _caganMode===5) {
+    ctx.save(); ctx.fillStyle='rgba(26,122,58,0.8)'; ctx.font='8px serif';
+    ctx.fillText('↑ Branche montante', L+8, B-8);
+    ctx.fillStyle='rgba(139,26,26,0.8)';
+    ctx.fillText('Tentation fiscale ↓', R-80, B-8);
+    ctx.restore();
+  }
+}
+
+
+// ================================================================
+//  CHART 4 — BFM Loss Function
+// ================================================================
+function drawBFM() {
+  const ctx = setupCanvas('c-bfm');
+  if (!ctx) return;
+  const {_w:w, _h:h} = ctx;
+  const L=54, T=14, R=w-14, B=h-30;
+
+  // Params
+  const A=150, alpha=5, piT=0.05;
+  const lambdaPi=100, lambdaS=0.1497, lambdaT=0.05, lambdaF=4.141, kappa=7.695;
+  const Y=1000, i=0.08, b0=1.2, eta=0.5;
+
+  // Find pi* numerically
+  const piGrid = Array.from({length:1000},(_,j)=>j*0.3/999);
+  const piLoss = piGrid.map(p => lambdaPi*(p-piT)**2 - lambdaS*A*p*Math.exp(-alpha*p));
+  const piStar = piGrid[piLoss.indexOf(Math.min(...piLoss))];
+
+  const bfm = (q, cs=0) => lambdaPi*(piStar-piT)**2 + lambdaT*Math.sqrt(2*i*Y*b0*(1-eta*q))
+    + lambdaF*(1-q) - lambdaS*A*piStar*Math.exp(-alpha*piStar) + kappa*q**2 + cs;
+  const bfm_no_kappa = (q, cs=0) => lambdaPi*(piStar-piT)**2 + lambdaT*Math.sqrt(2*i*Y*b0*(1-eta*q))
+    + lambdaF*(1-q) - lambdaS*A*piStar*Math.exp(-alpha*piStar) + cs;
+
+  const cs = 0.752 - bfm(0,0);
+  const qs = Array.from({length:300},(_,j)=>j/299);
+  const loss = qs.map(q=>bfm(q,cs));
+  const lossNK= qs.map(q=>bfm_no_kappa(q,cs));
+
+  const yMin = Math.min(...loss, ...lossNK) - 0.05;
+  const yMax = Math.max(...loss, ...lossNK) + 0.12;
+  ctx.clearRect(0,0,w,h);
+
+  const ptsL  = qs.map((q,i2)=>toCanvas(q,loss[i2], 0,1,yMin,yMax, L,T,R,B));
+  const ptsNK = qs.map((q,i2)=>toCanvas(q,lossNK[i2], 0,1,yMin,yMax, L,T,R,B));
+
+  fillBetween(ctx, ptsL, ptsNK, 'rgba(19,34,56,0.09)');
+  drawAxes(ctx, L,T,R,B, 0,1, yMin,yMax, 'Intensité q', 'L(π*,q)', 5, 4);
+  drawCurve(ctx, ptsNK, G.moutarde_d, 1.6, [6,4]);
+  drawCurve(ctx, ptsL,  G.grenat, 2.2);
+
+  // Optimum
+  const qOpt = qs[loss.indexOf(Math.min(...loss))];
+  const lOpt = Math.min(...loss);
+  const pOpt = toCanvas(qOpt,lOpt,0,1,yMin,yMax,L,T,R,B);
+  ctx.save();
+  ctx.fillStyle=G.moutarde_d;
+  // Star shape
+  ctx.font='16px serif'; ctx.textAlign='center';
+  ctx.fillText('★', pOpt.px, pOpt.py+5);
+  ctx.strokeStyle=G.moutarde_d; ctx.lineWidth=1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(pOpt.px,pOpt.py+8); ctx.lineTo(pOpt.px,B); ctx.stroke();
+  ctx.fillStyle='#333'; ctx.font='8.5px serif'; ctx.textAlign='center';
+  ctx.fillText('q*≈'+qOpt.toFixed(2), pOpt.px, B-4);
+  ctx.restore();
+
+  // Key scenario points
+  [[0.0,'Départ'],[0.3,'q=0.3'],[0.6,'q=0.6']].forEach(([qv,lab]) => {
+    const lv = bfm(qv,cs);
+    const p = toCanvas(qv,lv,0,1,yMin,yMax,L,T,R,B);
+    ctx.save();
+    ctx.fillStyle=G.grenat; ctx.beginPath(); ctx.arc(p.px,p.py,4,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle=G.blanc;  ctx.beginPath(); ctx.arc(p.px,p.py,2,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle='#333'; ctx.font='8px serif'; ctx.textAlign='center';
+    const dy = lv > (yMin+yMax)/2 ? -14 : 10;
+    ctx.fillText(lab+' L='+lv.toFixed(2), p.px, p.py+dy);
+    ctx.restore();
+  });
+
+  // Sur-coût label
+  const qMid=0.6, lMidT=bfm(qMid,cs), lMidNK=bfm_no_kappa(qMid,cs);
+  const pm = toCanvas(qMid, (lMidT+lMidNK)/2, 0,1,yMin,yMax,L,T,R,B);
+  ctx.save();
+  ctx.fillStyle='rgba(19,34,56,0.55)'; ctx.font='italic 8px serif'; ctx.textAlign='left';
+  ctx.fillText('surcoût κq²', pm.px+4, pm.py);
+  ctx.restore();
+}
+
+
+// ================================================================
+//  INITIALISATION DE TOUS LES CHARTS
+// ================================================================
+const allCharts = [
+  { id: 'c-neutral', draw: () => drawNeutral(_kCurrent) },
+  { id: 'c-bt',      draw: drawBT   },
+  { id: 'c-cagan',   draw: drawCagan },
+  { id: 'c-bfm',     draw: drawBFM  },
+];
+
+function drawAllVisible() {
+  allCharts.forEach(c => {
+    if (document.getElementById(c.id)) c.draw();
+  });
+}
+
+Reveal.on('ready', () => {
+  setTimeout(() => {
+    drawAllVisible();
+    if (window.MathJax) MathJax.typesetPromise();
+  }, 300);
+});
+
+Reveal.on('slidechanged', () => {
+  setTimeout(() => {
+    drawAllVisible();
+    if (window.MathJax) MathJax.typesetPromise();
+  }, 150);
+});
+
+window.addEventListener('resize', () => {
+  setTimeout(drawAllVisible, 200);
+});
+</script>
+</body>
+</html>
