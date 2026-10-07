@@ -216,6 +216,28 @@ mjx-container{display:inline!important;}
 .hero-slide .manuscript-link{font-size:.92rem!important;padding:.72rem 1.2rem;}
 @media (prefers-reduced-motion:reduce){.network-canvas{opacity:.40;}}
 
+
+/* Lien ORCID discret, accessible et identifiable sur la couverture */
+.hero-slide .orcid-link{color:var(--red)!important;text-decoration:none!important;border-bottom:1px solid rgba(0,108,69,.4);padding-bottom:1px;font-weight:700;transition:color .2s ease,border-color .2s ease;white-space:nowrap;}
+.hero-slide .orcid-link i{font-size:.66em;margin-left:.20rem;vertical-align:middle;opacity:.80;}
+.hero-slide .orcid-link:hover,.hero-slide .orcid-link:focus-visible{color:var(--red2)!important;border-bottom-color:var(--red2);outline-offset:3px;}
+
+/* Notification flottante : première diapositive seulement */
+.fullscreen-hint{position:absolute;right:2.6rem;top:1.4rem;z-index:30;display:flex;align-items:center;gap:.70rem;
+  padding:.62rem .92rem;border:1px solid rgba(0,108,69,.20);border-left:3px solid var(--red);border-radius:10px;
+  background:rgba(255,255,255,.95);box-shadow:0 9px 30px rgba(17,39,29,.10);backdrop-filter:blur(8px);
+  color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:.75rem;line-height:1.35;letter-spacing:.01em;
+  opacity:0;visibility:hidden;transform:translateY(-12px);pointer-events:none;
+  transition:opacity .5s ease,transform .5s ease,visibility .5s;}
+.fullscreen-hint.is-visible{opacity:1;visibility:visible;transform:translateY(0);}
+.fullscreen-hint-icon{width:1.8rem;height:1.8rem;border-radius:8px;display:flex;justify-content:center;align-items:center;
+  background:rgba(0,108,69,.085);color:var(--red);font-size:.83rem;flex-shrink:0;}
+.fullscreen-hint-text strong{font-weight:700;color:var(--ink);}
+.fullscreen-hint kbd{font-family:'DM Sans',sans-serif;display:inline-block;padding:.12rem .40rem;margin:0 .10rem 0 .15rem;
+  font-weight:700;font-size:.74rem;border:1px solid #CBD8D0;border-radius:5px;background:#F7FAF8;color:var(--red2);
+  box-shadow:0 2px 0 rgba(0,108,69,.08);}
+@media(prefers-reduced-motion:reduce){.fullscreen-hint{transition:none;}.hero-slide .orcid-link{transition:none;}}
+@media print{.fullscreen-hint{display:none!important;}}
 </style>
 </link></head>
 <body>
@@ -227,6 +249,10 @@ mjx-container{display:inline!important;}
 <section data-transition="fade">
 <div class="sl hero-slide">
 <canvas aria-hidden="true" class="network-canvas"></canvas>
+<div class="fullscreen-hint" id="fullscreen-hint" role="status" aria-live="polite" aria-hidden="true">
+  <span class="fullscreen-hint-icon"><i class="fas fa-expand" aria-hidden="true"></i></span>
+  <span class="fullscreen-hint-text"><strong>Pour une meilleure lecture</strong> — appuyez sur <kbd>F11</kbd> pour le plein écran.</span>
+</div>
 <div class="hero-panel">
 <div class="hero-badges" style="margin-bottom:1.35rem;">
 <span class="pill r">AFED — Association Française de l'Économie de Droit</span>
@@ -239,11 +265,11 @@ mjx-container{display:inline!important;}
 </h1>
 <div class="hero-divider"></div>
 <div class="profile-badge">
-<img alt="Photo de profil de Ramanambonona Ambinintsoa" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
+<img alt="Photo de profil de Ambinintsoa Ramanambonona" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
 <div class="person-meta">
-<div class="hero-author-name" style="font-weight:700;font-size:1.08rem;color:var(--ink);">Ramanambonona Ambinintsoa</div>
+<div class="hero-author-name" style="font-weight:700;font-size:1.08rem;color:var(--ink);">Ambinintsoa Ramanambonona</div>
 <div class="hero-affiliation" style="font-size:.8rem;color:var(--ink3);">Center for Economic Studies · Université d'Antananarivo, Madagascar</div>
-<div class="hero-email" style="font-size:.72rem;color:var(--gold);margin-top:.14rem;">ambinintsoa.uat.ead2@gmail.com · ORCID 0000-0002-3298-1793</div>
+<div class="hero-email" style="font-size:.72rem;color:var(--gold);margin-top:.14rem;">ambinintsoa.uat.ead2@gmail.com · <a class="orcid-link" href="https://orcid.org/0000-0002-3298-1793" target="_blank" rel="noopener noreferrer" aria-label="Consulter le profil ORCID 0000-0002-3298-1793 (nouvel onglet)" title="Ouvrir mon profil ORCID">ORCID 0000-0002-3298-1793 <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div>
 </div>
 </div>
 <div class="hero-keywords" style="margin-bottom:1rem;">
@@ -254,7 +280,7 @@ mjx-container{display:inline!important;}
     Jeux évolutionnaires  ·  Dynamique du réplicateur  ·  Congestion institutionnelle  ·  Réhabilitation  ·  Bassins d'attraction
   </div>
 <div class="manuscript-action" style="text-align:center;margin-top:.9rem;">
-<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscrit.pdf" href="manuscrit.pdf" type="application/pdf">
+<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscript.pdf" href="manuscript.pdf" type="application/pdf">
 <i aria-hidden="true" class="fas fa-file-pdf"></i> Télécharger le manuscrit (PDF)
   </a>
 </div>
@@ -873,9 +899,9 @@ Les zones <strong style="color:var(--red);">sombres</strong> correspondent à un
     </div>
 </div>
 <div class="profile-badge" style="margin-bottom:1rem;">
-<img alt="Photo de profil de Ramanambonona Ambinintsoa" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
+<img alt="Photo de profil de Ambinintsoa Ramanambonona" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
 <div class="person-meta">
-<div style="font-weight:700;font-size:.98rem;color:var(--ink);">Ramanambonona Ambinintsoa</div>
+<div style="font-weight:700;font-size:.98rem;color:var(--ink);">Ambinintsoa Ramanambonona</div>
 <div style="font-size:.72rem;color:var(--ink3);">Center for Economic Studies · Univ. Antananarivo</div>
 </div>
 </div>
@@ -888,7 +914,7 @@ Les zones <strong style="color:var(--red);">sombres</strong> correspondent à un
 <span class="pill g">Law and Economics</span>
 </div>
 <div class="manuscript-action" style="text-align:center;margin-top:.9rem;">
-<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscrit.pdf" href="manuscrit.pdf" type="application/pdf">
+<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscript.pdf" href="manuscript.pdf" type="application/pdf">
 <i aria-hidden="true" class="fas fa-file-pdf"></i> Télécharger le manuscrit (PDF)
   </a>
 </div>
@@ -955,7 +981,7 @@ window.addEventListener('load',()=>{setTimeout(()=>{if(window.MathJax&&MathJax.t
         const dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
         if(dist>reach)continue;
         const opacity=Math.pow(1-dist/reach,1.25)*.23;
-        ctx.strokeStyle=`rgba(90,103,113,${opacity})`;
+        ctx.strokeStyle=`rgba(0,108,69,${opacity})`;
         ctx.lineWidth=.55;
         ctx.beginPath();ctx.moveTo(a.x*xscale,a.y*yscale);ctx.lineTo(b.x*xscale,b.y*yscale);ctx.stroke();
       }
@@ -964,9 +990,9 @@ window.addEventListener('load',()=>{setTimeout(()=>{if(window.MathJax&&MathJax.t
       const r=p.radius*(1+.13*Math.sin(time*.00065+p.phase));
       const xx=p.x*xscale, yy=p.y*yscale;
       const halo=ctx.createRadialGradient(xx,yy,0,xx,yy,r*4.3);
-      halo.addColorStop(0,'rgba(92,104,114,.12)');halo.addColorStop(1,'rgba(92,104,114,0)');
+      halo.addColorStop(0,'rgba(0,108,69,.10)');halo.addColorStop(1,'rgba(0,108,69,0)');
       ctx.fillStyle=halo;ctx.beginPath();ctx.arc(xx,yy,r*4.3,0,TAU);ctx.fill();
-      ctx.fillStyle=i%7===0?'rgba(80,91,101,.40)':'rgba(129,140,149,.34)';
+      ctx.fillStyle=i%7===0?'rgba(0,75,48,.40)':'rgba(0,108,69,.32)';
       ctx.beginPath();ctx.arc(xx,yy,r,0,TAU);ctx.fill();
       if(!reduce){p.x+=p.vx;p.y+=p.vy;
         if(p.x<7||p.x>1273)p.vx*=-1;
@@ -989,6 +1015,36 @@ window.addEventListener('load',()=>{setTimeout(()=>{if(window.MathJax&&MathJax.t
     if(document.hidden&&animationId){cancelAnimationFrame(animationId);animationId=null;}
     else if(!document.hidden&&!reduce&&!animationId)animationId=requestAnimationFrame(frame);
   });
+})();
+</script>
+<script>
+/* Conseil temporaire de plein écran sur la diapositive d'ouverture. */
+(function(){
+  'use strict';
+  const hint = document.getElementById('fullscreen-hint');
+  if(!hint || !window.Reveal) return;
+  let enterTimer = null;
+  let leaveTimer = null;
+  function hide(){
+    window.clearTimeout(enterTimer);
+    window.clearTimeout(leaveTimer);
+    hint.classList.remove('is-visible');
+    hint.setAttribute('aria-hidden','true');
+  }
+  function showOnCover(){
+    hide();
+    const current = Reveal.getCurrentSlide && Reveal.getCurrentSlide();
+    if(!current || !current.querySelector('.hero-slide')) return;
+    enterTimer = window.setTimeout(function(){
+      if(Reveal.getCurrentSlide() !== current) return;
+      hint.classList.add('is-visible');
+      hint.setAttribute('aria-hidden','false');
+      leaveTimer = window.setTimeout(hide, 5200);
+    }, 750);
+  }
+  Reveal.on('ready',showOnCover);
+  Reveal.on('slidechanged',showOnCover);
+  if(Reveal.isReady && Reveal.isReady()) showOnCover();
 })();
 </script>
 </body>
