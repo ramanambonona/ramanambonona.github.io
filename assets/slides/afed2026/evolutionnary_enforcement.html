@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<title>Jeu Evolutionnaire et Application de la Loi — AFED · 2026</title>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},svg:{fontCache:'global'},startup:{typeset:false}};</script>
+<script async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --bg:#FFFFFF;
+  --bg2:#F3F5F6;
+
+  --red:#006C45;
+  --red2:#004B30;
+
+  --gold:#5F6872;
+  --gold2:#B9C0C8;
+
+  --blue:#22352D;
+  --blue2:#5E7068;
+
+  --ink:#14181B;
+  --ink2:#293137;
+  --ink3:#707882;
+
+  --cbrd:rgba(34,53,45,.15);
+  --cbg:rgba(34,53,45,.05);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#FFFFFF;}
+.reveal{font-family:'DM Sans',sans-serif;color:var(--ink);background:#FFFFFF;}
+.reveal .slides section{height:100%;padding:0;text-align:left;}
+
+/* ── SLIDE FRAME ── */
+.sl{width:100%;height:720px;display:flex;flex-direction:column;position:relative;overflow:hidden;
+    padding:2.4rem 3.8rem 1.6rem 4rem;background:var(--bg);}
+.sl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:linear-gradient(to bottom,var(--red) 0%,var(--gold2) 70%,transparent 100%);}
+.sl::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+    background:linear-gradient(to right,var(--red),var(--gold2),transparent);}
+
+/* ── TYPOGRAPHY ── */
+.tag{font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+     color:var(--gold);display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem;}
+.tag::before{content:'';display:block;width:1.8rem;height:2px;background:var(--gold2);}
+
+.title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.8vw,3rem);
+       font-weight:700;line-height:1.12;color:var(--ink);margin:0 0 .3rem;}
+.title .r{color:var(--red);}
+.title .g{color:var(--gold);}
+.title .b{color:var(--blue);}
+.divider{height:2px;background:var(--cbrd);margin:.4rem 0 .75rem;}
+
+/* ── EQUATION BOXES ── */
+.eq{background:rgba(0,122,61,.06);border:1.5px solid rgba(0,122,61,.22);border-left:4px solid var(--red);
+    border-radius:6px;padding:.75rem 1.2rem;margin:.5rem 0;font-size:1.05rem;}
+.eq.g{background:rgba(104,114,124,.06);border-color:rgba(104,114,124,.22);border-left-color:var(--gold);}
+.eq.b{background:rgba(11,122,75,.05);border-color:rgba(11,122,75,.18);border-left-color:var(--blue);}
+.eq-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin-bottom:.22rem;}
+.eq-lbl.r{color:var(--red);}
+.eq-lbl.b{color:var(--blue);}
+
+/* ── PROPOSITION BOXES ── */
+.prop{background:rgba(104,114,124,.07);border:1.5px solid rgba(104,114,124,.25);border-top:3px solid var(--gold2);
+      border-radius:6px;padding:.75rem 1.1rem;margin:.5rem 0;}
+.prop.r{background:rgba(0,122,61,.06);border-color:rgba(0,122,61,.2);border-top-color:var(--red);}
+.prop.b{background:rgba(11,122,75,.05);border-color:rgba(11,122,75,.18);border-top-color:var(--blue);}
+.prop-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin-bottom:.22rem;}
+.prop-lbl.r{color:var(--red);}
+.prop-lbl.b{color:var(--blue);}
+
+/* ── CARD ── */
+.card{background:white;border:1.5px solid var(--cbrd);border-radius:10px;padding:1rem 1.1rem;
+      box-shadow:0 2px 12px rgba(0,64,32,.07);}
+.card.r{border-top:3px solid var(--red);}
+.card.g{border-top:3px solid var(--gold2);}
+.card.b{border-top:3px solid var(--blue);}
+
+/* ── ITEM ROW ── */
+.ir{display:flex;align-items:flex-start;gap:.85rem;padding:.6rem .95rem;background:white;
+    border:1.5px solid var(--cbrd);border-radius:8px;box-shadow:0 1px 6px rgba(0,64,32,.05);transition:all .25s;}
+.ir:hover{box-shadow:0 3px 14px rgba(0,64,32,.10);transform:translateX(3px);}
+.ico{width:2.5rem;height:2.5rem;min-width:2.5rem;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.ico.r{background:rgba(0,122,61,.1);color:var(--red);}
+.ico.g{background:rgba(104,114,124,.1);color:var(--gold);}
+.ico.b{background:rgba(11,122,75,.1);color:var(--blue);}
+.ih{font-weight:700;font-size:.88rem;color:var(--ink);margin-bottom:.15rem;}
+.id{font-size:.76rem;color:var(--ink3);line-height:1.55;}
+
+/* ── LAYOUT ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.ilist{display:flex;flex-direction:column;gap:.5rem;}
+
+/* ── REGIME ZONES ── */
+.rz{flex:1;padding:.75rem .9rem;border-radius:8px;border:2px solid;text-align:center;}
+.rz.co{background:rgba(11,122,75,.07);border-color:rgba(11,122,75,.35);}
+.rz.bi{background:rgba(104,114,124,.07);border-color:rgba(104,114,124,.35);}
+.rz.cr{background:rgba(0,122,61,.08);border-color:rgba(0,122,61,.35);}
+.rz-lbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.22rem;}
+.rz-cond{font-size:.9rem;color:var(--ink);font-weight:600;}
+.rz-res{font-size:.7rem;color:var(--ink3);margin-top:.2rem;line-height:1.4;}
+
+/* ── PILL ── */
+.pill{display:inline-block;padding:.2rem .58rem;border-radius:4px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;}
+.pill.r{background:rgba(0,122,61,.1);color:var(--red);border:1.5px solid rgba(0,122,61,.25);}
+.pill.g{background:rgba(104,114,124,.1);color:var(--gold);border:1.5px solid rgba(104,114,124,.25);}
+.pill.b{background:rgba(11,122,75,.1);color:var(--blue);border:1.5px solid rgba(11,122,75,.22);}
+
+/* ── SENS BAR ── */
+.sb{display:flex;align-items:center;gap:.5rem;margin:.28rem 0;}
+.sb-p{font-size:.88rem;font-weight:700;width:1.5rem;text-align:right;}
+.sb-t{flex:1;height:.6rem;background:var(--bg2);border-radius:4px;position:relative;overflow:visible;border:1px solid var(--cbrd);}
+.sb-f{height:100%;border-radius:3px;position:absolute;}
+.sb-f.pos{background:var(--red);right:50%;}
+.sb-f.neg{background:var(--blue);left:50%;}
+.sb-c{position:absolute;left:50%;top:-3px;bottom:-3px;width:1.5px;background:var(--ink3);}
+.sb-v{font-size:.78rem;font-weight:600;width:3rem;}
+.sb-label{font-size:.7rem;color:var(--ink3);}
+
+/* ── FOOTER ── */
+.ft{margin-top:auto;padding-top:.65rem;border-top:1.5px solid var(--cbrd);display:flex;
+    align-items:center;justify-content:space-between;font-size:.62rem;color:var(--ink3);letter-spacing:.04em;}
+
+/* ── FIGURE SLIDE ── */
+.fig-sl{width:100%;height:720px;display:flex;flex-direction:column;position:relative;overflow:hidden;
+        padding:1.8rem 3.4rem 1.4rem 3.8rem;background:var(--bg);}
+.fig-sl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:linear-gradient(to bottom,var(--red) 0%,var(--gold2) 70%,transparent 100%);}
+.fig-sl::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+    background:linear-gradient(to right,var(--red),var(--gold2),transparent);}
+.fig-title{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:700;color:var(--ink);
+           margin:0 0 .25rem;line-height:1.15;}
+.fig-title .r{color:var(--red);}
+.fig-title .g{color:var(--gold);}
+.fig-tag{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+         display:flex;align-items:center;gap:.55rem;margin-bottom:.7rem;}
+.fig-tag::before{content:'';display:block;width:1.6rem;height:2px;background:var(--gold2);}
+.fig-area{flex:1;display:flex;align-items:center;justify-content:center;padding:.3rem 0;}
+
+
+/* ── FONDS ANIMÉS — STYLE MONOCHROME FUTURISTE ── */
+.network-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.18;overflow:hidden;}
+.network-bg .net-drift{animation:netDrift 16s ease-in-out infinite alternate;transform-origin:center;}
+.network-bg .net-drift.slow{animation-duration:22s;animation-direction:alternate-reverse;}
+.network-bg .net-line{stroke:#006C45;stroke-width:1.05;stroke-linecap:round;stroke-dasharray:6 7;animation:dashFlow 22s linear infinite;opacity:.72;}
+.network-bg .net-line.gold{stroke:#2E8B57;opacity:.62;}
+.network-bg .net-line.deep{stroke:#004B30;opacity:.72;}
+.network-bg .net-node{fill:#006C45;animation:nodePulse 4.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box;filter:drop-shadow(0 0 5px rgba(0,108,69,.16));}
+.network-bg .net-node.gold{fill:#2E8B57;animation-delay:.6s;}
+.network-bg .net-node.deep{fill:#004B30;animation-delay:1.2s;}
+.network-bg .net-orbit{fill:none;stroke:rgba(0,108,69,.18);stroke-width:.9;stroke-dasharray:3 6;animation:dashFlow 28s linear infinite reverse;}
+.hero-slide,.end-slide{justify-content:center;align-items:center;background:#FFFFFF;}
+.hero-panel,.end-panel{position:relative;z-index:5;max-width:900px;width:min(900px,82%);margin:0 auto;text-align:center;}
+.hero-badges,.hero-keywords,.end-keywords{display:flex;justify-content:center;gap:.45rem;flex-wrap:wrap;}
+.hero-divider,.end-divider{height:4px;width:5rem;background:linear-gradient(to right,var(--red),var(--gold2),var(--red));border-radius:999px;margin:0 auto 1.45rem;}
+.profile-badge{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.45rem;}
+.avatar-photo{width:76px;height:76px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(20,24,27,.12);box-shadow:0 8px 24px rgba(20,24,27,.12);filter:grayscale(100%) contrast(1.04) brightness(1.02);background:#fff;}
+.person-meta{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.center-prop{display:inline-block;text-align:center;margin-bottom:1.4rem;padding:1.1rem 1.6rem;max-width:860px;background:rgba(255,255,255,.88);backdrop-filter:blur(4px);}
+.section-center-title{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+@keyframes netDrift{0%{transform:translate3d(-12px,-10px,0) rotate(-0.8deg) scale(0.995);}100%{transform:translate3d(14px,12px,0) rotate(0.9deg) scale(1.01);}}
+@keyframes nodePulse{0%,100%{opacity:.48;transform:scale(.74);}50%{opacity:.92;transform:scale(.92);}}
+@keyframes dashFlow{to{stroke-dashoffset:-180;}}
+
+
+/* Réseau monochrome, réparti sur toute la surface */
+.network-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;opacity:.51;}
+.hero-slide .hero-panel,.end-slide .end-panel{isolation:isolate;}
+.manuscript-link{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.62rem 1.15rem;
+  border:1.5px solid #66717B;border-radius:7px;background:rgba(255,255,255,.93);
+  color:#26313A!important;font:600 .82rem 'DM Sans',sans-serif;text-decoration:none!important;
+  box-shadow:0 2px 10px rgba(20,25,30,.06);transition:transform .2s,box-shadow .2s,background .2s;}
+.manuscript-link:hover,.manuscript-link:focus-visible{transform:translateY(-2px);background:#F1F3F5;box-shadow:0 6px 18px rgba(20,25,30,.12);}
+.avatar-photo{object-position:center 18%;}
+@media (prefers-reduced-motion:reduce){.manuscript-link{transition:none;}}
+
+/* ── REVEAL ── */
+.reveal .progress{height:4px;}
+.reveal .progress span{background:var(--red);}
+.reveal .controls{color:var(--red);}
+.reveal .slide-number{background:white;color:var(--ink3);font-family:'DM Sans',sans-serif;font-size:.65rem;
+    padding:4px 10px;border:1.5px solid var(--cbrd);border-radius:4px;box-shadow:0 1px 4px rgba(0,64,32,.08);}
+
+/* ── FRAGMENTS ── */
+.reveal .fragment{opacity:0;transition:opacity .35s ease,transform .35s ease;}
+.reveal .fragment.visible{opacity:1;}
+.fu{transform:translateY(15px);}
+.fu.visible{transform:none;}
+
+mjx-container{display:inline!important;}
+
+/* Figures PNG authentiques du manuscrit, jamais redessinées en SVG */
+.manuscript-figure{width:100%;height:100%;display:flex;justify-content:center;align-items:center;min-height:0;}
+.manuscript-figure img{display:block;width:auto;height:auto;max-width:min(100%,1120px);max-height:510px;object-fit:contain;background:#FFFFFF;border:0;box-shadow:none;}
+.fig-sl .fig-area{min-height:0;overflow:hidden;}
+/* Lisibilité renforcée de la couverture uniquement : familles typographiques inchangées */
+.hero-slide .hero-panel{max-width:1040px;width:88%;}
+.hero-slide .hero-badges .pill{font-size:.77rem;letter-spacing:.055em;padding:.33rem .75rem;}
+.hero-slide .hero-badges{margin-bottom:1.06rem!important;}
+.hero-slide .hero-title{font-size:clamp(3.25rem,6.05vw,4.9rem)!important;line-height:1.025!important;margin-bottom:.75rem!important;}
+.hero-slide .hero-divider{margin-bottom:1.05rem;}
+.hero-slide .profile-badge{margin-bottom:1.05rem;}
+.hero-slide .person-meta .hero-author-name{font-size:1.37rem!important;}
+.hero-slide .person-meta .hero-affiliation{font-size:.96rem!important;}
+.hero-slide .person-meta .hero-email{font-size:.88rem!important;}
+.hero-slide .hero-keywords{margin-bottom:.72rem!important;}
+.hero-slide .hero-keywords .pill{font-size:.76rem;padding:.29rem .70rem;}
+.hero-slide .hero-topics{font-size:.91rem!important;line-height:1.47;}
+.hero-slide .manuscript-action{margin-top:.72rem!important;}
+.hero-slide .manuscript-link{font-size:.92rem!important;padding:.72rem 1.2rem;}
+@media (prefers-reduced-motion:reduce){.network-canvas{opacity:.40;}}
+
+</style>
+</link></head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- ════════════════════════════════════════
+     S1 — TITRE
+════════════════════════════════════════ -->
+<section data-transition="fade">
+<div class="sl hero-slide">
+<canvas aria-hidden="true" class="network-canvas"></canvas>
+<div class="hero-panel">
+<div class="hero-badges" style="margin-bottom:1.35rem;">
+<span class="pill r">AFED — Association Française de l'Économie de Droit</span>
+<span class="pill g">11ème conférence annuelle</span>
+</div>
+<h1 class="hero-title" style="font-family:'Cormorant Garamond',serif;font-weight:700;line-height:1.08;margin:0 0 .95rem;color:var(--ink);text-align:center;">
+    Jeu Évolutionnaire<br/>
+<span style="color:var(--red);">et Application</span><br/>
+<span style="color:var(--gold);font-style:italic;">de la Loi</span>
+</h1>
+<div class="hero-divider"></div>
+<div class="profile-badge">
+<img alt="Photo de profil de Ramanambonona Ambinintsoa" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
+<div class="person-meta">
+<div class="hero-author-name" style="font-weight:700;font-size:1.08rem;color:var(--ink);">Ramanambonona Ambinintsoa</div>
+<div class="hero-affiliation" style="font-size:.8rem;color:var(--ink3);">Center for Economic Studies · Université d'Antananarivo, Madagascar</div>
+<div class="hero-email" style="font-size:.72rem;color:var(--gold);margin-top:.14rem;">ambinintsoa.uat.ead2@gmail.com · ORCID 0000-0002-3298-1793</div>
+</div>
+</div>
+<div class="hero-keywords" style="margin-bottom:1rem;">
+<span class="pill b">C73</span><span class="pill b">K14</span><span class="pill b">K42</span><span class="pill b">D83</span><span class="pill b">H56</span>
+</div>
+<div class="hero-topics" style="font-size:.78rem;color:var(--ink3);text-align:center;max-width:850px;margin:0 auto;">
+<i class="fas fa-tag" style="color:var(--gold2);margin-right:.35rem;"></i>
+    Jeux évolutionnaires  ·  Dynamique du réplicateur  ·  Congestion institutionnelle  ·  Réhabilitation  ·  Bassins d'attraction
+  </div>
+<div class="manuscript-action" style="text-align:center;margin-top:.9rem;">
+<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscrit.pdf" href="manuscrit.pdf" type="application/pdf">
+<i aria-hidden="true" class="fas fa-file-pdf"></i> Télécharger le manuscrit (PDF)
+  </a>
+</div>
+</div>
+<div class="ft" style="position:absolute;bottom:1.6rem;left:4rem;right:3.8rem;z-index:6;">
+<span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span>
+<span>AFED · 2026</span>
+</div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S2 — MOTIVATION
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-question-circle" style="color:var(--gold2);"></i>Motivation</div>
+<h2 class="title">Au-delà de <span class="g">Becker (1968)</span> : que se passe-t-il<br/>quand le crime devient <span class="r">fréquent</span> ?</h2>
+<div class="divider"></div>
+<div class="g2" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="prop b; fragment" style="margin-bottom:.7rem;">
+<div class="prop-lbl b">Paradigme canonique</div>
+<div style="font-size:1.2rem;line-height:1.7;">
+        Infraction = <strong>gain privé</strong> vs <strong>sanction attendue</strong><br/>
+        Leviers : probabilité $p$, sévérité $f$, coût public $c$<br/>
+<span style="font-size:1.0rem;color:var(--ink3);">Becker 1968 · Stigler 1970 · Polinsky–Shavell 2000, 2007</span>
+</div>
+</div>
+<div class="ilist">
+<div class="ir fragment fu; fragment">
+<div class="ico g"><i class="fas fa-balance-scale-right"></i></div>
+<div><div class="ih" style="font-size:1.2rem;">Analyse statique</div>
+<div class="id" style="font-size:1.2rem;">Choix optimal $(p,f)$ pour un agent représentatif — hors dynamique de population et d'imitation collective</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico r"><i class="fas fa-exclamation-triangle"></i></div>
+<div><div class="ih" style="font-size:1.2rem;">Lacune centrale</div>
+<div class="id" style="font-size:1.2rem;">La probabilité effective de détection <em>se dégrade</em> quand les infractions se multiplient — la <strong>congestion institutionnelle</strong> est ignorée</div></div>
+</div>
+</div>
+</div>
+<div>
+<div class="ir fragment fu">
+<div class="ico b"><i class="fas fa-network-wired"></i></div>
+<div><div class="ih" style="font-size:1.2rem;">Effets de réseau absents</div>
+<div class="id" style="font-size:1.2rem;">Externalités d'imitation, normes sociales, réhabilitation comme flux comportemental — hors du cadre standard</div></div>
+</div>
+<div class="prop r; fragment" style="margin-top:.2rem;">
+<div class="prop-lbl r">Question de recherche</div>
+<div style="font-size:1.2rem;font-style:italic;line-height:1.65;">
+        « Comment la <span style="color:var(--red);font-weight:700;">congestion</span>, les <span style="color:var(--gold);font-weight:700;">externalités de réseau</span> et la <span style="color:var(--blue);font-weight:700;">réhabilitation</span> modifient-ils l'efficacité <em>dynamique</em> de l'application de la loi ? »
+      </div>
+</div>
+<div class="prop ; fragment" style="margin-top:.75rem;">
+<div class="prop-lbl" style="font-size:1.2rem;">Notre apport — Détection congestionnée</div>
+<div style="font-size:1.5rem;text-align:center;margin:.35rem 0;">
+        $$q(x,e)=\frac{\alpha\,e}{1+\kappa\,x}$$
+      </div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S3 — FIGURE : q(x,e) congestionnée
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-chart-line" style="color:var(--gold2);"></i>Figure 1 du manuscrit — Seuil et dynamique</div>
+<div class="fig-title">Différentiel de gain <span class="r">$\Delta(x)$</span> et vitesse de diffusion <span class="g">$\dot{x}$</span></div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 1 : différentiel de gain Delta(x), vitesse x point et seuil x dagger, manuscrit original." decoding="async" loading="lazy" src="figures/fig_01_phase_line.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">La dynamique du réplicateur change de signe au seuil instable <strong style="color:var(--red);">$x^\dagger\simeq0{,}364$</strong>. En deçà, la prévalence diminue ; au-delà, elle augmente (modèle de base sans flux).</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S4 — LITTÉRATURE
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-book-open" style="color:var(--gold2);"></i>Positionnement</div>
+<h2 class="title">Trois courants, <span class="g">une synthèse</span></h2>
+<div class="divider"></div>
+<div class="g3" style="flex:1;align-items:start;margin-top:.5rem;">
+<div class="card b fragment fu" style="height:100%;">
+<div style="font-size:1.6rem;color:var(--blue);margin-bottom:.45rem;"><i class="fas fa-gavel"></i></div>
+<div style="font-weight:700;font-size:1.5rem;margin-bottom:.38rem;">Économie du droit<br/>(dissuasion)</div>
+<div style="font-size:1.2rem;color:var(--ink3);line-height:1.68;">
+      Becker (1968),<br/>Polinsky–Shavell (2000, 2007)<br/>Garoupa (1997, 2001)<br/>Kaplow (1992)<br/><br/>
+<span style="color:var(--blue);font-weight:600;">→</span> Arbitrage $p\!\times\!f$ · Sanction optimale
+    </div>
+</div>
+<div class="card g fragment fu" style="height:100%;">
+<div style="font-size:1.6rem;color:var(--gold);margin-bottom:.45rem;"><i class="fas fa-dna"></i></div>
+<div style="font-weight:700;font-size:1.5rem;margin-bottom:.38rem;">Jeux évolutionnaires</div>
+<div style="font-size:1.2;color:var(--ink3);line-height:1.68;">
+      Maynard Smith–Price (1973)<br/>Taylor–Jonker (1978)<br/>Friedman (1991)<br/>Hofbauer–Sigmund (2003)<br/>Hofbauer–Sandholm (2009)<br/><br/>
+<span style="color:var(--gold);font-weight:600;">→</span> Réplicateur · ESS · Bassins d'attraction
+    </div>
+</div>
+<div class="card r fragment fu" style="height:100%;">
+<div style="font-size:1.6rem;color:var(--red);margin-bottom:.45rem;"><i class="fas fa-shield-virus"></i></div>
+<div style="font-weight:700;font-size:1.5rem;margin-bottom:.38rem;">Criminalité évolutionnaire</div>
+<div style="font-size:1.2rem;color:var(--ink3);line-height:1.68;">
+      Short et al. (2010)<br/>McBride et al. (2016)<br/>Berenji et al. (2014)<br/>Perc–Szolnoki (2015)<br/>Espejo (2016)<br/><br/>
+<span style="color:var(--red);font-weight:600;">→</span> Adversarial · Récidive · Inspection
+    </div>
+</div>
+</div>
+<div class="prop r fragment fu" style="margin-top:.8rem;">
+<div class="prop-lbl r" style="font-size:1.2rem"><i class="fas fa-crosshairs"></i>  Lacune ciblée</div>
+<div style="font-size:1.2rem;line-height:1.55;display:flex;align-items:center;gap:1.3rem;">
+<div style="flex:1;">Les modèles existants ignorent la <strong>congestion de la détection effective</strong> dans un cadre unifié intégrant dissuasion, externalités de réseau, réhabilitation et effort endogène.</div>
+<div style="text-align:center;padding:0 1.1rem;border-left:2px solid rgba(0,122,61,.2);">
+<div style="font-size:.6rem;color:var(--ink3);">Notre apport</div>
+<div style="font-size:1.2rem;">$q(x,e)=\dfrac{\alpha e}{1+\kappa x}$</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S5 — MODÈLE : ÉQUATIONS FONDAMENTALES
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-project-diagram" style="color:var(--gold2);"></i>Architecture du modèle</div>
+<h2 class="title">Population, détection <span class="r">congestionnée</span> et gain relatif</h2>
+<div class="divider"></div>
+<div class="g2" style="flex:1;align-items:start;margin-top:.4rem;">
+<div class="fragment">
+<div class="fragment" style="background:rgba(104,114,124,.07);border:1.5px solid rgba(104,114,124,.22);border-radius:8px;padding:.7rem 1rem;margin-bottom:.65rem;">
+<div style="font-size:.1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--gold);margin-bottom:.38rem;">Population normalisée à 1</div>
+<div style="display:flex;gap:1rem;align-items:center;">
+<div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--red);font-weight:700;">$x(t)$</div><div style="font-size:.9rem;color:var(--ink3);">Criminels (C)</div></div>
+<div style="font-size:1.2rem;color:var(--ink3);">+</div>
+<div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--blue);font-weight:700;">$1{-}x(t)$</div><div style="font-size:.9rem;color:var(--ink3);">Honnêtes (H)</div></div>
+<div style="font-size:1.2rem;color:var(--ink3);">$=\;1$</div>
+</div>
+</div>
+<div class="eq fragment" style="margin-bottom:.6rem">
+<div class="eq-lbl r" style="font-size:1.0rem">Éq. (1) — Probabilité effective de détection</div>
+      $$q(x,e)=\frac{\alpha\,e}{1+\kappa\,x}$$
+    </div>
+<div class="ilist">
+<div class="ir fragment fu">
+<div class="ico g"><i class="fas fa-microscope"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$\alpha>0$ — technologie de détection</div><div class="id" style="font-size:1.2rem">Capacité intrinsèque : équipements, traçabilité, formation</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico b"><i class="fas fa-cog"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$e\in[0,1]$ — effort d'application</div><div class="id" style="font-size:1.2rem">Exogène $\bar e$ dans le modèle de base · Endogène $\dot e$ dans l'extension</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico r"><i class="fas fa-compress-arrows-alt"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$\kappa\geq 0$ — congestion institutionnelle</div><div class="id" style="font-size:1.2rem">Saturation des juridictions, délais, filtrage administratif</div></div>
+</div>
+</div>
+</div>
+<div>
+<div class="eq g fragment" style="margin-bottom:.65rem;">
+<div class="eq-lbl" style="font-size:1.0rem">Éq. (2) — Différentiel de gain $\Delta$</div>
+      $$\Delta(x,e)=\underbrace{\beta+\rho x}_{\text{gain brut}} - f\underbrace{\frac{\alpha e}{1+\kappa x}}_{\text{sanction attendue}} - \underbrace{\lambda h}_{\text{réhabilitation}}$$
+    </div>
+<div class="ilist">
+<div class="ir fragment fu">
+<div class="ico g"><i class="fas fa-users"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$\rho x$ — externalité de réseau</div><div class="id" style="font-size:1.2rem">Prévalence élevée réduit la stigmatisation, facilite l'apprentissage illicite</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico b"><i class="fas fa-hand-holding-heart"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$\lambda h$ — réhabilitation sur le gain</div><div class="id" style="font-size:1.2rem">Alternatives licites, emploi, soutien social — réduit l'attractivité relative du crime</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico r"><i class="fas fa-money-bill-wave"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$\beta$ — gain net individuel</div><div class="id" style="font-size:1.2rem">Bénéfice privé de l'infraction net des coûts non pénaux — paramètre dominant dans les simulations</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S6 — DYNAMIQUE RÉPLICATEUR
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-dna" style="color:var(--gold2);"></i>Formalisation</div>
+<h2 class="title">Dynamique <span class="g">réplicateur-mutateur</span></h2>
+<div class="divider"></div>
+<div class="g2" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="eq fragment" style="margin-bottom:.6rem;">
+<div class="eq-lbl r" style="font-size:1.0rem">Éq. (3) — Dynamique centrale</div>
+      $$\dot{x}=\underbrace{x(1-x)\,\Delta(x,e)}_{\text{réplicateur}} - \underbrace{\mu\,x}_{\text{sortie}} + \underbrace{\nu(1-x)}_{\text{entrée}}$$
+    </div>
+<div class="ilist">
+<div class="ir fragment fu">
+<div class="ico g"><i class="fas fa-sync-alt"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$x(1-x)\Delta$ : composante réplicatrice</div>
+<div class="id" style="font-size:1.0rem">Si $\Delta>0$ : le crime se diffuse par imitation. Si $\Delta<0$ : la conformité l'emporte. Révision comportementale adaptative.</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico b"><i class="fas fa-door-open"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$-\mu x$ : flux direct de sortie</div>
+<div class="id" style="font-size:1.0rem">Réhabilitation, désistance, réinsertion. Empêche $x=1$ d'être un état absorbant.</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico r"><i class="fas fa-user-plus"></i></div>
+<div><div class="ih" style="font-size:1.2rem">$+\nu(1-x)$ : flux d'entrée (mutation)</div>
+<div class="id" style="font-size:1.0rem">Nouvelles infractions, recrutement. Empêche $x=0$ d'être absorbant.</div></div>
+</div>
+</div>
+<div class="prop fragment fu" style="margin-top:.55rem;">
+<div class="prop-lbl" style="font-size:1.0rem">Proposition 1 — Invariance du domaine</div>
+<div style="font-size:1.0rem;line-height:1.6;">$[0,1]$ positivement invariant pour $\dot x$ · $[0,1]^2$ pour $(\dot x,\dot e)$<br/>
+<span style="font-size:1.0rem;color:var(--ink3);">Preuve : $\dot x|_{x=0}=\nu\geq0$ ; $\dot x|_{x=1}=-\mu\leq0$ ; idem pour $e$. ∎</span></div>
+</div>
+</div>
+<div>
+<div class="eq b fragment" style="margin-bottom:.65rem;">
+<div class="eq-lbl b" style="font-size:1.0rem">Éq. (4) — Effort d'application endogène</div>
+      $$\dot{e}=\underbrace{\eta\,x\,(1-e)}_{\text{réaction autorité}} - \underbrace{\omega\,e - \chi\,e^2}_{\text{coûts}}$$
+    </div>
+<div class="prop fragment fu">
+<div class="prop-lbl" style="font-size:1.2rem">Interprétation des paramètres d'effort</div>
+<div class="ilist" style="margin-top:.35rem;">
+<div class="ir" style="padding:.45rem .75rem;">
+<div class="ico b" style="width:2rem;height:2rem;min-width:2rem;font-size:1.3rem;"><i class="fas fa-tachometer-alt"></i></div>
+<div><div class="ih" style="font-size:1.3rem;">$\eta$ : réactivité de l'autorité</div><div class="id" style="font-size:1.2rem">Vitesse de réponse à la hausse de criminalité</div></div>
+</div>
+<div class="ir" style="padding:.45rem .75rem;">
+<div class="ico r" style="width:2rem;height:2rem;min-width:2rem;font-size:1.0rem;"><i class="fas fa-battery-quarter"></i></div>
+<div><div class="ih" style="font-size:1.3rem;">$\omega$ : dépréciation de l'effort</div><div class="id" style="font-size:1.2rem">Fatigue institutionnelle, rotation du personnel</div></div>
+</div>
+<div class="ir" style="padding:.45rem .75rem;">
+<div class="ico g" style="width:2rem;height:2rem;min-width:2rem;font-size:1.0rem;"><i class="fas fa-chart-line"></i></div>
+<div><div class="ih" style="font-size:1.3rem;">$\chi$ : coût convexe de l'effort</div><div class="id" style="font-size:1.2rem">Rendements décroissants des ressources institutionnelles</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S7 — FIGURE : DIAGRAMME DE FLUX
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-project-diagram" style="color:var(--gold2);"></i>Schéma conceptuel — Flux entre stratégies</div>
+<div class="fig-title">Structure des flux entre stratégies <span class="r">C</span> et <span class="b">H</span></div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area">
+<div style="width:100%;max-width:860px;">
+<svg style="display:block;background:white;border-radius:10px;border:1.5px solid var(--cbrd);box-shadow:0 2px 16px rgba(0,64,32,.08);" viewbox="0 0 860 400" width="100%">
+<defs>
+<marker id="ar" markerheight="8" markerwidth="8" orient="auto" refx="7" refy="4"><path d="M0,0 L0,8 L8,4z" fill="#007A3D"></path></marker>
+<marker id="ab" markerheight="8" markerwidth="8" orient="auto" refx="1" refy="4"><path d="M8,0 L8,8 L0,4z" fill="#0B7A4B"></path></marker>
+<marker id="ag" markerheight="7" markerwidth="7" orient="auto" refx="6" refy="3.5"><path d="M0,0 L0,7 L7,3.5z" fill="#B5A268"></path></marker>
+</defs>
+<!-- Boxes H -->
+<rect fill="rgba(11,122,75,.08)" height="100" rx="12" stroke="#0B7A4B" stroke-width="2.5" width="200" x="60" y="150"></rect>
+<text fill="#0B7A4B" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="160" y="193">Honnêtes (H)</text>
+<text fill="#0B7A4B" font-family="Cormorant Garamond,serif" font-size="22" font-style="italic" text-anchor="middle" x="160" y="220">1 − x(t)</text>
+<!-- Boxes C -->
+<rect fill="rgba(0,122,61,.08)" height="100" rx="12" stroke="#007A3D" stroke-width="2.5" width="200" x="600" y="150"></rect>
+<text fill="#007A3D" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="700" y="193">Criminels (C)</text>
+<text fill="#007A3D" font-family="Cormorant Garamond,serif" font-size="22" font-style="italic" text-anchor="middle" x="700" y="220">x(t)</text>
+<!-- Arrow H→C (ν) top -->
+<path d="M260 180 Q430 80 600 180" fill="none" marker-end="url(#ar)" stroke="#007A3D" stroke-width="2.5"></path>
+<text fill="#007A3D" font-family="DM Sans,sans-serif" font-size="16" font-weight="600" text-anchor="middle" x="430" y="100">ν (mutation/recrutement)</text>
+<!-- Arrow C→H (μ) bottom -->
+<path d="M600 220 Q430 320 260 220" fill="none" marker-end="url(#ab)" stroke="#0B7A4B" stroke-width="2.5"></path>
+<text fill="#0B7A4B" font-family="DM Sans,sans-serif" font-size="18" font-weight="600" text-anchor="middle" x="430" y="356">μ (réhabilitation / désistance)</text>
+<!-- Self loop C (replicator) -->
+<path d="M700 150 Q760 70 790 55 Q820 40 810 80 Q800 115 750 130 Q730 137 700 150" fill="none" stroke="#B5A268" stroke-width="2.5"></path>
+<text fill="#B5A268" font-family="DM Sans,sans-serif" font-size="17" font-weight="700" x="800" y="42">Δ > 0</text>
+<!-- Detection box top center -->
+<rect fill="rgba(104,114,124,.1)" height="52" rx="8" stroke="#B5A268" stroke-width="2" width="210" x="325" y="15"></rect>
+<text fill="#B5A268" font-family="DM Sans,sans-serif" font-size="16" font-weight="600" text-anchor="middle" x="430" y="37">q(x,e) = αe / (1 + κx)</text>
+<text fill="#5D7468" font-family="DM Sans,sans-serif" font-size="14" text-anchor="middle" x="430" y="56">Congestion institutionnelle</text>
+<line marker-end="url(#ag)" stroke="#B5A268" stroke-dasharray="5,3" stroke-width="2" x1="430" x2="430" y1="67" y2="155"></line>
+<!-- Labels for arrows -->
+<text fill="#123C2C" font-family="DM Sans,sans-serif" font-size="15" font-style="italic" text-anchor="middle" x="430" y="200">x(1−x)Δ</text>
+</svg>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S8 — BISTABILITÉ
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-code-branch" style="color:var(--gold2);"></i>Résultat central</div>
+<h2 class="title">Bistabilité et seuil critique <span class="r">$x^\dagger$</span></h2>
+<div class="divider"></div>
+<div class="g2 fragment" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="prop fragment" style="margin-bottom:.65rem;">
+<div class="prop-lbl" style="font-size:1.2rem;">Proposition 2 — Seuil critique et bistabilité</div>
+<div style="font-size:1.2rem;line-height:1.85;">Posons $\;\beta_L=\dfrac{\alpha\bar e f}{1+\kappa}\;$ et $\;\beta_H=\alpha\bar e f$</div>
+</div>
+<div style="display:flex;gap:.5rem;margin-bottom:.65rem;">
+<div class="rz co fragment fu">
+<div class="rz-lbl" style="color:var(--blue); font-size:1.0rem">Conformité</div>
+<div class="rz-cond" style="font-size:1.0rem;">$\beta < \beta_L$</div>
+<div class="rz-res" style="font-size:1.0rem;">$x=0$ globalement attractif</div>
+</div>
+<div class="rz bi fragment fu">
+<div class="rz-lbl" style="color:var(--gold); font-size:1.0rem">Bistabilité</div>
+<div class="rz-cond" style="font-size:1.0rem;">$\beta_L < \beta < \beta_H$</div>
+<div class="rz-res" style="font-size:1.0rem;">$x^\dagger$ instable<br/>$x=0$ et $x=1$ attractifs</div>
+</div>
+<div class="rz cr fragment fu">
+<div class="rz-lbl" style="color:var(--red); font-size:1.0rem">Criminalité</div>
+<div class="rz-cond" style="font-size:1.0rem;">$\beta > \beta_H$</div>
+<div class="rz-res" style="font-size:1.0rem;">$x=1$ globalement attractif</div>
+</div>
+</div>
+<div class="eq g fragment" style="margin-bottom:.6rem;">
+<div class="eq-lbl" style="font-size:1.2rem;">Seuil intérieur instable</div>
+      $$x^\dagger = \frac{1}{\kappa}\!\left(\frac{\alpha\bar e f}{\beta}-1\right)\in(0,1)$$
+    </div>
+<div class="ir fragment fu">
+<div class="ico g"><i class="fas fa-map-marker-alt"></i></div>
+<div><div class="ih" style="font-size:1.2rem;">Dépendance à la condition initiale</div>
+<div class="id" style="font-size:1.0rem;">Si $x_0 < x^\dagger$ → conformité globale. Si $x_0 > x^\dagger$ → criminalité persistante.<br/>L'histoire initiale détermine l'attracteur final — <em>hystérèse dynamique</em>.</div></div>
+</div>
+</div>
+<div>
+<div class="prop r fragment fu" style="margin-bottom:.65rem;">
+<div class="prop-lbl r" style="font-size:1.2rem;">Proposition 3 — Statique comparative</div>
+<div style="font-size:.88rem;line-height:1.92;">
+        $$\frac{\partial x^\dagger}{\partial\alpha}>0,\;\frac{\partial x^\dagger}{\partial\bar e}>0,\;\frac{\partial x^\dagger}{\partial f}>0$$
+        $$\frac{\partial x^\dagger}{\partial\beta}<0,\;\frac{\partial x^\dagger}{\partial\kappa}<0$$
+      </div>
+<div style="font-size:1.0rem;color:var(--ink3);">Preuve : dérivées partielles de $x^\dagger=\tfrac{1}{\kappa}\!\left(\tfrac{\alpha\bar e f}{\beta}-1\right)$ ∎</div>
+</div>
+<div class="ilist">
+<div class="ir fragment fu" style="border-left:4px solid var(--blue);">
+<div class="ico b"><i class="fas fa-arrow-up"></i></div>
+<div><div class="ih" style="color:var(--blue); font-size:1.2rem;">$\alpha,\bar e,f$ : élargissent le bassin de conformité</div>
+<div class="id" style="font-size:1.0rem;">Un $x^\dagger$ plus élevé tolère une prévalence initiale plus grande sans basculement</div></div>
+</div>
+<div class="ir fragment fu" style="border-left:4px solid var(--red);">
+<div class="ico r"><i class="fas fa-exclamation-circle"></i></div>
+<div><div class="ih" style="color:var(--red); font-size:1.2rem;">$f\uparrow$ peut être neutralisé par $\kappa\uparrow$</div>
+<div class="id" style="font-size:1.0rem;">Augmenter les peines sans renforcer les capacités de traitement = zéro effet dynamique</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S9 — FIGURE : DIAGRAMME DE BIFURCATION
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-code-branch" style="color:var(--gold2);"></i>Figure 3 du manuscrit — Bifurcation</div>
+<div class="fig-title">Équilibres selon le gain net <span class="r">$\beta$</span> — branches stables et instable</div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 3 : bifurcation des équilibres selon beta, branches stables en trait continu et instable en tirets." decoding="async" loading="lazy" src="figures/fig_03_bifurcation.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">Entre $\beta_L=0{,}317$ et $\beta_H=0{,}950$, <strong style="color:var(--red);">deux attracteurs</strong> coexistent ; la branche en pointillés matérialise le seuil instable $x^\dagger$.</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section><section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-layer-group" style="color:var(--gold2);"></i>Figure 4 du manuscrit — Bassins d'attraction</div>
+<div class="fig-title">Condition initiale <span class="g">$x_0$</span>, gain net <span class="r">$\beta$</span> et état final $x(T)$</div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 4 du manuscrit : carte en nuances de gris des bassins d'attraction selon beta et x0." decoding="async" loading="lazy" src="figures/fig_04_basins.png"/></div></div>
+<div style="font-size:1.1rem;color:var(--ink3);text-align:center;margin-top:.25rem;">
+Les zones <strong style="color:var(--red);">sombres</strong> correspondent à une prévalence finale proche de 1, les zones <strong>claires</strong> à une prévalence finale proche de 0 ; la frontière dépend de $x_0$ et de $\beta$.
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S10 — RÉHABILITATION
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-hand-holding-heart" style="color:var(--gold2);"></i>Réhabilitation</div>
+<h2 class="title">Réhabilitation : <span class="b">deux canaux distincts</span></h2>
+<div class="divider"></div>
+<div class="g2 fragment" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="prop" style="margin-bottom:.65rem;">
+<div class="prop-lbl" style="font-size:1.2rem">Proposition 4 — Effet local de la réhabilitation</div>
+<div style="font-size:1.2rem;line-height:1.92;">À l'équilibre intérieur stable $x^*\in(0,1)$ :
+        $$\frac{\partial x^*}{\partial\mu}<0,\qquad\frac{\partial x^*}{\partial\nu}>0,\qquad\frac{\partial x^*}{\partial h}<0$$
+      </div>
+<div style="font-size:1.0rem;color:var(--ink3);">TFI : $\partial x^*/\partial z = -F_z/F_x$ ; $F_x < 0$ à l'équilibre stable ∎</div>
+</div>
+<div class="ilist">
+<div class="ir fragment fu" style="border-left:4px solid var(--blue);">
+<div class="ico b"><i class="fas fa-door-open"></i></div>
+<div><div class="ih" style="color:var(--blue); font-size:1.2rem">Canal 1 - Flux direct $\mu$</div>
+<div class="id" style="font-size:1.0rem">Agit sur la <em>masse</em> déjà engagée dans le crime. Peut supprimer le bassin supérieur en transformant la structure des racines de $F$.</div></div>
+</div>
+<div class="ir fragment fu" style="border-left:4px solid var(--gold);">
+<div class="ico g"><i class="fas fa-star-of-life"></i></div>
+<div><div class="ih" style="color:var(--gold); font-size:1.2rem">Canal 2 — Gain relatif $\lambda h$</div>
+<div class="id" style="font-size:1.0rem">Réduit l'attractivité du crime ($\Delta\downarrow$). Déplace le seuil structurel $x^\dagger$ vers le haut sans modifier le flux de masse.</div></div>
+</div>
+<div class="ir fragment fu" style="border-left:4px solid var(--red);">
+<div class="ico r"><i class="fas fa-undo"></i></div>
+<div><div class="ih" style="color:var(--red); font-size:1.2rem">Contre-force — Flux d'entrée $\nu$</div>
+<div class="id" style="font-size:1.0rem">Alimentent la stratégie illicite en continu. Un programme sans contrôle de $\nu$ peut être insuffisant en régime de récidive.</div></div>
+</div>
+</div>
+</div>
+<div>
+<div class="eq b fragment fu">
+<div class="eq-lbl b" style="font-size:1.2rem">Synthèse des deux canaux</div>
+<div style="font-size:1.2rem;line-height:1.75;">
+<strong>Sanction $f$</strong> : agit sur le <em>différentiel d'incitation</em> $\Delta$<br/>
+<strong>Désistance $\mu$</strong> : modifie la <em>masse dynamique</em> exposée à la récidive<br/>
+<strong>Attractivité $h$</strong> : déplace le <em>seuil structurel</em> $x^\dagger$
+      </div>
+</div>
+<div class="prop fragment fu" style="margin-top:.65rem;">
+<div class="prop-lbl" style="font-size:1.2rem">Implication pour la politique</div>
+<div style="font-size:1.2rem;line-height:1.58;">La réhabilitation est <strong>complémentaire</strong> à la dissuasion, non opposée. Elle est particulièrement utile dans les régimes de criminalité persistante où la sanction seule ne suffit pas à ramener le système dans le bassin de conformité.</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S11 — FIGURE : TRAJECTOIRES μ
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-hand-holding-heart" style="color:var(--gold2);"></i>Figure 5 du manuscrit — Réhabilitation</div>
+<div class="fig-title">Prévalence de long terme <span class="r">$x(T)$</span> selon la sortie directe <span class="g">$\mu$</span></div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 5 : prévalence finale en fonction de mu et des conditions initiales, avec racine intérieure." decoding="async" loading="lazy" src="figures/fig_05_rehabilitation.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">Les conditions initiales $x_0=0{,}12$ et $x_0=0{,}86$ conduisent à des régimes différents pour une faible désistance. Lorsque $\mu$ augmente, <strong style="color:var(--red);">le régime de forte prévalence disparaît</strong>.</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S12 — EFFORT ENDOGÈNE
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-sync" style="color:var(--gold2);"></i>Extension dynamique</div>
+<h2 class="title">Effort endogène et <span class="g">retard institutionnel</span></h2>
+<div class="divider"></div>
+<div class="g2 fragment" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="eq b fragment" style="margin-bottom:.6rem;">
+<div class="eq-lbl b" style="font-size:1.2rem">Système coévolutionnaire $(x,e)$</div>
+      $$\dot x=F(x,e)=x(1-x)\Delta-\mu x+\nu(1-x)$$
+      $$\dot e=G(x,e)=\eta x(1-e)-\omega e-\chi e^2$$
+    </div>
+<div class="prop fragment" style="margin-bottom:.6rem;">
+<div class="prop-lbl" style="font-size:1.2rem">Proposition 5 — Stabilité locale (Routh–Hurwitz)</div>
+<div style="font-size:1.2rem;line-height:1.88;">$(x^*,e^*)$ localement stable si :
+        $$\operatorname{tr}J=F_x+G_e<0,\quad\det J=F_xG_e-F_eG_x>0$$
+      </div>
+<div style="font-size:1.2rem;color:var(--ink3);">Signes structurels : $F_e<0$ · $G_x>0$ · $G_e<0$ ∎</div>
+</div>
+<div class="ilist">
+<div class="ir fragment fu">
+<div class="ico g"><i class="fas fa-tachometer-alt"></i></div>
+<div><div class="ih" style="font-size:1.2rem">Calibration numérique</div>
+<div class="id" style="font-size:1.2rem">$E^*\approx(0.961,\;0.736)$ · valeurs propres $\approx -0.366$ et $-1.647$ · stabilité locale confirmée</div></div>
+</div>
+<div class="ir fragment fu">
+<div class="ico r"><i class="fas fa-hourglass-half"></i></div>
+<div><div class="ih" style="font-size:1.2rem">Le paradoxe du retard institutionnel</div>
+<div class="id" style="font-size:1.2rem">$e^*=0.736$ mais $1{+}\kappa x^*\approx 2.92$ → $q(E^*)\approx 0.239$ seulement : <strong>l'effort ne se traduit pas en détection effective dans un système saturé</strong></div></div>
+</div>
+</div>
+</div>
+<div>
+<div class="prop r fragment fu" style="margin-bottom:.6rem;">
+<div class="prop-lbl r" style="font-size:1.2rem"><i class="fas fa-exclamation-triangle"></i>  Paradoxe central</div>
+<div style="font-size:1.2rem;line-height:1.62;">Une politique d'effort <em>purement réactive</em> à la criminalité peut stabiliser un régime de forte prévalence : $e^*=0.736$ mais $q(E^*)\approx 24\%$.<br/><br/>La congestion $\kappa$ absorbe l'effort sans améliorer la dissuasion effective.</div>
+</div>
+<div class="eq fragment fu" style="font-size:1.2rem;">
+<div class="eq-lbl r" style="font-size:1.2rem">Conséquence politique</div>
+      Réduire $\kappa$ (capacité institutionnelle) est un <strong>multiplicateur</strong> de l'effort $e$ : $\partial q/\partial\kappa = -\alpha e/(1+\kappa x)^2 < 0$
+    </div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S13 — FIGURE : DIAGRAMME DE PHASE
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-sync" style="color:var(--gold2);"></i>Figure 2 du manuscrit — Diagramme de phase</div>
+<div class="fig-title">Champ de trajectoires et nullclines du système <span class="g">$(x,e)$</span></div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 2 : champ vectoriel et trajectoires du système criminalité x et effort e, avec nullclines." decoding="async" loading="lazy" src="figures/fig_02_phase_diagram_xe.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">Le diagramme montre les nullclines $\dot{x}=0$ et $\dot{e}=0$, ainsi que les trajectoires convergeant vers <strong style="color:var(--red);">$E^*\simeq(0{,}961;0{,}736)$</strong> pour la calibration étudiée.</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S14 — FIGURE : SENSIBILITÉ MONTE-CARLO
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-chart-bar" style="color:var(--gold2);"></i>Figure 6 du manuscrit — Sensibilité globale</div>
+<div class="fig-title">Coefficients standardisés sur <span class="r">$x(T)$</span> — 2 500 tirages Monte-Carlo</div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 6 : graphique en barres de sensibilité standardisée montrant les onze paramètres du manuscrit." decoding="async" loading="lazy" src="figures/fig_06_sensitivity_tornado.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">Le gain net $\beta$ présente le coefficient positif dominant (environ $+0{,}70$), tandis que la désistance $\mu$ constitue le principal effet négatif (environ $-0{,}38$). Tous les <strong>11 paramètres</strong> de l’analyse sont représentés.</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S15 — FIGURE : FRONTIÈRE DE POLITIQUE
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="fig-sl">
+<div class="fig-tag"><i class="fas fa-map" style="color:var(--gold2);"></i>Figure 7 du manuscrit — Frontière de politique</div>
+<div class="fig-title">Iso-courbes de prévalence finale <span class="r">$x(T)$</span> selon <span class="g">$\alpha$ et $\mu$</span></div>
+<div style="height:2px;background:var(--cbrd);margin:.3rem 0 .5rem;"></div>
+<div class="fig-area"><div class="manuscript-figure"><img alt="Figure 7 : carte de niveaux x(T) selon technologie alpha et taux de sortie mu." decoding="async" loading="lazy" src="figures/fig_07_policy_frontier.png"/></div></div>
+<div style="font-size:1.2rem;color:var(--ink3);text-align:center;margin-top:.4rem;">Les iso-courbes $x(T)=0{,}10$ et $x(T)=0{,}50$ montrent la substitution possible entre <strong style="color:var(--red);">capacité de détection</strong> et <strong>sortie directe du crime</strong> à prévalence finale donnée.</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S16 — CONCLUSION
+════════════════════════════════════════ -->
+<section data-transition="slide">
+<div class="sl">
+<div class="tag"><i class="fas fa-comments" style="color:var(--gold2);"></i>Discussion et conclusion</div>
+<h2 class="title">De l'arbitrage $p{\times}f$ à une <span class="g">économie des bassins d'attraction</span></h2>
+<div class="divider"></div>
+<div class="g2 fragment" style="flex:1;align-items:start;margin-top:.4rem;">
+<div>
+<div class="ilist">
+<div class="ir fragment fu" style="border-left:4px solid var(--red);">
+<div class="ico r"><i class="fas fa-balance-scale"></i></div>
+<div><div class="ih" style="color:var(--red); font-size:1.2rem">1. Rendement conditionnel de la sévérité</div>
+<div class="id" style="font-size:1.0rem">$f\uparrow$ efficace si la détection reste crédible · neutralisé par $\kappa\uparrow$ · une réforme pénale sans capacités de traitement peut être sans effet dynamique</div></div>
+</div>
+<div class="ir fragment fu" style="border-left:4px solid var(--blue);">
+<div class="ico b"><i class="fas fa-hand-holding-heart"></i></div>
+<div><div class="ih" style="color:var(--blue);font-size:1.2rem">2. Réhabilitation complémentaire, non opposée</div>
+<div class="id" style="font-size:1.0rem">Deux canaux distincts : $h$ (attractivité) et $\mu$ (désistance). Surtout utile en régime de persistance où la sanction seule ne ramène pas vers la conformité.</div></div>
+</div>
+<div class="ir fragment fu" style="border-left:4px solid var(--gold);">
+<div class="ico g"><i class="fas fa-clock"></i></div>
+<div><div class="ih" style="color:var(--gold);font-size:1.2rem">3. Contrainte institutionnelle du retard</div>
+<div class="id" style="font-size:1.0rem">Agir <em>avant</em> le franchissement du seuil $x^\dagger$ est décisif. Une politique réactive dans un système saturé stabilise un équilibre de forte prévalence.</div></div>
+</div>
+</div>
+<div class="prop r fragment fu" style="margin-top:.6rem;">
+<div class="prop-lbl r" style="font-size:1.0rem"><i class="fas fa-crosshairs"></i>  Résultat central</div>
+<div style="font-size:1.0rem;font-style:italic;line-height:1.55;">
+        « L'efficacité de l'application de la loi dépend de la <strong>position du système relativement au seuil $x^\dagger$</strong>, pas seulement du niveau légal des peines. »
+      </div>
+</div>
+</div>
+<div>
+<div class="card fragment" style="padding:.95rem;margin-bottom:.6rem;">
+<div style="font-size:1.2rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem;">Synthèse des propositions</div>
+<table style="width:100%;border-collapse:collapse;font-size:1.2rem;">
+<tr style="border-bottom:1.5px solid var(--cbrd);"><td style="padding:.35rem .55rem;color:var(--gold);font-weight:700;">Prop.1</td><td style="padding:.35rem .55rem;">Invariance de $[0,1]$ et $[0,1]^2$</td><td style="padding:.35rem .55rem;color:var(--blue);font-size:1.2rem;font-weight:600;">Admissibilité</td></tr>
+<tr style="border-bottom:1.5px solid var(--cbrd);"><td style="padding:.35rem .55rem;color:var(--gold);font-weight:700;">Prop.2</td><td style="padding:.35rem .55rem;">Bistabilité et seuil $x^\dagger$</td><td style="padding:.35rem .55rem;color:var(--red);font-size:1.2rem;font-weight:600;">Central</td></tr>
+<tr style="border-bottom:1.5px solid var(--cbrd);"><td style="padding:.35rem .55rem;color:var(--gold);font-weight:700;">Prop.3</td><td style="padding:.35rem .55rem;">Statique comparative de $x^\dagger$</td><td style="padding:.35rem .55rem;color:var(--gold);font-size:1.2rem;font-weight:600;">Politique</td></tr>
+<tr style="border-bottom:1.5px solid var(--cbrd);"><td style="padding:.35rem .55rem;color:var(--gold);font-weight:700;">Prop.4</td><td style="padding:.35rem .55rem;">Effet de $\mu,\nu,h$ sur $x^*$</td><td style="padding:.35rem .55rem;color:var(--blue);font-size:1.2rem;font-weight:600;">Réhabilitation</td></tr>
+<tr><td style="padding:.35rem .55rem;color:var(--gold);font-weight:700;">Prop.5</td><td style="padding:.35rem .55rem;">Stabilité Routh–Hurwitz $(x^*,e^*)$</td><td style="padding:.35rem .55rem;color:var(--gold);font-size:1.2rem;font-weight:600;">Effort endogène</td></tr>
+</table>
+</div>
+<div class="card fragment" style="padding:.88rem;">
+<div style="font-size:1.2rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.42rem;">Perspectives empiriques</div>
+<div class="ilist">
+<div style="display:flex;gap:.5rem;align-items:start;"><i class="fas fa-database" style="color:var(--gold2);min-width:1rem;font-size:1.2rem;margin-top:.1rem;"></i><div style="font-size:1.2rem;color:var(--ink3);">Estimer $\kappa$ via données judiciaires (délais, taux de poursuite)</div></div>
+<div style="display:flex;gap:.5rem;align-items:start;"><i class="fas fa-map-marked-alt" style="color:var(--blue);min-width:1rem;font-size:1.2rem;margin-top:.1rem;"></i><div style="font-size:1.2rem;color:var(--ink3);">Tester seuils et hystérèse sur données de police, justice, récidive</div></div>
+<div style="display:flex;gap:.5rem;align-items:start;"><i class="fas fa-project-diagram" style="color:var(--red);min-width:1rem;font-size:1.2rem;margin-top:.1rem;"></i><div style="font-size:1.2rem;color:var(--ink3);">Extensions : hétérogénéité, spatiale, multi-stratégies, erreurs judiciaires</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ft"><span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span><span>AFED · 2026</span></div>
+</div>
+</section>
+<!-- ════════════════════════════════════════
+     S17 — MERCI
+════════════════════════════════════════ -->
+<section data-transition="fade">
+<div class="sl end-slide">
+<canvas aria-hidden="true" class="network-canvas"></canvas>
+<div class="end-panel">
+<div class="section-center-title">AFED · 2026</div>
+<h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.25rem,4.5vw,3.65rem);font-weight:400;line-height:1.18;margin:0 0 .85rem;color:var(--ink);text-align:center;">
+    Merci de votre attention
+  </h1>
+<div class="end-divider"></div>
+<div class="prop center-prop">
+<div class="prop-lbl" style="font-size:1.05rem;text-align:center;"><i class="fas fa-quote-left" style="font-size:.75rem;margin-right:.3rem;"></i> Résultat central</div>
+<div style="font-size:1.1rem;font-style:italic;line-height:1.58;text-align:center;">
+      « L'efficacité de l'application de la loi ne se réduit pas au choix de $(p,f)$, elle dépend de la position du système relativement au seuil $x^\dagger$ séparant les bassins d'attraction. »
+    </div>
+</div>
+<div class="profile-badge" style="margin-bottom:1rem;">
+<img alt="Photo de profil de Ramanambonona Ambinintsoa" class="avatar-photo" src="https://ramanambonona.github.io/assets/img/profile.jpg"/>
+<div class="person-meta">
+<div style="font-weight:700;font-size:.98rem;color:var(--ink);">Ramanambonona Ambinintsoa</div>
+<div style="font-size:.72rem;color:var(--ink3);">Center for Economic Studies · Univ. Antananarivo</div>
+</div>
+</div>
+<div style="display:flex;justify-content:center;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem;">
+<i class="fas fa-envelope" style="color:var(--gold2);font-size:.95rem;"></i>
+<span style="font-size:.84rem;color:var(--ink3);">ambinintsoa.uat.ead2@gmail.com</span>
+</div>
+<div class="end-keywords">
+<span class="pill b">C73 · K14 · K42 · D83 · H56</span>
+<span class="pill g">Law and Economics</span>
+</div>
+<div class="manuscript-action" style="text-align:center;margin-top:.9rem;">
+<a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscrit.pdf" href="manuscrit.pdf" type="application/pdf">
+<i aria-hidden="true" class="fas fa-file-pdf"></i> Télécharger le manuscrit (PDF)
+  </a>
+</div>
+</div>
+<div class="ft" style="position:absolute;bottom:1.6rem;left:4rem;right:3.8rem;z-index:6;">
+<span>Ramanambonona A.— Jeu Évolutionnaire et Application de la Loi</span>
+<span>AFED · 2026</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  width:1280,height:720,hash:true,controls:true,progress:true,
+  slideNumber:'c/t',center:false,margin:0.02,
+  transition:'slide',backgroundTransition:'fade',fragments:true,
+  pdfSeparateFragments: false
+});
+Reveal.on('slidechanged',()=>{if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise();});
+window.addEventListener('load',()=>{setTimeout(()=>{if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise();},600);});
+</script>
+<script>
+/* Réseau de particules monochrome, inspiré du visuel fourni.
+   Animation active sur les diapositives de couverture et de fin uniquement. */
+(function(){
+  const canvases = document.querySelectorAll('.network-canvas');
+  const networks = [];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const TAU = Math.PI * 2;
+  canvases.forEach((canvas, which) => {
+    const ctx = canvas.getContext('2d', {alpha:true});
+    if(!ctx) return;
+    const cfg={canvas,ctx,particles:[],w:1280,h:720,which};
+    const seed = 4567 + which*827;
+    let rng=seed;
+    const random=()=> {rng=(1664525*rng+1013904223)>>>0; return rng/4294967296;};
+    const count=87;
+    for(let i=0;i<count;i++){
+      cfg.particles.push({x:18+random()*1244,y:18+random()*684,
+        vx:(random()-.5)*.28,vy:(random()-.5)*.25,
+        radius:1.5+random()*3.2,phase:random()*TAU});
+    }
+    networks.push(cfg);
+  });
+  function draw(cfg,time){
+    const {ctx,canvas,particles}=cfg;
+    const rect=canvas.getBoundingClientRect();
+    if(rect.width<1||rect.height<1)return;
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const w=rect.width,h=rect.height;
+    if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){
+      canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    const xscale=w/1280,yscale=h/720;
+    const reach=175;
+    for(let i=0;i<particles.length;i++){
+      const a=particles[i];
+      for(let j=i+1;j<particles.length;j++){
+        const b=particles[j];
+        const dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
+        if(dist>reach)continue;
+        const opacity=Math.pow(1-dist/reach,1.25)*.23;
+        ctx.strokeStyle=`rgba(90,103,113,${opacity})`;
+        ctx.lineWidth=.55;
+        ctx.beginPath();ctx.moveTo(a.x*xscale,a.y*yscale);ctx.lineTo(b.x*xscale,b.y*yscale);ctx.stroke();
+      }
+    }
+    particles.forEach((p,i)=>{
+      const r=p.radius*(1+.13*Math.sin(time*.00065+p.phase));
+      const xx=p.x*xscale, yy=p.y*yscale;
+      const halo=ctx.createRadialGradient(xx,yy,0,xx,yy,r*4.3);
+      halo.addColorStop(0,'rgba(92,104,114,.12)');halo.addColorStop(1,'rgba(92,104,114,0)');
+      ctx.fillStyle=halo;ctx.beginPath();ctx.arc(xx,yy,r*4.3,0,TAU);ctx.fill();
+      ctx.fillStyle=i%7===0?'rgba(80,91,101,.40)':'rgba(129,140,149,.34)';
+      ctx.beginPath();ctx.arc(xx,yy,r,0,TAU);ctx.fill();
+      if(!reduce){p.x+=p.vx;p.y+=p.vy;
+        if(p.x<7||p.x>1273)p.vx*=-1;
+        if(p.y<7||p.y>713)p.vy*=-1;
+      }
+    });
+  }
+  let animationId=null;
+  function frame(t){
+    networks.forEach(cfg=>{
+      if(cfg.canvas.closest('section')?.classList.contains('present'))draw(cfg,t);
+    });
+    if(!reduce)animationId=requestAnimationFrame(frame);
+  }
+  if(reduce){
+    Reveal.on('slidechanged',()=>frame(0));
+    requestAnimationFrame(()=>frame(0));
+  }else{animationId=requestAnimationFrame(frame);}
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden&&animationId){cancelAnimationFrame(animationId);animationId=null;}
+    else if(!document.hidden&&!reduce&&!animationId)animationId=requestAnimationFrame(frame);
+  });
+})();
+</script>
+</body>
+</html>
