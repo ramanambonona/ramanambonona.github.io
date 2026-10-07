@@ -144,7 +144,7 @@ html,body{margin:0;padding:0;background:#FFFFFF;}
 .fig-area{flex:1;display:flex;align-items:center;justify-content:center;padding:.3rem 0;}
 
 
-/* ── FONDS ANIMÉS — STYLE MONOCHROME FUTURISTE ── */
+/* ── FONDS ANIMÉS  ── */
 .network-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.18;overflow:hidden;}
 .network-bg .net-drift{animation:netDrift 16s ease-in-out infinite alternate;transform-origin:center;}
 .network-bg .net-drift.slow{animation-duration:22s;animation-direction:alternate-reverse;}
@@ -169,7 +169,7 @@ html,body{margin:0;padding:0;background:#FFFFFF;}
 @keyframes dashFlow{to{stroke-dashoffset:-180;}}
 
 
-/* Réseau monochrome, réparti sur toute la surface */
+/* Réseau animé */
 .network-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;opacity:.51;}
 .hero-slide .hero-panel,.end-slide .end-panel{isolation:isolate;}
 .manuscript-link{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.62rem 1.15rem;
@@ -195,7 +195,7 @@ html,body{margin:0;padding:0;background:#FFFFFF;}
 
 mjx-container{display:inline!important;}
 
-/* Figures PNG authentiques du manuscrit, jamais redessinées en SVG */
+/* Figures  */
 .manuscript-figure{width:100%;height:100%;display:flex;justify-content:center;align-items:center;min-height:0;}
 .manuscript-figure img{display:block;width:auto;height:auto;max-width:min(100%,1120px);max-height:510px;object-fit:contain;background:#FFFFFF;border:0;box-shadow:none;}
 .fig-sl .fig-area{min-height:0;overflow:hidden;}
@@ -217,12 +217,12 @@ mjx-container{display:inline!important;}
 @media (prefers-reduced-motion:reduce){.network-canvas{opacity:.40;}}
 
 
-/* Lien ORCID discret, accessible et identifiable sur la couverture */
+/* Lien ORCID  */
 .hero-slide .orcid-link{color:var(--red)!important;text-decoration:none!important;border-bottom:1px solid rgba(0,108,69,.4);padding-bottom:1px;font-weight:700;transition:color .2s ease,border-color .2s ease;white-space:nowrap;}
 .hero-slide .orcid-link i{font-size:.66em;margin-left:.20rem;vertical-align:middle;opacity:.80;}
 .hero-slide .orcid-link:hover,.hero-slide .orcid-link:focus-visible{color:var(--red2)!important;border-bottom-color:var(--red2);outline-offset:3px;}
 
-/* Notification flottante : première diapositive seulement */
+/* Notification flottante  */
 .fullscreen-hint{position:absolute;right:2.6rem;top:1.4rem;z-index:30;display:flex;align-items:center;gap:.70rem;
   padding:.62rem .92rem;border:1px solid rgba(0,108,69,.20);border-left:3px solid var(--red);border-radius:10px;
   background:rgba(255,255,255,.95);box-shadow:0 9px 30px rgba(17,39,29,.10);backdrop-filter:blur(8px);
@@ -277,7 +277,7 @@ mjx-container{display:inline!important;}
 </div>
 <div class="hero-topics" style="font-size:.78rem;color:var(--ink3);text-align:center;max-width:850px;margin:0 auto;">
 <i class="fas fa-tag" style="color:var(--gold2);margin-right:.35rem;"></i>
-    Jeux évolutionnaires  ·  Dynamique du réplicateur  ·  Congestion institutionnelle  ·  Réhabilitation  ·  Bassins d'attraction
+    Aix - Marseille Université · 08 octobre 2026 · Parallel Session 1A
   </div>
 <div class="manuscript-action" style="text-align:center;margin-top:.9rem;">
 <a aria-label="Télécharger le manuscrit au format PDF" class="manuscript-link" download="manuscript.pdf" href="manuscript.pdf" type="application/pdf">
